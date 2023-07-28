@@ -1,0 +1,12 @@
+{
+  "name": "LearningOn",
+  "version": "1.0.0",
+  "description": "Online Learning Platform with Courses, Blogs & Tutors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
