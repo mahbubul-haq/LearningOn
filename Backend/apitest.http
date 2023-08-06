@@ -1,0 +1,21 @@
+get http://localhost:5000
+
+###
+
+post http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+  "password": "test",
+  "name": "test",
+  "email": "a@gmail.com"
+}
+
+###
+post http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "a@gmail.com",
+  "password": "test"
+}
