@@ -17,10 +17,10 @@ const StyledTextField = styled(TextField)(({ theme }) => {
             },
 
             "& fieldset": {
-                borderColor: theme.palette.text.primary,
+                borderColor: theme.palette.text.secondary,
                 borderWidth: 0,
                 borderRadius: "0.1rem",
-                color: theme.palette.text.primary,
+                color: theme.palette.text.secondary,
             },
             "&:hover fieldset": {
                 borderWidth: 1,
@@ -30,26 +30,34 @@ const StyledTextField = styled(TextField)(({ theme }) => {
                 borderWidth: 2,
             },
             "&.Mui-error fieldset": {
-                borderColor: theme.palette.primary.main,
+                borderColor: theme.palette.error.main,
+            },
+            "&.Mui-error input": {
+                color: theme.palette.error.main,
             },
             "&.Mui-focused:not(.Mui-error) fieldset": {
                 borderColor: theme.palette.text.secondary,
             },
         },
-        "& .MuiInputLabel-shrink": {
-            color: isNonMobileScreen ? theme.palette.text.primary : theme.palette.text.secondary,
+        "& .MuiInputLabel-root": {
+            color: theme.palette.neutral.shadow,
         },
+        "& .MuiInputLabel-shrink": {
+            color: isNonMobileScreen ? theme.palette.neutral.shadow : theme.palette.neutral.shadow,
+            fontSize: "1rem",
+        },
+        
         "& .MuiInputLabel-root.Mui-focused": {
-            color: isNonMobileScreen ? theme.palette.text.primary : theme.palette.text.secondary,
+            color: isNonMobileScreen ? theme.palette.text.secondary : theme.palette.text.secondary,
         },
         "& .MuiFormLabel-root.Mui-error": {
-            color: theme.palette.primary.main,
+            color: theme.palette.error.main,
         },
         "& .MuiFormLabel-root.Mui-error:not(.Mui-focused)": {
-            color: theme.palette.text.light,
+            color: theme.palette.error.secondary,
         },
         "& .MuiFormLabel-root.Mui-error:not(.Mui-focused).MuiInputLabel-shrink": {
-            color: isNonMobileScreen ? theme.palette.primary.main : theme.palette.text.light,
+            color: isNonMobileScreen ? theme.palette.error.secondary : theme.palette.error.secondary,
         },
         "& .MuiFormHelperText-root.Mui-error": {
             color: theme.palette.primary.main,

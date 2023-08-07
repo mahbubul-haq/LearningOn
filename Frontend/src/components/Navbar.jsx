@@ -14,11 +14,13 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
 
     return (
         <Box
@@ -26,15 +28,16 @@ const Navbar = () => {
                 flexGrow: 1,
                 padding: 0,
                 // very light gray boxShadow
-
+                position: "sticky",
+                top: 0,
                 backgroundColor: "white",
             }}
         >
             <AppBar
                 sx={{
                     // border: "1px solid green",
-                    position: "sticky",
-                    top: 0,
+                    // position: "sticky",
+                    // top: 0,
                     backgroundColor: "transparent",
                     boxShadow: (theme) =>
                         `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,
@@ -66,7 +69,16 @@ const Navbar = () => {
                                             : "1rem",
                                     }}
                                 >
-                                    LearningOn
+                                    Learning
+                                    <Box
+                                        sx={{
+                                            display: "inline-block",
+                                            color: (theme) =>
+                                                theme.palette.primary.main,
+                                        }}
+                                    >
+                                        On
+                                    </Box>
                                 </Typography>
                             </Box>
                             {isNonMobileScreens && (
@@ -111,16 +123,19 @@ const Navbar = () => {
                                     <FlexBetween gap="0.6rem">
                                         {user ? (
                                             <>
-                                                <Badge
-                                                    badgeContent={4}
-                                                    color="secondary"
+                                                <IconButton
+                                                    sx={{
+                                                        color: (theme) =>
+                                                            theme.palette.text
+                                                                .primary,
+                                                    }}
                                                 >
-                                                    <IconButton
+                                                    <Badge
+                                                        badgeContent={4}
+                                                        color="error"
+                                                        size="small"
                                                         sx={{
-                                                            color: (theme) =>
-                                                                theme.palette
-                                                                    .text
-                                                                    .primary,
+                                                            color: theme => theme.palette.text.primary,
                                                         }}
                                                     >
                                                         <NotificationsIcon
@@ -129,8 +144,8 @@ const Navbar = () => {
                                                                     "1.7rem",
                                                             }}
                                                         />
-                                                    </IconButton>
-                                                </Badge>
+                                                    </Badge>
+                                                </IconButton>
                                                 <IconButton
                                                     sx={{
                                                         color: (theme) =>
@@ -138,11 +153,27 @@ const Navbar = () => {
                                                                 .primary,
                                                     }}
                                                 >
-                                                    <AccountCircleIcon
-                                                        sx={{
-                                                            fontSize: "1.7rem",
-                                                        }}
-                                                    />
+                                                    { user.picturePath ? (
+                                                        <img
+                                                            src={`http://localhost:5000/images/${user.picturePath}`}
+                                                            alt="user"
+                                                            style={{
+                                                                width: "2rem",
+                                                                height: "2rem",
+                                                                borderRadius:
+                                                                    "50%",
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <AccountCircleIcon
+                                                            sx={{
+                                                                fontSize:
+                                                                    "1.7rem",
+                                                            }}
+                                                        />
+
+                                                    )}
+                                                    
                                                 </IconButton>
                                             </>
                                         ) : (
@@ -157,11 +188,11 @@ const Navbar = () => {
                                                         },
                                                     }}
                                                     onClick={() => {
-                                                        // navigate("/login", {
-                                                        //     state: {
-                                                        //         isLogin: true,
-                                                        //     },
-                                                        // });
+                                                        navigate("/login", {
+                                                            state: {
+                                                                isLogin: true,
+                                                            },
+                                                        });
                                                     }}
                                                 >
                                                     Log In
@@ -179,16 +210,20 @@ const Navbar = () => {
                                                                 "transparent",
                                                             "&:hover": {
                                                                 backgroundColor:
-                                                                    "transparent",
+                                                                    (theme) =>
+                                                                        theme
+                                                                            .palette
+                                                                            .primary
+                                                                            .main,
                                                             },
                                                         },
                                                     }}
                                                     onClick={() => {
-                                                        // navigate("/signup", {
-                                                        //     state: {
-                                                        //         isLogin: false,
-                                                        //     },
-                                                        // });
+                                                        navigate("/signup", {
+                                                            state: {
+                                                                isLogin: false,
+                                                            },
+                                                        });
                                                     }}
                                                 >
                                                     Sign Up

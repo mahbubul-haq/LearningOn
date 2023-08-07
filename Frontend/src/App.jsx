@@ -7,6 +7,7 @@ import { themeSettings } from "./theme";
 import "./App.css";
 
 import HomePage from "./scenes/homepage";
+import LoginSignUp from "./scenes/loginpage";
 
 function App() {
     const mode = useSelector((state) => state.mode);
@@ -20,7 +21,8 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<div>Login</div>} />
+                    <Route path="/login" element={<LoginSignUp />} />
+                    <Route path="/signup" element={<LoginSignUp />} />
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

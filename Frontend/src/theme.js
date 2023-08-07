@@ -101,9 +101,15 @@ export const themeSettings = (mode) => {
                           buttonBgPink: colorTokens.background.buttonBgPink,
                           buttonBgLightPink:
                               colorTokens.background.buttonBgLightPink,
+
+                          gradient2: "#BCECC5",
                       },
                       nav: {
-                        boxShadow: "#E5E5E5",
+                          boxShadow: "#E5E5E5",
+                      },
+                      error: {
+                            main: "#CD103E",
+                            secondary: "#EEA4B6",
                       }
                   }),
         },
