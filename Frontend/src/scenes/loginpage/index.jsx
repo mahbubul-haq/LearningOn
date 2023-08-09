@@ -19,12 +19,14 @@ const LoginSignUp = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                overflow: "auto",
             }}
         >
             <Box
                 sx={{
                     borderRadius: "0.2rem",
                     minHeight: "85%",
+                    minHeight: "600px",
                     minWidth: "85%",
                     maxWidth: isNonMobileScreens ? "90%" : "100%",
 

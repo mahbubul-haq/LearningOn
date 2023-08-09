@@ -31,6 +31,7 @@ const Navbar = () => {
                 position: "sticky",
                 top: 0,
                 backgroundColor: "white",
+                zIndex: 100,
             }}
         >
             <AppBar
@@ -38,7 +39,7 @@ const Navbar = () => {
                     // border: "1px solid green",
                     // position: "sticky",
                     // top: 0,
-                    backgroundColor: "transparent",
+                    backgroundColor: "white",
                     boxShadow: (theme) =>
                         `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,
                     padding: isNonMobileScreens
@@ -67,7 +68,9 @@ const Navbar = () => {
                                         fontSize: isNonMobileScreens
                                             ? "2rem"
                                             : "1rem",
+                                        cursor: "pointer",
                                     }}
+                                    onClick={() => navigate("/")}
                                 >
                                     Learning
                                     <Box
@@ -179,7 +182,7 @@ const Navbar = () => {
                                         ) : (
                                             <>
                                                 <StyledButton
-                                                    variant="contained"
+                                                    // variant="contained"
                                                     sx={{
                                                         "&&": {
                                                             padding:

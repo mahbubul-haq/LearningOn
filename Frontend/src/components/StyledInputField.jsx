@@ -27,7 +27,7 @@ const StyledTextField = styled(TextField)(({ theme }) => {
                 borderColor: theme.palette.text.secondary,
             },
             "&.Mui-focused fieldset": {
-                borderWidth: 2,
+                borderWidth: 1,
             },
             "&.Mui-error fieldset": {
                 borderColor: theme.palette.error.main,
@@ -43,7 +43,7 @@ const StyledTextField = styled(TextField)(({ theme }) => {
             color: theme.palette.neutral.shadow,
         },
         "& .MuiInputLabel-shrink": {
-            color: isNonMobileScreen ? theme.palette.neutral.shadow : theme.palette.neutral.shadow,
+            color: isNonMobileScreen ? theme.palette.grey.grey400 : theme.palette.grey.grey400,
             fontSize: "1rem",
         },
         

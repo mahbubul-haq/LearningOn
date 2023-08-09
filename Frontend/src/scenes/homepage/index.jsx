@@ -1,17 +1,26 @@
+import LandingView from "./LandingView";
 import Navbar from "../../components/Navbar.jsx";
-import { Box } from "@mui/material";
+import CoursesView from "./CoursesView";
+import CourseWidget from "../../widgets/CourseWidget";
+import Box from "@mui/material/Box";
+
+
 const HomePage = () => {
-  return (
-    <>
-        <Navbar />
+
+    return (
+        <>
         <Box sx={{
-           backgroundColor: "white",
-           height: "500px",
+            overflow: "auto",
+            height: "100%",
         }}>
 
+            <Navbar />
+            <LandingView />
+            <CoursesView />
         </Box>
-    </>
-  )
-}
+            
+        </>
+    );
+};
 
-export default HomePage
+export default HomePage;

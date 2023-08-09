@@ -10,6 +10,7 @@ import multer from "multer";
 // internal imports
 import {register} from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
+import dataRoutes from "./routes/data.js";
 
 // configurations
 
@@ -60,6 +61,7 @@ app.post(
 );
 
 app.use("/auth", authRoutes);
+app.use("/data", dataRoutes);
 
 app.get("/", (req, res) => {
     res.send("Hello World");

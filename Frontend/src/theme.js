@@ -77,6 +77,7 @@ export const themeSettings = (mode) => {
                           buttonBgPink: colorTokens.background.buttonBgPink,
                           buttonBgLightPink:
                               colorTokens.background.buttonBgLightPink,
+                          buttonBgLightPinkDark: "#E69A9A",
                       },
                   }
                 : {
@@ -99,17 +100,35 @@ export const themeSettings = (mode) => {
                           light300: colorTokens.background.light300,
                           imagesBg: colorTokens.background.imagesBg,
                           buttonBgPink: colorTokens.background.buttonBgPink,
+                          buttonBgPinkDark: "#E482EC",
                           buttonBgLightPink:
                               colorTokens.background.buttonBgLightPink,
+                          buttonBgLightPinkDark: "#E69A9A",
 
                           gradient2: "#BCECC5",
                       },
                       nav: {
                           boxShadow: "#E5E5E5",
                       },
+                      rating : "#F4B30A",
                       error: {
-                            main: "#CD103E",
-                            secondary: "#EEA4B6",
+                          main: "#CD103E",
+                          secondary: "#EEA4B6",
+                      },
+                      grey: {
+                        grey0: "#FFFFFF",
+                        grey10: "#F6F6F6",
+                        grey50: "#F0F0F0",
+                        grey100: "#E0E0E0",
+                        grey200: "#C2C2C2",
+                        grey300: "#A3A3A3",
+                        grey400: "#858585",
+                        grey500: "#666666",
+                        grey600: "#4D4D4D",
+                        grey700: "#333333",
+                        grey800: "#1A1A1A",
+                        grey900: "#0A0A0A",
+                        grey1000: "#000000",
                       }
                   }),
         },

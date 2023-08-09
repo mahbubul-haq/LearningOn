@@ -8,6 +8,8 @@ import "./App.css";
 
 import HomePage from "./scenes/homepage";
 import LoginSignUp from "./scenes/loginpage";
+import PublishCourse from "./scenes/publishcourse";
+import { CreateCourseState } from "./state/CreateCourse";
 
 function App() {
     const mode = useSelector((state) => state.mode);
@@ -16,16 +18,22 @@ function App() {
     useEffect(() => {}, [mode]);
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<LoginSignUp />} />
-                    <Route path="/signup" element={<LoginSignUp />} />
-                </Routes>
-            </BrowserRouter>
-        </ThemeProvider>
+        <CreateCourseState>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/login" element={<LoginSignUp />} />
+                        <Route path="/signup" element={<LoginSignUp />} />
+                        <Route
+                            path="/publishcourse"
+                            element={<PublishCourse />}
+                        />
+                    </Routes>
+                </BrowserRouter>
+            </ThemeProvider>
+        </CreateCourseState>
     );
 }
 

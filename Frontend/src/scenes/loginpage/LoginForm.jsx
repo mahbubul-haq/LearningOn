@@ -8,7 +8,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 
 import StyledTextField from "../../components/StyledInputField.jsx";
 import { useMediaQuery } from "@mui/material";
-import { StyledButton } from "../../Components/StyledButton.jsx";
+import { StyledButton } from "../../components/StyledButton.jsx";
 import { useNavigate } from "react-router-dom";
 
 
