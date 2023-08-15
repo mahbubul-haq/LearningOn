@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
@@ -11,30 +11,33 @@ import { StyledCheckbox } from "../../components/StyledButton";
 import { useContext } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import state from "../../state";
+import { useTheme } from "@emotion/react";
 
 const basicInfo = [
-    ["Category", "category"],
-    ["Course Title", "courseTitle"],
-    ["Course Description", "courseDescription"],
-    ["Student Requirements", "studentRequirements"],
-    ["Skill Tags", "skillTags"],
+    ["Category", "category", 1],
+    ["Course Title", "courseTitle", 2],
+    ["Course Description", "courseDescription", 3],
+    ["Student Requirements", "studentRequirements", 4],
+    ["Skill Tags", "skillTags", 5],
 ];
 
 const media = [
-    ["Course Thumbnail", "courseThumbnail"],
-    ["Intro Video", "introVideo"],
+    ["Course Thumbnail", "courseThumbnail", 6],
+    ["Intro Video", "introVideo", 7],
 ];
 const moreInfo = [
-    ["Course Language", "courseLanguage"],
-    ["Course Price", "coursePrice"],
-    ["Approx Time to Complete", "approxTimeToComplete"],
-    ["Course Instructors", "courseInstructors"],
+    ["Course Language", "courseLanguage", 8],
+    ["Course Price", "coursePrice", 9],
+    ["Approx Time to Complete", "approxTimeToComplete", 10],
+    ["Course Instructors", "courseInstructors", 11],
 ];
 
 const LeftPanel = () => {
+    const { courseState, setCourseState, inputSection, setInputSection } =
+        useContext(CreateCourseContext);
 
-    const {courseState, setCourseState} = useContext(CreateCourseContext);
-    console.log(courseState);
+    const theme = useTheme();
+    const backgroundColor = theme.palette.primary.dark;
 
     // setCourseState({
     //     ...courseState,
@@ -42,215 +45,329 @@ const LeftPanel = () => {
     // });
 
     useEffect(() => {
-        setCourseState({
-            ...courseState,
-            category: "hello",
-            courseTitle: "hello",
-            courseDescription: "hello",
-            studentRequirements: "hello",
-            skillTags: "hello",
-        });
+        // setCourseState({
+        //     ...courseState,
+        //     category: "hello",
+        //     courseTitle: "hello",
+        //     courseDescription: "hello",
+        //     studentRequirements: "hello",
+        //     skillTags: "hello",
+        // });
     }, []);
 
     return (
-        
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.5rem",
+            }}
+        >
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "0.7rem",
+                    gap: "0.4rem",
+
+                    cursor: "pointer",
                 }}
+                onClick={() => setInputSection("basic info")}
             >
                 <Typography
                     variant="h6"
                     sx={{
                         fontWeight: "600",
                         mb: "0.2rem",
+                        cursor: "pointer",
+                        padding: "0 0rem 0rem 2rem",
                     }}
+                    onClick={() => setInputSection("basic info")}
                 >
                     Basic Info
                 </Typography>
-                {basicInfo.map((item, index) => (
-                    <FlexBetween
-                        key={item}
-                        gap="0.5rem"
-                        sx={{
-                            "&&": {
-                                justifyContent: "flex-start",
-                                alignItems: "center",
-                            },
-                        }}
-                    >
-                        <StyledCheckbox
-                            icon={
-                                <RadioButtonUncheckedIcon
-                                    sx={{
-                                        fontSize: "1.1rem",
-                                    }}
-                                />
-                            }
-                            checkedIcon={
-                                <CheckCircleIcon
-                                    sx={{
-                                        fontSize: "1.1rem",
-                                    }}
-                                />
-                            }
-                            checked={courseState[item[1]].length > 0}
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.5rem",
+                        borderLeft:
+                            inputSection === "basic info"
+                                ? `4px solid ${theme.palette.grey.grey400}`
+                                : "",
+                        padding: "0 0rem 0rem 2rem",
+                    }}
+                >
+                    {basicInfo.map((item, index) => (
+                        <FlexBetween
+                            key={item}
+                            gap="0.5rem"
                             sx={{
                                 "&&": {
-                                    // different color if checked vs unchecked
-                                    color: courseState[item[1]].length > 0 ? (theme) =>
-                                        theme.palette.primary.dark : (theme) =>
-                                        theme.palette.grey.grey400,
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                    cursor: "pointer",
                                 },
-                                // border: "1px solid #E0E0E0"
                             }}
-                        />
-
-                        <Typography
-                            variant="body1"
-                            sx={{
-                                color: (theme) => theme.palette.text.secondary,
-                                // border: "1px solid #E0E0E0",
-                                padding: "0",
-                                fontSize: "0.8rem",
-                            }}
+                            onClick={() => setInputSection("basic info")}
                         >
-                            {item[0]}
-                        </Typography>
-                    </FlexBetween>
-                ))}
+                            <StyledCheckbox
+                                icon={
+                                    <RadioButtonUncheckedIcon
+                                        sx={{
+                                            fontSize: "1.1rem",
+                                        }}
+                                    />
+                                }
+                                checkedIcon={
+                                    <CheckCircleIcon
+                                        sx={{
+                                            fontSize: "1.1rem",
+                                        }}
+                                    />
+                                }
+                                checked={courseState[item[1]].length > 0}
+                                sx={{
+                                    "&&": {
+                                        // different color if checked vs unchecked
+                                        color:
+                                            courseState[item[1]].length > 0
+                                                ? (theme) =>
+                                                      theme.palette.primary.dark
+                                                : (theme) =>
+                                                      theme.palette.grey
+                                                          .grey400,
+                                    },
+                                    // border: "1px solid #E0E0E0"
+                                }}
+                            />
 
+                            <Typography
+                                variant="body1"
+                                sx={{
+                                    color: (theme) =>
+                                        theme.palette.text.secondary,
+                                    // border: "1px solid #E0E0E0",
+                                    padding: "0",
+                                    fontSize: "0.9rem",
+                                }}
+                            >
+                                {item[0]}
+                            </Typography>
+                        </FlexBetween>
+                    ))}
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.4rem",
+
+                    // backgroundColor: inputSection === "basic info" ? backgroundColor : "",
+                    cursor: "pointer",
+                }}
+                onClick={() => setInputSection("course media")}
+            >
                 <Typography
                     variant="h6"
                     sx={{
                         fontWeight: "600",
                         mb: "0.2rem",
-                        mt: "0.5rem",
+                        cursor: "pointer",
+                        padding: "0 0rem 0rem 2rem",
                     }}
+                    onClick={() => setInputSection("course media")}
                 >
                     Media
                 </Typography>
-                {media.map((item, index) => (
-                    <FlexBetween
-                        key={item}
-                        gap="0.5rem"
-                        sx={{
-                            "&&": {
-                                justifyContent: "flex-start",
-                                alignItems: "center",
-                            },
-                        }}
-                    >
-                        <StyledCheckbox
-                            icon={
-                                <RadioButtonUncheckedIcon
-                                    sx={{
-                                        fontSize: "1.1rem",
-                                    }}
-                                />
-                            }
-                            checkedIcon={
-                                <CheckCircleIcon
-                                    sx={{
-                                        fontSize: "1.1rem",
-                                    }}
-                                />
-                            }
-                            checked={courseState[item[1]].length > 0}
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.5rem",
+                        borderLeft:
+                            inputSection === "course media"
+                                ? `4px solid ${theme.palette.grey.grey400}`
+                                : "",
+                        padding: "0 0rem 0rem 2rem",
+                    }}
+                >
+                    {media.map((item, index) => (
+                        <FlexBetween
+                            key={item}
+                            gap="0.5rem"
                             sx={{
                                 "&&": {
-                                    // different color if checked vs unchecked
-                                    color: courseState[item[1]].length > 0 ? (theme) =>
-                                        theme.palette.primary.dark : (theme) =>
-                                        theme.palette.grey.grey400,
-
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                    cursor: "pointer",
                                 },
-                                // border: "1px solid #E0E0E0"
                             }}
-                        />
-                        <Typography
-                            variant="body1"
-                            sx={{
-                                color: (theme) => theme.palette.grey.grey600,
-                            }}
+                            onClick={() => setInputSection("course media")}
                         >
-                            {item[0]}
-                        </Typography>
-                    </FlexBetween>
-                ))}
+                            <StyledCheckbox
+                                icon={
+                                    <RadioButtonUncheckedIcon
+                                        sx={{
+                                            fontSize: "1.1rem",
+                                        }}
+                                    />
+                                }
+                                checkedIcon={
+                                    <CheckCircleIcon
+                                        sx={{
+                                            fontSize: "1.1rem",
+                                        }}
+                                    />
+                                }
+                                checked={courseState[item[1]].length > 0}
+                                sx={{
+                                    "&&": {
+                                        // different color if checked vs unchecked
+                                        color:
+                                            courseState[item[1]].length > 0
+                                                ? (theme) =>
+                                                      theme.palette.primary.dark
+                                                : (theme) =>
+                                                      theme.palette.grey
+                                                          .grey400,
+                                    },
+                                    // border: "1px solid #E0E0E0"
+                                }}
+                            />
+                            <Typography
+                                variant="body1"
+                                sx={{
+                                    color: (theme) =>
+                                        theme.palette.grey.grey600,
+                                    
+                                    fontSize: "0.9rem",
+                                }}
+                            >
+                                {item[0]}
+                            </Typography>
+                        </FlexBetween>
+                    ))}
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.4rem",
+
+                    // backgroundColor: inputSection === "basic info" ? backgroundColor : "",
+                    cursor: "pointer",
+                }}
+                onClick={() => setInputSection("more info")}
+            >
                 <Typography
                     variant="h6"
                     sx={{
                         fontWeight: "600",
                         mb: "0.2rem",
-                        mt: "0.5rem",
+                        cursor: "pointer",
+                        padding: "0 0rem 0rem 2rem",
                     }}
+                    onClick={() => setInputSection("more info")}
                 >
                     More Info
                 </Typography>
-                {moreInfo.map((item, index) => (
-                    <FlexBetween
-                        key={item}
-                        gap="0.5rem"
-                        sx={{
-                            "&&": {
-                                justifyContent: "flex-start",
-                                alignItems: "center",
-                            },
-                        }}
-                    >
-                        <StyledCheckbox
-                            icon={
-                                <RadioButtonUncheckedIcon
-                                    sx={{
-                                        fontSize: "1.1rem",
-                                    }}
-                                />
-                            }
-                            checkedIcon={
-                                <CheckCircleIcon
-                                    sx={{
-                                        fontSize: "1.1rem",
-                                    }}
-                                />
-                            }
-                            checked={courseState[item[1]].length > 0}
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.5rem",
+                        borderLeft:
+                            inputSection === "more info"
+                                ? `4px solid ${theme.palette.grey.grey400}`
+                                : "",
+                        padding: "0 0rem 0rem 2rem",
+                    }}
+                >
+                    {moreInfo.map((item, index) => (
+                        <FlexBetween
+                            key={item}
+                            gap="0.5rem"
                             sx={{
                                 "&&": {
-                                    // different color if checked vs unchecked
-                                    color: courseState[item[1]].length > 0 ? (theme) =>
-                                        theme.palette.primary.dark : (theme) =>
-                                        theme.palette.grey.grey400,
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                    cursor: "pointer",
                                 },
-                                // border: "1px solid #E0E0E0"
                             }}
-                        />
-                        <Typography
-                            variant="body1"
-                            sx={{
-                                color: (theme) => theme.palette.grey.grey600,
-                            }}
+                            onClick={() => setInputSection("more info")}
                         >
-                            {item[0]}
-                        </Typography>
-                    </FlexBetween>
-                ))}
+                            <StyledCheckbox
+                                icon={
+                                    <RadioButtonUncheckedIcon
+                                        sx={{
+                                            fontSize: "1.1rem",
+                                        }}
+                                    />
+                                }
+                                checkedIcon={
+                                    <CheckCircleIcon
+                                        sx={{
+                                            fontSize: "1.1rem",
+                                        }}
+                                    />
+                                }
+                                checked={courseState[item[1]].length > 0}
+                                sx={{
+                                    "&&": {
+                                        // different color if checked vs unchecked
+                                        color:
+                                            courseState[item[1]].length > 0
+                                                ? (theme) =>
+                                                      theme.palette.primary.dark
+                                                : (theme) =>
+                                                      theme.palette.grey
+                                                          .grey400,
+                                    },
+                                    // border: "1px solid #E0E0E0"
+                                }}
+                            />
+                            <Typography
+                                variant="body1"
+                                sx={{
+                                    color: (theme) =>
+                                        theme.palette.grey.grey600,
+                                    fontSize: "0.9rem",
+                                }}
+                            >
+                                {item[0]}
+                            </Typography>
+                        </FlexBetween>
+                    ))}
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.4rem",
 
+                    // backgroundColor: inputSection === "basic info" ? backgroundColor : "",
+                    cursor: "pointer",
+                }}
+                onClick={() => setInputSection("course content")}
+            >
                 <Typography
                     variant="h6"
                     sx={{
                         fontWeight: "600",
                         mb: "0.2rem",
-                        mt: "0.5rem",
+                        cursor: "pointer",
+                        padding: "0 0rem 0rem 2rem",
                     }}
+                    onClick={() => setInputSection("course content")}
                 >
                     Course Content
                 </Typography>
-                
+            </Box>
 
-                {/* <Box>
+            {/* <Box>
                     <StyledCheckbox
                         icon={
                             <RadioButtonUncheckedIcon
@@ -274,8 +391,7 @@ const LeftPanel = () => {
                         }}
                     />
                 </Box> */}
-            </Box>
-        
+        </Box>
     );
 };
 

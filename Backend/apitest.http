@@ -17,5 +17,28 @@ Content-Type: application/json
 
 {
   "email": "a@gmail.com",
-  "password": "test"
+  "password": "test"    
 }
+
+###
+post http://localhost:5000/data/addcategory
+Content-Type: application/json
+
+{
+  "name": "Human Language",
+  "subcategory": []
+}
+
+
+###
+get http://localhost:5000/data/getcategories
+
+
+// get all users
+// add token in header
+get http://localhost:5000/users/all 
+Content-Type: application/json
+"auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDA2OTlmZWNhYjk4YTVmNGM3ZjU3MiIsImVtYWlsIjoiYUBnbWFpbC5jb20iLCJuYW1lIjoiUmViZWthaCBNaWthZWxzb24iLCJpYXQiOjE2OTE2MDg3Mjl9.G_c7u7j1dzAZM8dftNvI9Jo0A1_s9FMchrOHGh4yaMg"
+
+
+

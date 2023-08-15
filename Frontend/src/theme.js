@@ -56,66 +56,69 @@ export const themeSettings = (mode) => {
             mode: mode,
             ...(mode === "dark"
                 ? {
-                      primary: {
-                          dark: colorTokens.brand.secondaryDark,
-                          main: colorTokens.brand.secondaryMain,
-                          light: colorTokens.brand.secondaryMain,
-                      },
-                      text: {
-                          primary: colorTokens.text.primary,
-                          secondary: colorTokens.text.secondary,
-                      },
-                      neutral: {
-                          shadow: colorTokens.shadow.primary,
-                      },
-                      background: {
-                          default: colorTokens.background.light100,
-                          alt: colorTokens.background.light200,
-                          light200: colorTokens.background.light200,
-                          light300: colorTokens.background.light300,
-                          imagesBg: colorTokens.background.imagesBg,
-                          buttonBgPink: colorTokens.background.buttonBgPink,
-                          buttonBgLightPink:
-                              colorTokens.background.buttonBgLightPink,
-                          buttonBgLightPinkDark: "#E69A9A",
-                      },
-                  }
+                    primary: {
+                        darker: "#0F661C",
+                        dark: colorTokens.brand.secondaryDark,
+                        main: colorTokens.brand.secondaryMain,
+                        light: colorTokens.brand.secondaryMain,
+                    },
+                    text: {
+                        primary: colorTokens.text.primary,
+                        secondary: colorTokens.text.secondary,
+                    },
+                    neutral: {
+                        shadow: colorTokens.shadow.primary,
+                    },
+                    background: {
+                        default: colorTokens.background.light100,
+                        alt: colorTokens.background.light200,
+                        light200: colorTokens.background.light200,
+                        light300: colorTokens.background.light300,
+                        imagesBg: colorTokens.background.imagesBg,
+                        buttonBgPink: colorTokens.background.buttonBgPink,
+                        buttonBgLightPink:
+                            colorTokens.background.buttonBgLightPink,
+                        buttonBgLightPinkDark: "#E69A9A",
+                    },
+                }
                 : {
-                      primary: {
-                          dark: colorTokens.brand.secondaryDark,
-                          main: colorTokens.brand.secondaryMain,
-                          light: colorTokens.brand.secondaryMain,
-                      },
-                      text: {
-                          primary: colorTokens.text.primary,
-                          secondary: colorTokens.text.secondary,
-                      },
-                      neutral: {
-                          shadow: colorTokens.shadow.primary,
-                      },
-                      background: {
-                          default: colorTokens.background.light100,
-                          alt: colorTokens.background.light200,
-                          light200: colorTokens.background.light200,
-                          light300: colorTokens.background.light300,
-                          imagesBg: colorTokens.background.imagesBg,
-                          buttonBgPink: colorTokens.background.buttonBgPink,
-                          buttonBgPinkDark: "#E482EC",
-                          buttonBgLightPink:
-                              colorTokens.background.buttonBgLightPink,
-                          buttonBgLightPinkDark: "#E69A9A",
+                    primary: {
+                        darker: "#0F661C",
+                        dark: colorTokens.brand.secondaryDark,
+                        main: colorTokens.brand.secondaryMain,
+                        light: "#97FCA7",
+                        light2: "#63FC7C",
+                    },
+                    text: {
+                        primary: colorTokens.text.primary,
+                        secondary: colorTokens.text.secondary,
+                    },
+                    neutral: {
+                        shadow: colorTokens.shadow.primary,
+                    },
+                    background: {
+                        default: colorTokens.background.light100,
+                        alt: colorTokens.background.light200,
+                        light200: colorTokens.background.light200,
+                        light300: colorTokens.background.light300,
+                        imagesBg: colorTokens.background.imagesBg,
+                        buttonBgPink: colorTokens.background.buttonBgPink,
+                        buttonBgPinkDark: "#E482EC",
+                        buttonBgLightPink:
+                            colorTokens.background.buttonBgLightPink,
+                        buttonBgLightPinkDark: "#E69A9A",
 
-                          gradient2: "#BCECC5",
-                      },
-                      nav: {
-                          boxShadow: "#E5E5E5",
-                      },
-                      rating : "#F4B30A",
-                      error: {
-                          main: "#CD103E",
-                          secondary: "#EEA4B6",
-                      },
-                      grey: {
+                        gradient2: "#BCECC5",
+                    },
+                    nav: {
+                        boxShadow: "#E5E5E5",
+                    },
+                    rating: "#F4B30A",
+                    error: {
+                        main: "#CD103E",
+                        secondary: "#EEA4B6",
+                    },
+                    grey: {
                         grey0: "#FFFFFF",
                         grey10: "#F6F6F6",
                         grey50: "#F0F0F0",
@@ -129,8 +132,8 @@ export const themeSettings = (mode) => {
                         grey800: "#1A1A1A",
                         grey900: "#0A0A0A",
                         grey1000: "#000000",
-                      }
-                  }),
+                    },
+                }),
         },
         typography: {
             fontFamily: ["Rubik", "sans-serif"].join(","),

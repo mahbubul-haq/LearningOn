@@ -6,11 +6,15 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
+import fs from "fs";
 
 // internal imports
-import {register} from "./controllers/auth.js";
+import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
 import dataRoutes from "./routes/data.js";
+import courseRoutes from "./routes/course.js";
+import verifyToken from "./middlewares/auth.js";
+import userRoutes from "./routes/user.js";
 
 // configurations
 
@@ -49,6 +53,38 @@ const upload = multer({ storage: storage });
 
 // routes
 
+app.post("/fileupload", verifyToken, upload.single("picture"), (req, res) => {
+    if (req.file?.filename) {
+        res.status(200).json({
+            success: true,
+            fileName: req.file.filename,
+        });
+    } else {
+        res.status(400).json({
+            success: false,
+            message: "File upload failed",
+        });
+    }
+});
+
+app.delete("/filedelete/:fileName", verifyToken, (req, res) => {
+    const fileName = req.params.fileName;
+    fs.unlink(path.join(__dirname, "assets/images", fileName), (err) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({
+                success: false,
+                message: "File delete failed",
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                message: "File deleted",
+            });
+        }
+    });
+});
+
 app.post(
     "/auth/register",
     upload.single("picture"),
@@ -61,13 +97,14 @@ app.post(
 );
 
 app.use("/auth", authRoutes);
+app.use("/course", courseRoutes);
 app.use("/data", dataRoutes);
+app.use("/users", userRoutes);
+
 
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
-
-
 
 app.listen(5000, () => {
     console.log("Server is running on port 5000");

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -10,12 +10,27 @@ import LeftPanel from "./LeftPanel";
 import RightPanel from "./RightPanel";
 import { useContext } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
+import { GlobalContext } from "../../state/GlobalContext";
+import { useNavigate } from "react-router-dom";
 
 const PublishCourse = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
-    const { courseState, setCourseState, isCourseValid } =
-        useContext(CreateCourseContext);
+    const {
+        courseState,
+        setCourseState,
+        isCourseValid,
+        getDraftCourse,
+        updateCourse,
+    } = useContext(CreateCourseContext);
+    const { categories, getUsers,getCategories } = useContext(GlobalContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        getDraftCourse();
+        getUsers();
+        getCategories();
+    }, []);
 
     return (
         <>
@@ -43,6 +58,10 @@ const PublishCourse = () => {
                             textTransform: "capitalize",
                             borderRadius: "0.2rem",
                         }}
+                        onClick={() => {
+                            // navigate(-1);
+                            navigate(-1);
+                        }}
                     >
                         Back
                     </Button>
@@ -60,27 +79,6 @@ const PublishCourse = () => {
                 </Box>
                 <FlexBetween gap="1.5rem">
                     <StyledButton
-                     
-                     sx={{
-                        textTransform: "capitalize",
-                        fontWeight: "600",
-                        color: theme => theme.palette.grey.grey700,
-                        cursor: "pointer",
-                        "&&": {
-                            padding: "0.2rem 0.5rem",
-                            background: (theme) => theme.palette.grey.grey600,
-                            color: "white",
-                            "&:hover": {
-                                background: (theme) => theme.palette.grey.grey800,
-                            },
-                        }
-                        
-                    }}
-                    >
-                       
-                        Save Progress
-                    </StyledButton>
-                    <StyledButton
                         disabled={!isCourseValid()}
                         onClick={() => {
                             console.log("publishing course");
@@ -97,7 +95,13 @@ const PublishCourse = () => {
                             },
                         }}
                     >
-                        Publish
+                        <Typography
+                            sx={{
+                                fontWeight: "600",
+                            }}
+                        >
+                            Publish
+                        </Typography>
                     </StyledButton>
                 </FlexBetween>
             </Box>
@@ -105,8 +109,8 @@ const PublishCourse = () => {
                 sx={{
                     padding: isNonMobileScreens ? "4rem 5rem" : "2rem",
                     paddingBottom: "6rem",
-                    
-                   height: "100%",
+
+                    height: "100%",
                     overflow: "auto",
                 }}
             >
@@ -116,21 +120,20 @@ const PublishCourse = () => {
                         height: "100%",
                         position: "fixed",
                         maxWidth: "15%",
-                        
                     }}
                 >
                     <LeftPanel />
                 </Box>
-                <Box sx={{
-                    marginLeft: "20%",
-                   width: "80%",
-                   backgroundColor: "white",
-                   padding: "2rem",
-                     borderRadius: "0.2rem",
-                }}>
-                    
-                        <RightPanel />
-                   
+                <Box
+                    sx={{
+                        marginLeft: "20%",
+                        width: "80%",
+                        backgroundColor: "white",
+                        padding: "2rem",
+                        borderRadius: "0.2rem",
+                    }}
+                >
+                    <RightPanel />
                 </Box>
             </Box>
         </>

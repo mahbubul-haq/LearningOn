@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+import Course from "./Course.js";
 
 const PeopleSchema = mongoose.Schema(
     {
@@ -48,7 +49,8 @@ const PeopleSchema = mongoose.Schema(
             default: [],
         },
         courses: {
-            type: [String],
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "Course",
             required: false,
             default: [],
         },
