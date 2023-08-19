@@ -1,6 +1,7 @@
 import React, { createContext, useEffect } from "react";
-import { useSelector } from "react-redux";
-import state from ".";
+import { useSelector, useDispatch } from "react-redux";
+
+import state, { setLogout, setLogin } from ".";
 
 export const GlobalContext = createContext();
 
@@ -9,8 +10,44 @@ export const GlobalState = (props) => {
     const [listOfCategories, setListOfCategories] = React.useState([]);
     const [categoriesWithLabel, setCategoriesWithLabel] = React.useState([]); // [{name: "Development", label: "Development"}, {name: "Web Development", label: "Web Development"}
     const [users, setUsers] = React.useState([]);
+    const [user, setUser] = React.useState(null);
 
     const token = useSelector((state) => state.token);
+    const dispatch = useDispatch();
+
+    const getUser = async () => {
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_REACT_APP_URL}/users/getuser`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                }
+            );
+
+            const data = await response.json();
+            if (data.success) {
+                setUser(data.user);
+                console.log("user fetched", data.user);
+                dispatch(
+                    setLogin({
+                        token,
+                        user: data.user,
+                    })
+                );
+            } else {
+                //dispatch(setLogout());
+                dispatch(setLogin({ token: token, user: null }));
+            }
+        } catch (err) {
+            console.log(err?.message);
+            //dispatch(setLogout());
+            dispatch(setLogin({ token: token, user: null }));
+        }
+    };
 
     const getCategories = async () => {
         const response = await fetch(
@@ -70,7 +107,28 @@ export const GlobalState = (props) => {
         }
     };
 
+    const deleteFile = async (fileName) => {
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_REACT_APP_URL}/filedelete/${fileName}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                }
+            );
+
+            const data = await response.json();
+            console.log(data);
+        } catch (err) {
+            console.log(err?.message);
+        }
+    };
+
     useEffect(() => {
+        getUser();
         getCategories();
         getUsers();
     }, []);
@@ -86,6 +144,7 @@ export const GlobalState = (props) => {
                 users,
                 setUsers,
                 getCategories,
+                deleteFile,
             }}
         >
             {props.children}

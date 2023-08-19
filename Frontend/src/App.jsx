@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline} from "@mui/material";
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { createTheme } from "@mui/material/styles";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";

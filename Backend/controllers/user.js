@@ -15,5 +15,22 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+const getUser = async (req, res) => {
+    try {
+        const user = await People.findById(req.userId).populate("courses").exec();
+        console.log(user);
+        res.status(200).json({
+            success: true,
+            user: user
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
 
-export { getAllUsers };
+
+
+export { getAllUsers, getUser };

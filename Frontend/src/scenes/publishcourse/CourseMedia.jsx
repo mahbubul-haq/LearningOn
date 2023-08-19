@@ -33,6 +33,7 @@ import Dropzone from "react-dropzone";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import { Alert, Snackbar } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import VideoUpload from "../../components/VideoUpload";
 
 const CourseMedia = () => {
     const { categoriesWithLabel } = useContext(GlobalContext);
@@ -47,6 +48,7 @@ const CourseMedia = () => {
         uploadFile,
         uploadProgress,
         setUploadProgress,
+        updateCourse,
     } = useContext(CreateCourseContext);
     const [addSkill, setAddSkill] = React.useState(false);
     const [skillName, setSkillName] = React.useState("");
@@ -56,6 +58,10 @@ const CourseMedia = () => {
     useEffect(() => {
         console.log(courseState);
     }, [courseState]);
+
+    useEffect(() => {
+        updateCourse("draft");
+    }, [courseState.courseThumbnail, courseState.introVideo]);
 
     return (
         <Box
@@ -68,34 +74,7 @@ const CourseMedia = () => {
                 mb: "1rem",
             }}
         >
-            <Snackbar
-                open={openSnackbar}
-                autoHideDuration={4000}
-                onClose={() => setOpenSnackbar(false)}
-                anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "center",
-                }}
-            >
-                <Alert
-                    onClose={() => setOpenSnackbar(false)}
-                    severity="error"
-                    sx={{
-                        width: "100%",
-
-                        backgroundColor: (theme) =>
-                            theme.palette.background.buttonBgLightPink,
-                    }}
-                >
-                    <Typography
-                        sx={{
-                            fontWeight: "600",
-                        }}
-                    >
-                        File type not supported!
-                    </Typography>
-                </Alert>
-            </Snackbar>
+            
             <Box>
                 <Box
                     sx={{
@@ -116,122 +95,17 @@ const CourseMedia = () => {
                     </InputLabel>
                 </Box>
 
-                <Dropzone
-                    acceptedFiles=".png,.jpg,.jpeg"
-                    id = "thumbnail"
-                    onDrop={(acceptedFiles) => {
-                        setUploading(false);
-                        console.log(acceptedFiles);
-                        // setFieldValue("picture", acceptedFiles[0]);
-                        // check extionsion of file
-                        const types = ["image/png", "image/jpg", "image/jpeg"];
-                        if (types.includes(acceptedFiles[0]?.type)) {
-                            setCourseThumbnailInput(acceptedFiles[0]);
-                            uploadFile(
-                                "courseThumbnail",
-                                acceptedFiles[0],
-                                courseState.courseThumbnail
-                            );
-                            setCourseState({
-                                ...courseState,
-                                courseThumbnail: "",
-                            });
-                        } else {
-                            setOpenSnackbar(true);
-                        }
+                <VideoUpload
+                    setFileName={(fileName) => {
+                        setCourseState({
+                            ...courseState,
+                            courseThumbnail: fileName,
+                        });
                     }}
-                >
-                    {({ getRootProps, getInputProps }) => (
-                        <Box
-                            {...getRootProps()}
-                            sx={{
-                                border: `2px dashed ${theme.palette.grey.grey300}`,
-                                height: "20rem",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "1rem",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <input {...getInputProps()} />
-
-                            {courseState.courseThumbnail ||
-                            courseThumbnailInput ? (
-                                <>
-                                    <img
-                                        src={
-                                            !courseState.courseThumbnail
-                                                ? URL.createObjectURL(
-                                                      courseThumbnailInput
-                                                  )
-                                                : `${
-                                                      import.meta.env
-                                                          .VITE_REACT_APP_URL
-                                                  }/images/${
-                                                      courseState.courseThumbnail
-                                                  }`
-                                        }
-                                        alt="course thumbnail"
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                        }}
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <Box>
-                                        <CloudUploadIcon
-                                            sx={{
-                                                fontSize: "5rem",
-                                                color: (theme) =>
-                                                    theme.palette.grey.grey800,
-                                            }}
-                                        />
-                                    </Box>
-                                    <Box>
-                                        <StyledButton
-                                            sx={{
-                                                textTransform: "capitalize",
-                                                fontWeight: "600",
-
-                                                cursor: "pointer",
-                                                "&&": {
-                                                    borderRadius: "0",
-                                                    padding: "0.4rem 0.8rem",
-                                                    fontWeight: "600",
-                                                    background: (theme) =>
-                                                        theme.palette.primary
-                                                            .light2,
-                                                    color: (theme) =>
-                                                        theme.palette.text
-                                                            .primary,
-                                                    "&:hover": {
-                                                        background: (theme) =>
-                                                            theme.palette
-                                                                .primary.dark,
-                                                    },
-                                                },
-                                            }}
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    fontWeight: "600",
-                                                    pr: "0.5rem",
-                                                }}
-                                            >
-                                                Upload Course Thumbnail
-                                            </Typography>
-                                        </StyledButton>
-                                    </Box>
-                                </>
-                            )}
-                        </Box>
-                    )}
-                </Dropzone>
+                    fileName={courseState.courseThumbnail}
+                    isImage={true}
+                    uploadText="Upload Thumbnail Image"
+                />
             </Box>
 
             <Box
@@ -256,160 +130,18 @@ const CourseMedia = () => {
                         </Typography>
                     </InputLabel>
                 </Box>
-                <Dropzone
-                    acceptedFiles=".mp4,.mkv,.avi"
-                    onDrop={(acceptedFiles) => {
-                        setUploading(true);
-                        console.log(acceptedFiles);
-                        // setFieldValue("picture", acceptedFiles[0]);
-                        const types = ["video/mp4", "video/mkv", "video/avi"];
-                        if (types.includes(acceptedFiles[0]?.type)) {
-                            setIntroVideoInput(acceptedFiles[0]);
-                            uploadFile(
-                                "introVideo",
-                                acceptedFiles[0],
-                                courseState.introVideo
-                            );
-                            setCourseState({
-                                ...courseState,
-                                introVideo: "",
-                            });
-                        } else {
-                            setOpenSnackbar(true);
-                        }
+
+                <VideoUpload
+                    setFileName={(fileName) => {
+                        setCourseState({
+                            ...courseState,
+                            introVideo: fileName,
+                        });
                     }}
-                >
-                    {({ getRootProps, getInputProps }) => (
-                        <Box
-                            {...getRootProps()}
-                            sx={{
-                                border: `2px dashed ${theme.palette.grey.grey300}`,
-                                height: "30rem",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "1rem",
-                                cursor: "pointer",
-                                position: "relative",
-                            }}
-                        >
-                            {uploadProgress >= 0 && uploadProgress < 100 && uploading && (
-                                <Box
-                                    sx={{
-                                        position: "absolute",
-                                        top: "0",
-                                        left: "0",
-                                        width: "100%",
-                                        height: "100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        gap: "1rem",
-                                        background: theme.palette.grey.grey100,
-                                        opacity: "1",
-                                        zIndex: "10",
-                                    }}
-                                >
-                                    <CircularProgress
-                                        variant="determinate"
-                                        value={uploadProgress}
-                                        size="3rem"
-                                        sx={{
-                                            color: (theme) =>
-                                                theme.palette.primary.dark,
-                                            fontSize: "3rem",
-                                        }}
-                                    />
-                                    <Typography
-                                        sx={{
-                                            color: (theme) =>
-                                                theme.palette.text.primary,
-                                            fontWeight: "600",
-                                            fontSize: "2rem",
-                                        }}
-                                    >
-                                        {uploadProgress}%
-                                    </Typography>
-                                </Box>
-                            )}
-                            <input {...getInputProps()} />
-
-                            {courseState.introVideo || introVideoInput ? (
-                                <>
-                                    <video
-                                        src={
-                                            !courseState.introVideo
-                                                ? URL.createObjectURL(
-                                                      introVideoInput
-                                                  )
-                                                : `${
-                                                      import.meta.env
-                                                          .VITE_REACT_APP_URL
-                                                  }/images/${
-                                                      courseState.introVideo
-                                                  }`
-                                        }
-                                        controls
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "contain",
-                                        }}
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <Box>
-                                        <CloudUploadIcon
-                                            sx={{
-                                                fontSize: "5rem",
-                                                color: (theme) =>
-                                                    theme.palette.grey.grey800,
-                                            }}
-                                        />
-                                    </Box>
-                                    <Box>
-                                        <StyledButton
-                                            sx={{
-                                                textTransform: "capitalize",
-                                                fontWeight: "600",
-
-                                                cursor: "pointer",
-                                                "&&": {
-                                                    borderRadius: "0",
-                                                    padding: "0.4rem 0.8rem",
-                                                    fontWeight: "600",
-                                                    background: (theme) =>
-                                                        theme.palette.primary
-                                                            .light2,
-                                                    color: (theme) =>
-                                                        theme.palette.text
-                                                            .primary,
-                                                    "&:hover": {
-                                                        background: (theme) =>
-                                                            theme.palette
-                                                                .primary.dark,
-                                                    },
-                                                },
-                                            }}
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    fontWeight: "600",
-                                                    pr: "0.5rem",
-                                                }}
-                                            >
-                                                Upload Intro Video
-                                            </Typography>
-                                        </StyledButton>
-                                    </Box>
-                                </>
-                            )}
-                        </Box>
-                    )}
-                </Dropzone>
+                    fileName={courseState.introVideo}
+                    isImage={false}
+                    uploadText="Upload Intro Video"
+                />
             </Box>
         </Box>
     );

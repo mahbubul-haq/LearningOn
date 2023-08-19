@@ -39,6 +39,7 @@ const BasicInfo = () => {
                 gap: "1.5rem",
                 mt: "0rem",
                 mb: "1rem",
+
             }}
         >
             {/* <Box sx={{

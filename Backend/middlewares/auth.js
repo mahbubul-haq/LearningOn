@@ -12,7 +12,17 @@ const verifyToken = async (req, res, next) => {
             });
         }
         const verified = jwt.verify(authToken, process.env.JWT_SECRET);
-       // console.log(verified);
+
+        const user = await People.findById(verified.id);
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Access Denied",
+            });
+        }
+
+        //console.log(verified);
         req.userId = verified.id;
         next();
     } catch (error) {

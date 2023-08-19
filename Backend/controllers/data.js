@@ -1,4 +1,6 @@
 import Category from "../models/Category.js";
+import People from "../models/People.js";
+import Course from "../models/Course.js";
 
 const addCategory = async (req, res) => {
     try {
@@ -63,4 +65,31 @@ const getCategories = async (req, res) => {
     }
 };
 
-export { addCategory, getCategories };
+const deleteAllData = async (req, res) => {
+    try {
+        
+       await People.deleteMany();
+       await Course.deleteMany();
+
+       
+       const users = await People.find();
+
+      
+       const courses = await Course.find();
+
+        res.status(200).json({
+            success: true,
+            users,
+            courses
+        })
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: "Data deletion unsuccessful"
+        })
+    }
+}
+
+export { addCategory, getCategories, deleteAllData };

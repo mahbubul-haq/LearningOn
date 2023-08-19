@@ -26,13 +26,40 @@ export const CreateCourseState = (props) => {
     const [introVideoInput, setIntroVideoInput] = React.useState("");
     const [inputSection, setInputSection] = React.useState("basic info");
     const [uploadProgress, setUploadProgress] = React.useState(-1);
+    const [inputLessons, setInputLessons] = React.useState([]);
+
+    // useEffect(() => {
+    //     console.log(isCourseValid());
+    // }, [courseState]);
 
     const isCourseValid = () => {
-        for (const key in courseState) {
-            if (!courseState[key] || courseState[key]?.length === 0) {
-                return false;
+        if (
+            courseState.category?.length === 0 ||
+            courseState.courseTitle?.length === 0 ||
+            courseState.courseDescription?.length === 0 ||
+            courseState.studentRequirements?.length === 0 ||
+            courseState.skillTags?.length === 0 ||
+            courseState.courseThumbnail?.length === 0 ||
+            courseState.introVideo?.length === 0 ||
+            courseState.courseLanguage?.length === 0 ||
+            courseState.coursePrice?.length === 0 ||
+            courseState.approxTimeToComplete?.length === 0 ||
+            courseState.courseInstructors?.length === 0 ||
+            courseState.lessons?.length === 0
+        )
+            return false;
+
+        for (let lesson of courseState.lessons) {
+            if (!lesson.title) return false;
+            for (let subLesson of lesson.subLessons) {
+                if (
+                    !subLesson.title ||
+                    !(subLesson.videoLink || subLesson.lectureNote)
+                )
+                    return false;
             }
         }
+
         return true;
     };
 
@@ -196,6 +223,8 @@ export const CreateCourseState = (props) => {
                 uploadFile,
                 uploadProgress,
                 setUploadProgress,
+                inputLessons,
+                setInputLessons,
             }}
         >
             {props.children}

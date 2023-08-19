@@ -44,14 +44,20 @@ const RightPanel = () => {
     };
 
     return (
-        <Box>
+        <Box sx={{
+            backgroundColor: "white",
+            padding: "2rem",
+            borderRadius: "0.25rem",
+            // minHeight: "100%",
+            // border: "2px solid green"
+        }}>
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={4000}
                 onClose={() => setOpenSnackbar(false)}
                 anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "center",
+                    vertical: "bottom",
+                    horizontal: "right",
                 }}
             >
                 <Alert
@@ -86,7 +92,7 @@ const RightPanel = () => {
             {inputSection === "course content" && <CourseContent />}
             <Divider
                 sx={{
-                    my: "1rem",
+                    my: "2rem",
                 }}
             />
             <Box

@@ -36,9 +36,18 @@ get http://localhost:5000/data/getcategories
 
 // get all users
 // add token in header
+###
 get http://localhost:5000/users/all 
 Content-Type: application/json
-"auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDA2OTlmZWNhYjk4YTVmNGM3ZjU3MiIsImVtYWlsIjoiYUBnbWFpbC5jb20iLCJuYW1lIjoiUmViZWthaCBNaWthZWxzb24iLCJpYXQiOjE2OTE2MDg3Mjl9.G_c7u7j1dzAZM8dftNvI9Jo0A1_s9FMchrOHGh4yaMg"
+auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDA2OTlmZWNhYjk4YTVmNGM3ZjU3MiIsImVtYWlsIjoiYUBnbWFpbC5jb20iLCJuYW1lIjoiUmViZWthaCBNaWthZWxzb24iLCJpYXQiOjE2OTE2MDg3Mjl9.G_c7u7j1dzAZM8dftNvI9Jo0A1_s9FMchrOHGh4yaMg
 
+###
+delete http://localhost:5000/data/deleteall
+Content-Type: application/json
+auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDA2NTE4ZWNhYjk4YTVmNGM3ZjU2ZCIsImVtYWlsIjoibWFoYnViQGdtYWlsLmNvbSIsIm5hbWUiOiJNYWhidWJ1bCBIYXF1ZSIsImlhdCI6MTY5MjMwMjc2OH0.sdTicd1Xe-mhKvQf87H4fDVPsYsA6b1LQwdQ5lNe1UE
 
+###
+get http://localhost:5000/users/getuser
+Content-Type: application/json
+auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZGY4ODBkZjlmZjE3Y2E5NjEwMzljNiIsImVtYWlsIjoicmViZWthaEBnbWFpbC5jb20iLCJuYW1lIjoiUmViZWthaCBNaWthZWxzb24iLCJpYXQiOjE2OTIzNzA5ODZ9.1Mvbf4IQs0qWw2FAmN7WZfhMz3lbxtePFUsz5yel4So
 
