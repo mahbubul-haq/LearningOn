@@ -58,6 +58,7 @@ export const themeSettings = (mode) => {
                 ? {
                     primary: {
                         darker: "#0F661C",
+                        
                         dark: colorTokens.brand.secondaryDark,
                         main: colorTokens.brand.secondaryMain,
                         light: colorTokens.brand.secondaryMain,
@@ -86,6 +87,7 @@ export const themeSettings = (mode) => {
                         darker: "#0F661C",
                         dark: colorTokens.brand.secondaryDark,
                         main: colorTokens.brand.secondaryMain,
+                        main1: "#4CCB60",
                         light: "#97FCA7",
                         light2: "#63FC7C",
                     },
@@ -104,11 +106,14 @@ export const themeSettings = (mode) => {
                         imagesBg: colorTokens.background.imagesBg,
                         buttonBgPink: colorTokens.background.buttonBgPink,
                         buttonBgPinkDark: "#E482EC",
+                        buttonBgPinkDark2: "#D835E6",
                         buttonBgLightPink:
                             colorTokens.background.buttonBgLightPink,
                         buttonBgLightPinkDark: "#E69A9A",
 
                         gradient2: "#BCECC5",
+                        top: "#E5F3E7",
+                        bottom: "#B4EBC0",
                     },
                     nav: {
                         boxShadow: "#E5E5E5",
@@ -117,6 +122,9 @@ export const themeSettings = (mode) => {
                     error: {
                         main: "#CD103E",
                         secondary: "#EEA4B6",
+                    },
+                    customDivider: {
+                        main: "#909090",
                     },
                     grey: {
                         grey0: "#FFFFFF",

@@ -9,23 +9,32 @@ import Rating from "../components/Rating";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import CustomSlider1 from "../components/CustomSlider1";
-import {useNavigate} from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 const CourseWidget = ({ courseInfo }) => {
-
     const navigate = useNavigate();
 
     return (
-        <Card sx={{ maxWidth: 345, minWidth: 300, borderRadius: "0.5rem",
-        boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset"
-         }}>
+        <Card
+            sx={{
+                maxWidth: 345,
+                minWidth: 300,
+                borderRadius: "0.5rem",
+                boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset",
+                // border: "4px solid black",
+            }}
+        >
             <CardMedia
                 sx={{ height: 200 }}
                 image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiTHouB53d2smKXcdqRKRCww-DiaRyVr-iKZMHCLIp&s"
                 title="green iguana"
             />
-            <CardContent>
+            <CardContent
+                sx={{
+                    
+                    
+                }}
+            >
                 <Typography
                     gutterBottom
                     sx={{
@@ -55,31 +64,36 @@ const CourseWidget = ({ courseInfo }) => {
                 >
                     {courseInfo.owner.name}
                 </Typography>
+:                 
                 <Box
                     sx={{
-                        mt: "1rem",
-                        fontSize: "1rem",
-                        mb: "0.5rem",
+                        // position at the bottom of the CardContent
+                        
+                        
                     }}
                 >
-                    <Rating
-                        rating={{
-                            rating: courseInfo.ratings.totalRating,
-                            count: courseInfo.ratings.numberOfRatings,
-                            showText: false,
+                    <Box
+                        sx={{
+                            mt: "1rem",
+                            fontSize: "1rem",
+                            mb: "0.5rem",
                         }}
-                    />
-                </Box>
-                <Box>
-                    <CustomSlider1
-                        items={[
-                            "Programming",
-                            "Python",
-                            
-                        ]}
-                        selectedItem=""
-                        setSelectedItem=""
-                    />
+                    >
+                        <Rating
+                            rating={{
+                                rating: courseInfo.ratings.totalRating,
+                                count: courseInfo.ratings.numberOfRatings,
+                                showText: false,
+                            }}
+                        />
+                    </Box>
+                    <Box>
+                        <CustomSlider1
+                            items={["Programming", "Python"]}
+                            selectedItem=""
+                            setSelectedItem=""
+                        />
+                    </Box>
                 </Box>
             </CardContent>
         </Card>

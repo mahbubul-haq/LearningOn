@@ -14,6 +14,7 @@ import { CreateCourseState } from "./state/CreateCourse";
 import { GlobalState } from "./state/GlobalContext";
 import { HomePageState } from "./state/HomePageState";
 import CoursePage from "./scenes/coursepage";
+import LearningPage from "./scenes/learningpage";
 
 function App() {
     const mode = useSelector((state) => state.mode);
@@ -46,6 +47,11 @@ function App() {
                                     path="/course/:courseId"
                                     element={<CoursePage />}
                                 />
+                                <Route
+                                    path="/learning/course/:courseId"
+                                    element={<LearningPage />}
+                                />
+
                             </Routes>
                         </BrowserRouter>
                     </ThemeProvider>

@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { GlobalContext } from "../../state/GlobalContext";
 import { HomePageContext } from "../../state/HomePageState";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import {useNavigate} from "react-router-dom";
 
 const CoursesView = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -16,6 +17,7 @@ const CoursesView = () => {
     const [selectedItem, setSelectedItem] = React.useState("");
     const { courses, getCourses } = useContext(HomePageContext);
     const [selectedCourses, setSelectedCourses] = React.useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (listOfCategories.length > 0) {
@@ -25,16 +27,18 @@ const CoursesView = () => {
 
     useEffect(() => {
         getCourses();
+       
     }, []);
 
     useEffect(() => {
+        //console.log(selectedItem, courses);
         if (selectedItem) {
             const filteredCourses = courses.filter((course) => {
                 return course.category === selectedItem;
             });
             setSelectedCourses(filteredCourses);
         }
-    }, [selectedItem]);
+    }, [selectedItem, courses]);
 
     const handleScroll = (direction) => {
         const container = document.querySelector(".courses-container");
@@ -195,7 +199,10 @@ const CoursesView = () => {
                     >
                         {selectedCourses.map((course) => {
                             return (
-                                <Box key={course._id}>
+                                <Box key={course._id} sx={{
+                                    display: "grid",
+                                    gridTemplateRows: "1",
+                                }}>
                                     <CourseWidget courseInfo={course} />
                                 </Box>
                             );
@@ -225,19 +232,25 @@ const CoursesView = () => {
                                 alignItems: "center",
                                 width: "100%",
                                 mt: "2rem",
-                                cursor: "pointer",
+                              
                                 
                             }}
                         
                         >
-                            <Typography sx={{
+                            <Typography
+                            
+
+                            sx={{
                                 borderRadius: "0.25rem",
                                 border: "1px solid rgba(0, 0, 0, 0.23)",
                                 fontSize: "1rem",
                                 px: "0.5rem",
+                                cursor: "pointer",
                                 "&:hover": {
                                     backgroundColor: theme => theme.palette.grey.grey100
                                 }
+                            
+                                
                             }}>
                                 Browse more courses on <b>{selectedItem}</b>
                             </Typography>

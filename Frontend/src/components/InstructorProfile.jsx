@@ -17,7 +17,7 @@ const InstructorProfile = ({
         return acc + course.enrolledStudents ? course.enrolledStudents.length : 0;
     }, 0);
 
-    const profilePicture = instructor?.picturePath ? `${import.meta.env.VITE_REACT_APP_URL}/images/${instructor.picturePath}` : "images/dummyPerson.jpeg";
+    const profilePicture = instructor?.picturePath ? `${import.meta.env.VITE_REACT_APP_URL}/images/${instructor.picturePath}` : "/images/dummyPerson.jpeg";
 
     console.log(instructor);
 
@@ -41,7 +41,8 @@ const InstructorProfile = ({
                     alignItems: "center",
                 }}>
                     <img
-                        src={profilePicture}
+                        // load image from public/image folder
+                        src = {profilePicture}
                         alt="instructor"
                         style={{
                             width: "4rem",
@@ -49,6 +50,7 @@ const InstructorProfile = ({
                             borderRadius: "50%",
                             objectFit: "cover"
                         }}
+                        loading="lazy"
                     />
 
                 </Box>
