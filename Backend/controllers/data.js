@@ -23,9 +23,10 @@ const addCategory = async (req, res) => {
 
                 if (!category.subcategories.includes(subcategory)) {
                     category.subcategories.push(subcategory);
-                    await category.save();
+                    
                 }
             });
+            await category.save();
         }
 
         res.status(201).json({

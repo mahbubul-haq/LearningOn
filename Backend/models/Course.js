@@ -34,7 +34,7 @@ const CourseSchema = new mongoose.Schema(
         },
         coursePrice: {
             type: String,
-            default: ""
+            default: "",
         },
         approxTimeToComplete: {
             type: String,
@@ -50,11 +50,26 @@ const CourseSchema = new mongoose.Schema(
             default: [],
         },
         ratings: {
-            type: Object,
+            type: {
+                totalRating: Number,
+                numberOfRatings: Number,
+                ratings: [
+                    {
+                        userId: {
+                            type: mongoose.Schema.Types.ObjectId,
+                            ref: "People",
+                        },
+
+                        rating: Number,
+                    },
+                ],
+            },
+            ref: "People",
+
             default: {
                 totalRating: 0,
                 numberOfRatings: 0,
-                ratings: [Object],
+                ratings: [],
             },
         },
         reviews: {

@@ -13,7 +13,7 @@ const LandingView = () => {
     return (
         <Box
             sx={{
-                mt: isNonMobileScreens ? "5rem" : "0",
+                mt: isNonMobileScreens ? "0rem" : "0",
                 backgroundColor: "white",
                 padding: isNonMobileScreens ? "4rem 5rem" : "2rem",
             }}

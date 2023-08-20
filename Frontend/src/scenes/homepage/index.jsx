@@ -11,7 +11,8 @@ const HomePage = () => {
         <>
         <Box sx={{
             overflow: "auto",
-            height: "100%",
+            height: "calc(100% - 5rem)",
+            marginTop: "5rem",
         }}>
 
             <Navbar />

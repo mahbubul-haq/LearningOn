@@ -25,8 +25,8 @@ post http://localhost:5000/data/addcategory
 Content-Type: application/json
 
 {
-  "name": "Human Language",
-  "subcategory": []
+  "name": "Health & Fitness",
+  "subcategory": ["Diets & Weight Loss", "Exercise & Fitness", "Mental Health", "Nutrition"]
 }
 
 

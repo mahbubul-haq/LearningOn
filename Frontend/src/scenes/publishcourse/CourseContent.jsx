@@ -97,14 +97,6 @@ const CourseContent = () => {
         }
     };
 
-    const updateVideoLinks = (index, subIndex, videoLink) => {
-        setVideoLinks((prevVideoLinks) => {
-            const newVideoLinks = [...prevVideoLinks];
-            newVideoLinks[index][subIndex] = videoLink;
-            return newVideoLinks;
-        });
-    };
-
     const handleInput = (event, index, subIndex) => {
         if (subIndex === undefined) {
             setCourseState({
@@ -153,17 +145,25 @@ const CourseContent = () => {
     };
 
     useEffect(() => {
-        setVideoLinks(
-            courseState.lessons.map((lesson) =>
-                lesson.subLessons?.map((subLesson) => subLesson.videoLink)
-            )
-        );
+        //videlinks is a 1D array of videoLinks
+        const links = [];
+        for (const lesson of courseState.lessons) {
+            for (const subLesson of lesson.subLessons) {
+                if (subLesson.videoLink) {
+                    links.push(subLesson.videoLink);
+                }
+            }
+        }
+        setVideoLinks(links);
     }, []);
     // useEffect calls when videoLink is updated
     useEffect(() => {
+        if (videoLinks.length === 0) return;
         updateCourse("draft");
-        console.log("videoLink updated");
+        // console.log("videoLink updated");
+        // console.log(videoLinks);
     }, [videoLinks]);
+
     return (
         <Box
             sx={{
@@ -427,7 +427,8 @@ const CourseContent = () => {
                                                         );
                                                     }}
                                                 >
-                                                    Delete {index + 1}.{subIndex + 1}
+                                                    Delete {index + 1}.
+                                                    {subIndex + 1}
                                                 </StyledButton>
                                             </AccordionSummary>
                                             <AccordionDetails
@@ -521,12 +522,6 @@ const CourseContent = () => {
                                                         subLesson.videoLink
                                                     }
                                                     setFileName={(fileName) => {
-                                                        updateVideoLinks(
-                                                            index,
-                                                            subIndex,
-                                                            fileName
-                                                        );
-
                                                         const e = {
                                                             target: {
                                                                 name: "videoLink",
@@ -539,6 +534,21 @@ const CourseContent = () => {
                                                             index,
                                                             subIndex
                                                         );
+
+                                                        if (fileName) {
+                                                            setVideoLinks([
+                                                                ...videoLinks,
+                                                                fileName,
+                                                            ]);
+                                                        } else {
+                                                            setVideoLinks([
+                                                                ...videoLinks.filter(
+                                                                    (link) =>
+                                                                        link !==
+                                                                        subLesson.videoLink
+                                                                ),
+                                                            ]);
+                                                        }
                                                     }}
                                                 />
 
@@ -650,15 +660,12 @@ const CourseContent = () => {
                                             textTransform: "capitalize",
                                         }}
                                     >
-                                        Add Lesson {index + 1}.{lesson.subLessons.length + 1}
+                                        Add Lesson {index + 1}.
+                                        {lesson.subLessons.length + 1}
                                     </Typography>
                                 </Fab>
                             </AccordionDetails>
-                            <AccordionActions
-                                
-                            >
-                                
-                            </AccordionActions>
+                            <AccordionActions></AccordionActions>
                         </Accordion>
                     ))
                 ) : (
@@ -690,20 +697,35 @@ const CourseContent = () => {
                     onClick={() => {
                         setCourseState({
                             ...courseState,
-                            lessons: [
-                                ...courseState.lessons,
-                                {
-                                    title: "",
-                                    description: "",
-                                    subLessons: [
-                                        {
-                                            title: "",
-                                            videoLink: "",
-                                            lectureNode: "",
-                                        },
-                                    ],
-                                },
-                            ],
+                            lessons:
+                                courseState.lessons.length == 0
+                                    ? [
+                                          {
+                                              title: "",
+                                              description: "",
+                                              subLessons: [
+                                                  {
+                                                      title: "",
+                                                      videoLink: "",
+                                                      lectureNode: "",
+                                                  },
+                                              ],
+                                          },
+                                      ]
+                                    : [
+                                          ...courseState.lessons,
+                                          {
+                                              title: "",
+                                              description: "",
+                                              subLessons: [
+                                                  {
+                                                      title: "",
+                                                      videoLink: "",
+                                                      lectureNode: "",
+                                                  },
+                                              ],
+                                          },
+                                      ],
                         });
                     }}
                 >

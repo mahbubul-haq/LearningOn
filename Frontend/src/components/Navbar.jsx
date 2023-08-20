@@ -32,6 +32,7 @@ const Navbar = () => {
                 top: 0,
                 backgroundColor: "white",
                 zIndex: 100,
+                
             }}
         >
             <AppBar
@@ -39,6 +40,7 @@ const Navbar = () => {
                     // border: "1px solid green",
                     // position: "sticky",
                     // top: 0,
+                    height: isNonMobileScreens ? "5rem" : "4rem",
                     backgroundColor: "white",
                     boxShadow: (theme) =>
                         `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,

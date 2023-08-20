@@ -5,6 +5,21 @@ import axios from "axios";
 
 export const CreateCourseContext = createContext();
 
+const initialCourseState = {
+    category: "",
+    courseTitle: "",
+    courseDescription: "",
+    studentRequirements: "",
+    skillTags: [],
+    courseThumbnail: "",
+    introVideo: "",
+    courseLanguage: "",
+    coursePrice: "",
+    approxTimeToComplete: "",
+    courseInstructors: [],
+    lessons: [],
+};
+
 export const CreateCourseState = (props) => {
     const token = useSelector((state) => state.token);
 
@@ -27,6 +42,7 @@ export const CreateCourseState = (props) => {
     const [inputSection, setInputSection] = React.useState("basic info");
     const [uploadProgress, setUploadProgress] = React.useState(-1);
     const [inputLessons, setInputLessons] = React.useState([]);
+    const [uploadStatus, setUploadStatus] = React.useState("");
 
     // useEffect(() => {
     //     console.log(isCourseValid());
@@ -105,26 +121,34 @@ export const CreateCourseState = (props) => {
 
     const updateCourse = async (status) => {
         console.log(courseState);
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_REACT_APP_URL}/course/update/${
+                    courseState._id
+                }/${status}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                    body: JSON.stringify({
+                        ...courseState,
+                    }),
+                }
+            );
 
-        const response = await fetch(
-            `${import.meta.env.VITE_REACT_APP_URL}/course/update/${
-                courseState._id
-            }/${status}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "auth-token": token,
-                },
-                body: JSON.stringify({
-                    ...courseState,
-                }),
+            const data = await response.json();
+            if (data.success) {
+                setCourseState(data.courseInfo);
+                if (status === "published") setUploadStatus("published");
+                getDraftCourse();
+            } else {
+                if (status === "published") setUploadStatus("unpublished");
             }
-        );
-
-        const data = await response.json();
-
-        console.log(data);
+        } catch (err) {
+            if (status === "published") setUploadStatus("unpublished");
+        }
     };
 
     const uploadFile = async (courseProperty, file, curValue) => {
@@ -225,6 +249,8 @@ export const CreateCourseState = (props) => {
                 setUploadProgress,
                 inputLessons,
                 setInputLessons,
+                uploadStatus,
+                setUploadStatus,
             }}
         >
             {props.children}
