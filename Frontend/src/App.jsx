@@ -15,6 +15,7 @@ import { GlobalState } from "./state/GlobalContext";
 import { HomePageState } from "./state/HomePageState";
 import CoursePage from "./scenes/coursepage";
 import LearningPage from "./scenes/learningpage";
+import { LearningCourseState } from "./state/LearningCourseContex";
 
 function App() {
     const mode = useSelector((state) => state.mode);
@@ -23,41 +24,42 @@ function App() {
     useEffect(() => {}, [mode]);
 
     return (
-        <HomePageState>
-            <GlobalState>
-                <CreateCourseState>
-                    <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <BrowserRouter>
-                            <Routes>
-                                <Route path="/" element={<HomePage />} />
-                                <Route
-                                    path="/login"
-                                    element={<LoginSignUp />}
-                                />
-                                <Route
-                                    path="/signup"
-                                    element={<LoginSignUp />}
-                                />
-                                <Route
-                                    path="/publishcourse"
-                                    element={<PublishCourse />}
-                                />
-                                <Route
-                                    path="/course/:courseId"
-                                    element={<CoursePage />}
-                                />
-                                <Route
-                                    path="/learning/course/:courseId"
-                                    element={<LearningPage />}
-                                />
-
-                            </Routes>
-                        </BrowserRouter>
-                    </ThemeProvider>
-                </CreateCourseState>
-            </GlobalState>
-        </HomePageState>
+        <LearningCourseState>
+            <HomePageState>
+                <GlobalState>
+                    <CreateCourseState>
+                        <ThemeProvider theme={theme}>
+                            <CssBaseline />
+                            <BrowserRouter>
+                                <Routes>
+                                    <Route path="/" element={<HomePage />} />
+                                    <Route
+                                        path="/login"
+                                        element={<LoginSignUp />}
+                                    />
+                                    <Route
+                                        path="/signup"
+                                        element={<LoginSignUp />}
+                                    />
+                                    <Route
+                                        path="/publishcourse"
+                                        element={<PublishCourse />}
+                                    />
+                                    <Route
+                                        path="/course/:courseId"
+                                        element={<CoursePage />}
+                                    />
+                                    <Route
+                                        path="/learning/course/:courseId"
+                                        element={<LearningPage />}
+                                    />
+                                </Routes>
+                            </BrowserRouter>
+                        </ThemeProvider>
+                    </CreateCourseState>
+                </GlobalState>
+            </HomePageState>
+        </LearningCourseState>
     );
 }
 

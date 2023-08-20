@@ -381,7 +381,7 @@ const LeftPanel = () => {
                     }}
                     onClick={() => setInputSection("course content")}
                 >
-                    {courseState.lessons.length > 0 ? (
+                    {courseState.lessons?.length > 0 ? (
                         <React.Fragment key={courseState.lessons?.length}>
                             {courseState.lessons.map((lesson, index) => (
                                 <React.Fragment key={index}>
@@ -390,7 +390,7 @@ const LeftPanel = () => {
                                         sx={{
                                             "&&": {
                                                 justifyContent: "flex-start",
-                                                alignItems: "center",
+                                                alignItems: "flex-start",
                                                 cursor: "pointer",
                                             },
                                         }}

@@ -317,7 +317,7 @@ const CourseContent = () => {
                                     id="description"
                                     name="description"
                                     inputProps={{
-                                        maxLength: 1000,
+                                        maxLength: 2000,
                                     }}
                                     // change font size of input
                                     onChange={(event) =>
@@ -576,7 +576,7 @@ const CourseContent = () => {
                                                     id="sublesson-note"
                                                     name="lectureNote"
                                                     inputProps={{
-                                                        maxLength: 100,
+                                                        maxLength: 10000,
                                                     }}
                                                     // change font size of input
                                                     onChange={(event) =>

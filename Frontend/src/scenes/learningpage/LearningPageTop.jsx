@@ -10,7 +10,7 @@ const LearningPageTop = ({ courseInfo }) => {
     return (
         <Box
             sx={{
-                padding: "3rem 5rem 1.5rem 5rem",
+                padding: "3rem 5rem 1.5rem 5rem",   
                 backgroundColor: theme.palette.background.bottom,
                 backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
                 color: theme.palette.text.primary,
