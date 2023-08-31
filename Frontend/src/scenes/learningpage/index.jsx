@@ -53,6 +53,8 @@ const LearningPage = () => {
                 });
             }
         }
+
+        scrollTop();
     };
 
     const handlePrev = () => {
@@ -71,6 +73,7 @@ const LearningPage = () => {
                 subLesson: openedLesson.subLesson - 1,
             });
         }
+        scrollTop();
     };
 
     useEffect(() => {
@@ -78,15 +81,22 @@ const LearningPage = () => {
             getCourses();
         }
     }, []);
+
+    const scrollTop = () => {
+        document.querySelector(".learning-page-main").scrollTop = 0;
+    };
+
     return (
         <>
             <Navbar />
             <Box
+                className="learning-page-main"
                 sx={{
                     marginTop: isNonMobileScreens ? "5rem" : "4rem",
                     height: "calc(100% - 5rem)",
                     overflowY: "auto",
                     width: "100%",
+                    scrollBehavior: "smooth",
                 }}
             >
                 <LearningPageTop courseInfo={courseInfo} />

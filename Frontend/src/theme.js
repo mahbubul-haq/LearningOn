@@ -90,6 +90,7 @@ export const themeSettings = (mode) => {
                         main1: "#4CCB60",
                         light: "#97FCA7",
                         light2: "#63FC7C",
+                        light3: "#C7FFD3",
                     },
                     text: {
                         primary: colorTokens.text.primary,
@@ -122,6 +123,8 @@ export const themeSettings = (mode) => {
                     error: {
                         main: "#CD103E",
                         secondary: "#EEA4B6",
+                        light: "#FFB5B5",
+                        light1: "#FFD7D7"
                     },
                     customDivider: {
                         main: "#909090",

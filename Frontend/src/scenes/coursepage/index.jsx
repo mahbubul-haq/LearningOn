@@ -62,6 +62,7 @@ const CoursePage = () => {
                     overflowX: "auto",
                     height: "100%",
                     paddingBottom: "4rem",
+                    scrollBehavior: "smooth",
                 }}
             >
                 <Box

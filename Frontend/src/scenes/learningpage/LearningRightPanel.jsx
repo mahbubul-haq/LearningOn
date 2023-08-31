@@ -38,8 +38,8 @@ const LearningRightPanel = ({ courseInfo }) => {
                                 </span>
                                 &nbsp;&nbsp;
                                 {
-                                    courseInfo?.lessons[openedLesson.lesson - 1]
-                                        .title
+                                    courseInfo?.lessons[openedLesson.lesson - 1] ? 
+                                    courseInfo?.lessons[openedLesson.lesson - 1].title : ""
                                 }
                             </Typography>
                             <Box
@@ -49,7 +49,8 @@ const LearningRightPanel = ({ courseInfo }) => {
                                     padding: "2rem",
                                 }}
                             >
-                                {courseInfo?.lessons[openedLesson.lesson - 1]
+                                {courseInfo?.lessons[openedLesson.lesson - 1] &&
+                                    courseInfo?.lessons[openedLesson.lesson - 1]
                                     .description && (
                                     <Typography
                                         sx={{
@@ -158,7 +159,7 @@ const LearningRightPanel = ({ courseInfo }) => {
                                     <Box
                                         sx={{
                                             width: "100%",
-                                            maxHeight: "500px",
+                                            // maxHeight: "500px",
                                             borderRadius: "0.05rem",
                                             border: `1px solid ${theme.palette.grey.grey200}`,
                                             padding: "0",

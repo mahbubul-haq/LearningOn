@@ -12,6 +12,6 @@ router.post('/new', verifyToken, newCourse);
 router.get('/draft', verifyToken, getDraftCourses);
 router.put('/update/:courseId/:status', verifyToken, updateCourse);
 router.get('/get/:courseId', verifyToken, getCourseById);
-router.get('/all', verifyToken, getAllCourses);
+router.get('/all',  getAllCourses);
 
 export default router;

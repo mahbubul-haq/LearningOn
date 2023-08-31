@@ -25,8 +25,8 @@ post http://localhost:5000/data/addcategory
 Content-Type: application/json
 
 {
-  "name": "Health & Fitness",
-  "subcategory": ["Diets & Weight Loss", "Exercise & Fitness", "Mental Health", "Nutrition"]
+  "name": "Science",
+  "subcategory": ["Physics", "Chemistry", "Biology"]
 }
 
 
@@ -44,10 +44,18 @@ auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDA2OTlmZWNhYjk4YTV
 ###
 delete http://localhost:5000/data/deleteall
 Content-Type: application/json
-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDA2NTE4ZWNhYjk4YTVmNGM3ZjU2ZCIsImVtYWlsIjoibWFoYnViQGdtYWlsLmNvbSIsIm5hbWUiOiJNYWhidWJ1bCBIYXF1ZSIsImlhdCI6MTY5MjMwMjc2OH0.sdTicd1Xe-mhKvQf87H4fDVPsYsA6b1LQwdQ5lNe1UE
+auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTMxMGFjOWVkM2YyMTk3MDhhOGRjOCIsImVtYWlsIjoiYnVja3lAZ21haWwuY29tIiwibmFtZSI6IkJ1Y2t5IFJvYmVydHMiLCJpYXQiOjE2OTI2MDI1NDl9.4aVBCnbMYiDAxrUKdLmOBKoKgl7t_k2ew38Wbw1utjc
 
 ###
 get http://localhost:5000/users/getuser
 Content-Type: application/json
 auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZGY4ODBkZjlmZjE3Y2E5NjEwMzljNiIsImVtYWlsIjoicmViZWthaEBnbWFpbC5jb20iLCJuYW1lIjoiUmViZWthaCBNaWthZWxzb24iLCJpYXQiOjE2OTIzNzA5ODZ9.1Mvbf4IQs0qWw2FAmN7WZfhMz3lbxtePFUsz5yel4So
 
+###
+post http://localhost:5000/data/create-payment-sesson
+Content-Type: application/json
+auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTM0N2MxN2U2MTQ3NzhiYjY3NGI5OSIsImVtYWlsIjoibWFoYnViQGdtYWlsLmNvbSIsIm5hbWUiOiJNYWhidWJ1bCBIYXF1ZSIsImlhdCI6MTY5MjYxNjc2Mn0.lQI8tYyRepbWx0o3Wu2WCoXdbEmrlDCh3wErulzfoiQ
+
+{
+    "courseId": "64e3111a9ed3f219708a8de7"
+}

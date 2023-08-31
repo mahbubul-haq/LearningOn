@@ -1,6 +1,10 @@
 import Category from "../models/Category.js";
 import People from "../models/People.js";
 import Course from "../models/Course.js";
+import Stripe from "stripe";
+const stripe = new Stripe(
+    "sk_test_51NkNkxSGLLKlVFdVYwxLLI6YoDKUCMiTj7nKkorP9eCrlyuPyyId4K9YvgUuaqTKCEHdQ1RqLiuzKfKlHQgH1d8T00J4fv9YEf"
+);
 
 const addCategory = async (req, res) => {
     try {
@@ -23,7 +27,6 @@ const addCategory = async (req, res) => {
 
                 if (!category.subcategories.includes(subcategory)) {
                     category.subcategories.push(subcategory);
-                    
                 }
             });
             await category.save();
@@ -52,7 +55,6 @@ const getCategories = async (req, res) => {
         categories.forEach((category) => {
             category.subcategories.sort();
         });
-        
 
         res.status(200).json({
             success: true,
@@ -68,29 +70,200 @@ const getCategories = async (req, res) => {
 
 const deleteAllData = async (req, res) => {
     try {
-        
-       await People.deleteMany();
-       await Course.deleteMany();
+        await People.deleteMany();
+        await Course.deleteMany();
 
-       
-       const users = await People.find();
+        const users = await People.find();
 
-      
-       const courses = await Course.find();
+        const courses = await Course.find();
 
         res.status(200).json({
             success: true,
             users,
-            courses
-        })
-    }
-    catch (err) {
-        console.log(err)
+            courses,
+        });
+    } catch (err) {
+        console.log(err);
         res.status(500).json({
             success: false,
-            message: "Data deletion unsuccessful"
-        })
+            message: "Data deletion unsuccessful",
+        });
     }
-}
+};
 
-export { addCategory, getCategories, deleteAllData };
+const makePayment = async (req, res) => {
+    try {
+        const courseInfo = await Course.findOne({ _id: req.body.courseId });
+       // console.log(courseInfo.courseThumbnail);
+
+        const customer = await stripe.customers.create({
+            metadata: {
+                userId: req.userId,
+                cart: JSON.stringify([
+                    {
+                        courseId: req.body.courseId,
+                        courseTitle: courseInfo.courseTitle,
+                        coursePrice: courseInfo.coursePrice,
+                        owner: courseInfo.owner,
+                    },
+                ]),
+            },
+        });
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "payment",
+            customer: customer.id,
+            line_items: [
+                {
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: courseInfo.courseTitle,
+                            images: [
+                                `http://localhost:5000/images/${courseInfo.courseThumbnail}`,
+                            ],
+                            // images: [
+                            //     `${process.env.SERVER_URL}/images/${courseInfo.courseThumbnail}`,
+                            // ],
+                        },
+                        unit_amount: courseInfo.coursePrice * 100,
+                    },
+                    quantity: 1,
+                },
+            ],
+            success_url: `${process.env.CLIENT_URL}/payment/success/${req.body.courseId}`,
+            cancel_url: `${process.env.CLIENT_URL}/payment/cancel/${req.body.courseId}`,
+        });
+
+        //console.log("session", session.url);
+
+        // check if payment is successful
+
+        //event handler to check if payment success
+
+        res.status(200).json({
+            success: true,
+            url: session.url,
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            success: false,
+            message: e.message,
+        });
+    }
+};
+
+// This is your Stripe CLI webhook secret for testing your endpoint locally.
+let endpointSecret;
+
+// endpointSecret =
+//     "whsec_b710aff255dc4bdcbd8d187756c2d7b45113c8753d73c4d238322ef3ae56996b";
+
+const stripeWebHook = async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+
+    let data;
+    let eventType;
+
+    if (endpointSecret) {
+        let event;
+        // console.log("event triggered");
+
+        try {
+            event = stripe.webhooks.constructEvent(
+                req.body,
+                sig,
+                endpointSecret
+            );
+            // console.log("event triggered");
+        } catch (err) {
+            res.status(400).send(`Webhook Error: ${err.message}`);
+            return;
+        }
+
+        data = event.data.object;
+        eventType = event.type;
+    } else {
+        data = req.body.data.object;
+        eventType = req.body.type;
+    }
+
+    //console.log("data", data);
+    console.log("eventType", eventType);
+
+    // Handle the event
+    if (eventType === "payment_intent.succeeded") {
+        // console.log("succeded", data);
+    } else if (eventType === "checkout.session.completed") {
+        stripe.customers.retrieve(data.customer, async (err, customer) => {
+            if (err) {
+                console.log(err);
+            } else {
+                const user = await People.findOne({
+                    _id: customer.metadata.userId,
+                });
+
+                const cart = JSON.parse(customer.metadata.cart);
+
+                cart?.forEach(async (item) => {
+                    //console.log("item", item);
+                    let courseOwner = await People.findOne({
+                        _id: item.owner,
+                    });
+
+                    if (courseOwner) {
+                        let wallet =
+                            courseOwner.wallet === ""
+                                ? 0
+                                : parseFloat(courseOwner.wallet);
+                        wallet += parseFloat(item.coursePrice);
+                        courseOwner.wallet = wallet.toString();
+
+                        await courseOwner.save();
+                    }
+
+                    let course = await Course.findOne({
+                        _id: item.courseId,
+                    });
+
+                    if (course) {
+                        course.enrolledStudents.push({
+                            userId: user._id,
+                            enrolledOn: Date.now(),
+                            status: "active",
+                        });
+
+                        await course.save();
+                    }
+
+                    user.learning.push({
+                        courseId: item.courseId,
+                        enrolledOn: Date.now(),
+                        status: "active",
+                        completedLessons: [],
+                    });
+
+                    await user.save();
+                });
+            }
+        });
+    }
+
+    // Return a 200 response to acknowledge receipt of the event
+    res.send().end();
+};
+("");
+
+// app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+
+// });
+
+export {
+    addCategory,
+    getCategories,
+    deleteAllData,
+    makePayment,
+    stripeWebHook,
+};

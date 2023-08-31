@@ -6,12 +6,55 @@ import FlexBetween from "../../components/FlexBetween";
 import Rating from "../../components/Rating";
 import { StyledButton } from "../../components/StyledButton";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const TopSection = ({ courseInfo }) => {
-    const theme = useTheme();
-    const navigate = useNavigate();
+    const { user, token } = useSelector((state) => state);
 
-    console.log("topsection", courseInfo);
+    const [purchased, setPurchased] = React.useState(
+        courseInfo?.enrolledStudents?.reduce((cur, enrollMent) => {
+            return cur || enrollMent.userId == user?._id;
+        }, false)
+    );
+    const navigate = useNavigate();
+    const theme = useTheme();
+
+    React.useEffect(() => {
+        console.log(user, courseInfo);
+        if (user && courseInfo) {
+            if (
+                courseInfo.enrolledStudents?.reduce((cur, enrollMent) => {
+                    return cur || enrollMent.userId == user._id;
+                }, false)
+            )
+                setPurchased(true);
+        }
+    }, [user, courseInfo]);
+
+    const enrollCourse = async () => {
+        try {
+            const response = await fetch(
+                `${
+                    import.meta.env.VITE_REACT_APP_URL
+                }/data/create-payment-sesson`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                    body: JSON.stringify({
+                        courseId: courseInfo._id,
+                    }),
+                }
+            );
+            const data = await response.json();
+            if (data.success) {
+                window.location = data.url;
+            }
+            console.log(data);
+        } catch (e) {}
+    };
 
     return (
         <Box
@@ -130,7 +173,11 @@ const TopSection = ({ courseInfo }) => {
                 </Typography>
                 <StyledButton
                     onClick={() => {
-                        navigate(`/learning/course/${courseInfo._id}`);
+                        if (purchased) {
+                            navigate(`/learning/course/${courseInfo._id}`);
+                        } else {
+                            enrollCourse();
+                        }
                     }}
                     sx={{
                         fontSize: "1.1rem",
@@ -143,7 +190,7 @@ const TopSection = ({ courseInfo }) => {
                         },
                     }}
                 >
-                    Start Learning
+                    {purchased ? "Start Learning" : "Enroll Now"}
                 </StyledButton>
 
                 <Box></Box>

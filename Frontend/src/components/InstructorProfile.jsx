@@ -14,12 +14,12 @@ const InstructorProfile = ({
 
     const instructor = users.find(user => user._id == instructorId);
     const numberOfEnrolledStudents = instructor?.courses?.reduce((acc, course) => {
-        return acc + course.enrolledStudents ? course.enrolledStudents.length : 0;
+        return acc + (course.enrolledStudents ? course.enrolledStudents.length : 0);
     }, 0);
 
     const profilePicture = instructor?.picturePath ? `${import.meta.env.VITE_REACT_APP_URL}/images/${instructor.picturePath}` : "/images/dummyPerson.jpeg";
 
-    console.log(instructor);
+    console.log("instructor", instructor);
 
 
 

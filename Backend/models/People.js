@@ -77,7 +77,24 @@ const PeopleSchema = mongoose.Schema(
             default: "",
         },
         learning: {
-            type: [Object],
+            type: [
+                {
+                    courseId: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: "Course",
+                    },
+                    completedLessons: {
+                        type: [String],
+                        default: [],
+                    },
+                    status: {
+                        type: String,
+                        enum: ["active", "postponed", "completed"],
+                        default: "active",
+                    },
+                    enrolledOn: Date,
+                },
+            ],
             required: false,
             default: [],
         },
@@ -90,6 +107,11 @@ const PeopleSchema = mongoose.Schema(
             type: [String],
             required: false,
             default: [],
+        },
+        wallet: {
+            type: String,
+            required: false,
+            default: "",
         },
     },
     {

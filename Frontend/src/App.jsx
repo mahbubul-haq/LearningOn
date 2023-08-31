@@ -16,6 +16,7 @@ import { HomePageState } from "./state/HomePageState";
 import CoursePage from "./scenes/coursepage";
 import LearningPage from "./scenes/learningpage";
 import { LearningCourseState } from "./state/LearningCourseContex";
+import PaymentStatus from "./scenes/coursepage/PaymentStatus";
 
 function App() {
     const mode = useSelector((state) => state.mode);
@@ -52,6 +53,10 @@ function App() {
                                     <Route
                                         path="/learning/course/:courseId"
                                         element={<LearningPage />}
+                                    />
+                                    <Route
+                                        path="/payment/:status/:courseId"
+                                        element={<PaymentStatus />}
                                     />
                                 </Routes>
                             </BrowserRouter>

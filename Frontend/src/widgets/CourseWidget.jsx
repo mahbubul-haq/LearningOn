@@ -26,7 +26,7 @@ const CourseWidget = ({ courseInfo }) => {
         >
             <CardMedia
                 sx={{ height: 200 }}
-                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiTHouB53d2smKXcdqRKRCww-DiaRyVr-iKZMHCLIp&s"
+                image={`${import.meta.env.VITE_REACT_APP_URL}/images/${courseInfo.courseThumbnail}`}
                 title="green iguana"
             />
             <CardContent
