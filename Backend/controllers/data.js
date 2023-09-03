@@ -233,6 +233,8 @@ const stripeWebHook = async (req, res) => {
                             userId: user._id,
                             enrolledOn: Date.now(),
                             status: "active",
+                            paidAmount: parseFloat(item.coursePrice),
+                            userName: user.name,
                         });
 
                         await course.save();

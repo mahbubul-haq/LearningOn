@@ -47,7 +47,7 @@ const login = async (req, res) => {
 
         const user = await People.findOne({
             email: email,
-        });
+        }).populate("courses").exec();
 
         if (!user) {
             return res.status(401).json({

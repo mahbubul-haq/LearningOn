@@ -31,4 +31,12 @@ body {
   color: "#3F3D56";
 }
 
+.nav-tabs .nav-link {
+    border-bottom: none;
+    padding: 0.5rem 2rem;
+    color: #3F3D56;
+}
+.nav-tabs .nav-link.active {
+    background-color: #EBF5E2;
+}
 

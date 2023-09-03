@@ -9,45 +9,34 @@ import ProfileLeft from "./ProfileLeft";
 import ProfileRight from "./ProfileRight";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useTheme from "@mui/material/styles/useTheme";
-import socketIoClient from "socket.io-client";
+import { ProfilePageContext } from "../../state/ProfilePageContext";
 
 const ProfilePage = () => {
     const { userId } = useParams();
     const { userById, getUserById, setUserById } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
     const theme = useTheme();
 
     useEffect(() => {
         getUserById(userId);
+        setOpenedTab("profile");
     }, [userId]);
 
     useEffect(() => {
         console.log(userById);
+        
     }, [userById]);
 
-    useEffect(() => {
-        if (userById) {
-            const socket = socketIoClient(import.meta.env.VITE_REACT_APP_URL);
-            /// send roomId and userId to server, socket.emit("join-room")
-
-            socket.emit("join-room", {
-                roomId: userById._id,
-                userId: userById._id,
-            });
-
-            socket.on("user-joined", (data) => {
-                if (data.userId === userById._id) {
-                    console.log("ureka");
-                }
-                else {
-                    console.log("someone joined");
-                }
-            });
-        }
-    }, [userById]);
+   
 
     return (
-        <Box>
+        <Box sx={{
+            height: "100%",
+            width: "100%",
+            minHeight: "600px",
+            overflow: "auto",
+        }}>
             <Navbar />
             <ProfileTop userInfo={userById} />
             <Box

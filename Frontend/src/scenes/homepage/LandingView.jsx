@@ -4,11 +4,24 @@ import { Box, useMediaQuery, Typography } from "@mui/material";
 import { StyledButton } from "../../components/StyledButton.jsx";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
+import useTheme from "@mui/material/styles/useTheme";
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 const LandingView = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
+    const theme = useTheme();
+
+    const showDashboard = () => {
+        return (
+            user &&
+            (user.courses.length > 0 ||
+                user.tutoring.length > 0 ||
+                user.blogs.length > 0)
+        );
+    };
 
     return (
         <Box
@@ -192,6 +205,33 @@ const LandingView = () => {
                     />
                 </Box>
             </FlexBetween>
+            {showDashboard() && (
+                <Button
+                    sx={{
+                        borderRadius: "0.25rem",
+                        border: "1px solid " + theme.palette.primary.darker,
+                        padding: "0.5rem 1rem",
+                        color: (theme) => theme.palette.primary.darker,
+
+                        "&:hover": {
+                            backgroundColor: (theme) =>
+                                theme.palette.primary.light3,
+                        },
+                    }}
+                    onClick={() => {
+                        navigate("/dashboard");
+                    }}
+                >
+                    <DashboardIcon
+                        sx={{
+                            mr: "0.5rem",
+                        }}
+                    />
+                    <Typography sx={{}} variant="h6">
+                        Open Dashboard
+                    </Typography>
+                </Button>
+            )}
         </Box>
     );
 };

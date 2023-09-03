@@ -13,5 +13,6 @@ router.get('/draft', verifyToken, getDraftCourses);
 router.put('/update/:courseId/:status', verifyToken, updateCourse);
 router.get('/get/:courseId', getCourseById);
 router.get('/all',  getAllCourses);
+router.get('/getmycourses', verifyToken, getAllCourses);
 
 export default router;

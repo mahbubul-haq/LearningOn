@@ -8,11 +8,18 @@ import { ProfilePageContext } from "../../state/ProfilePageContext";
 import { useSelector } from "react-redux";
 import FlexBetween from "../../components/FlexBetween";
 import Typography from "@mui/material/Typography";
+import { StyledButton } from "../../components/StyledButton";
+import { Divider } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setLogout } from "../../state";
+import { useNavigate } from "react-router-dom";
 
 const ProfileLeft = ({ userInfo }) => {
     const theme = useTheme();
     const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
     const { user } = useSelector((state) => state);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     return (
         <Box
@@ -33,7 +40,7 @@ const ProfileLeft = ({ userInfo }) => {
                             color: theme.palette.grey.grey700,
                             fontSize: "1rem",
                             // fontWeight: "600",
-                            padding: "0.6rem 1rem",
+                            padding: "0.7em 1rem",
                             "&:hover": {
                                 backgroundColor:
                                     theme.palette.background.light300,
@@ -284,6 +291,36 @@ const ProfileLeft = ({ userInfo }) => {
                         </FlexBetween>
                     </MenuItem>
                 </MenuList>
+                {userInfo?._id == user?._id && (
+                    <>
+                        <Divider
+                            sx={{
+                                mt: "0.5rem",
+                            }}
+                        />
+
+                        <StyledButton
+                            sx={{
+                                mt: "1rem",
+                                mb: "0.5rem",
+                                "&&": {
+                                    width: "100%",
+                                    backgroundColor: theme.palette.grey.grey200,
+                                    "&:hover": {
+                                        backgroundColor:
+                                            theme.palette.grey.grey300,
+                                    },
+                                },
+                            }}
+                            onClick={() => {
+                                dispatch(setLogout());
+                                navigate("/");
+                            }}
+                        >
+                            Log out
+                        </StyledButton>
+                    </>
+                )}
             </Box>
         </Box>
     );

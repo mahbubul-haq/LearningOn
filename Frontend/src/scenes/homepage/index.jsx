@@ -5,9 +5,13 @@ import CourseWidget from "../../widgets/CourseWidget";
 import Box from "@mui/material/Box";
 import { useEffect, useRef } from "react";
 import socketIoClient from "socket.io-client";
+import Button from "@mui/material/Button";
+import useTheme from "@mui/material/styles/useTheme";
+import Typography from "@mui/material/Typography";
 
 const HomePage = () => {
     const prevScrollY = useRef(0);
+    const theme = useTheme();
 
     useEffect(() => {
         const socket = socketIoClient(import.meta.env.VITE_REACT_APP_URL);
@@ -70,6 +74,17 @@ const HomePage = () => {
                     <Navbar />
                 </Box>
                 <LandingView />
+                {/* <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        padding: "0rem 0 3rem 5rem",
+                        backgroundColor: "white"
+                    }}
+                >
+                    
+                </Box> */}
                 <CoursesView />
             </Box>
         </>

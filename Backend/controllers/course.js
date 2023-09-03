@@ -170,6 +170,14 @@ const updateCourse = async (req, res) => {
             }
         }
 
+        const owner = await People.findById(req.userId);
+        if (owner) {
+            if (!owner.courses.includes(updatedCourse._id)) {
+                owner.courses.push(updatedCourse._id);
+                await owner.save();
+            }
+        }
+
         res.status(200).json({
             success: true,
             courseInfo: updatedCourse,
@@ -230,7 +238,34 @@ const getAllCourses = async (req, res) => {
             message: error.message,
         });
     }
-}
+};
+
+const getMyCourses = async (req, res) => {
+    try {
+        // find courses with owner as req.userId or there is an entry req.userId inside courseInstructors
+        const courses = await Course.find({
+            $or: [{ owner: req.userId }, { courseInstructors: req.userId }],
+        }).populate(
+            "courseInstructors owner enrolledStudents ratings.ratings.userId"
+        );
+        if (!courses) {
+            return res.status(404).json({
+                success: false,
+                message: "No courses found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            courseInfo: courses,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
 
 export {
     newCourse,
@@ -238,4 +273,5 @@ export {
     updateCourse,
     getCourseById,
     getAllCourses,
+    getMyCourses,
 };
