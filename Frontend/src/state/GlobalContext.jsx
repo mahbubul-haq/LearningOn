@@ -11,6 +11,8 @@ export const GlobalState = (props) => {
     const [categoriesWithLabel, setCategoriesWithLabel] = React.useState([]); // [{name: "Development", label: "Development"}, {name: "Web Development", label: "Web Development"}
     const [users, setUsers] = React.useState([]);
     const [user, setUser] = React.useState(null);
+    const [userById, setUserById] = React.useState(null);
+    const [courseById, setCourseById] = React.useState(null);
 
     const token = useSelector((state) => state.token);
     const dispatch = useDispatch();
@@ -31,7 +33,7 @@ export const GlobalState = (props) => {
             const data = await response.json();
             if (data.success) {
                 setUser(data.user);
-                console.log("user fetched", data.user);
+                //console.log("user fetched", data.user);
                 dispatch(
                     setLogin({
                         token,
@@ -43,7 +45,7 @@ export const GlobalState = (props) => {
                 dispatch(setLogin({ token: token, user: null }));
             }
         } catch (err) {
-            console.log(err?.message);
+            //console.log(err?.message);
             //dispatch(setLogout());
             dispatch(setLogin({ token: token, user: null }));
         }
@@ -85,7 +87,7 @@ export const GlobalState = (props) => {
 
         setListOfCategories(sortedCategories);
 
-        console.log("categories fetched");
+        //console.log("categories fetched");
     };
 
     const getUsers = async () => {
@@ -103,7 +105,7 @@ export const GlobalState = (props) => {
 
         if (data.success) {
             setUsers(data.users);
-            console.log("users fetched", data.users);
+            // console.log("users fetched", data.users);
         }
     };
 
@@ -121,9 +123,61 @@ export const GlobalState = (props) => {
             );
 
             const data = await response.json();
-            console.log(data);
+            //console.log(data);
         } catch (err) {
-            console.log(err?.message);
+            //console.log(err?.message);
+        }
+    };
+
+    const getUserById = async (userId) => {
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_REACT_APP_URL}/users/getuser/${userId}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                }
+            );
+
+            const data = await response.json();
+            console.log(data);
+            if (data.success) {
+                setUserById(data.user);
+                //console.log("user fetched", data.user);
+            } else {
+                setUserById(null);
+            }
+        } catch (err) {
+            //console.log(err?.message);
+            setUserById(null);
+        }
+    };
+
+    const getCourseById = async (courseId) => {
+        try {
+            const response = await fetch(
+                `${
+                    import.meta.env.VITE_REACT_APP_URL
+                }/course/get/${courseId}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                }
+            );
+
+            const data = await response.json();
+
+            if (data.success) {
+                setCourseById(data.courseInfo);
+            }
+        } catch (err) {
+            //console.log(err?.message);
         }
     };
 
@@ -145,6 +199,12 @@ export const GlobalState = (props) => {
                 setUsers,
                 getCategories,
                 deleteFile,
+                getUserById,
+                userById,
+                setUserById,
+                courseById,
+                setCourseById,
+                getCourseById,
             }}
         >
             {props.children}

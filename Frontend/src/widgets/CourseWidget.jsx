@@ -61,6 +61,9 @@ const CourseWidget = ({ courseInfo }) => {
                             color: (theme) => theme.palette.grey.grey500,
                         },
                     }}
+                    onClick={() => {
+                        navigate(`/profile/${courseInfo.owner._id}`);
+                    }}
                 >
                     {courseInfo.owner.name}
                 </Typography>

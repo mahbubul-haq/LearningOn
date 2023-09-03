@@ -22,10 +22,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import LinearProgress from "@mui/material/LinearProgress";
 
+import { useSelector } from "react-redux";
+
 const PublishCourse = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [dialogOpen, setDialogOpen] = React.useState(0);
+    const user = useSelector((state) => state.user);
 
     const {
         courseState,
@@ -40,6 +43,9 @@ const PublishCourse = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!user) {
+            navigate("/");
+        }
         getDraftCourse();
         getUsers();
         getCategories();
@@ -105,7 +111,7 @@ const PublishCourse = () => {
                             sx={{
                                 fontWeight: "600",
                                 pl: "0.5rem",
-                                textTransform: "uppercase"
+                                textTransform: "uppercase",
                             }}
                         >
                             Close

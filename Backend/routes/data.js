@@ -9,7 +9,7 @@ const router = Router();
 router.post('/addcategory', addCategory);
 
 router.get('/getcategories', getCategories);
-router.delete('/deleteall', verifyToken, deleteAllData);
+// router.delete('/deleteall', verifyToken, deleteAllData);
 router.post('/create-payment-sesson', verifyToken, makePayment);
 router.post('/stripe/webhook', express.raw({type: 'application/json'}), stripeWebHook);
 

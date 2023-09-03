@@ -34,17 +34,24 @@ const PeopleSchema = mongoose.Schema(
             default: ["Student"],
         },
         followers: {
-            type: [String],
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "People",
             required: false,
             default: [],
         },
         following: {
-            type: [String],
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "People",
             required: false,
             default: [],
         },
         externalProfiles: {
-            type: [Object],
+            type: [
+                {
+                    link: String,
+                    platform: String,
+                },
+            ],
             required: false,
             default: [],
         },

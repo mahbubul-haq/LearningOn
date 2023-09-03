@@ -42,15 +42,14 @@ const CoursesView = () => {
     }, []);
 
     useEffect(() => {
-        setFilteredCourses(courses);
+        changeCourseType();
     }, [courses]);
 
     useEffect(() => {
         if (categoriesWithCourse.length > 0) {
             setSelectedItem(categoriesWithCourse[0]);
-        }
-        else {
-            setSelectedItem("...");
+        } else {
+            setSelectedItem("");
         }
     }, [categoriesWithCourse]);
 
@@ -85,15 +84,13 @@ const CoursesView = () => {
             courses?.forEach((course) => {
                 console.log(course.owner._id, user._id);
                 if (course.owner._id == user._id) {
-
                     curFilteredCourses.push(course);
-                }
-                else {
+                } else {
                     course.courseInstructors.forEach((instructor) => {
                         if (instructor._id == user._id) {
                             curFilteredCourses.push(course);
                         }
-                    })
+                    });
                 }
             });
 
@@ -116,6 +113,10 @@ const CoursesView = () => {
     useEffect(() => {
         changeCourseType();
     }, [courseType]);
+
+    // ueEffect(() => {
+
+    // });
 
     const handleScroll = (direction) => {
         const container = document.querySelector(".courses-container");
@@ -264,6 +265,7 @@ const CoursesView = () => {
                     backgroundColor: "white",
                     borderRadius: "0.25rem",
                     width: "100%",
+                    height: "600px",
                 }}
             >
                 <Box
@@ -348,6 +350,7 @@ const CoursesView = () => {
                             gap: "2rem",
                             overflowX: "hidden",
                             width: "100%",
+                            height: "100%",
                             scrollBehavior: "smooth",
                         }}
                     >
@@ -370,13 +373,40 @@ const CoursesView = () => {
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
+                                    height: "100%",
                                     width: "100%",
-                                    height: "150px",
+                                    //border: "1px solid rgba(0, 0, 0, 0.23)",
                                 }}
                             >
-                                <Typography variant="h4">
-                                    No courses found on <b>{selectedItem}</b>
-                                </Typography>
+                                {selectedItem === "" ? (
+                                    <Box sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "3rem",
+                                        mt: "4rem",
+                                        alignItems: "center",
+                                        height: "100%",
+                                        // width: "100%",
+                                        // border: "1px solid rgba(0, 0, 0, 0.23)",
+                                    }}>
+                                        <Typography variant="h3">
+                                            No courses found
+                                        </Typography>
+                                        <img
+                                            src="/images/not_found_1.svg"
+                                            style={{
+                                                // height: "30%",
+                                                maxHeight: "250px",
+                                                width: "auto",
+                                            }}
+                                        />
+                                    </Box>
+                                ) : (
+                                    <Typography variant="h4">
+                                        No courses found on{" "}
+                                        <b>{selectedItem}</b>
+                                    </Typography>
+                                )}
                             </Box>
                         )}
                     </Box>

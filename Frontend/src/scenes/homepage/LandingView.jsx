@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const LandingView = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const user = useSelector((state) => state);
+    const user = useSelector((state) => state.user);
     const navigate = useNavigate();
 
     return (

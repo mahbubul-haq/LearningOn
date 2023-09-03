@@ -158,6 +158,9 @@ const TopSection = ({ courseInfo }) => {
                                         textDecoration: "underline",
                                     },
                                 }}
+                                onClick={() => {
+                                    navigate(`/profile/${instructor._id}`);
+                                }}
                             >
                                 {instructor.name}
                             </Button>

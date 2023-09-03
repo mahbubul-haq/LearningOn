@@ -105,6 +105,7 @@ export const themeSettings = (mode) => {
                         light200: colorTokens.background.light200,
                         light300: colorTokens.background.light300,
                         imagesBg: colorTokens.background.imagesBg,
+                        imagesBg1: "#CBEFD1",
                         buttonBgPink: colorTokens.background.buttonBgPink,
                         buttonBgPinkDark: "#E482EC",
                         buttonBgPinkDark2: "#D835E6",

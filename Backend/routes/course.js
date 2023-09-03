@@ -11,7 +11,7 @@ const router = Router();
 router.post('/new', verifyToken, newCourse);
 router.get('/draft', verifyToken, getDraftCourses);
 router.put('/update/:courseId/:status', verifyToken, updateCourse);
-router.get('/get/:courseId', verifyToken, getCourseById);
+router.get('/get/:courseId', getCourseById);
 router.get('/all',  getAllCourses);
 
 export default router;
