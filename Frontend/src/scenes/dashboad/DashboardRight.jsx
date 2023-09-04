@@ -30,9 +30,9 @@ const DashboardRight = () => {
             time += hours + "h ";
         }
         if (minutes > -1) {
-            time += minutes + "m";
+            time += minutes + "m ";
         }
-        return time;
+        return time + "ago";
     };
 
     return (

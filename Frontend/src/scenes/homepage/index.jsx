@@ -8,16 +8,24 @@ import socketIoClient from "socket.io-client";
 import Button from "@mui/material/Button";
 import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
+import { useContext } from "react";
+import { NotificationContext } from "../../state/NotificationContext";
+import { useSelector } from "react-redux";
 
 const HomePage = () => {
     const prevScrollY = useRef(0);
     const theme = useTheme();
+    const user = useSelector((state) => state.user);
+
+    const { notifications, setNotifications, getNotifications } =
+        useContext(NotificationContext);
 
     useEffect(() => {
         const socket = socketIoClient(import.meta.env.VITE_REACT_APP_URL);
 
         socket.on("my-course-purchased", (data) => {
-            console.log("data from server", data);
+            getNotifications(user._id);
+            console.log(data);
         });
     }, []);
 

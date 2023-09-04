@@ -15,12 +15,82 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { NotificationContext } from "../state/NotificationContext.jsx";
+import { useEffect } from "react";
+import { useState } from "react";
+import React from "react";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useTheme } from "@mui/material/styles";
 
 const Navbar = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
+    const [newNotifications, setNewNotifications] = React.useState(0);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const theme = useTheme();
+
+    const {
+        notifications,
+        setNotifications,
+        getNotifications,
+        updateNotifications,
+    } = useContext(NotificationContext);
+
+    const calculateNewNotifications = () => {
+        let count = 0;
+        notifications?.forEach((n) => {
+            if (n.status === "new") {
+                count++;
+            }
+        });
+        setNewNotifications(count);
+    };
+
+    const convertTime = (timeString) => {
+        const date = new Date(timeString);
+        let diff = Math.abs(new Date() - date);
+        let time = "";
+        /// convert to days hours and minutes
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -= days * (1000 * 60 * 60 * 24);
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        diff -= hours * (1000 * 60 * 60);
+        const minutes = Math.floor(diff / (1000 * 60));
+        diff -= minutes * (1000 * 60);
+
+        if (days > 0) {
+            time += days + "d ";
+        }
+        if (hours > 0) {
+            time += hours + "h ";
+        }
+        if (minutes > -1) {
+            time += minutes + "m ";
+        }
+        return time + "ago";
+    };
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+        updateNotifications("no id", "opened");
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    useEffect(() => {
+        calculateNewNotifications();
+    }, [notifications]);
+
+    useEffect(() => {
+        getNotifications(user._id);
+    }, []);
 
     return (
         <Box
@@ -133,9 +203,12 @@ const Navbar = () => {
                                                         theme.palette.text
                                                             .primary,
                                                 }}
+                                                onClick={handleClick}
                                             >
                                                 <Badge
-                                                    badgeContent={4}
+                                                    badgeContent={
+                                                        newNotifications
+                                                    }
                                                     color="error"
                                                     size="small"
                                                     sx={{
@@ -151,6 +224,114 @@ const Navbar = () => {
                                                     />
                                                 </Badge>
                                             </IconButton>
+                                            <Menu
+                                                id="basic-menu"
+                                                anchorEl={anchorEl}
+                                                open={open}
+                                                onClose={handleClose}
+                                                MenuListProps={{
+                                                    "aria-labelledby":
+                                                        "basic-button",
+                                                }}
+                                                anchorOrigin={{
+                                                    vertical: "bottom",
+                                                    horizontal: "right",
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: "top",
+                                                    horizontal: "right",
+                                                }}
+                                            >
+                                                {notifications?.map(
+                                                    (n, index) => (
+                                                        <MenuItem
+                                                            key={index}
+                                                            onClick={() => {
+                                                                updateNotifications(
+                                                                    n._id,
+                                                                    "clicked"
+                                                                );
+                                                                window.location.href =
+                                                                    n.link;
+                                                            }}
+                                                            sx={{
+                                                                maxWidth:
+                                                                    "500px",
+                                                                whiteSpace:
+                                                                    "wrap",
+                                                                backgroundColor:
+                                                                    n.status ===
+                                                                    "new"
+                                                                        ? theme
+                                                                              .palette
+                                                                              .background
+                                                                              .imagesBg
+                                                                        : n.status ===
+                                                                          "opened"
+                                                                        ? theme
+                                                                              .palette
+                                                                              .background
+                                                                              .imagesBg1
+                                                                        : theme
+                                                                              .palette
+                                                                              .grey
+                                                                              .grey50,
+                                                            }}
+                                                        >
+                                                            <Box>
+                                                                <FlexBetween gap="1rem">
+                                                                    <img
+                                                                        src={
+                                                                            n.imageLink
+                                                                                ? `${
+                                                                                      import.meta
+                                                                                          .env
+                                                                                          .VITE_REACT_APP_URL
+                                                                                  }/images/${
+                                                                                      n.imageLink
+                                                                                  }`
+                                                                                : "/images/dummyPerson.jpeg"
+                                                                        }
+                                                                        alt="user"
+                                                                        style={{
+                                                                            width: "2rem",
+                                                                            height: "2rem",
+                                                                            borderRadius:
+                                                                                "50%",
+                                                                        }}
+                                                                    />
+                                                                    <div
+                                                                        dangerouslySetInnerHTML={{
+                                                                            __html: n.message,
+                                                                        }}
+                                                                    ></div>
+                                                                    <Typography
+                                                                        sx={{
+                                                                            fontSize:
+                                                                                "0.8rem",
+                                                                            textAlign:
+                                                                                "right",
+                                                                            whiteSpace:
+                                                                                "nowrap",
+                                                                            color: (
+                                                                                theme
+                                                                            ) =>
+                                                                                theme
+                                                                                    .palette
+                                                                                    .text
+                                                                                    .secondary,
+                                                                        }}
+                                                                    >
+                                                                        {convertTime(
+                                                                            n.createdAt
+                                                                        )}
+                                                                    </Typography>
+                                                                </FlexBetween>
+                                                            </Box>
+                                                        </MenuItem>
+                                                    )
+                                                )}
+                                            </Menu>
                                             <IconButton
                                                 sx={{
                                                     color: (theme) =>
@@ -158,7 +339,9 @@ const Navbar = () => {
                                                             .primary,
                                                 }}
                                                 onClick={() => {
-                                                    navigate(`/profile/${user._id}`);
+                                                    navigate(
+                                                        `/profile/${user._id}`
+                                                    );
                                                 }}
                                             >
                                                 {user.picturePath ? (

@@ -9,10 +9,15 @@ import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { useContext } from "react";
 import { DashboardContext } from "../../state/DashboardContext";
+import {useParams} from "react-router-dom";
 
 const Dashboard = () => {
     const theme = useTheme();
     const user = useSelector((state) => state.user);
+
+    let courseId = useParams().courseId;
+    
+
     const {
         openedTab,
         setOpenedTab,
@@ -22,12 +27,20 @@ const Dashboard = () => {
         setRecentEnrollments,
     } = useContext(DashboardContext);
 
+    if (courseId) {
+        const course = user?.courses.find((course) => course._id == courseId);
+        setSelectedCourse(course);
+        //delete from params from url
+    }
+
     useEffect(() => {
         console.log(user?.courses);
     }, [user?.courses]);
 
     useEffect(() => {
         console.log(selectedCourse);
+        //add to url params
+        
         let element = document.querySelector(".dashboard");
         if (element) {
             element.scrollTop = 0;

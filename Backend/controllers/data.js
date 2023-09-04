@@ -1,6 +1,7 @@
 import Category from "../models/Category.js";
 import People from "../models/People.js";
 import Course from "../models/Course.js";
+import Notification from "../models/Notification.js";
 import Stripe from "stripe";
 const stripe = new Stripe(
     "sk_test_51NkNkxSGLLKlVFdVYwxLLI6YoDKUCMiTj7nKkorP9eCrlyuPyyId4K9YvgUuaqTKCEHdQ1RqLiuzKfKlHQgH1d8T00J4fv9YEf"
@@ -94,7 +95,7 @@ const deleteAllData = async (req, res) => {
 const makePayment = async (req, res) => {
     try {
         const courseInfo = await Course.findOne({ _id: req.body.courseId });
-       // console.log(courseInfo.courseThumbnail);
+        // console.log(courseInfo.courseThumbnail);
 
         const customer = await stripe.customers.create({
             metadata: {
@@ -248,6 +249,40 @@ const stripeWebHook = async (req, res) => {
                     });
 
                     await user.save();
+
+                    const targetIds = [];
+                    // targetIds.push(item.owner.toString());
+                    // if item.owner is an ObjectId, convert it to string
+                    // if (typeof item.owner === "object") {
+                    //     targetIds.push(item.owner.toString());
+                    // find the string of the objectid
+                    //console.log("item.owner", item.owner.toString(), item.owner);
+                    targetIds.push(item.owner.toString());
+
+                    course.courseInstructors.forEach((instructor) => {
+                        const instructorId = instructor.toString();
+                        if (!targetIds.includes(instructorId)) {
+                            targetIds.push(instructorId);
+                        }
+                    });
+
+                    targetIds.forEach(async (targetId) => {
+                        const curUser = await People.findOne({
+                            _id: targetId,
+                        });
+
+                        console.log("targetId", targetId);
+
+                        const notification = new Notification({
+                            userId: curUser._id,
+                            message: `<b>${user.name}</b> enrolled in your course <b>${course.courseTitle} </b>`,
+                            link: `${process.env.CLIENT_URL}/dashboard/${course._id}`,
+                            status: "new",
+                            imageLink: user.picturePath,
+                        });
+
+                        await notification.save();
+                    });
                 });
             }
         });

@@ -21,6 +21,7 @@ import ProfilePage from "./scenes/profilepage";
 import { ProfilePageState } from "./state/ProfilePageContext";
 import Dashboard from "./scenes/dashboad";
 import { DashboardState } from "./state/DashboardContext";
+import { NotificationState } from "./state/NotificationContext";
 
 function App() {
     const mode = useSelector((state) => state.mode);
@@ -29,61 +30,66 @@ function App() {
     useEffect(() => {}, [mode]);
 
     return (
-        <DashboardState>
-            <ProfilePageState>
-                <LearningCourseState>
-                    <HomePageState>
-                        <GlobalState>
-                            <CreateCourseState>
-                                <ThemeProvider theme={theme}>
-                                    <CssBaseline />
-                                    <BrowserRouter>
-                                        <Routes>
-                                            <Route
-                                                path="/"
-                                                element={<HomePage />}
-                                            />
-                                            <Route
-                                                path="/login"
-                                                element={<LoginSignUp />}
-                                            />
-                                            <Route
-                                                path="/signup"
-                                                element={<LoginSignUp />}
-                                            />
-                                            <Route
-                                                path="/publishcourse"
-                                                element={<PublishCourse />}
-                                            />
-                                            <Route
-                                                path="/course/:courseId"
-                                                element={<CoursePage />}
-                                            />
-                                            <Route
-                                                path="/learning/course/:courseId"
-                                                element={<LearningPage />}
-                                            />
-                                            <Route
-                                                path="/payment/:status/:courseId"
-                                                element={<PaymentStatus />}
-                                            />
-                                            <Route
-                                                path="/profile/:userId"
-                                                element={<ProfilePage />}
-                                            />
-                                            <Route
-                                                path="/dashboard"
-                                                element={<Dashboard />}
-                                            />
-                                        </Routes>
-                                    </BrowserRouter>
-                                </ThemeProvider>
-                            </CreateCourseState>
-                        </GlobalState>
-                    </HomePageState>
-                </LearningCourseState>
-            </ProfilePageState>
-        </DashboardState>
+        <NotificationState>
+            <DashboardState>
+                <ProfilePageState>
+                    <LearningCourseState>
+                        <HomePageState>
+                            <GlobalState>
+                                <CreateCourseState>
+                                    <ThemeProvider theme={theme}>
+                                        <CssBaseline />
+                                        <BrowserRouter>
+                                            <Routes>
+                                                <Route
+                                                    path="/"
+                                                    element={<HomePage />}
+                                                />
+                                                <Route
+                                                    path="/login"
+                                                    element={<LoginSignUp />}
+                                                />
+                                                <Route
+                                                    path="/signup"
+                                                    element={<LoginSignUp />}
+                                                />
+                                                <Route
+                                                    path="/publishcourse"
+                                                    element={<PublishCourse />}
+                                                />
+                                                <Route
+                                                    path="/course/:courseId"
+                                                    element={<CoursePage />}
+                                                />
+                                                <Route
+                                                    path="/learning/course/:courseId"
+                                                    element={<LearningPage />}
+                                                />
+                                                <Route
+                                                    path="/payment/:status/:courseId"
+                                                    element={<PaymentStatus />}
+                                                />
+                                                <Route
+                                                    path="/profile/:userId"
+                                                    element={<ProfilePage />}
+                                                />
+                                                <Route
+                                                    path="/dashboard/:courseId"
+                                                    element={<Dashboard />}
+                                                />
+                                                <Route path="dashboard/"
+                                                    element={<Dashboard />}
+                                                />
+                                            </Routes>
+                                        </BrowserRouter>
+                                    </ThemeProvider>
+                                </CreateCourseState>
+                            </GlobalState>
+                        </HomePageState>
+                    </LearningCourseState>
+                </ProfilePageState>
+            </DashboardState>
+        </NotificationState>
     );
 }
 

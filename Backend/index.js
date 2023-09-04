@@ -15,8 +15,10 @@ import dataRoutes from "./routes/data.js";
 import courseRoutes from "./routes/course.js";
 import verifyToken from "./middlewares/auth.js";
 import userRoutes from "./routes/user.js";
+import notificationRoutes from "./routes/notification.js";
 import http from "http";
 import { Server } from "socket.io";
+//chage in index.js
 
 // configurations
 
@@ -102,6 +104,7 @@ app.use("/auth", authRoutes);
 app.use("/course", courseRoutes);
 app.use("/data", dataRoutes);
 app.use("/users", userRoutes);
+app.use("/notification", notificationRoutes);
 
 app.get("/", (req, res) => {
     res.send("Hello World");
