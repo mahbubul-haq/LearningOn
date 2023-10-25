@@ -11,12 +11,13 @@ import Typography from "@mui/material/Typography";
 import { useContext } from "react";
 import { NotificationContext } from "../../state/NotificationContext";
 import { useSelector } from "react-redux";
+import { GlobalContext } from "../../state/GlobalContext";
 
 const HomePage = () => {
     const prevScrollY = useRef(0);
     const theme = useTheme();
     const user = useSelector((state) => state.user);
-
+    const {setOpenedItem} = useContext(GlobalContext);
     const { notifications, setNotifications, getNotifications } =
         useContext(NotificationContext);
 
@@ -25,8 +26,9 @@ const HomePage = () => {
 
         socket.on("my-course-purchased", (data) => {
             getNotifications(user._id);
-            console.log(data);
+            console.log("someone purchased", data);
         });
+        setOpenedItem("home");
     }, []);
 
     useEffect(() => {

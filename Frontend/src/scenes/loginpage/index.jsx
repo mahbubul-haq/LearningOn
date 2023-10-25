@@ -8,6 +8,7 @@ import LoginForm from "./LoginForm";
 const LoginSignUp = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isLogin = useLocation().state?.isLogin;
+    const redirect = useLocation().state?.redirect;
 
     const theme = useTheme();
 
@@ -34,11 +35,8 @@ const LoginSignUp = () => {
                     //     ? "0px 0px 43px rgba(134, 143, 143, 0.3)"
                     //     : "none",
                     display: "flex",
-                    justifyContent: isNonMobileScreens
-                        ? "space-between"
-                        : "center",
-                    backgroundColor: isNonMobileScreens ? (theme) =>
-                        theme.palette.background.gradient2: "transparent",
+                    justifyContent: isNonMobileScreens ? "space-between" : "center",
+                    backgroundColor: isNonMobileScreens ? (theme) => theme.palette.background.gradient2 : "transparent",
                 }}
             >
                 {isNonMobileScreens && (
@@ -59,8 +57,7 @@ const LoginSignUp = () => {
                             <Box
                                 sx={{
                                     display: "inline-block",
-                                    color: (theme) =>
-                                        theme.palette.text.primary,
+                                    color: (theme) => theme.palette.text.primary,
                                 }}
                             >
                                 On
@@ -76,12 +73,7 @@ const LoginSignUp = () => {
                                 opacity: "0.7",
                             }}
                         >
-                            <img
-                                src="/images/login_light.svg"
-                                width="100%"
-                                height="auto"
-                                alt="client svg"
-                            />
+                            <img src="/images/login_light.svg" width="100%" height="auto" alt="client svg" />
                         </Box>
                     </Box>
                 )}
@@ -93,7 +85,7 @@ const LoginSignUp = () => {
                         alignItems: "center",
                     }}
                 >
-                    {isLogin ? <LoginForm /> : <SignUpForm />}
+                    {isLogin ? <LoginForm redirect={redirect} /> : <SignUpForm />}
                 </Box>
             </Box>
         </Box>
@@ -101,5 +93,3 @@ const LoginSignUp = () => {
 };
 
 export default LoginSignUp;
-
-

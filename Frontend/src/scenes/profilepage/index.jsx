@@ -13,7 +13,7 @@ import { ProfilePageContext } from "../../state/ProfilePageContext";
 
 const ProfilePage = () => {
     const { userId } = useParams();
-    const { userById, getUserById, setUserById } = useContext(GlobalContext);
+    const { userById, getUserById, setUserById, setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
     const theme = useTheme();
@@ -28,6 +28,10 @@ const ProfilePage = () => {
         
     }, [userById]);
 
+    useEffect(() => {
+        setOpenedItem("profile");
+    }, []);
+
    
 
     return (
@@ -36,6 +40,7 @@ const ProfilePage = () => {
             width: "100%",
             minHeight: "600px",
             overflow: "auto",
+            paddingBottom: "2rem"
         }}>
             <Navbar />
             <ProfileTop userInfo={userById} />

@@ -42,8 +42,7 @@ const ProfileLeft = ({ userInfo }) => {
                             // fontWeight: "600",
                             padding: "0.7em 1rem",
                             "&:hover": {
-                                backgroundColor:
-                                    theme.palette.background.light300,
+                                backgroundColor: theme.palette.background.light300,
                             },
                         },
                     }}
@@ -54,10 +53,7 @@ const ProfileLeft = ({ userInfo }) => {
                                 setOpenedTab("wallet");
                             }}
                             sx={{
-                                backgroundColor:
-                                    openedTab === "wallet"
-                                        ? theme.palette.background.light300
-                                        : "transparent",
+                                backgroundColor: openedTab === "wallet" ? theme.palette.background.light300 : "transparent",
                             }}
                         >
                             <FlexBetween
@@ -68,10 +64,7 @@ const ProfileLeft = ({ userInfo }) => {
                                 <Typography
                                     sx={{
                                         fontSize: "1rem",
-                                        fontWeight:
-                                            openedTab === "wallet"
-                                                ? "600"
-                                                : "400",
+                                        fontWeight: openedTab === "wallet" ? "600" : "400",
                                     }}
                                 >
                                     Wallet
@@ -93,10 +86,7 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "profile" ? "600" : "400",
-                            backgroundColor:
-                                openedTab === "profile"
-                                    ? theme.palette.background.light300
-                                    : "transparent",
+                            backgroundColor: openedTab === "profile" ? theme.palette.background.light300 : "transparent",
                         }}
                     >
                         Profile
@@ -107,10 +97,7 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "courses" ? "600" : "400",
-                            backgroundColor:
-                                openedTab === "courses"
-                                    ? theme.palette.background.light300
-                                    : "transparent",
+                            backgroundColor: openedTab === "courses" ? theme.palette.background.light300 : "transparent",
                         }}
                     >
                         <FlexBetween
@@ -121,8 +108,7 @@ const ProfileLeft = ({ userInfo }) => {
                             <Typography
                                 sx={{
                                     fontSize: "1rem",
-                                    fontWeight:
-                                        openedTab === "courses" ? "600" : "400",
+                                    fontWeight: openedTab === "courses" ? "600" : "400",
                                 }}
                             >
                                 Courses
@@ -133,7 +119,7 @@ const ProfileLeft = ({ userInfo }) => {
                                     fontWeight: "600",
                                 }}
                             >
-                                {userInfo?.courses?.length || "0"}
+                                {userInfo?.courses?.reduce((acc, course) => (acc + (course.courseStatus == "draft" ? 0 : 1)), 0) || "0"}
                             </Typography>
                         </FlexBetween>
                     </MenuItem>
@@ -143,10 +129,7 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "blogs" ? "600" : "400",
-                            backgroundColor:
-                                openedTab === "blogs"
-                                    ? theme.palette.background.light300
-                                    : "transparent",
+                            backgroundColor: openedTab === "blogs" ? theme.palette.background.light300 : "transparent",
                         }}
                     >
                         <FlexBetween
@@ -157,8 +140,7 @@ const ProfileLeft = ({ userInfo }) => {
                             <Typography
                                 sx={{
                                     fontSize: "1rem",
-                                    fontWeight:
-                                        openedTab === "blogs" ? "600" : "400",
+                                    fontWeight: openedTab === "blogs" ? "600" : "400",
                                 }}
                             >
                                 Blogs
@@ -178,12 +160,8 @@ const ProfileLeft = ({ userInfo }) => {
                             setOpenedTab("tutoring");
                         }}
                         sx={{
-                            fontWeight:
-                                openedTab === "tutoring" ? "600" : "400",
-                            backgroundColor:
-                                openedTab === "tutoring"
-                                    ? theme.palette.background.light300
-                                    : "transparent",
+                            fontWeight: openedTab === "tutoring" ? "600" : "400",
+                            backgroundColor: openedTab === "tutoring" ? theme.palette.background.light300 : "transparent",
                         }}
                     >
                         <FlexBetween
@@ -194,10 +172,7 @@ const ProfileLeft = ({ userInfo }) => {
                             <Typography
                                 sx={{
                                     fontSize: "1rem",
-                                    fontWeight:
-                                        openedTab === "tutoring"
-                                            ? "600"
-                                            : "400",
+                                    fontWeight: openedTab === "tutoring" ? "600" : "400",
                                 }}
                             >
                                 Tutoring
@@ -217,12 +192,8 @@ const ProfileLeft = ({ userInfo }) => {
                             setOpenedTab("followers");
                         }}
                         sx={{
-                            fontWeight:
-                                openedTab === "followers" ? "600" : "400",
-                            backgroundColor:
-                                openedTab === "followers"
-                                    ? theme.palette.background.light300
-                                    : "transparent",
+                            fontWeight: openedTab === "followers" ? "600" : "400",
+                            backgroundColor: openedTab === "followers" ? theme.palette.background.light300 : "transparent",
                         }}
                     >
                         <FlexBetween
@@ -233,10 +204,7 @@ const ProfileLeft = ({ userInfo }) => {
                             <Typography
                                 sx={{
                                     fontSize: "1rem",
-                                    fontWeight:
-                                        openedTab === "followers"
-                                            ? "600"
-                                            : "400",
+                                    fontWeight: openedTab === "followers" ? "600" : "400",
                                 }}
                             >
                                 Followers
@@ -256,12 +224,8 @@ const ProfileLeft = ({ userInfo }) => {
                             setOpenedTab("following");
                         }}
                         sx={{
-                            fontWeight:
-                                openedTab === "following" ? "600" : "400",
-                            backgroundColor:
-                                openedTab === "following"
-                                    ? theme.palette.background.light300
-                                    : "transparent",
+                            fontWeight: openedTab === "following" ? "600" : "400",
+                            backgroundColor: openedTab === "following" ? theme.palette.background.light300 : "transparent",
                         }}
                     >
                         <FlexBetween
@@ -272,10 +236,7 @@ const ProfileLeft = ({ userInfo }) => {
                             <Typography
                                 sx={{
                                     fontSize: "1rem",
-                                    fontWeight:
-                                        openedTab === "following"
-                                            ? "600"
-                                            : "400",
+                                    fontWeight: openedTab === "following" ? "600" : "400",
                                 }}
                             >
                                 Following
@@ -307,8 +268,7 @@ const ProfileLeft = ({ userInfo }) => {
                                     width: "100%",
                                     backgroundColor: theme.palette.grey.grey200,
                                     "&:hover": {
-                                        backgroundColor:
-                                            theme.palette.grey.grey300,
+                                        backgroundColor: theme.palette.grey.grey300,
                                     },
                                 },
                             }}

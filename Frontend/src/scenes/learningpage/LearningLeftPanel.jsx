@@ -13,16 +13,15 @@ import { CreateCourseContext } from "../../state/CreateCourse";
 import state from "../../state";
 import { useTheme } from "@emotion/react";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export const LearningLeftPanel = ({ courseInfo }) => {
-    const { openedLesson, setOpenedLesson } = useContext(LearningCourseContext);
+    const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons } = useContext(LearningCourseContext);
 
     const theme = useTheme();
 
     return (
-        <Box sx={{
-           
-        }}>
+        <Box sx={{}}>
             <Box
                 sx={{
                     display: "flex",
@@ -35,7 +34,6 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                 // onClick={() => setInputSection("course content")}
             >
                 <Typography
-                    
                     sx={{
                         fontWeight: "600",
                         mb: "0.8rem",
@@ -69,115 +67,146 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                         {courseInfo.lessons.map((lesson, index) => (
                             <React.Fragment key={index}>
                                 <FlexBetween
-                                    gap="0.8rem"
                                     sx={{
-                                        "&&": {
-                                            justifyContent: "flex-start",
-                                            alignItems: "flex-start",
-                                            cursor: "pointer",
-                                            p: "1rem 1rem",
-                                        },
                                         backgroundColor:
-                                            openedLesson.subLesson === 0 &&
-                                            openedLesson.lesson === index + 1
+                                            openedLesson.subLesson === 0 && openedLesson.lesson === index + 1
                                                 ? theme.palette.primary.main
                                                 : "transparent",
                                         "&:hover": {
-                                            backgroundColor:
-                                                theme.palette.primary.main,
+                                            backgroundColor: theme.palette.primary.light,
+                                        },
+                                        "&&": {
+                                            gap: "0.5rem",
                                         },
                                     }}
-                                    onClick={() => {
-                                        setOpenedLesson({
-                                            lesson: index + 1,
-                                            subLesson: 0,
-                                        });
-                                    }}
                                 >
-                                    <StyledCheckbox
-                                        icon={
-                                            <RadioButtonUncheckedIcon
-                                                sx={{
-                                                    fontSize: "1.1rem",
-                                                }}
-                                            />
-                                        }
-                                        checkedIcon={
-                                            <CheckCircleIcon
-                                                sx={{
-                                                    fontSize: "1.1rem",
-                                                }}
-                                            />
-                                        }
-                                        checked={false}
+                                    <FlexBetween
+                                        gap="0.8rem"
                                         sx={{
                                             "&&": {
-                                                // different color if checked vs unchecked
-                                                color: theme.palette.grey
-                                                    .grey400,
+                                                justifyContent: "flex-start",
+                                                alignItems: "flex-start",
+                                                cursor: "pointer",
+                                                p: "1rem 0rem 1rem 1rem",
                                             },
-                                            // border: "1px solid #E0E0E0"
                                         }}
-                                    />
-                                    <Box
-                                        sx={{
-                                            justifyContent: "flex-start",
-                                            alignItems: "flex-start",
-                                            gap: "1rem",
-                                            display: "flex",
-                                            // border: "2px solid black"
+                                        onClick={() => {
+                                            setOpenedLesson({
+                                                lesson: index + 1,
+                                                subLesson: 0,
+                                            });
                                         }}
                                     >
-                                        <Typography
-                                            variant="body1"
+                                        <StyledCheckbox
+                                            icon={
+                                                <RadioButtonUncheckedIcon
+                                                    sx={{
+                                                        fontSize: "1.1rem",
+                                                    }}
+                                                />
+                                            }
+                                            checkedIcon={
+                                                <CheckCircleIcon
+                                                    sx={{
+                                                        fontSize: "1.1rem",
+                                                    }}
+                                                />
+                                            }
+                                            checked={false}
                                             sx={{
-                                                color: (theme) =>
-                                                    theme.palette.grey.grey600,
-                                                fontSize: "0.9rem",
-                                                fontWeight: "600",
+                                                "&&": {
+                                                    // different color if checked vs unchecked
+                                                    color: theme.palette.grey.grey400,
+                                                },
+                                                // border: "1px solid #E0E0E0"
+                                            }}
+                                        />
+                                        <Box
+                                            sx={{
+                                                justifyContent: "flex-start",
+                                                alignItems: "flex-start",
+                                                gap: "1rem",
+                                                display: "flex",
+                                                // border: "2px solid black"
                                             }}
                                         >
-                                            {index + 1}
-                                        </Typography>
-                                        <Typography
-                                            variant="body1"
+                                            <Typography
+                                                variant="body1"
+                                                sx={{
+                                                    color: (theme) => theme.palette.grey.grey600,
+                                                    fontSize: "0.9rem",
+                                                    fontWeight: "600",
+                                                }}
+                                            >
+                                                {index + 1}
+                                            </Typography>
+                                            <Typography
+                                                variant="body1"
+                                                sx={{
+                                                    color: (theme) => theme.palette.grey.grey600,
+                                                    fontSize: "0.9rem",
+                                                }}
+                                            >
+                                                {lesson.title}
+                                            </Typography>
+                                        </Box>
+                                    </FlexBetween>
+                                    <Box
+                                        sx={{
+                                            p: "1rem 1rem 1rem 0",
+                                            pr: "2rem",
+                                            cursor: "pointer",
+                                            height: "100%",
+                                            // border: "2px solid red"
+                                            
+                                        }}
+                                        onClick={() => {
+                                            if (expandedLessons.includes(index + 1)) {
+                                                setExpandedLessons((prev) => prev.filter((item) => item !== index + 1));
+                                            } else {
+                                                setExpandedLessons((prev) => [...prev, index + 1]);
+                                            }
+                                        }}
+                                    >
+                                        <ExpandMoreIcon
                                             sx={{
-                                                color: (theme) =>
-                                                    theme.palette.grey.grey600,
-                                                fontSize: "0.9rem",
+                                                transform: expandedLessons.includes(index + 1) ? "rotate(180deg)" : "",
+                                                transition: "transform 0.3s ease-in-out",
+                                                color: theme.palette.grey.grey600,
+                                                fontSize: "1.5rem",
                                             }}
-                                        >
-                                            {lesson.title}
-                                        </Typography>
+                                        />
                                     </Box>
                                 </FlexBetween>
-
-                                {lesson.subLessons?.map(
-                                    (subLesson, subIndex) => (
+                                <Box
+                                    sx={{
+                                        height: expandedLessons.includes(index + 1) ? "auto" : "0px",
+                                        maxHeight: expandedLessons.includes(index + 1) ? "1000px" : "0px",
+                                        transition: "all 0.5s ease",
+                                        ///add webkit transition
+                                        // transition not working
+                                        overflow: "hidden",
+                                        
+                                    }}
+                                >
+                                    {lesson.subLessons?.map((subLesson, subIndex) => (
                                         <FlexBetween
                                             key={subLesson.title + subIndex}
                                             gap="0.8rem"
                                             sx={{
                                                 "&&": {
-                                                    justifyContent:
-                                                        "flex-start",
+                                                    justifyContent: "flex-start",
                                                     alignItems: "flex-start",
                                                     cursor: "pointer",
                                                     p: "1rem 1rem",
                                                     paddingLeft: "2rem",
                                                 },
                                                 backgroundColor:
-                                                    openedLesson.subLesson ===
-                                                        subIndex + 1 &&
-                                                    openedLesson.lesson ===
-                                                        index + 1
-                                                        ? theme.palette.primary
-                                                              .main
+                                                    openedLesson.subLesson === subIndex + 1 && openedLesson.lesson === index + 1
+                                                        ? theme.palette.primary.main
                                                         : "transparent",
                                                 "&:hover": {
-                                                    backgroundColor:
-                                                        theme.palette.primary
-                                                            .main,
+                                                    backgroundColor: theme.palette.primary.light,
                                                 },
                                             }}
                                             onClick={() =>
@@ -206,16 +235,14 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                                                 sx={{
                                                     "&&": {
                                                         // different color if checked vs unchecked
-                                                        color: theme.palette
-                                                            .grey.grey400,
+                                                        color: theme.palette.grey.grey400,
                                                     },
                                                     // border: "1px solid #E0E0E0"
                                                 }}
                                             />
                                             <Box
                                                 sx={{
-                                                    justifyContent:
-                                                        "flex-start",
+                                                    justifyContent: "flex-start",
                                                     alignItems: "flex-start",
                                                     gap: "1rem",
                                                     display: "flex",
@@ -225,9 +252,7 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                                                 <Typography
                                                     variant="body1"
                                                     sx={{
-                                                        color: (theme) =>
-                                                            theme.palette.grey
-                                                                .grey600,
+                                                        color: (theme) => theme.palette.grey.grey600,
                                                         fontSize: "0.9rem",
                                                         fontWeight: "600",
                                                     }}
@@ -237,9 +262,7 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                                                 <Typography
                                                     variant="body1"
                                                     sx={{
-                                                        color: (theme) =>
-                                                            theme.palette.grey
-                                                                .grey600,
+                                                        color: (theme) => theme.palette.grey.grey600,
                                                         fontSize: "0.9rem",
                                                     }}
                                                 >
@@ -247,8 +270,8 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                                                 </Typography>
                                             </Box>
                                         </FlexBetween>
-                                    )
-                                )}
+                                    ))}
+                                </Box>
                             </React.Fragment>
                         ))}
                     </React.Fragment>

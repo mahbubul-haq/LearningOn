@@ -29,7 +29,7 @@ export const NotificationState = (props) => {
                 const notifications = data.notifications?.sort((a, b) => {
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
-                console.log("notifications", notifications);
+                //console.log("notifications", notifications);
                 setNotifications(notifications);
             } else {
                 setNotifications([]);

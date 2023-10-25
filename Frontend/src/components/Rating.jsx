@@ -6,7 +6,7 @@ import { Box, Typography } from '@mui/material';
 const Rating = ({
     rating
 }) => {
-    console.log(rating);
+    //console.log(rating);
   return (
     <Box sx={{
         display: "flex",
@@ -22,7 +22,8 @@ const Rating = ({
             // border: "1px solid red",
             display: "flex",
             alignItems: "center",
-            alignSelf: "baseline"
+            fontSize: "1rem",
+            mt: "0.1rem"
         }}>
 
         <Typography sx={{
@@ -30,7 +31,6 @@ const Rating = ({
             fontSize: "inherit",
             m: 0,
             p: 0,
-            lineHeight: "0.5rem"
             
         }}>
             {rating.rating}
@@ -39,7 +39,7 @@ const Rating = ({
             color: theme => theme.palette.grey.grey400,
             fontSize: "inherit"
         }}>
-            ({rating.count}{rating.showText ? " ratings": ""})
+            &#40;{rating.count}{rating.showText ? " ratings": ""}&#41;
         </Typography>
             </Box>
     </Box>

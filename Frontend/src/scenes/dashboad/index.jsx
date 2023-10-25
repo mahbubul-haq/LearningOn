@@ -9,38 +9,36 @@ import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { useContext } from "react";
 import { DashboardContext } from "../../state/DashboardContext";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import {GlobalContext} from "../../state/GlobalContext";
 
 const Dashboard = () => {
     const theme = useTheme();
     const user = useSelector((state) => state.user);
-
-    let courseId = useParams().courseId;
+   
+    const params = useParams();
+    const {setOpenedItem} = useContext(GlobalContext);
+    const { openedTab, setOpenedTab, selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);
     
-
-    const {
-        openedTab,
-        setOpenedTab,
-        selectedCourse,
-        setSelectedCourse,
-        recentEnrollments,
-        setRecentEnrollments,
-    } = useContext(DashboardContext);
-
-    if (courseId) {
-        const course = user?.courses.find((course) => course._id == courseId);
-        setSelectedCourse(course);
-        //delete from params from url
-    }
+    useEffect(() => {
+        setOpenedItem("dashboard");
+    }, []);
 
     useEffect(() => {
-        console.log(user?.courses);
-    }, [user?.courses]);
+        if (params.courseId) {
+            setSelectedCourse(user?.courses.find((course) => course._id == params.courseId));
+        } else {
+            setSelectedCourse(null);
+        }
+    }, [params]);
 
     useEffect(() => {
-        console.log(selectedCourse);
-        //add to url params
-        
+        // console.log(selectedCourse);
+        //add selectecCourse._id to url
+
+        window.history.pushState({}, "", `/dashboard/${selectedCourse?._id}`);
+
         let element = document.querySelector(".dashboard");
         if (element) {
             element.scrollTop = 0;
@@ -49,16 +47,14 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (selectedCourse) {
-            const enrollments = selectedCourse.enrolledStudents.map(
-                (enrollment) => {
-                    return {
-                        enrolledOn: enrollment.enrolledOn,
-                        userId: enrollment.userId,
-                        userName: enrollment.userName,
-                        paidAmount: enrollment.paidAmount,
-                    };
-                }
-            );
+            const enrollments = selectedCourse.enrolledStudents.map((enrollment) => {
+                return {
+                    enrolledOn: enrollment.enrolledOn,
+                    userId: enrollment.userId,
+                    userName: enrollment.userName,
+                    paidAmount: enrollment.paidAmount,
+                };
+            });
 
             enrollments.sort((a, b) => {
                 return new Date(b.enrolledOn) - new Date(a.enrolledOn);
@@ -113,9 +109,10 @@ const Dashboard = () => {
                     <Navbar />
                 </Box>
                 <Box
+                    className="dashboard-top"
                     sx={{
                         position: "sticky",
-                        top: "-4.5rem",
+                        top: "-1rem",
                         zIndex: "10",
                     }}
                 >
@@ -127,6 +124,7 @@ const Dashboard = () => {
                         display: "flex",
                         gap: "2rem",
                         py: "3rem",
+                        
                     }}
                 >
                     <Box
@@ -158,6 +156,33 @@ const Dashboard = () => {
                             p: "1rem",
                             maxHeight: "1500px",
                             overflow: "auto",
+                            "&::-webkit-scrollbar": {
+                                width: "0.5rem",
+                            },
+                            "&::-webkit-scrollbar-track": {
+                                background: "white",
+                                borderRadius: "0.25rem",
+                            },
+                            "&::-webkit-scrollbar-thumb": {
+                                background: theme.palette.grey.grey300,
+
+                                borderRadius: "0.25rem",
+                                //change the length of scroll bar thumb
+                                height: "5px",
+                            },
+
+                            "&::-webkit-scrollbar-thumb:hover": {
+                                background: theme.palette.grey.grey400,
+                            },
+
+                            "&::-webkit-scrollbar-thumb:active": {
+                                background: theme.palette.grey.grey400,
+                            },
+
+                            //change the buttons of scroll bar
+                            "&::-webkit-scrollbar-button": {
+                                display: "none",
+                            },
                         }}
                     >
                         <DashboardRight />

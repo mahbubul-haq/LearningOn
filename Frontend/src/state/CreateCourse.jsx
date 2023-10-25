@@ -43,6 +43,10 @@ export const CreateCourseState = (props) => {
     const [uploadProgress, setUploadProgress] = React.useState(-1);
     const [inputLessons, setInputLessons] = React.useState([]);
     const [uploadStatus, setUploadStatus] = React.useState("");
+    const [errors, setErrors] = React.useState({});
+    const [updating, setUpdating] = React.useState("");
+    const [editMode, setEditMode] = React.useState(false);
+    const [courseId, setCourseId] = React.useState("");
 
     // useEffect(() => {
     //     console.log(isCourseValid());
@@ -68,11 +72,7 @@ export const CreateCourseState = (props) => {
         for (let lesson of courseState.lessons) {
             if (!lesson.title) return false;
             for (let subLesson of lesson.subLessons) {
-                if (
-                    !subLesson.title ||
-                    !(subLesson.videoLink || subLesson.lectureNote)
-                )
-                    return false;
+                if (!subLesson.title || !(subLesson.videoLink || subLesson.lectureNote)) return false;
             }
         }
 
@@ -80,38 +80,34 @@ export const CreateCourseState = (props) => {
     };
 
     const getDraftCourse = async () => {
-        const response = await fetch(
-            `${import.meta.env.VITE_REACT_APP_URL}/course/draft`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "auth-token": token,
-                },
-            }
-        );
+        if (isAnyError()) return;
+
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/draft`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+            },
+        });
 
         const data = await response.json();
 
-        console.log(data);
+        //console.log(data);
 
         if (data.success) {
             setCourseState(data.courseInfo);
         } else {
-            const response = await fetch(
-                `${import.meta.env.VITE_REACT_APP_URL}/course/new`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                }
-            );
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/new`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": token,
+                },
+            });
 
             const data = await response.json();
 
-            console.log(data);
+            //console.log(data);
 
             if (data.success) {
                 setCourseState(data.courseInfo);
@@ -119,35 +115,55 @@ export const CreateCourseState = (props) => {
         }
     };
 
+    const getCoursePlainById = async (courseId) => {
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/get/plain/${courseId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+            },
+        });
+
+        const data = await response.json();
+
+        //console.log(data);
+
+        if (data.success) {
+            setCourseState(data.courseInfo);
+        }
+    };
+
     const updateCourse = async (status) => {
-        console.log(courseState);
+        //console.log(courseState);
+        console.log("update course called");
         try {
-            const response = await fetch(
-                `${import.meta.env.VITE_REACT_APP_URL}/course/update/${
-                    courseState._id
-                }/${status}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                    body: JSON.stringify({
-                        ...courseState,
-                    }),
-                }
-            );
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/update/${courseState._id}/${status}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": token,
+                },
+                body: JSON.stringify({
+                    ...courseState,
+                }),
+            });
 
             const data = await response.json();
             if (data.success) {
                 setCourseState(data.courseInfo);
-                if (status === "published") setUploadStatus("published");
+                if (status === "published" && uploadStatus == "publishing") setUploadStatus("published");
+                if (status === "draft" && updating == "updating") setUpdating("updated");
+                setErrors({});
                 getDraftCourse();
             } else {
-                if (status === "published") setUploadStatus("unpublished");
+                if (status === "published" && uploadStatus == "publishing") setUploadStatus("unpublished");
+                if (status === "draft" && updating == "updating") setUpdating("failed");
+
+                if (data.errors) setErrors(data.errors);
             }
         } catch (err) {
-            if (status === "published") setUploadStatus("unpublished");
+            if (status === "published" && uploadStatus == "publishing") setUploadStatus("unpublished");
+            if (status === "draft" && updating == "updating") setUpdating("failed");
         }
     };
 
@@ -159,7 +175,7 @@ export const CreateCourseState = (props) => {
             onUploadProgress: (progressEvent) => {
                 const { loaded, total } = progressEvent;
                 let percent = Math.floor((loaded * 100) / total);
-                console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+                //console.log(`${loaded}kb of ${total}kb | ${percent}%`);
                 if (percent < 100) {
                     setUploadProgress(percent);
                 }
@@ -186,39 +202,29 @@ export const CreateCourseState = (props) => {
                 setUploadProgress(100);
 
                 if (curValue) {
-                    const response = await fetch(
-                        `${
-                            import.meta.env.VITE_REACT_APP_URL
-                        }/filedelete/${curValue}`,
-                        {
-                            method: "DELETE",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "auth-token": token,
-                            },
-                        }
-                    );
-
-                    const data = await response.json();
-                    console.log(data);
-                }
-
-                await fetch(
-                    `${import.meta.env.VITE_REACT_APP_URL}/course/update/${
-                        courseState._id
-                    }/draft`,
-                    {
-                        method: "PUT",
+                    const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/filedelete/${curValue}`, {
+                        method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
                             "auth-token": token,
                         },
-                        body: JSON.stringify({
-                            ...courseState,
-                            [courseProperty]: res.data.fileName,
-                        }),
-                    }
-                );
+                    });
+
+                    const data = await response.json();
+                    // console.log(data);
+                }
+
+                await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/update/${courseState._id}/draft`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                    body: JSON.stringify({
+                        ...courseState,
+                        [courseProperty]: res.data.fileName,
+                    }),
+                });
 
                 setCourseState({
                     ...courseState,
@@ -226,8 +232,18 @@ export const CreateCourseState = (props) => {
                 });
             }
         } catch (err) {
-            console.log(err);
+            //console.log(err);
         }
+    };
+
+    const isAnyError = () => {
+        if (errors) {
+            for (let error in errors) {
+                if (errors[error]) return true;
+            }
+        }
+
+        return false;
     };
 
     return (
@@ -251,6 +267,16 @@ export const CreateCourseState = (props) => {
                 setInputLessons,
                 uploadStatus,
                 setUploadStatus,
+                errors,
+                setErrors,
+                isAnyError,
+                updating,
+                setUpdating,
+                courseId,
+                setCourseId,
+                editMode,
+                setEditMode,
+                getCoursePlainById,
             }}
         >
             {props.children}

@@ -49,18 +49,24 @@ const CourseMedia = () => {
         uploadProgress,
         setUploadProgress,
         updateCourse,
+        editMode,
+        courseId,
     } = useContext(CreateCourseContext);
     const [addSkill, setAddSkill] = React.useState(false);
     const [skillName, setSkillName] = React.useState("");
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const theme = useTheme();
 
-    useEffect(() => {
-        console.log(courseState);
-    }, [courseState]);
+    // useEffect(() => {
+    //     console.log(courseState);
+    // }, [courseState]);
 
     useEffect(() => {
-        updateCourse("draft");
+        if (editMode == "edit" && courseState.courseThumbnail != "" && courseState.introVideo != "") {
+            updateCourse("published");
+        } else if (editMode != "edit") {
+            updateCourse("draft");
+        }
     }, [courseState.courseThumbnail, courseState.introVideo]);
 
     return (
@@ -74,7 +80,6 @@ const CourseMedia = () => {
                 mb: "1rem",
             }}
         >
-            
             <Box>
                 <Box
                     sx={{

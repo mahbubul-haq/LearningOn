@@ -7,7 +7,6 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import { useTheme } from "@mui/material/styles";
 
-
 const testItems = [
     "Programming",
     "Web Development",
@@ -30,6 +29,7 @@ const testItems = [
 
 const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     const theme = useTheme();
+    const [clientWidth, setClientWidth] = React.useState(0);
 
     const handleNext = (side) => {
         let slider = document.querySelector(".custom-slider-items");
@@ -40,40 +40,45 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
         if (side === "prev") {
             slider.scrollLeft -= 300;
         }
-        
-        console.log(slider.scrollLeft, slider.clientWidth, slider.scrollWidth);
+
+        // console.log(slider.scrollLeft, slider.clientWidth, slider.scrollWidth);
 
         if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
-            document.querySelector(".custom-slider-right-arrow").style.display =
-                "none";
+            document.querySelector(".custom-slider-right-arrow").style.display = "none";
         } else {
-            document.querySelector(".custom-slider-right-arrow").style.display =
-                "block";
+            document.querySelector(".custom-slider-right-arrow").style.display = "block";
         }
 
         // check if slider has reached start
         if (slider.scrollLeft === 0) {
-            document.querySelector(".custom-slider-left-arrow").style.display =
-                "none";
+            document.querySelector(".custom-slider-left-arrow").style.display = "none";
         } else {
-            document.querySelector(".custom-slider-left-arrow").style.display =
-                "block";
+            document.querySelector(".custom-slider-left-arrow").style.display = "block";
         }
     };
 
     useEffect(() => {
         if (document.querySelector(".custom-slider-items").scrollLeft === 0) {
-            document.querySelector(".custom-slider-left-arrow").style.display =
-                "none";
+            document.querySelector(".custom-slider-left-arrow").style.display = "none";
         } else {
-            document.querySelector(".custom-slider-left-arrow").style.display =
-                "block";
+            document.querySelector(".custom-slider-left-arrow").style.display = "block";
         }
 
         if (items?.length > 0) {
             if (setSelectedItem) setSelectedItem(items[0]);
         }
     }, []);
+
+    useEffect(() => {
+        let slider = document.querySelector(".custom-slider-items");
+        if (!slider) return;
+
+        if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
+            document.querySelector(".custom-slider-right-arrow").style.display = "none";
+        } else {
+            document.querySelector(".custom-slider-right-arrow").style.display = "block";
+        }
+    }, [items]);
 
     return (
         <Box
@@ -158,23 +163,11 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
                         sx={{
                             cursor: "pointer",
                             fontSize: "0.8rem",
-                            background:
-                                item === selectedItem
-                                    ? theme.palette.text.primary
-                                    : theme.palette.grey.grey100,
-                            color:
-                                item === selectedItem
-                                    ? "white"
-                                    : theme.palette.text.primary,
+                            background: item === selectedItem ? theme.palette.text.primary : theme.palette.grey.grey100,
+                            color: item === selectedItem ? "white" : theme.palette.text.primary,
                             "&:hover": {
-                                background:
-                                    item === selectedItem
-                                        ? theme.palette.text.primary
-                                        : theme.palette.grey.grey200,
-                                color:
-                                    item === selectedItem
-                                        ? "white"
-                                        : theme.palette.text.primary,
+                                background: item === selectedItem ? theme.palette.text.primary : theme.palette.grey.grey200,
+                                color: item === selectedItem ? "white" : theme.palette.text.primary,
                             },
                         }}
                         onClick={() => {

@@ -13,6 +13,7 @@ export const GlobalState = (props) => {
     const [user, setUser] = React.useState(null);
     const [userById, setUserById] = React.useState(null);
     const [courseById, setCourseById] = React.useState(null);
+    const [openedItem, setOpenedItem] = React.useState("");
 
     const token = useSelector((state) => state.token);
     const dispatch = useDispatch();
@@ -143,7 +144,7 @@ export const GlobalState = (props) => {
             );
 
             const data = await response.json();
-            console.log(data);
+            //console.log(data);
             if (data.success) {
                 setUserById(data.user);
                 //console.log("user fetched", data.user);
@@ -205,6 +206,9 @@ export const GlobalState = (props) => {
                 courseById,
                 setCourseById,
                 getCourseById,
+                openedItem,
+                setOpenedItem,
+                getUser,
             }}
         >
             {props.children}

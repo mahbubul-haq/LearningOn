@@ -26,10 +26,10 @@ const DashboardRight = () => {
         if (days > 0) {
             time += days + "d ";
         }
-        if (hours > 0) {
+        if (hours > 0 && time == "") {
             time += hours + "h ";
         }
-        if (minutes > -1) {
+        if (minutes > -1 && time == "") {
             time += minutes + "m ";
         }
         return time + "ago";
@@ -101,6 +101,9 @@ const DashboardRight = () => {
                                     "&:hover": {
                                         textDecoration: "underline",
                                     },
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
                                 }}
                                 onClick={() => {
                                     navigate(`/profile/${enrollment.userId}`);
@@ -110,7 +113,9 @@ const DashboardRight = () => {
                                     ? enrollment.userName
                                     : "No Name"}
                             </Typography>
-                            <Typography sx={{ fontSize: "0.8rem" }}>
+                            <Typography sx={{ fontSize: "0.8rem",
+                            color: (theme) => theme.palette.grey.grey500,
+                         }}>
                                 {convertTime(enrollment.enrolledOn)}
                             </Typography>
                         </FlexBetween>
@@ -120,10 +125,11 @@ const DashboardRight = () => {
                                 fontSize: "0.8rem",
                                 fontWeight: "600",
                                 textAlign: "right",
+                                
                             }}
                         >
                             {enrollment.paidAmount
-                                ? enrollment.paidAmount
+                                ? "$" + enrollment.paidAmount
                                 : "$0"}
                         </Typography>
                     </Box>

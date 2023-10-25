@@ -57,6 +57,9 @@ function App() {
                                                     path="/publishcourse"
                                                     element={<PublishCourse />}
                                                 />
+                                                <Route path="/publishcourse/:edit/:courseId"
+                                                    element={<PublishCourse />}
+                                                />
                                                 <Route
                                                     path="/course/:courseId"
                                                     element={<CoursePage />}

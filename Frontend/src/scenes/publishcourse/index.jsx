@@ -21,7 +21,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import LinearProgress from "@mui/material/LinearProgress";
-
+import useTheme from "@mui/material/styles/useTheme";
+import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const PublishCourse = () => {
@@ -29,6 +30,12 @@ const PublishCourse = () => {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [dialogOpen, setDialogOpen] = React.useState(0);
     const user = useSelector((state) => state.user);
+    const theme = useTheme();
+
+    // const [editMode, setEditMode] = React.useState(useParams().editMode);
+    // const [courseId, setCourseId] = React.useState(useParams().courseId);
+    const edit = useParams().edit;
+    const id = useParams().courseId;
 
     const {
         courseState,
@@ -38,37 +45,62 @@ const PublishCourse = () => {
         updateCourse,
         uploadStatus,
         setUploadStatus,
+        editMode,
+        setEditMode,
+        courseId,
+        setCourseId,
+        getCoursePlainById,
     } = useContext(CreateCourseContext);
-    const { categories, getUsers, getCategories } = useContext(GlobalContext);
+    const { categories, getUsers, getCategories, setOpenedItem, getUser } = useContext(GlobalContext);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (edit == "edit" && id) {
+            setCourseId(id);
+            setEditMode(edit);
+        }
+    }, []);
 
     useEffect(() => {
         if (!user) {
             navigate("/");
         }
-        getDraftCourse();
-        getUsers();
-        getCategories();
+        console.log(edit, id);
+        if (edit == "edit" && id) {
+            getCoursePlainById(id);
+            getUsers();
+            getCategories();
+        } else {
+            getDraftCourse();
+            getUsers();
+            getCategories();
+            // setOpenedItem("courses");
+        }
     }, []);
 
     useEffect(() => {
         if (courseState.courseStatus === "published") setDialogOpen(2);
     }, [courseState.courseStatus]);
 
+    useEffect(() => {
+        if (uploadStatus == "publishing") {
+            updateCourse("published");
+        }
+    }, [uploadStatus]);
+
     return (
         <>
             <Dialog
-                open={
-                    uploadStatus === "publishing" ||
-                    uploadStatus === "unpublished" ||
-                    uploadStatus === "published"
-                }
-                onClose={() => setUploadStatus("")}
+                open={uploadStatus === "publishing" || uploadStatus === "unpublished" || uploadStatus === "published"}
+                onClose={(event, reason) => {
+                    if (reason !== "backdropClick") {
+                        setUploadStatus("");
+                    }
+                }}
                 aria-labelledby="responsive-dialog-title"
+                disableEscapeKeyDown
             >
-                <DialogTitle id="responsive-dialog-title">
-                    Course Publish Status
-                </DialogTitle>
+                <DialogTitle id="responsive-dialog-title">Course Publish Status</DialogTitle>
                 <DialogContent>
                     {uploadStatus === "publishing" && (
                         <Box>
@@ -76,12 +108,8 @@ const PublishCourse = () => {
                             <Typography>Uploading course content...</Typography>
                         </Box>
                     )}
-                    {uploadStatus === "unpublished" && (
-                        <>There was an error publishing your course.</>
-                    )}
-                    {uploadStatus === "published" && (
-                        <>Your course has been published successfully.</>
-                    )}
+                    {uploadStatus === "unpublished" && <>There was an error publishing your course.</>}
+                    {uploadStatus === "published" && <>Your course has been published successfully.</>}
                 </DialogContent>
                 <DialogActions>
                     <StyledButton
@@ -96,15 +124,21 @@ const PublishCourse = () => {
                                 background: "transparent",
                                 color: (theme) => theme.palette.primary.dark,
                                 "&:hover": {
-                                    color: (theme) =>
-                                        theme.palette.primary.darker,
-                                    background: (theme) =>
-                                        theme.palette.background.alt,
+                                    color: (theme) => theme.palette.primary.darker,
+                                    background: (theme) => theme.palette.background.alt,
                                 },
                             },
                         }}
                         onClick={() => {
-                            setUploadStatus("");
+                            if (uploadStatus === "published") {
+                                navigate("/dashboard");
+                                setUploadStatus("");
+                                setEditMode("");
+                                setCourseId("");
+                                getUser();
+                            } else {
+                                setUploadStatus("");
+                            }
                         }}
                     >
                         <Typography
@@ -114,86 +148,93 @@ const PublishCourse = () => {
                                 textTransform: "uppercase",
                             }}
                         >
-                            Close
+                            {uploadStatus === "published" ? "Go to dashboard" : "Close"}
                         </Typography>
                     </StyledButton>
                 </DialogActions>
             </Dialog>
             <Box
+                className="publish-course-main"
                 sx={{
-                    position: "sticky",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    top: 0,
-                    zIndex: 10,
-                    px: isNonMobileScreens ? "3rem" : "2rem",
-                    py: "0.7rem",
-                    height: "50px",
-                    backgroundColor: "white",
-
-                    boxShadow: (theme) =>
-                        `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,
+                    height: "100%",
+                    overflow: "auto",
+                    width: "100%",
+                    position: "relative",
+                    scrollBehavior: "smooth",
                 }}
             >
-                <Box>
-                    <Button
-                        variant="outlined"
-                        color="secondary"
-                        sx={{
-                            padding: "0.2rem 0.5rem",
-                            textTransform: "capitalize",
-                            borderRadius: "0.2rem",
-                        }}
-                        onClick={() => {
-                            // navigate(-1);
-                            navigate(-1);
-                        }}
-                    >
-                        Back
-                    </Button>
-                </Box>
-                <Box>
-                    <Typography
-                        variant="h5"
-                        sx={{
-                            fontWeight: "600",
-                            color: (theme) => theme.palette.grey.grey400,
-                        }}
-                    >
-                        Create new course
-                    </Typography>
-                </Box>
-                <FlexBetween gap="1.5rem">
-                    <StyledButton
-                        disabled={!isCourseValid()}
-                        onClick={() => {
-                            setUploadStatus("publishing");
-                            updateCourse("published");
-                        }}
-                        sx={{
-                            // cursor: isCourseValid() ? "pointer" : "not-allowed",
-                            // pointerEvents: isCourseValid() ? "auto" : "none",
+                <Box
+                    sx={{
+                        position: "sticky",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        top: 0,
+                        zIndex: 10,
+                        px: isNonMobileScreens ? "3rem" : "2rem",
+                        py: "0.7rem",
+                        height: "50px",
+                        backgroundColor: "white",
 
-                            "&&": {
-                                padding: "0.2rem 0.5rem",
-                                background: isCourseValid()
-                                    ? (theme) => theme.palette.primary.main
-                                    : (theme) => theme.palette.grey.grey100,
-                            },
-                        }}
-                    >
-                        <Typography
+                        boxShadow: (theme) => `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,
+                    }}
+                >
+                    <Box>
+                        <Button
+                            variant="outlined"
+                            color="secondary"
                             sx={{
-                                fontWeight: "600",
+                                padding: "0.2rem 0.5rem",
+                                textTransform: "capitalize",
+                                borderRadius: "0.2rem",
+                            }}
+                            onClick={() => {
+                                // navigate(-1);
+                                navigate(-1);
                             }}
                         >
-                            Publish
+                            Back
+                        </Button>
+                    </Box>
+                    <Box>
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                fontWeight: "600",
+                                color: (theme) => theme.palette.grey.grey400,
+                            }}
+                        >
+                            Create new course
                         </Typography>
-                    </StyledButton>
-                </FlexBetween>
-            </Box>
-            {/* <Box
+                    </Box>
+                    <FlexBetween gap="1.5rem">
+                        <StyledButton
+                            disabled={!isCourseValid()}
+                            onClick={() => {
+                                setUploadStatus("publishing");
+                                //updateCourse("published");
+                            }}
+                            sx={{
+                                // cursor: isCourseValid() ? "pointer" : "not-allowed",
+                                // pointerEvents: isCourseValid() ? "auto" : "none",
+
+                                "&&": {
+                                    padding: "0.2rem 0.5rem",
+                                    background: isCourseValid() ? (theme) => theme.palette.primary.main : (theme) => theme.palette.grey.grey100,
+                                },
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    fontWeight: "600",
+                                }}
+                            >
+                                Publish
+                            </Typography>
+                        </StyledButton>
+                    </FlexBetween>
+                </Box>
+                {/* <Box
                 // sx={{
                 //     padding: isNonMobileScreens ? "4rem 5rem" : "2rem",
                 //     paddingBottom: "6rem",
@@ -202,48 +243,52 @@ const PublishCourse = () => {
                 //     overflow: "auto",
                 // }}
             > */}
-            <Box
-                sx={{
-                    position: "fixed",
-                    height: "100%",
-                    // zIndex: "1000",
-                    // border: "2px solid red",
-                    overflowY: "auto",
-                    top: "0",
-                    width: "30%",
-                    display: "grid",
-                    gridTemplateRows: "100px calc(100% - 100px - 2rem) 2rem",
-                    padding: "0",
-                }}
-            >
-                <Box
-                    sx={
-                        {
-                            // borderBottom: "1px solid black",
-                        }
-                    }
-                ></Box>
                 <Box
                     sx={{
+                        position: "fixed",
+                        height: "calc(100% - 50px)",
+                        // zIndex: "1000",
+                        // border: "2px solid red",
                         overflowY: "auto",
-                        height: "100%",
-
-                        // border: "1px solid red"
-                        // border: "1px solid red"
+                        top: "0",
+                        width: "30%",
+                        display: "grid",
+                        //gridTemplateRows: "100",
+                        padding: "0",
+                        marginTop: "50px",
+                        borderRight: `1px dashed ${theme.palette.customDivider.main}`,
                     }}
                 >
+                    {/* <Box
+                        sx={
+                            {
+                                // borderBottom: "1px solid black",
+                            }
+                        }
+                    ></Box> */}
                     <Box
                         sx={{
-                            padding: "0rem 0 0rem 4rem",
-                            //border: "1px solid black"
+                            // overflowY: "auto",
+                            // height: "100%",
+
+                            // border: "1px solid red"
+                            // border: "1px solid red"
+                            paddingTop: "50px",
+                            paddingBottom: "2rem",
                         }}
                     >
-                        <LeftPanel />
+                        <Box
+                            sx={{
+                                padding: "0rem 0 0rem 4rem",
+                                //border: "1px solid black"
+                            }}
+                        >
+                            <LeftPanel />
+                        </Box>
                     </Box>
+                    {/* <Box></Box> */}
                 </Box>
-                <Box></Box>
-            </Box>
-            {/* <Divider orientation="vertical" flexItem sx={{
+                {/* <Divider orientation="vertical" flexItem sx={{
                     height: "100%",
                     position: "fixed",
                     left: "25%",
@@ -252,31 +297,32 @@ const PublishCourse = () => {
                     
                 }}
                     /> */}
-            <Box
-                sx={{
-                    position: "fixed",
-                    height: "calc(100% - 50px)",
-                    overflowY: "auto",
-                    top: "50px",
-                    left: "30%",
-                    zIndex: "1",
-                    width: "70%",
-                }}
-            >
                 <Box
                     sx={{
-                        height: "50px",
-                        // borderBottom: "1px solid black",
-                    }}
-                ></Box>
-                <Box
-                    sx={{
-                        padding: "0 4rem 2rem 0",
-                        // border: "2px solid black",
-                        // minHeight: "calc(100% - 50px)"
+                        // position: "fixed",
+                        // height: "100%",
+                        // overflowY: "auto",
+                        position: "relative",
+                        left: "35%",
+                        zIndex: "1",
+                        width: "65%",
                     }}
                 >
-                    <RightPanel />
+                    <Box
+                        sx={{
+                            height: "50px",
+                            // borderBottom: "1px solid black",
+                        }}
+                    ></Box>
+                    <Box
+                        sx={{
+                            padding: "0 4rem 2rem 0",
+                            // border: "2px solid black",
+                            // minHeight: "calc(100% - 50px)"
+                        }}
+                    >
+                        <RightPanel />
+                    </Box>
                 </Box>
             </Box>
             {/* </Box> */}

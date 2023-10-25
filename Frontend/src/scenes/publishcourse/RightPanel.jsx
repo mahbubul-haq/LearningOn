@@ -13,15 +13,15 @@ import CourseContent from "./CourseContent";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 
 const RightPanel = () => {
-    const { inputSection, setInputSection, updateCourse } =
-        useContext(CreateCourseContext);
+    const { inputSection, setInputSection, updateCourse, errors, isAnyError, updating, setUpdating, editMode } = useContext(CreateCourseContext);
     const { categories, listOfCategories } = useContext(GlobalContext);
+
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
-    console.log(inputSection);
-    useEffect(() => {
-        console.log(inputSection);
-    }, [inputSection]);
+    // console.log(inputSection);
+    // useEffect(() => {
+    //     console.log(inputSection);
+    // }, [inputSection]);
 
     const handleNext = () => {
         if (inputSection === "basic info") {
@@ -43,30 +43,63 @@ const RightPanel = () => {
         }
     };
 
+    useEffect(() => {
+        let element = document.querySelector(".publish-course-main");
+        if (element) {
+            element.scrollTop = 0;
+        }
+    }, [inputSection]);
+
+    useEffect(() => {
+        if (updating == "updated" || updating == "failed") {
+            setOpenSnackbar(true);
+            setUpdating("");
+        }
+    }, [updating]);
+
+    // useEffect(() => {
+    //     console.log("updating", updating);
+    //     console.log(openSnackbar);
+    // }, [updating, openSnackbar]);
+
+    useEffect(() => {
+        if (updating == "updating") {
+            updateCourse("draft");
+        }
+    }, [updating]);
+
     return (
-        <Box sx={{
-            backgroundColor: "white",
-            padding: "2rem",
-            borderRadius: "0.25rem",
-            // minHeight: "100%",
-            // border: "2px solid green"
-        }}>
+        <Box
+            sx={{
+                backgroundColor: "white",
+                padding: "2rem",
+                borderRadius: "0.25rem",
+                // minHeight: "100%",
+                // border: "2px solid green"
+            }}
+        >
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={4000}
-                onClose={() => setOpenSnackbar(false)}
+                onClose={() => {
+                    setOpenSnackbar(false);
+                    setUpdating("");
+                }}
                 anchorOrigin={{
                     vertical: "bottom",
                     horizontal: "right",
                 }}
             >
                 <Alert
-                    onClose={() => setOpenSnackbar(false)}
-                    severity="success"
+                    onClose={() => {
+                        setOpenSnackbar(false);
+                        setUpdating("");
+                    }}
+                    severity={!isAnyError() ? "success" : "error"}
                     sx={{
                         width: "100%",
 
-                        backgroundColor: (theme) => theme.palette.primary.light,
+                        backgroundColor: (theme) => (!isAnyError() ? theme.palette.primary.light : theme.palette.error.light),
                     }}
                 >
                     <Typography
@@ -74,7 +107,7 @@ const RightPanel = () => {
                             fontWeight: "600",
                         }}
                     >
-                        Your course information is saved as draft.
+                        {!isAnyError() ? "Your course information is saved as draft." : "Failed to save course information."}
                     </Typography>
                 </Alert>
             </Snackbar>
@@ -115,10 +148,8 @@ const RightPanel = () => {
                                 background: "transparent",
                                 color: (theme) => theme.palette.primary.dark,
                                 "&:hover": {
-                                    color: (theme) =>
-                                        theme.palette.primary.darker,
-                                    background: (theme) =>
-                                        theme.palette.background.alt,
+                                    color: (theme) => theme.palette.primary.darker,
+                                    background: (theme) => theme.palette.background.alt,
                                 },
                             },
                         }}
@@ -137,35 +168,40 @@ const RightPanel = () => {
                 ) : (
                     <Box></Box>
                 )}
-                <StyledButton
-                    sx={{
-                        textTransform: "capitalize",
-                        fontWeight: "600",
-
-                        cursor: "pointer",
-                        "&&": {
-                            padding: "0.4rem 0.8rem",
-                            background: (theme) => theme.palette.grey.grey700,
-                            color: "white",
-                            "&:hover": {
-                                background: (theme) =>
-                                    theme.palette.grey.grey900,
-                            },
-                        },
-                    }}
-                    onClick={() => {
-                        updateCourse("draft");
-                        setOpenSnackbar(true);
-                    }}
-                >
-                    <Typography
+                {!editMode && (
+                    <StyledButton
                         sx={{
+                            textTransform: "capitalize",
                             fontWeight: "600",
+
+                            cursor: "pointer",
+                            "&&": {
+                                padding: "0.4rem 0.8rem",
+                                background: (theme) => theme.palette.grey.grey700,
+                                color: "white",
+                                "&:hover": {
+                                    background: (theme) => theme.palette.grey.grey900,
+                                },
+                            },
+                        }}
+                        onClick={() => {
+                            //updateCourse("draft");
+                            setUpdating("updating");
+
+                            // if (updating == "updated" || updating == "failed") {
+                            //     setOpenSnackbar(true);
+                            // }
                         }}
                     >
-                        Save Progress
-                    </Typography>
-                </StyledButton>
+                        <Typography
+                            sx={{
+                                fontWeight: "600",
+                            }}
+                        >
+                            Save Progress
+                        </Typography>
+                    </StyledButton>
+                )}
                 {inputSection != "course content" ? (
                     <StyledButton
                         sx={{
@@ -180,10 +216,8 @@ const RightPanel = () => {
                                 background: "transparent",
                                 color: (theme) => theme.palette.primary.dark,
                                 "&:hover": {
-                                    color: (theme) =>
-                                        theme.palette.primary.darker,
-                                    background: (theme) =>
-                                        theme.palette.background.alt,
+                                    color: (theme) => theme.palette.primary.darker,
+                                    background: (theme) => theme.palette.background.alt,
                                 },
                             },
                         }}
@@ -199,8 +233,9 @@ const RightPanel = () => {
                         </Typography>
                         <KeyboardDoubleArrowRightIcon />
                     </StyledButton>
-                ) : (<Box></Box>)}
-
+                ) : (
+                    <Box></Box>
+                )}
             </Box>
         </Box>
     );

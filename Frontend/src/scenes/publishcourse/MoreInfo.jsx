@@ -28,11 +28,11 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InstructorProfile from "../../components/InstructorProfile";
 import { StyledButton } from "../../Components/StyledButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 
 const MoreInfo = () => {
     const { categoriesWithLabel, users } = useContext(GlobalContext);
-    const { courseState, setCourseState } = useContext(CreateCourseContext);
+    const { courseState, setCourseState, errors, setErrors } = useContext(CreateCourseContext);
     const [instructor, setInstructor] = React.useState(null);
 
     const addInstructor = () => {
@@ -43,10 +43,7 @@ const MoreInfo = () => {
 
             setCourseState({
                 ...courseState,
-                courseInstructors: [
-                    ...courseState.courseInstructors,
-                    instructor.value,
-                ],
+                courseInstructors: [...courseState.courseInstructors, instructor.value],
             });
 
             setInstructor(null);
@@ -120,8 +117,7 @@ const MoreInfo = () => {
 
                                     "&&": {
                                         "& .MuiInputBase-root": {
-                                            color: (theme) =>
-                                                theme.palette.grey.grey600,
+                                            color: (theme) => theme.palette.grey.grey600,
                                         },
                                     },
                                     //enforce color of input
@@ -168,8 +164,7 @@ const MoreInfo = () => {
                             endAdornment: (
                                 <AttachMoneyIcon
                                     sx={{
-                                        color: (theme) =>
-                                            theme.palette.grey.grey600,
+                                        color: (theme) => theme.palette.grey.grey600,
                                         fontSize: "2rem",
                                     }}
                                     position="end"
@@ -184,16 +179,17 @@ const MoreInfo = () => {
                             setCourseState({
                                 ...courseState,
                                 coursePrice:
-                                    event.target.value && event.target.value > 0 && !(event.target.value == "0")
-                                        ? event.target.value.toString()
-                                        : "",
+                                    event.target.value && event.target.value > 0 && !(event.target.value == "0") ? event.target.value.toString() : "",
                             });
+
+                            if (event.target.value && event.target.value > 0) {
+                                setErrors({
+                                    ...errors,
+                                    coursePrice: "",
+                                });
+                            }
                         }}
-                        value={
-                            courseState.coursePrice
-                                ? courseState.coursePrice.toString()
-                                : ""
-                        }
+                        value={courseState.coursePrice ? courseState.coursePrice.toString() : ""}
                         sx={{
                             p: 0,
                             "& .MuiInputBase-input": {
@@ -207,6 +203,16 @@ const MoreInfo = () => {
                             },
                         }}
                     />
+
+                    {errors.coursePrice && (
+                        <Typography
+                            sx={{
+                                color: (theme) => theme.palette.error.main,
+                            }}
+                        >
+                            {errors.coursePrice}
+                        </Typography>
+                    )}
                 </Box>
             </Box>
 
@@ -235,9 +241,7 @@ const MoreInfo = () => {
                         onChange={(event, value) => {
                             setCourseState({
                                 ...courseState,
-                                approxTimeToComplete: value
-                                    ? value.value.toString()
-                                    : ""
+                                approxTimeToComplete: value ? value.value.toString() : "",
                             });
                         }}
                         value={
@@ -273,8 +277,7 @@ const MoreInfo = () => {
 
                                     "&&": {
                                         "& .MuiInputBase-root": {
-                                            color: (theme) =>
-                                                theme.palette.grey.grey600,
+                                            color: (theme) => theme.palette.grey.grey600,
                                         },
                                     },
                                     //enforce color of input
@@ -312,7 +315,6 @@ const MoreInfo = () => {
                         justifyContent: "flex-start",
                         gap: "1rem",
                         flexWrap: "wrap",
-                       
                     }}
                 >
                     {courseState.courseInstructors.map((id, index) => (
@@ -320,17 +322,14 @@ const MoreInfo = () => {
                             key={id}
                             sx={{
                                 position: "relative",
-                                mb: "1rem"
+                                mb: "1rem",
                             }}
                         >
                             <IconButton
                                 onClick={() => {
                                     setCourseState({
                                         ...courseState,
-                                        courseInstructors:
-                                            courseState.courseInstructors.filter(
-                                                (insId) => insId != id
-                                            ),
+                                        courseInstructors: courseState.courseInstructors.filter((insId) => insId != id),
                                     });
                                 }}
                                 sx={{
@@ -338,12 +337,11 @@ const MoreInfo = () => {
                                     top: 0,
                                     right: 0,
                                     fontSize: "1rem",
-                                    color: (theme) =>
-                                        theme.palette.grey.grey1000,
+                                    color: (theme) => theme.palette.grey.grey1000,
                                 }}
                             >
                                 {/* <PersonRemoveIcon /> */}
-                                <CloseIcon/>
+                                <CloseIcon />
                             </IconButton>
                             <InstructorProfile instructorId={id} />
                         </Box>
@@ -407,16 +405,10 @@ const MoreInfo = () => {
                                                     padding: "0.4rem 0.8rem",
                                                     fontWeight: "600",
                                                     height: "100%",
-                                                    background: (theme) =>
-                                                        theme.palette.primary
-                                                            .light2,
-                                                    color: (theme) =>
-                                                        theme.palette.text
-                                                            .primary,
+                                                    background: (theme) => theme.palette.primary.light2,
+                                                    color: (theme) => theme.palette.text.primary,
                                                     "&:hover": {
-                                                        background: (theme) =>
-                                                            theme.palette
-                                                                .primary.dark,
+                                                        background: (theme) => theme.palette.primary.dark,
                                                     },
                                                 },
                                             }}
@@ -442,8 +434,7 @@ const MoreInfo = () => {
 
                                     "&&": {
                                         "& .MuiInputBase-root": {
-                                            color: (theme) =>
-                                                theme.palette.grey.grey600,
+                                            color: (theme) => theme.palette.grey.grey600,
                                         },
                                     },
                                     //enforce color of input

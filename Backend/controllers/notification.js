@@ -2,6 +2,20 @@ import Notification from "../models/Notification.js";
 
 const createNotification = async (req, res) => {
     try {
+
+        // delete one notification if there are more than 5 notifications
+        const notifications = await Notification.find({
+            userId: req.body.userId,
+        });
+        //console.log(notifications, notifications?.length);
+       // console.log("why not here");
+        if (notifications?.length >= 50) {
+            await Notification.deleteOne({
+                _id: notifications[0]._id,
+            });
+        }
+
+
         const notification = new Notification({
             userId: req.body.userId,
             message: req.body.message,

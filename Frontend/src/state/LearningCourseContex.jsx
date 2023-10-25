@@ -8,12 +8,15 @@ export const LearningCourseState = ({ children }) => {
         lesson: 1,
         subLesson: 0,
     });
+    const [expandedLessons, setExpandedLessons] = useState([]);
 
     return (
         <LearningCourseContext.Provider
             value={{
                 openedLesson,
                 setOpenedLesson,
+                expandedLessons,
+                setExpandedLessons,
             }}
         >
             {children}

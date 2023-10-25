@@ -8,7 +8,7 @@ import TopSection from "./TopSection";
 import Box from "@mui/material/Box";
 import MainSection from "./MainSection";
 import { useNavigate } from "react-router-dom";
-
+import { GlobalContext } from "../../state/GlobalContext";
 import { useSelector } from "react-redux";
 
 const CoursePage = () => {
@@ -18,6 +18,7 @@ const CoursePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
+    const {setOpenedItem} = useContext(GlobalContext);
 
     // useEffect(() => {
     //     if (!user) {
@@ -37,6 +38,7 @@ const CoursePage = () => {
         if (!courses || courses.length == 0) {
             getCourses();
         }
+        setOpenedItem("courses");
     }, []);
 
     // useEffect(() => {

@@ -23,7 +23,7 @@ export const HomePageState = (props) => {
             );
 
             const data = await response.json();
-            console.log("courses, ", data);
+           // console.log("courses, ", data);
 
             if (data.success) {
                 setCourses(data.courseInfo);

@@ -28,26 +28,32 @@ const TopSection = ({ courseInfo }) => {
                 }, false)
             )
                 setPurchased(true);
+            if (
+                courseInfo.courseInstructors?.reduce((cur, instructor) => {
+                    return cur || instructor._id == user._id;
+                }, false)
+            ) {
+                setPurchased(true);
+            }
+
+            if (courseInfo.owner?._id == user._id) {
+                setPurchased(true);
+            }
         }
     }, [user, courseInfo]);
 
     const enrollCourse = async () => {
         try {
-            const response = await fetch(
-                `${
-                    import.meta.env.VITE_REACT_APP_URL
-                }/data/create-payment-sesson`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                    body: JSON.stringify({
-                        courseId: courseInfo._id,
-                    }),
-                }
-            );
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/data/create-payment-sesson`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": token,
+                },
+                body: JSON.stringify({
+                    courseId: courseInfo._id,
+                }),
+            });
             const data = await response.json();
             if (data.success) {
                 window.location = data.url;
@@ -125,16 +131,14 @@ const TopSection = ({ courseInfo }) => {
                         fontSize: "1.1rem",
                     }}
                 >
-                    Enrolled by <b>{courseInfo?.enrolledStudents?.length}</b>{" "}
-                    students
+                    Enrolled by <b>{courseInfo?.enrolledStudents?.length}</b> students
                 </Typography>
                 <Typography
                     sx={{
                         fontSize: "1.1rem",
                     }}
                 >
-                    Time to complete{" "}
-                    <b>{courseInfo?.approxTimeToComplete} weeks</b> (Approx)
+                    Time to complete <b>{courseInfo?.approxTimeToComplete} weeks</b> (Approx)
                 </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -179,7 +183,16 @@ const TopSection = ({ courseInfo }) => {
                         if (purchased) {
                             navigate(`/learning/course/${courseInfo._id}`);
                         } else {
-                            enrollCourse();
+                            if (user) {
+                                enrollCourse();
+                            } else {
+                                navigate("/login", {
+                                    state: {
+                                        isLogin: true,
+                                        redirect: `/course/${courseInfo._id}`,
+                                    },
+                                });
+                            }
                         }
                     }}
                     sx={{
@@ -193,7 +206,13 @@ const TopSection = ({ courseInfo }) => {
                         },
                     }}
                 >
-                    {purchased ? "Start Learning" : "Enroll Now"}
+                    {purchased
+                        ? courseInfo.courseInstructors?.reduce((cur, instructor) => {
+                              return cur || instructor._id == user._id;
+                          }, false) || courseInfo.owner?._id == user._id
+                            ? "Open Lessons"
+                            : "Start Learning"
+                        : "Enroll Now"}
                 </StyledButton>
 
                 <Box></Box>

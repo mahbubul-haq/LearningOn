@@ -3,9 +3,7 @@ import People from "../models/People.js";
 import Course from "../models/Course.js";
 import Notification from "../models/Notification.js";
 import Stripe from "stripe";
-const stripe = new Stripe(
-    "sk_test_51NkNkxSGLLKlVFdVYwxLLI6YoDKUCMiTj7nKkorP9eCrlyuPyyId4K9YvgUuaqTKCEHdQ1RqLiuzKfKlHQgH1d8T00J4fv9YEf"
-);
+const stripe = new Stripe("sk_test_51NkNkxSGLLKlVFdVYwxLLI6YoDKUCMiTj7nKkorP9eCrlyuPyyId4K9YvgUuaqTKCEHdQ1RqLiuzKfKlHQgH1d8T00J4fv9YEf");
 
 const addCategory = async (req, res) => {
     try {
@@ -121,9 +119,7 @@ const makePayment = async (req, res) => {
                         currency: "usd",
                         product_data: {
                             name: courseInfo.courseTitle,
-                            images: [
-                                `http://localhost:5000/images/${courseInfo.courseThumbnail}`,
-                            ],
+                            images: [`http://localhost:5000/images/${courseInfo.courseThumbnail}`],
                             // images: [
                             //     `${process.env.SERVER_URL}/images/${courseInfo.courseThumbnail}`,
                             // ],
@@ -173,11 +169,7 @@ const stripeWebHook = async (req, res) => {
         // console.log("event triggered");
 
         try {
-            event = stripe.webhooks.constructEvent(
-                req.body,
-                sig,
-                endpointSecret
-            );
+            event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
             // console.log("event triggered");
         } catch (err) {
             res.status(400).send(`Webhook Error: ${err.message}`);
@@ -215,10 +207,7 @@ const stripeWebHook = async (req, res) => {
                     });
 
                     if (courseOwner) {
-                        let wallet =
-                            courseOwner.wallet === ""
-                                ? 0
-                                : parseFloat(courseOwner.wallet);
+                        let wallet = courseOwner.wallet === "" ? 0 : parseFloat(courseOwner.wallet);
                         wallet += parseFloat(item.coursePrice);
                         courseOwner.wallet = wallet.toString();
 
@@ -273,6 +262,17 @@ const stripeWebHook = async (req, res) => {
 
                         console.log("targetId", targetId);
 
+                        // delete the oldest notification if the number of notifications is greater than 50
+                        const notifications = await Notification.find({
+                            userId: curUser._id,
+                        });
+
+                        if (notifications?.length >= 50) {
+                            await Notification.deleteOne({
+                                _id: notifications[0]._id,
+                            });
+                        }
+
                         const notification = new Notification({
                             userId: curUser._id,
                             message: `<b>${user.name}</b> enrolled in your course <b>${course.courseTitle} </b>`,
@@ -297,10 +297,4 @@ const stripeWebHook = async (req, res) => {
 
 // });
 
-export {
-    addCategory,
-    getCategories,
-    deleteAllData,
-    makePayment,
-    stripeWebHook,
-};
+export { addCategory, getCategories, deleteAllData, makePayment, stripeWebHook };

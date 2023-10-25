@@ -14,34 +14,45 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import Typography from "@mui/material/Typography";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
-import {useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
-
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../../state/GlobalContext";
 
 const LearningPage = () => {
     const { courseId } = useParams();
     const [courseInfo, setCourseInfo] = React.useState({});
-    const { courses, getCourses } = useContext(HomePageContext);
+    const { getCourseById, courseById, setCourseById, setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const theme = useTheme();
-    const { openedLesson, setOpenedLesson } = useContext(LearningCourseContext);
+    const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons } = useContext(LearningCourseContext);
     const scrollPositionRef = React.useRef(0);
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
 
     useEffect(() => {
+        setExpandedLessons([]);
+        setOpenedLesson({
+            lesson: 1,
+            subLesson: 0,
+        });
         if (!user) {
             navigate("/");
         }
+        setOpenedItem("courses");
     }, []);
 
     useEffect(() => {
-        //console.log(courseId, courses);
-        if (courseId && courses && courses.length > 0) {
-            const course = courses.find((c) => c._id == courseId);
-            setCourseInfo(course);
+        ///console.log("courseId", courseId);
+        if (courseId) {
+            getCourseById(courseId);
         }
-    }, [courseId, courses]);
+    }, [courseId]);
+
+    useEffect(() => {
+        if (courseById) {
+            setCourseInfo(courseById);
+        }
+    }, [courseById]);
 
     const handleNext = () => {
         if (openedLesson.subLesson === 0) {
@@ -49,11 +60,11 @@ const LearningPage = () => {
                 lesson: openedLesson.lesson,
                 subLesson: openedLesson.subLesson + 1,
             });
+            if (!expandedLessons.includes(openedLesson.lesson)) {
+                setExpandedLessons([...expandedLessons, openedLesson.lesson]);
+            }
         } else {
-            if (
-                openedLesson.subLesson ===
-                courseInfo.lessons[openedLesson.lesson - 1].subLessons.length
-            ) {
+            if (openedLesson.subLesson === courseInfo.lessons[openedLesson.lesson - 1].subLessons.length) {
                 setOpenedLesson({
                     lesson: openedLesson.lesson + 1,
                     subLesson: 0,
@@ -63,6 +74,10 @@ const LearningPage = () => {
                     lesson: openedLesson.lesson,
                     subLesson: openedLesson.subLesson + 1,
                 });
+
+                if (!expandedLessons.includes(openedLesson.lesson)) {
+                    setExpandedLessons([...expandedLessons, openedLesson.lesson]);
+                }
             }
         }
 
@@ -74,10 +89,12 @@ const LearningPage = () => {
             if (openedLesson.lesson > 1) {
                 setOpenedLesson({
                     lesson: openedLesson.lesson - 1,
-                    subLesson:
-                        courseInfo.lessons[openedLesson.lesson - 2].subLessons
-                            .length,
+                    subLesson: courseInfo.lessons[openedLesson.lesson - 2].subLessons.length,
                 });
+
+                if (!expandedLessons.includes(openedLesson.lesson - 1)) {
+                    setExpandedLessons([...expandedLessons, openedLesson.lesson - 1]);
+                }
             }
         } else {
             setOpenedLesson({
@@ -87,45 +104,6 @@ const LearningPage = () => {
         }
         scrollTop();
     };
-
-    // useEffect(() => {
-    //     if (!courses || courses.length == 0) {
-    //         getCourses();
-    //     }
-
-    //     let element = document.querySelector(".learning-page-main");
-    //     let element2 = document.querySelector(".learning-page-navbar");
-
-    //     if (!element || !element2) return;
-    //     //const eventListneter = element.addEventListener
-
-    //     // if previous scroll position is greater than current scroll position then show navbar
-
-    //     const eventListneter = element.addEventListener("scroll", (e) => {
-    //         const scrollPosition = element.scrollTop;
-    //         const previousScrollPosition = scrollPositionRef.current;
-
-    //         console.log(scrollPosition, previousScrollPosition);
-
-    //         if (scrollPosition > previousScrollPosition) {
-    //             element2.style.position = "sticky";
-    //             element2.style.top = "0";
-    //         } else {
-    //             element2.style.position = "relative";
-    //             element2.style.top = "-5rem";
-    //         }
-
-    //         scrollPositionRef.current = scrollPosition;
-            
-    //     });
-
-    //     return () => {
-    //         if (!element || !element2) return;
-    //         element.removeEventListener("scroll", eventListneter);
-    //     };
-    // }, []);
-
-    
 
     const scrollTop = () => {
         document.querySelector(".learning-page-main").scrollTop = 0;
@@ -147,7 +125,6 @@ const LearningPage = () => {
                 <Box
                     className="learning-page-navbar"
                     sx={{
-                       
                         top: "0",
                         zIndex: "1000",
                         transition: "all 0.5s ease",
@@ -209,8 +186,7 @@ const LearningPage = () => {
                                 justifyContent: "space-between",
                             }}
                         >
-                            {openedLesson.lesson == 1 &&
-                            openedLesson.subLesson == 0 ? (
+                            {openedLesson.lesson == 1 && openedLesson.subLesson == 0 ? (
                                 <Box></Box>
                             ) : (
                                 <StyledButton
@@ -223,15 +199,10 @@ const LearningPage = () => {
                                             padding: "0.4rem 0.8rem",
                                             fontWeight: "600",
                                             background: "transparent",
-                                            color: (theme) =>
-                                                theme.palette.primary.dark,
+                                            color: (theme) => theme.palette.primary.dark,
                                             "&:hover": {
-                                                color: (theme) =>
-                                                    theme.palette.primary
-                                                        .darker,
-                                                background: (theme) =>
-                                                    theme.palette.background
-                                                        .alt,
+                                                color: (theme) => theme.palette.primary.darker,
+                                                background: (theme) => theme.palette.background.alt,
                                             },
                                         },
                                     }}
@@ -248,11 +219,8 @@ const LearningPage = () => {
                                     </Typography>
                                 </StyledButton>
                             )}
-                            {openedLesson.lesson ==
-                                courseInfo?.lessons?.length &&
-                            openedLesson.subLesson ==
-                                courseInfo?.lessons[openedLesson.lesson - 1]
-                                    .subLessons.length ? (
+                            {openedLesson.lesson == courseInfo?.lessons?.length &&
+                            openedLesson.subLesson == courseInfo?.lessons[openedLesson.lesson - 1].subLessons.length ? (
                                 <Box></Box>
                             ) : (
                                 <StyledButton
@@ -266,15 +234,10 @@ const LearningPage = () => {
                                             fontWeight: "600",
 
                                             background: "transparent",
-                                            color: (theme) =>
-                                                theme.palette.primary.dark,
+                                            color: (theme) => theme.palette.primary.dark,
                                             "&:hover": {
-                                                color: (theme) =>
-                                                    theme.palette.primary
-                                                        .darker,
-                                                background: (theme) =>
-                                                    theme.palette.background
-                                                        .alt,
+                                                color: (theme) => theme.palette.primary.darker,
+                                                background: (theme) => theme.palette.background.alt,
                                             },
                                         },
                                     }}

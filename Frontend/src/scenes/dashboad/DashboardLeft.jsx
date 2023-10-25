@@ -6,23 +6,28 @@ import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-
+import { Button, Chip } from "@mui/material";
+import { StyledButton } from "../../components/StyledButton";
 
 const DashboardLeft = () => {
-    const { openedTab, setOpenedTab, selectedCourse, setSelectedCourse } =
-        useContext(DashboardContext);
+    const { openedTab, setOpenedTab, selectedCourse, setSelectedCourse } = useContext(DashboardContext);
 
     const user = useSelector((state) => state.user);
     const theme = useTheme();
 
     return (
         <Box>
-            <Typography
-                variant="h6"
-                sx={{ textAlign: "center", fontWeight: "600" }}
-            >
-                Courses
-            </Typography>
+            {!selectedCourse && (
+                <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "600" }}>
+                    Select a course
+                </Typography>
+            )}
+            {selectedCourse && (
+                <StyledButton variant="contained" sx={{ width: "100%", my: "0.5rem" }} onClick={() => setSelectedCourse(null)}>
+                    Remove selection
+                </StyledButton>
+            )}
+
             <Divider sx={{ mt: "0.5rem", mb: "1rem", zIndex: "-100" }} />
             <Box
                 sx={{
@@ -31,59 +36,95 @@ const DashboardLeft = () => {
                     gap: "1rem",
                 }}
             >
-                {user?.courses?.map((course, index) => (
-                    <Box
-                        key={index}
-                        sx={{
-                            cursor: "pointer",
-                            border: "1px solid " + theme.palette.grey.grey300,
-                            width: "100%",
-                            borderRadius: "0.5rem",
-                            // padding: "0.5rem",
-                            overflow: "hidden",
-                            backgroundColor:
-                                selectedCourse?._id == course._id
-                                    ? theme.palette.primary.main
-                                    : "transparent",
-                            outline:
-                                selectedCourse?._id == course._id
-                                    ? "2px solid " + theme.palette.grey.grey600
-                                    : "none",
+                {user?.courses
+                    ?.slice(0)
+                    .reverse()
+                    .map((course, index) => {
+                        if (course.courseStatus != "draft")
+                            return (
+                                <Box
+                                    key={index}
+                                    sx={{
+                                        cursor: "pointer",
+                                        border: "1px solid " + theme.palette.grey.grey300,
+                                        width: "100%",
+                                        borderRadius: "0.5rem",
+                                        // padding: "0.5rem",
+                                        overflow: "hidden",
+                                        backgroundColor: selectedCourse?._id == course._id ? theme.palette.primary.main : "transparent",
+                                        outline: selectedCourse?._id == course._id ? "2px solid " + theme.palette.grey.grey600 : "none",
 
-                            "&:hover": {
-                                backgroundColor: theme.palette.primary.main,
-                            },
-                        }}
-                        onClick={() => {
-                            if (selectedCourse && selectedCourse._id == course._id) {
-                                setSelectedCourse(null);
-                            } else {
-                                setSelectedCourse(course);
-                            }
-                        }}
-                    >
-                        <img
-                            src={`${
-                                import.meta.env.VITE_REACT_APP_URL
-                            }/images/${course.courseThumbnail}`}
-                            alt=""
-                            style={{
-                                width: "100%",
+                                        "&:hover": {
+                                            backgroundColor: theme.palette.primary.main,
+                                        },
+                                    }}
+                                    onClick={() => {
+                                        if (selectedCourse && selectedCourse._id == course._id) {
+                                            setSelectedCourse(null);
+                                        } else {
+                                            setSelectedCourse(course);
+                                        }
+                                    }}
+                                >
+                                    <img
+                                        src={`${import.meta.env.VITE_REACT_APP_URL}/images/${course.courseThumbnail}`}
+                                        alt=""
+                                        style={{
+                                            width: "100%",
 
-                                // height: "100%",
-                                maxHeight: "150px",
-                                objectFit: "cover",
-                            }}
-                        />
-                        <h6
-                            style={{
-                                padding: "0.5rem",
-                            }}
-                        >
-                            {course.courseTitle}
-                        </h6>
-                    </Box>
-                ))}
+                                            // height: "100%",
+                                            maxHeight: "120px",
+                                            objectFit: "cover",
+                                        }}
+                                    />
+                                    <h6
+                                        style={{
+                                            padding: "0.5rem",
+                                        }}
+                                    >
+                                        {course.courseTitle}
+                                    </h6>
+                                    <Box
+                                        sx={{
+                                            // mt: "0.5rem",
+                                            padding: "0.5rem",
+                                            fontSize: "1rem",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "0.5rem",
+                                        }}
+                                    >
+                                        {/* <Typography> You are </Typography> */}
+                                        {course.owner == user._id && (
+                                            <Chip
+                                                sx={{
+                                                    color: "white",
+                                                    backgroundColor: theme.palette.error.main,
+                                                }}
+                                                label="Owner"
+                                                size="small"
+                                                variant="contained"
+                                            />
+                                        )}
+                                        {course.courseInstructors.reduce((acc, curr) => {
+                                            if (curr == user._id) return true;
+                                            else return acc;
+                                        }, false) && (
+                                            <Chip
+                                                sx={{
+                                                    color: "white",
+                                                    backgroundColor: theme.palette.grey.grey800,
+                                                }}
+                                                label="Instructor"
+                                                size="small"
+                                                variant="contained"
+                                            />
+                                        )}
+                                    </Box>
+                                </Box>
+                            );
+                        else return null;
+                    })}
             </Box>
         </Box>
     );
