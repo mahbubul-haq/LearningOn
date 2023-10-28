@@ -29,11 +29,13 @@ import InstructorProfile from "../../components/InstructorProfile";
 import { StyledButton } from "../../Components/StyledButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import CloseIcon from "@mui/icons-material/Close";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const MoreInfo = () => {
     const { categoriesWithLabel, users } = useContext(GlobalContext);
     const { courseState, setCourseState, errors, setErrors } = useContext(CreateCourseContext);
     const [instructor, setInstructor] = React.useState(null);
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
 
     const addInstructor = () => {
         if (instructor) {
@@ -100,7 +102,8 @@ const MoreInfo = () => {
                         id="course-language"
                         options={languages ? languages : [{ label: "No data" }]}
                         sx={{
-                            width: "250px",
+                            width: isMobileScreens ? "100%" : "250px",
+                            maxWidth: "100%",
                         }}
                         renderInput={(params) => (
                             <StyledTextField1
@@ -197,7 +200,8 @@ const MoreInfo = () => {
                                 fontWeight: "600",
                                 color: (theme) => theme.palette.grey.grey600,
                             },
-                            width: "300px",
+                            width: isMobileScreens ? "100%" : "300px",
+                            maxWidth: "100%",
                             "&&": {
                                 p: 0,
                             },
@@ -260,7 +264,8 @@ const MoreInfo = () => {
                             })) || [{ label: "No data" }]
                         }
                         sx={{
-                            width: "250px",
+                            width: isMobileScreens ? "100%" : "250px",
+                            maxWidth: "100%",
                         }}
                         renderInput={(params) => (
                             <StyledTextField1
@@ -322,7 +327,7 @@ const MoreInfo = () => {
                             key={id}
                             sx={{
                                 position: "relative",
-                                mb: "1rem",
+                                // mb: "1rem",
                             }}
                         >
                             <IconButton
@@ -355,6 +360,7 @@ const MoreInfo = () => {
                         justifyContent: "flex-start",
                         gap: "1rem",
                         flexWrap: "wrap",
+                        mt: courseState?.courseInstructors?.length > 0 ? "1rem" : "0rem",
                     }}
                 >
                     <Autocomplete
@@ -376,7 +382,8 @@ const MoreInfo = () => {
                                 : [{ label: "No data" }]
                         }
                         sx={{
-                            width: "350px",
+                            width: isMobileScreens ? "100%" : "350px",
+                            maxWidth: "100%",
                             p: 0,
                             m: 0,
                             // border: "1px solid black",

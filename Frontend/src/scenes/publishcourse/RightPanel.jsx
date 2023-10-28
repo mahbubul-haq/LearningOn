@@ -11,11 +11,12 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import MoreInfo from "./MoreInfo";
 import CourseContent from "./CourseContent";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const RightPanel = () => {
     const { inputSection, setInputSection, updateCourse, errors, isAnyError, updating, setUpdating, editMode } = useContext(CreateCourseContext);
     const { categories, listOfCategories } = useContext(GlobalContext);
-
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
     // console.log(inputSection);
@@ -71,8 +72,8 @@ const RightPanel = () => {
     return (
         <Box
             sx={{
-                backgroundColor: "white",
-                padding: "2rem",
+                backgroundColor: isMobileScreens ? "transparent" : "white",
+                padding: isMobileScreens ? "0rem" : "2rem",
                 borderRadius: "0.25rem",
                 // minHeight: "100%",
                 // border: "2px solid green"
@@ -132,6 +133,7 @@ const RightPanel = () => {
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
+                    flexDirection: isMobileScreens ? "column" : "row",
                     gap: "1.5rem",
                 }}
             >

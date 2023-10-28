@@ -23,12 +23,14 @@ import Divider from "@mui/material/Divider";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
+import { useMediaQuery } from "@mui/material";
 
 const BasicInfo = () => {
     const { categoriesWithLabel } = useContext(GlobalContext);
     const { courseState, setCourseState } = useContext(CreateCourseContext);
     const [addSkill, setAddSkill] = React.useState(false);
     const [skillName, setSkillName] = React.useState("");
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
 
     return (
         <Box
@@ -109,6 +111,7 @@ const BasicInfo = () => {
                         }
                         sx={{
                             width: "350px",
+                            maxWidth: "100%",
                         }}
                         renderInput={(params) => (
                             <StyledTextField1
@@ -167,7 +170,7 @@ const BasicInfo = () => {
                     <StyledTextField1
                         placeholder="Give a nice title for your course"
                         multiline
-                        maxRows={2}
+                        maxRows={ isMobileScreens ? 4 : 2}
                         id="title"
                         inputProps={{
                             maxLength: 100,
@@ -184,7 +187,7 @@ const BasicInfo = () => {
                         sx={{
                             p: 0,
                             "& .MuiInputBase-input": {
-                                fontSize: "1.6rem",
+                                fontSize: isMobileScreens ? "1rem" : "1.6rem",
                                 fontWeight: "600",
                                 color: (theme) => theme.palette.grey.grey600,
                             },
@@ -236,7 +239,7 @@ const BasicInfo = () => {
                     {/* make a bulleted list */}
                     <Box
                         sx={{
-                            marginLeft: "2rem",
+                            marginLeft: isMobileScreens ? "0rem" : "2rem",
                             mb: "1rem",
 
                             color: (theme) => theme.palette.grey.grey400,
@@ -317,7 +320,7 @@ const BasicInfo = () => {
                     <StyledTextField1
                         placeholder="Shortly describe what are the requirements for students to take this course, e.g. programming language, software, etc."
                         multiline
-                        rows={2}
+                        rows={isMobileScreens ? 4 : 2}
                         id="student-requirements"
                         inputProps={{
                             maxLength: 200,
@@ -383,6 +386,10 @@ const BasicInfo = () => {
                     sx={{
                         width: "100%",
                         mt: "1rem",
+                        display: "flex",
+                        flexWrap: "wrap",
+                        flexDirection: "row",
+                        gap: "1rem",
                     }}
                 >
                     {courseState.skillTags?.map((skill, index) => (
@@ -405,7 +412,8 @@ const BasicInfo = () => {
                                 });
                             }}
                             sx={{
-                                mr: "1rem",
+                                // mr: "1rem",
+                                // mb: "1rem",
                                 borderRadius: "2rem",
                                 fontSize: "1rem",
                                 padding: "1.2rem 0.5rem",

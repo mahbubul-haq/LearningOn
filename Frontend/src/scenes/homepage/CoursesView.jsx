@@ -25,7 +25,7 @@ const CoursesView = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const [courseType, setCourseType] = React.useState("Popular Courses");
-    const { categories, listOfCategories } = useContext(GlobalContext);
+    const { categories, listOfCategories, getCategories} = useContext(GlobalContext);
     const [categoriesWithCourse, setCategoriesWithCourse] = React.useState([]);
     const [selectedItem, setSelectedItem] = React.useState("");
     const { courses, getCourses } = useContext(HomePageContext);
@@ -51,6 +51,9 @@ const CoursesView = () => {
 
     useEffect(() => {
         getCourses();
+        if (!listOfCategories || listOfCategories.length === 0) {
+            getCategories();
+        }
     }, []);
 
     useEffect(() => {
@@ -149,7 +152,7 @@ const CoursesView = () => {
             container.scrollLeft += scrollStep;
         }
 
-        console.log(container.scrollLeft, container.scrollWidth - container.clientWidth);
+       // console.log(container.scrollLeft, container.scrollWidth - container.clientWidth);
 
         setTimeout(() => {
             if (container.scrollLeft === 0) {
@@ -207,6 +210,7 @@ const CoursesView = () => {
                     sx={{
                         mb: "1rem",
                         flexGrow: "1",
+                        textAlign: isNonMobileScreens ? "left" : "center",
                     }}
                 >
                     <Typography variant="h3">{courseType}</Typography>
@@ -464,19 +468,21 @@ const CoursesView = () => {
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 gap: "3rem",
-                                                mt: "4rem",
+                                                mt: isNonMobileScreens ? "4rem" : "2rem",
                                                 alignItems: "center",
                                                 height: "100%",
                                                 // width: "100%",
                                                 // border: "1px solid rgba(0, 0, 0, 0.23)",
                                             }}
                                         >
-                                            <Typography variant="h3">No courses found</Typography>
+                                            <Typography 
+                                            variant= {isNonMobileScreens ? "h3" : "h4"}
+                                            >No courses found</Typography>
                                             <img
                                                 src="/images/not_found_1.svg"
                                                 style={{
                                                     // height: "30%",
-                                                    maxHeight: "250px",
+                                                    maxHeight: isNonMobileScreens ? "250px" : "150px",
                                                     width: "auto",
                                                 }}
                                             />

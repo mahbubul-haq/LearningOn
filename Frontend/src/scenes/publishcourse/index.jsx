@@ -12,7 +12,7 @@ import { useContext } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { GlobalContext } from "../../state/GlobalContext";
 import { useNavigate } from "react-router-dom";
-import { Divider } from "@mui/material";
+import { Divider, IconButton } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Dialog from "@mui/material/Dialog";
@@ -24,13 +24,21 @@ import LinearProgress from "@mui/material/LinearProgress";
 import useTheme from "@mui/material/styles/useTheme";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ListIcon from "@mui/icons-material/List";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const PublishCourse = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [dialogOpen, setDialogOpen] = React.useState(0);
     const user = useSelector((state) => state.user);
     const theme = useTheme();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [open, setOpen] = React.useState(false);
 
     // const [editMode, setEditMode] = React.useState(useParams().editMode);
     // const [courseId, setCourseId] = React.useState(useParams().courseId);
@@ -53,6 +61,15 @@ const PublishCourse = () => {
     } = useContext(CreateCourseContext);
     const { categories, getUsers, getCategories, setOpenedItem, getUser } = useContext(GlobalContext);
     const navigate = useNavigate();
+
+    const handleClick = (event) => {
+        if (anchorEl) setAnchorEl(null);
+        else setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     useEffect(() => {
         if (edit == "edit" && id) {
@@ -171,7 +188,7 @@ const PublishCourse = () => {
                         justifyContent: "space-between",
                         top: 0,
                         zIndex: 10,
-                        px: isNonMobileScreens ? "3rem" : "2rem",
+                        px: isNonMobileScreens ? "3rem" : "1rem",
                         py: "0.7rem",
                         height: "50px",
                         backgroundColor: "white",
@@ -179,34 +196,96 @@ const PublishCourse = () => {
                         boxShadow: (theme) => `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,
                     }}
                 >
-                    <Box>
-                        <Button
-                            variant="outlined"
-                            color="secondary"
+                    {isNonMobileScreens && (
+                        <Box>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                sx={{
+                                    padding: "0.2rem 0.5rem",
+                                    textTransform: "capitalize",
+                                    borderRadius: "0.2rem",
+                                }}
+                                onClick={() => {
+                                    // navigate(-1);
+                                    navigate("/");
+                                }}
+                            >
+                                Back
+                            </Button>
+                        </Box>
+                    )}
+                    {!isNonMobileScreens && (
+                        <FlexBetween
                             sx={{
-                                padding: "0.2rem 0.5rem",
-                                textTransform: "capitalize",
-                                borderRadius: "0.2rem",
-                            }}
-                            onClick={() => {
-                                // navigate(-1);
-                                navigate(-1);
+                                gap: "0.5rem",
                             }}
                         >
-                            Back
-                        </Button>
-                    </Box>
-                    <Box>
-                        <Typography
-                            variant="h5"
-                            sx={{
-                                fontWeight: "600",
-                                color: (theme) => theme.palette.grey.grey400,
-                            }}
-                        >
-                            Create new course
-                        </Typography>
-                    </Box>
+                            <ArrowBackIcon
+                                sx={{
+                                    cursor: "pointer",
+                                    color: (theme) => theme.palette.grey.grey400,
+                                    fontSize: "1.5rem",
+                                    "&:hover": {
+                                        color: (theme) => theme.palette.grey.grey800,
+                                    },
+                                }}
+                                onClick={() => {
+                                    navigate("/");
+                                }}
+                            />
+
+                            <IconButton
+                                onClick={handleClick}
+                            >
+                                <ListIcon
+                                    sx={{
+                                        cursor: "pointer",
+                                        color: (theme) => theme.palette.grey.grey400,
+                                        fontSize: "2rem",
+                                        "&:hover": {
+                                            color: (theme) => theme.palette.grey.grey800,
+                                        },
+                                    }}
+                                />
+                            </IconButton>
+                            <Menu
+                                id="publish-course-menu"
+                                aria-labelledby="publish-course-menu"
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "left",
+                                }}
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "left",
+                                }}
+                            >
+                                <MenuItem onClick={() => {
+                                    if (isMobileScreens) handleClose();
+                                }}>
+                                    <LeftPanel/>
+                                </MenuItem>
+                                
+                            </Menu>
+                        </FlexBetween>
+                    )}
+                    {isNonMobileScreens && (
+                        <Box>
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    fontWeight: "600",
+                                    color: (theme) => theme.palette.grey.grey400,
+                                }}
+                            >
+                                Create new course
+                            </Typography>
+                        </Box>
+                    )}
                     <FlexBetween gap="1.5rem">
                         <StyledButton
                             disabled={!isCourseValid()}
@@ -252,7 +331,7 @@ const PublishCourse = () => {
                         overflowY: "auto",
                         top: "0",
                         width: "30%",
-                        display: "grid",
+                        display: isNonMobileScreens ? "grid" : "none",
                         //gridTemplateRows: "100",
                         padding: "0",
                         marginTop: "50px",
@@ -303,22 +382,25 @@ const PublishCourse = () => {
                         // height: "100%",
                         // overflowY: "auto",
                         position: "relative",
-                        left: "35%",
+                        left: isNonMobileScreens ? "35%" : "0",
+                        right: isNonMobileScreens ? "0" : "0",
                         zIndex: "1",
-                        width: "65%",
+                        width: isNonMobileScreens ? "65%" : "100%",
+                        // border: "2px solid red"
                     }}
                 >
                     <Box
                         sx={{
-                            height: "50px",
+                            height: isNonMobileScreens ? "50px" : isMobileScreens ? "2rem" : "1rem",
                             // borderBottom: "1px solid black",
                         }}
                     ></Box>
                     <Box
                         sx={{
-                            padding: "0 4rem 2rem 0",
+                            padding: isNonMobileScreens ? "0 4rem 2rem 0" : "0 1rem 2rem 1rem",
                             // border: "2px solid black",
                             // minHeight: "calc(100% - 50px)"
+                            // border: "2px solid green",
                         }}
                     >
                         <RightPanel />

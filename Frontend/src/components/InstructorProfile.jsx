@@ -6,10 +6,11 @@ import { Box, Typography } from "@mui/material";
 import { GlobalContext } from "../state/GlobalContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const InstructorProfile = ({ instructorId }) => {
     const { users } = useContext(GlobalContext);
-
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const instructor = users.find((user) => user._id == instructorId);
     const numberOfEnrolledStudents = instructor?.courses?.reduce(
         (acc, course) => {
@@ -34,18 +35,20 @@ const InstructorProfile = ({ instructorId }) => {
         <WidgetWrapper
             sx={{
                 "&&": {
-                    paddingRight: "3rem",
+                    paddingRight: isMobileScreens ? "2rem" : "3rem",
                 },
             }}
         >
             <FlexBetween
                 sx={{
                     gap: "3rem",
+                    flexDirection: isMobileScreens ? "column" : "row",
                 }}
             >
                 <FlexBetween
                     sx={{
                         gap: "1rem",
+                        flexDirection: isMobileScreens ? "column" : "row",
                     }}
                 >
                     <Box
@@ -72,9 +75,9 @@ const InstructorProfile = ({ instructorId }) => {
                         sx={{
                             display: "flex",
                             flexDirection: "column",
-                            gap: "1rem",
+                            gap: isMobileScreens ? "0.5rem" : "1rem",
                             justifyContent: "center",
-                            alignItems: "flex-start",
+                            alignItems: isMobileScreens ? "center" : "flex-start",
                         }}
                     >
                         <Typography
@@ -115,10 +118,10 @@ const InstructorProfile = ({ instructorId }) => {
                 <Box
                     sx={{
                         display: "flex",
-                        flexDirection: "column",
+                        flexDirection: isMobileScreens ? "row" : "column",
                         gap: "1rem",
                         justifyContent: "center",
-                        alignItems: "flex-start",
+                        alignItems: isMobileScreens ? "space-between" : "flex-start",
                     }}
                 >
                     <Typography
