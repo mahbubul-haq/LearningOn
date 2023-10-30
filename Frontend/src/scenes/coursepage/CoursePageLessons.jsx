@@ -14,9 +14,11 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const CoursePageLessons = ({ courseInfo }) => {
     const [expanded, setExpanded] = React.useState("");
+    const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
     const theme = useTheme();
 
@@ -76,7 +78,7 @@ const CoursePageLessons = ({ courseInfo }) => {
                                     fontWeight: "600",
                                 }}
                             >
-                                Lesson {index + 1}
+                                {isNonMobileScreens ? "Lesson" : ""} {index + 1}
                             </span>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             {lesson.title}
@@ -93,8 +95,7 @@ const CoursePageLessons = ({ courseInfo }) => {
                                     lineHeight: "1.5rem",
                                     mb: "1rem",
 
-                                    color: (theme) =>
-                                        theme.palette.grey.grey800,
+                                    color: (theme) => theme.palette.grey.grey800,
                                 }}
                             >
                                 {lesson.description?.split("\n").map(
@@ -111,33 +112,27 @@ const CoursePageLessons = ({ courseInfo }) => {
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableBody>
-                                    {lesson.subLessons.map(
-                                        (subLesson, subIndex) => (
-                                            <TableRow
-                                                key={index + " " + subIndex}
-                                            >
-                                                <TableCell
-                                                    sx={{
-                                                        fontSize: "1rem",
+                                    {lesson.subLessons.map((subLesson, subIndex) => (
+                                        <TableRow key={index + " " + subIndex}>
+                                            <TableCell
+                                                sx={{
+                                                    fontSize: "1rem",
 
-                                                        color: theme.palette
-                                                            .grey.grey800,
+                                                    color: theme.palette.grey.grey800,
+                                                }}
+                                            >
+                                                <span
+                                                    style={{
+                                                        fontWeight: "600",
                                                     }}
                                                 >
-                                                    <span
-                                                        style={{
-                                                            fontWeight: "600",
-                                                        }}
-                                                    >
-                                                        Lesson {index + 1}.
-                                                        {subIndex + 1}
-                                                    </span>
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    {subLesson.title}
-                                                </TableCell>
-                                            </TableRow>
-                                        )
-                                    )}
+                                                    {isNonMobileScreens ? "Lesson" : ""} {index + 1}.{subIndex + 1}
+                                                </span>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                {subLesson.title}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>

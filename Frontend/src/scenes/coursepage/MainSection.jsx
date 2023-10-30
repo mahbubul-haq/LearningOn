@@ -7,45 +7,52 @@ import { Chip, Divider } from "@mui/material";
 import CoursePageLessons from "./CoursePageLessons";
 import CoursePageInstructors from "./CoursePageInstructors";
 import CoursePageReviews from "./CoursePageReviews";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const MainSection = ({ courseInfo }) => {
     const theme = useTheme();
+    const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+    const isMobileScreens = useMediaQuery("(max-width:600px)");
     return (
         <Box>
             <Box
                 sx={{
                     width: "100%",
-                    padding: "0.1rem 5rem",
+                    padding: isNonMobileScreens ? "0.1rem 5rem" : "0rem 1rem",
                     backgroundColor: theme.palette.background.buttonBgPink,
                     position: "sticky",
                     top: "0",
-                    zIndex: "5000",
+                    zIndex: "100",
                 }}
             >
-                <FlexBetween sx={{}}>
-                    <nav
-                        id="coursepage-mainsection"
-                        className="navbar navbar-light"
-                    >
+                <FlexBetween
+                    sx={{
+                        py: isNonMobileScreens ? "0.5rem" : "0.4rem",
+                    }}
+                >
+                    <nav id="coursepage-mainsection" className="navbar navbar-light">
                         <ul
-                            className="nav nav-pills"
+                            className="nav"
                             style={{
                                 display: "flex",
-                                gap: "1rem",
-                                justifyContent: "space-between",
+                                gap: isNonMobileScreens ? "3rem" : isMobileScreens ? "1rem" : "2rem",
+                                justifyContent: "flex-start",
+                                flexWrap: "wrap",
                                 padding: "0",
                                 margin: "0",
                             }}
                         >
-                            <li className="nav-item" style={{
-                                padding: "0",
-                                margin: "0",
-                            }}>
+                            <li
+                                className="nav-item"
+                                style={{
+                                    padding: "0",
+                                    margin: "0",
+                                }}
+                            >
                                 <a
-
                                     className="nav-link"
                                     style={{
-                                        fontSize: "1.2rem",
+                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
                                         color: theme.palette.text.primary,
                                         paddingLeft: "0",
                                         margin: "0",
@@ -55,34 +62,24 @@ const MainSection = ({ courseInfo }) => {
                                     About
                                 </a>
                             </li>
-                            <Box
-                                component="li"
-                                sx={{
-                                    "&&": {},
-                                }}
-                                className="nav-item"
-                            >
-                                <Box
-                                    component="a"
-                                    className="nav-link"
+                            <li className="nav-item">
+                                <a
                                     href="#coursepage-mainsection-learn"
-                                    sx={{
-                                        fontSize: "1.2rem",
-
-                                        "&&": {
-                                            color: theme.palette.text.primary,
-                                        },
+                                    className="nav-link"
+                                    style={{
+                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
+                                        color: theme.palette.text.primary,
                                     }}
                                 >
                                     You'll Learn
-                                </Box>
-                            </Box>
+                                </a>
+                            </li>
                             <li className="nav-item">
                                 <a
                                     href="#coursepage-mainsection-lessons"
                                     className="nav-link"
                                     style={{
-                                        fontSize: "1.2rem",
+                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
                                         color: theme.palette.text.primary,
                                     }}
                                 >
@@ -94,7 +91,7 @@ const MainSection = ({ courseInfo }) => {
                                     href="#coursepage-mainsection-instructors"
                                     className="nav-link"
                                     style={{
-                                        fontSize: "1.2rem",
+                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
                                         color: theme.palette.text.primary,
                                     }}
                                 >
@@ -106,7 +103,7 @@ const MainSection = ({ courseInfo }) => {
                                     href="#coursepage-mainsection-reviews"
                                     className="nav-link"
                                     style={{
-                                        fontSize: "1.2rem",
+                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
                                         color: theme.palette.text.primary,
                                     }}
                                 >
@@ -119,18 +116,11 @@ const MainSection = ({ courseInfo }) => {
                 </FlexBetween>
             </Box>
 
-            <Box
-                data-bs-spy="scroll"
-                data-bs-target="#coursepage-mainsection"
-                data-bs-offset="0"
-                data-bs-duration="800"
-                tabIndex="0"
-                sx={{}}
-            >
+            <Box data-bs-spy="scroll" data-bs-target="#coursepage-mainsection" data-bs-offset="0" data-bs-duration="800" tabIndex="0" sx={{}}>
                 <Box
                     id="coursepage-mainsection-about"
                     sx={{
-                        padding: "2rem 5rem 3rem 5rem",
+                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
                     }}
                 >
                     <Typography
@@ -144,24 +134,54 @@ const MainSection = ({ courseInfo }) => {
                         About this course
                     </Typography>
                     {/* <pre> */}
-                    <Typography
+                    <Box
                         sx={{
-                            fontSize: "0.9rem",
-                            lineHeight: "1.5rem",
-                            // wrap words break anywhere
-                            overflowWrap: "anywhere",
+                            width: "100%",
                         }}
                     >
-                        {/* convert newlines into <br> */}
-                        {courseInfo?.courseDescription
-                            ?.split("\n")
-                            .map((line, index) => (
+                        <Typography
+                            sx={{
+                                fontSize: "0.9rem",
+                                lineHeight: "1.5rem",
+                                // wrap words break anywhere
+                                overflowWrap: "anywhere",
+                                // clearfix
+                                "&::after": {
+                                    content: '""',
+                                    display: "table",
+                                    clear: "both",
+                                },
+
+                                // float: "left",
+                                // width: isNonMobileScreens ? "65%" : "100%",
+                            }}
+                        >
+                            <video
+                                controls
+                                src={`${import.meta.env.VITE_REACT_APP_URL}/images/${courseInfo?.introVideo}`}
+                                style={{
+                                    // width: "100%",
+                                    maxWidth: isMobileScreens ? "100%" : "400px",
+                                    // minWidth: "100%",
+                                    height: "auto",
+                                    marginLeft: "1rem",
+                                    marginBottom: "1rem",
+                                    float: "right",
+                                }}
+                                //add title and caption
+                                title={"Intro: " + courseInfo?.courseTitle}
+                                alt="Intro video"
+                                loading="lazy"
+                            />
+                            {/* convert newlines into <br> */}
+                            {courseInfo?.courseDescription?.split("\n").map((line, index) => (
                                 <React.Fragment key={index}>
                                     {line}
                                     <br />
                                 </React.Fragment>
                             ))}
-                    </Typography>
+                        </Typography>
+                    </Box>
                     {/* </pre> */}
                 </Box>
                 <Divider
@@ -173,7 +193,7 @@ const MainSection = ({ courseInfo }) => {
                 <Box
                     id="coursepage-mainsection-learn"
                     sx={{
-                        padding: "2rem 5rem 3rem 5rem",
+                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
                     }}
                 >
                     <Typography
@@ -205,9 +225,7 @@ const MainSection = ({ courseInfo }) => {
                                     borderRadius: "2rem",
                                     fontSize: "1rem",
                                     padding: "1.2rem 0.5rem",
-                                    backgroundColor: (theme) =>
-                                        theme.palette.background
-                                            .buttonBgLightPink,
+                                    backgroundColor: (theme) => theme.palette.background.buttonBgLightPink,
                                 }}
                             />
                         ))}
@@ -222,7 +240,7 @@ const MainSection = ({ courseInfo }) => {
                 <Box
                     id="coursepage-mainsection-lessons"
                     sx={{
-                        padding: "2rem 5rem 3rem 5rem",
+                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
                     }}
                 >
                     <Typography
@@ -246,7 +264,7 @@ const MainSection = ({ courseInfo }) => {
                 <Box
                     id="coursepage-mainsection-instructors"
                     sx={{
-                        padding: "2rem 5rem 3rem 5rem",
+                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
                     }}
                 >
                     <Typography
@@ -272,7 +290,7 @@ const MainSection = ({ courseInfo }) => {
                 <Box
                     id="coursepage-mainsection-reviews"
                     sx={{
-                        padding: "2rem 5rem 3rem 5rem",
+                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
                     }}
                 >
                     <Typography

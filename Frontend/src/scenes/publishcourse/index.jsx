@@ -264,11 +264,13 @@ const PublishCourse = () => {
                                     horizontal: "left",
                                 }}
                             >
-                                <MenuItem onClick={() => {
+                                <Box sx={{
+                                    padding: "1rem"
+                                }} onClick={() => {
                                     if (isMobileScreens) handleClose();
                                 }}>
                                     <LeftPanel/>
-                                </MenuItem>
+                                </Box>
                                 
                             </Menu>
                         </FlexBetween>

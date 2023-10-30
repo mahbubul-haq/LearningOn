@@ -10,6 +10,7 @@ import MainSection from "./MainSection";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../state/GlobalContext";
 import { useSelector } from "react-redux";
+import TopSectionSmall from "./TopSectionSmall";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -18,7 +19,7 @@ const CoursePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
-    const {setOpenedItem} = useContext(GlobalContext);
+    const { setOpenedItem } = useContext(GlobalContext);
 
     // useEffect(() => {
     //     if (!user) {
@@ -48,17 +49,14 @@ const CoursePage = () => {
     useEffect(() => {
         let element = document.querySelector(".coursepage-main");
         if (!element) return;
-        const scrollEventListner = (document.querySelector(
-            ".coursepage-main"
-        ).onscroll = (e) => {
+        const scrollEventListner = (document.querySelector(".coursepage-main").onscroll = (e) => {
+            console.log("scrolling", e.target.scrollTop);
             if (e.target.scrollTop > 200) {
-                document.querySelector(".sticky-top").style.position =
-                    "relative";
-                document.querySelector(".sticky-top").style.top = "-100px";
+                document.querySelector(".coursepage-sticky-top").style.position = "relative";
+                document.querySelector(".coursepage-sticky-top").style.top = "-100px";
             } else {
-                document.querySelector(".sticky-top").style.position =
-                    "relative";
-                document.querySelector(".sticky-top").style.top = "0";
+                document.querySelector(".coursepage-sticky-top").style.position = "relative";
+                document.querySelector(".coursepage-sticky-top").style.top = "0";
             }
         });
         return () => {
@@ -81,10 +79,13 @@ const CoursePage = () => {
                 }}
             >
                 <Box
-                    className="sticky-top"
+                    className="coursepage-sticky-top"
                     sx={{
                         // transition: "all 0.5s ease",
                         transition: "all 0.5s ease",
+                        zIndex: "100",
+                        //border: "2px solid red"
+                        margin: "0",
                     }}
                 >
                     <Navbar />
@@ -93,8 +94,11 @@ const CoursePage = () => {
                 // sx={{
                 //     paddingTop: "5rem",
                 // }}
+                sx={{
+                    //border: "4px solid green"
+                }}
                 >
-                    <TopSection courseInfo={courseInfo} />
+                    {isNonMobileScreens ? <TopSection courseInfo={courseInfo} /> : <TopSectionSmall courseInfo={courseInfo} />}
                 </Box>
 
                 <MainSection courseInfo={courseInfo} />
