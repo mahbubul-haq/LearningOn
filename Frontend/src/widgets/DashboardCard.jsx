@@ -1,9 +1,10 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const DashboardCard = ({ title, value }) => {
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     return (
         <Box
             sx={{
@@ -11,6 +12,7 @@ const DashboardCard = ({ title, value }) => {
                 backgroundColor: "#f5f5f5",
 
                 borderRadius: "0.5rem",
+                minWidth: isNonMobileScreens ? "240px" : "200px",
             }}
         >
             <Typography
@@ -25,7 +27,8 @@ const DashboardCard = ({ title, value }) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: "2rem 4rem",
+                    padding: "2rem 2rem",
+                    
                 }}
             >
                 <Typography

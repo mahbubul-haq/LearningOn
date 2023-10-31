@@ -8,10 +8,12 @@ import DashboardCard from "../../widgets/DashboardCard";
 import { Divider } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import { StyledButton } from "../../components/StyledButton";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const DashboardMiddle = () => {
     const { selectedCourse } = useContext(DashboardContext);
     const user = useSelector((state) => state.user);
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const getTotalStudents = () => {
         if (selectedCourse) {
@@ -47,7 +49,7 @@ const DashboardMiddle = () => {
                     <h4
                         style={{
                             textAlign: "center",
-                            marginTop: "2rem",
+                            marginTop: isNonMobileScreens ? "2rem" : "1rem",
                         }}
                     >
                         {selectedCourse?.courseTitle}
@@ -74,7 +76,7 @@ const DashboardMiddle = () => {
                     variant="h4"
                     sx={{
                         textAlign: "center",
-                        marginTop: "2rem",
+                        marginTop: isNonMobileScreens ? "2rem" : "1rem",
                     }}
                 >
                     No Course Selected
@@ -92,7 +94,7 @@ const DashboardMiddle = () => {
                 sx={{
                     textAlign: "center",
                     fontWeight: "600",
-                    mt: "3rem",
+                    mt: isNonMobileScreens ? "3rem" : "1rem",
                 }}
             >
                 {selectedCourse ? "Course" : "All Courses"} Statistics

@@ -42,3 +42,7 @@ body {
     background-color: #EBF5E2;
 }
 
+.dashboard-tabs .nav-link {
+    /* add padding  */
+    padding: 0.5rem 1rem;
+}

@@ -11,16 +11,18 @@ import { useContext } from "react";
 import { DashboardContext } from "../../state/DashboardContext";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import {GlobalContext} from "../../state/GlobalContext";
+import { GlobalContext } from "../../state/GlobalContext";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Dashboard = () => {
     const theme = useTheme();
     const user = useSelector((state) => state.user);
-   
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const params = useParams();
-    const {setOpenedItem} = useContext(GlobalContext);
+    const { setOpenedItem } = useContext(GlobalContext);
     const { openedTab, setOpenedTab, selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);
-    
+
     useEffect(() => {
         setOpenedItem("dashboard");
     }, []);
@@ -103,6 +105,7 @@ const Dashboard = () => {
                     // height: "100%",
                     width: "100%",
                     //overflow: "auto",
+                    
                 }}
             >
                 <Box>
@@ -112,7 +115,7 @@ const Dashboard = () => {
                     className="dashboard-top"
                     sx={{
                         position: "sticky",
-                        top: "-1rem",
+                        top: isNonMobileScreens ? "-1rem" : "0",
                         zIndex: "10",
                     }}
                 >
@@ -120,73 +123,77 @@ const Dashboard = () => {
                 </Box>
                 <Box
                     sx={{
-                        px: "5rem",
+                        px: isNonMobileScreens ? "5rem": "1rem",
                         display: "flex",
                         gap: "2rem",
                         py: "3rem",
-                        
                     }}
                 >
+                    {isNonMobileScreens && (
+                        <Box
+                            sx={{
+                                width: "20%",
+                                backgroundColor: theme.palette.background.alt,
+                                borderRadius: "0.25rem",
+                                p: "1rem",
+                            }}
+                        >
+                            <DashboardLeft />
+                        </Box>
+                    )}
                     <Box
                         sx={{
-                            width: "20%",
+                            width: isNonMobileScreens ? "55%" : "100%",
                             backgroundColor: theme.palette.background.alt,
                             borderRadius: "0.25rem",
                             p: "1rem",
-                        }}
-                    >
-                        <DashboardLeft />
-                    </Box>
-                    <Box
-                        sx={{
-                            width: "55%",
-                            backgroundColor: theme.palette.background.alt,
-                            borderRadius: "0.25rem",
-                            p: "1rem",
+                            pb: "3rem",
                             // maxHeight: "1000px"
                         }}
                     >
                         <DashboardMiddle />
                     </Box>
-                    <Box
-                        sx={{
-                            width: "25%",
-                            backgroundColor: theme.palette.background.alt,
-                            borderRadius: "0.25rem",
-                            p: "1rem",
-                            maxHeight: "1500px",
-                            overflow: "auto",
-                            "&::-webkit-scrollbar": {
-                                width: "0.5rem",
-                            },
-                            "&::-webkit-scrollbar-track": {
-                                background: "white",
+                    {isNonMobileScreens && (
+                        <Box
+                            sx={{
+                                width: "25%",
+                                backgroundColor: theme.palette.background.alt,
                                 borderRadius: "0.25rem",
-                            },
-                            "&::-webkit-scrollbar-thumb": {
-                                background: theme.palette.grey.grey300,
+                                p: "1rem",
+                                maxHeight: "1500px",
+                                overflow: "auto",
+                                "&::-webkit-scrollbar": {
+                                    width: "0.5rem",
+                                },
+                                "&::-webkit-scrollbar-track": {
+                                    background: "white",
+                                    borderRadius: "0.25rem",
+                                },
+                                "&::-webkit-scrollbar-thumb": {
+                                    background: theme.palette.grey.grey300,
 
-                                borderRadius: "0.25rem",
-                                //change the length of scroll bar thumb
-                                height: "5px",
-                            },
+                                    borderRadius: "0.25rem",
+                                    //change the length of scroll bar thumb
+                                    height: "5px",
+                                },
 
-                            "&::-webkit-scrollbar-thumb:hover": {
-                                background: theme.palette.grey.grey400,
-                            },
+                                "&::-webkit-scrollbar-thumb:hover": {
+                                    background: theme.palette.grey.grey400,
+                                },
 
-                            "&::-webkit-scrollbar-thumb:active": {
-                                background: theme.palette.grey.grey400,
-                            },
+                                "&::-webkit-scrollbar-thumb:active": {
+                                    background: theme.palette.grey.grey400,
+                                },
 
-                            //change the buttons of scroll bar
-                            "&::-webkit-scrollbar-button": {
-                                display: "none",
-                            },
-                        }}
-                    >
-                        <DashboardRight />
-                    </Box>
+                                //change the buttons of scroll bar
+                                "&::-webkit-scrollbar-button": {
+                                    display: "none",
+                                },
+                            }}
+                        >
+                            <DashboardRight />
+                        </Box>
+                    )}
                 </Box>
             </Box>
         </Box>
