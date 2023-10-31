@@ -4,9 +4,11 @@ import { LearningCourseContext } from "../../state/LearningCourseContex";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const LearningRightPanel = ({ courseInfo }) => {
     const { openedLesson, setOpenedLesson } = useContext(LearningCourseContext);
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const theme = useTheme();
 
     return (
@@ -25,7 +27,7 @@ const LearningRightPanel = ({ courseInfo }) => {
                             <Typography
                                 variant="h4"
                                 sx={{
-                                    fontSize: "1.3rem",
+                                    fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
                                     mb: "1rem",
                                 }}
                             >
@@ -46,7 +48,7 @@ const LearningRightPanel = ({ courseInfo }) => {
                                 sx={{
                                     backgroundColor:
                                         theme.palette.background.imagesBg,
-                                    padding: "2rem",
+                                    padding: isNonMobileScreens ? "2rem" : "1rem",
                                 }}
                             >
                                 {courseInfo?.lessons[openedLesson.lesson - 1] &&
@@ -135,7 +137,7 @@ const LearningRightPanel = ({ courseInfo }) => {
                                     <Typography
                                         variant="h4"
                                         sx={{
-                                            fontSize: "1.3rem",
+                                            fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
                                             mb: "1rem",
                                         }}
                                     >
@@ -184,6 +186,13 @@ const LearningRightPanel = ({ courseInfo }) => {
                                                 padding: "0",
                                                 margin: "0",
                                             }}
+                                            title={
+                                                courseInfo?.lessons[
+                                                    openedLesson.lesson - 1
+                                                ].subLessons[
+                                                    openedLesson.subLesson - 1
+                                                ].title
+                                            }
                                         />
                                     </Box>
                                 </Box>
@@ -202,7 +211,7 @@ const LearningRightPanel = ({ courseInfo }) => {
                                     <Typography
                                         variant="h4"
                                         sx={{
-                                            fontSize: "1.3rem",
+                                            fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
                                             mb: "1rem",
                                         }}
                                     >
@@ -228,7 +237,7 @@ const LearningRightPanel = ({ courseInfo }) => {
                                             backgroundColor:
                                                 theme.palette.background
                                                     .imagesBg,
-                                            padding: "2rem",
+                                            padding: isNonMobileScreens ? "2rem" : "1rem",
                                         }}
                                     >
                                         <Typography

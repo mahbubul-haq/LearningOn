@@ -160,12 +160,14 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                                             // border: "2px solid red"
                                             
                                         }}
-                                        onClick={() => {
+                                        onClick={(e) => {
                                             if (expandedLessons.includes(index + 1)) {
                                                 setExpandedLessons((prev) => prev.filter((item) => item !== index + 1));
                                             } else {
                                                 setExpandedLessons((prev) => [...prev, index + 1]);
                                             }
+                                            e.stopPropagation();
+                                            e.preventDefault();
                                         }}
                                     >
                                         <ExpandMoreIcon

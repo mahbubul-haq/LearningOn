@@ -23,6 +23,7 @@ const LearningPage = () => {
     const [courseInfo, setCourseInfo] = React.useState({});
     const { getCourseById, courseById, setCourseById, setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const theme = useTheme();
     const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons } = useContext(LearningCourseContext);
     const scrollPositionRef = React.useRef(0);
@@ -134,9 +135,10 @@ const LearningPage = () => {
                 </Box>
                 <Box
                     sx={{
-                        position: "relative",
+                        position: isNonMobileScreens ? "relative" : "sticky",
                         top: "0",
                         zIndex: "100",
+
                     }}
                 >
                     <LearningPageTop courseInfo={courseInfo} />
@@ -146,20 +148,22 @@ const LearningPage = () => {
                         display: "flex",
                         justifyContent: "space-between",
 
-                        padding: "0 5rem",
+                        padding: isNonMobileScreens ? "0 5rem" : isMobileScreens ? "0 1rem" : "0 2rem",
                         width: "100%",
                     }}
                 >
-                    <Box
-                        sx={{
-                            width: "30%",
+                    {isNonMobileScreens && (
+                        <Box
+                            sx={{
+                                width: "30%",
 
-                            py: "4rem",
-                            borderRight: `1px dashed ${theme.palette.customDivider.main}`,
-                        }}
-                    >
-                        <LearningLeftPanel courseInfo={courseInfo} />
-                    </Box>
+                                py: "4rem",
+                                borderRight: `1px dashed ${theme.palette.customDivider.main}`,
+                            }}
+                        >
+                            <LearningLeftPanel courseInfo={courseInfo} />
+                        </Box>
+                    )}
 
                     {/* <Divider
                         sx={{
@@ -173,9 +177,9 @@ const LearningPage = () => {
 
                     <Box
                         sx={{
-                            width: "65%",
+                            width: isNonMobileScreens ? "65%" : "100%",
                             // border: "1px solid red",
-                            py: "4rem",
+                            py: isNonMobileScreens ? "4rem" : "2rem",
                         }}
                     >
                         <LearningRightPanel courseInfo={courseInfo} />
