@@ -23,11 +23,12 @@ const MainSection = ({ courseInfo }) => {
                     position: "sticky",
                     top: "0",
                     zIndex: "100",
+                    boxShadow: "0px 4px 4px 0px rgba(0,0,0,0.1)",
                 }}
             >
                 <FlexBetween
                     sx={{
-                        py: isNonMobileScreens ? "0.5rem" : "0.4rem",
+                        py: isNonMobileScreens ? "0.7rem" : "0.5rem",
                     }}
                 >
                     <nav id="coursepage-mainsection" className="navbar navbar-light">
@@ -35,7 +36,7 @@ const MainSection = ({ courseInfo }) => {
                             className="nav"
                             style={{
                                 display: "flex",
-                                gap: isNonMobileScreens ? "3rem" : isMobileScreens ? "1rem" : "2rem",
+                                gap: isNonMobileScreens ? "2.5rem" : isMobileScreens ? "1rem" : "2rem",
                                 justifyContent: "flex-start",
                                 flexWrap: "wrap",
                                 padding: "0",

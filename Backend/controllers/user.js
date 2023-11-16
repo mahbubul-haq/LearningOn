@@ -18,9 +18,9 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const user = await People.findById(req.userId)
-            .populate("courses")
+            .populate("courses followers following")
             .exec();
-        console.log(user);
+        //console.log(user);
         res.status(200).json({
             success: true,
             user: user,
@@ -36,7 +36,7 @@ const getUser = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const user = await People.findById(req.params.userId)
-            .populate("courses")
+            .populate("courses followers following")
             .exec();
         //console.log(user);
         res.status(200).json({
@@ -51,4 +51,48 @@ const getUserById = async (req, res) => {
     }
 };
 
-export { getAllUsers, getUser, getUserById };
+const follow = async (req, res) => {
+
+    const userId = req.params.userId;
+    //console.log("following user id: " + userId);
+
+    try {
+        const user = await People.findById(userId);
+        const currentUser = await People.findById(req.userId);
+
+        if (!user.followers.includes(req.userId)) {
+            const user = await People.findById(userId);
+            const currentUser = await People.findById(req.userId);
+
+            user.followers.push(req.userId);
+            currentUser.following.push(userId);
+
+            await user.save();
+            await currentUser.save();
+
+            res.status(200).json({
+                success: true,
+                user: user,
+                follwer: currentUser,
+            });
+        }
+        else {
+            await user.updateOne({ $pull: { followers: req.userId } });
+            await currentUser.updateOne({ $pull: { following: userId } });
+
+            res.status(200).json({
+                success: true,
+                user: user,
+                follwer: currentUser,
+            });
+        }
+    }
+    catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+
+export { getAllUsers, getUser, getUserById, follow };

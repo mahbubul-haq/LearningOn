@@ -49,6 +49,8 @@ const ProfileLeft = ({ userInfo }) => {
                 >
                     {userInfo?._id == user?._id && (
                         <MenuItem
+                            component="a"
+                            href="#profile-wallet"
                             onClick={() => {
                                 setOpenedTab("wallet");
                             }}
@@ -80,7 +82,10 @@ const ProfileLeft = ({ userInfo }) => {
                             </FlexBetween>
                         </MenuItem>
                     )}
+
                     <MenuItem
+                        component="a"
+                        href="#profile-about"
                         onClick={() => {
                             setOpenedTab("profile");
                         }}
@@ -89,9 +94,12 @@ const ProfileLeft = ({ userInfo }) => {
                             backgroundColor: openedTab === "profile" ? theme.palette.background.light300 : "transparent",
                         }}
                     >
-                        Profile
+                        About
                     </MenuItem>
+
                     <MenuItem
+                        component="a"
+                        href="#profile-courses"
                         onClick={() => {
                             setOpenedTab("courses");
                         }}
@@ -119,7 +127,7 @@ const ProfileLeft = ({ userInfo }) => {
                                     fontWeight: "600",
                                 }}
                             >
-                                {userInfo?.courses?.reduce((acc, course) => (acc + (course.courseStatus == "draft" ? 0 : 1)), 0) || "0"}
+                                {userInfo?.courses?.reduce((acc, course) => acc + (course.courseStatus == "draft" ? 0 : 1), 0) || "0"}
                             </Typography>
                         </FlexBetween>
                     </MenuItem>
@@ -188,6 +196,8 @@ const ProfileLeft = ({ userInfo }) => {
                         </FlexBetween>
                     </MenuItem>
                     <MenuItem
+                        component="a"
+                        href="#profile-followers"
                         onClick={() => {
                             setOpenedTab("followers");
                         }}
@@ -220,6 +230,8 @@ const ProfileLeft = ({ userInfo }) => {
                         </FlexBetween>
                     </MenuItem>
                     <MenuItem
+                        component="a"
+                        href="#profile-following"
                         onClick={() => {
                             setOpenedTab("following");
                         }}

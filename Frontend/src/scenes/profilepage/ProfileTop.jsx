@@ -8,12 +8,19 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import { useNavigate } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton";
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { ProfilePageContext } from "../../state/ProfilePageContext";
+import { GlobalContext } from "../../state/GlobalContext";
 
 const ProfileTop = ({ userInfo }) => {
     const theme = useTheme();
     const navigate = useNavigate();
-    const user = useSelector(state => state.user);
+    const user = useSelector((state) => state.user);
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
+    const { follow, followingDone, setFollowingDone } = React.useContext(ProfilePageContext);
+    const { getUserById, getUser } = React.useContext(GlobalContext);
 
     const getQualifications = () => {
         let qualifications = [];
@@ -37,13 +44,19 @@ const ProfileTop = ({ userInfo }) => {
         return qualifications.join(", ");
     };
 
-
+    React.useEffect(() => {
+        if (followingDone) {
+            getUserById(userInfo?._id);
+            getUser();
+            setFollowingDone(false);
+        }
+    }, [followingDone]);
 
     return (
         <Box
             sx={{
                 width: "100%",
-                padding: "2rem 5rem 0rem 5rem",
+                padding: isNonMobileScreens ? "2rem 5rem 0rem 5rem" : isMobileScreens ? "1rem 1rem 0 1rem" : "2rem 2rem 0rem 2rem",
                 backgroundColor: theme.palette.background.bottom,
                 backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
             }}
@@ -97,16 +110,10 @@ const ProfileTop = ({ userInfo }) => {
                 }}
             >
                 <img
-                    src={
-                        userInfo?.picturePath
-                            ? `${import.meta.env.VITE_REACT_APP_URL}/images/${
-                                  userInfo?.picturePath
-                              }`
-                            : "/images/dummyPerson.jpeg"
-                    }
+                    src={userInfo?.picturePath ? `${import.meta.env.VITE_REACT_APP_URL}/images/${userInfo?.picturePath}` : "/images/dummyPerson.jpeg"}
                     style={{
-                        width: "180px",
-                        height: "180px",
+                        width: isNonMobileScreens ? "180px" : "120px",
+                        height: isNonMobileScreens ? "180px" : "120px",
                         objectFit: "cover",
                         borderRadius: "50%",
                         // thumbnail
@@ -132,14 +139,8 @@ const ProfileTop = ({ userInfo }) => {
                             },
                         }}
                     >
-                        <Typography
-                            sx={{ fontSize: "1.5rem", fontWeight: "bold" }}
-                        >
-                            {userInfo?.name}
-                        </Typography>
-                        <Typography sx={{ fontSize: "1rem" }}>
-                            {getQualifications()}
-                        </Typography>
+                        <Typography sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>{userInfo?.name}</Typography>
+                        <Typography sx={{ fontSize: "1rem" }}>{getQualifications()}</Typography>
                     </FlexBetween>
                     <StyledButton
                         sx={{
@@ -147,8 +148,21 @@ const ProfileTop = ({ userInfo }) => {
                                 px: "2rem",
                             },
                         }}
+                        onClick={() => {
+                            if (userInfo?._id == user?._id) {
+                                navigate("/profile/edit");
+                            } else {
+                                setFollowingDone(false);
+                                follow(userInfo?._id);
+                            }
+                        }}
                     >
-                        {userInfo?._id == user?._id ? "Edit Profile" : "Follow"}
+                        {userInfo?._id == user?._id ? "Edit Profile" : userInfo?.followers.length > 0 && userInfo?.followers?.reduce((prev, cur) => {
+                            if (cur._id == user?._id) {
+                                return true;
+                            }
+                            return prev || false;
+                        }) ? "Unfollow" : "Follow"}
                     </StyledButton>
                 </FlexBetween>
             </Box>

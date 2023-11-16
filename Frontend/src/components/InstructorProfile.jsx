@@ -12,20 +12,12 @@ const InstructorProfile = ({ instructorId }) => {
     const { users } = useContext(GlobalContext);
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const instructor = users.find((user) => user._id == instructorId);
-    const numberOfEnrolledStudents = instructor?.courses?.reduce(
-        (acc, course) => {
-            return (
-                acc +
-                (course.enrolledStudents ? course.enrolledStudents.length : 0)
-            );
-        },
-        0
-    );
+    const numberOfEnrolledStudents = instructor?.courses?.reduce((acc, course) => {
+        return acc + (course.enrolledStudents ? course.enrolledStudents.length : 0);
+    }, 0);
 
     const profilePicture = instructor?.picturePath
-        ? `${import.meta.env.VITE_REACT_APP_URL}/images/${
-              instructor.picturePath
-          }`
+        ? `${import.meta.env.VITE_REACT_APP_URL}/images/${instructor.picturePath}`
         : "/images/dummyPerson.jpeg";
 
     // console.log("instructor", instructor);
@@ -34,21 +26,34 @@ const InstructorProfile = ({ instructorId }) => {
     return (
         <WidgetWrapper
             sx={{
+                width: "100%",
+                height: "100%",
+                maxHeight: "300px",
                 "&&": {
                     paddingRight: isMobileScreens ? "2rem" : "3rem",
+
                 },
             }}
         >
             <FlexBetween
                 sx={{
-                    gap: "3rem",
+                    gap: isMobileScreens ? "2rem" : "3rem",
+
                     flexDirection: isMobileScreens ? "column" : "row",
+                    //alignItems: isMobileScreens ? "flex-start" : "center",
+                    "&&": {
+                        justifyContent: isMobileScreens ? "flex-start" : "space-between",
+                        alignItems: isMobileScreens ? "flex-start" : "center",
+                    },
+                    //border: "2px solid black"
                 }}
             >
                 <FlexBetween
                     sx={{
                         gap: "1rem",
-                        flexDirection: isMobileScreens ? "column" : "row",
+                        flexDirection: isMobileScreens ? "row" : "row",
+                        // alignItems: isMobileScreens ? "flex-start" : "center",
+                        // justifyContent: isMobileScreens ? "flex-start" : "space-between",
                     }}
                 >
                     <Box
@@ -63,8 +68,8 @@ const InstructorProfile = ({ instructorId }) => {
                             src={profilePicture}
                             alt="instructor"
                             style={{
-                                width: "4rem",
-                                height: "4rem",
+                                width: isMobileScreens ? "3rem" : "4rem",
+                                height: isMobileScreens ? "3rem" : "4rem",
                                 borderRadius: "50%",
                                 objectFit: "cover",
                             }}
@@ -75,9 +80,9 @@ const InstructorProfile = ({ instructorId }) => {
                         sx={{
                             display: "flex",
                             flexDirection: "column",
-                            gap: isMobileScreens ? "0.5rem" : "1rem",
-                            justifyContent: "center",
-                            alignItems: isMobileScreens ? "center" : "flex-start",
+                            gap: isMobileScreens ? "0rem" : "1rem",
+                            justifyContent: "flex-start",
+                            alignItems: isMobileScreens ? "flex-start" : "flex-start",
                         }}
                     >
                         <Typography
@@ -100,15 +105,11 @@ const InstructorProfile = ({ instructorId }) => {
                                 navigate(`/profile/${instructor?._id}`);
                             }}
                         >
-                            {instructor?.name?.length > 20
-                                ? instructor?.name?.slice(0, 20) + "..."
-                                : instructor?.name}
+                            {instructor?.name?.length > 20 ? instructor?.name?.slice(0, 20) + "..." : instructor?.name}
                         </Typography>
                         <Rating
                             rating={{
-                                rating: instructor
-                                    ? instructor.rating.rating
-                                    : 0,
+                                rating: instructor ? instructor.rating.rating : 0,
                                 count: instructor ? instructor.rating.count : 0,
                                 showText: false,
                             }}

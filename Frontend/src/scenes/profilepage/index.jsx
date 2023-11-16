@@ -15,6 +15,7 @@ const ProfilePage = () => {
     const { userId } = useParams();
     const { userById, getUserById, setUserById, setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
     const theme = useTheme();
 
@@ -25,46 +26,49 @@ const ProfilePage = () => {
 
     useEffect(() => {
         console.log(userById);
-        
     }, [userById]);
 
     useEffect(() => {
         setOpenedItem("profile");
     }, []);
 
-   
-
     return (
-        <Box sx={{
-            height: "100%",
-            width: "100%",
-            minHeight: "600px",
-            overflow: "auto",
-            paddingBottom: "2rem"
-        }}>
+        <Box
+            sx={{
+                height: "100%",
+                width: "100%",
+                minHeight: "600px",
+                overflow: "auto",
+                paddingBottom: "2rem",
+                scrollBehavior: "smooth",
+                overflowX: "hidden",
+            }}
+        >
             <Navbar />
             <ProfileTop userInfo={userById} />
             <Box
                 sx={{
                     width: "100%",
-                    padding: "7rem 5rem 5rem 5rem",
+                    padding: isNonMobileScreens ? "7rem 5rem 5rem 5rem" :  isMobileScreens ? "6rem 1rem 0 1rem" : "7rem 2rem 5rem 2rem",
                     display: "flex",
                     gap: "4rem",
                 }}
             >
+                {isNonMobileScreens && (
+                    <Box
+                        sx={{
+                            width: isNonMobileScreens ? "20%" : "25%",
+                            // border: "1px solid #ccc",
+                        }}
+                    >
+                        <ProfileLeft userInfo={userById} />
+                    </Box>
+                )}
                 <Box
                     sx={{
-                        width: isNonMobileScreens ? "20%" : "25%",
+                        width: isNonMobileScreens ? "80%" : "100%",
                         // border: "1px solid #ccc",
-                    }}
-                >
-                    <ProfileLeft userInfo={userById} />
-                </Box>
-                <Box
-                    sx={{
-                        width: isNonMobileScreens ? "80%" : "75%",
-                        // border: "1px solid #ccc",
-                        backgroundColor: theme.palette.background.imagesBg1,
+                        backgroundColor: isMobileScreens ? "transparent" : theme.palette.background.imagesBg1,
                     }}
                 >
                     <ProfileRight userInfo={userById} />

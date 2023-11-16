@@ -36,6 +36,7 @@ const MoreInfo = () => {
     const { courseState, setCourseState, errors, setErrors } = useContext(CreateCourseContext);
     const [instructor, setInstructor] = React.useState(null);
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const addInstructor = () => {
         if (instructor) {
@@ -314,12 +315,10 @@ const MoreInfo = () => {
                 </Box>
                 <Box
                     sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
+                        display: "grid",
+                        gridTemplateColumns: isMobileScreens ? "1fr" :"repeat(auto-fit, minmax(350px, 1fr))",
                         gap: "1rem",
-                        flexWrap: "wrap",
+                        gridAutoRows: "1fr",
                     }}
                 >
                     {courseState.courseInstructors.map((id, index) => (
@@ -328,6 +327,7 @@ const MoreInfo = () => {
                             sx={{
                                 position: "relative",
                                 // mb: "1rem",
+                                width: "100%",
                             }}
                         >
                             <IconButton
