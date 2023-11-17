@@ -10,6 +10,9 @@ import ProfileRight from "./ProfileRight";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useTheme from "@mui/material/styles/useTheme";
 import { ProfilePageContext } from "../../state/ProfilePageContext";
+import FlexBetween from "../../components/FlexBetween";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 
 const ProfilePage = () => {
     const { userId } = useParams();
@@ -18,6 +21,28 @@ const ProfilePage = () => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
     const theme = useTheme();
+
+    const getQualifications = () => {
+        let qualifications = [];
+
+        if (userById?.learning?.length > 0) {
+            qualifications.push("Student");
+        }
+        if (userById?.courses?.length > 0) {
+            qualifications.push("Instructor");
+        }
+        if (userById?.tutoring?.length > 0) {
+            qualifications.push("Tutor");
+        }
+        if (userById?.blogs?.length > 0) {
+            qualifications.push("Blogger");
+        }
+
+        if (qualifications.length === 0) {
+            qualifications.push("Student");
+        }
+        return qualifications.join(", ");
+    };
 
     useEffect(() => {
         getUserById(userId);
@@ -46,10 +71,36 @@ const ProfilePage = () => {
         >
             <Navbar />
             <ProfileTop userInfo={userById} />
+            {isMobileScreens && (
+                <>
+                    <FlexBetween
+                        sx={{
+                            "&&": {
+                                flexDirection: "column",
+                                gap: "0.5rem",
+                                alignItems: "flex-start",
+                                mt: "2.5rem",
+                                mx: "1rem",
+                            },
+                        }}
+                    >
+                        <Typography sx={{ fontSize: isNonMobileScreens ? "1.5rem" : "1.2rem", fontWeight: "bold" }}>{userById?.name}</Typography>
+                        <Typography sx={{ fontSize: "0.9rem" }}>{getQualifications()}</Typography>
+                    </FlexBetween>
+                    <Divider
+                        light
+                        sx={{
+                            color: (theme) => theme.palette.grey.grey400,
+                            mt: "2rem",
+                            mb: "1rem",
+                        }}
+                    />
+                </>
+            )}
             <Box
                 sx={{
                     width: "100%",
-                    padding: isNonMobileScreens ? "7rem 5rem 5rem 5rem" :  isMobileScreens ? "6rem 1rem 0 1rem" : "7rem 2rem 5rem 2rem",
+                    padding: isNonMobileScreens ? "7rem 5rem 5rem 5rem" : isMobileScreens ? "0rem 1rem 0 1rem" : "5rem 2rem 5rem 2rem",
                     display: "flex",
                     gap: "4rem",
                 }}

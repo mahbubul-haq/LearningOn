@@ -67,7 +67,7 @@ export const GlobalState = (props) => {
         // flatten the categories
         const flattenCategories = (categories) => {
             let result = [];
-            categories.forEach((category) => {
+            categories?.forEach((category) => {
                 result.push(category.name);
                 if (category.subcategories?.length > 0) {
                     for (const subcategory of category.subcategories) {

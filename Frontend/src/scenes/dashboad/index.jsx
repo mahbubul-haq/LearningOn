@@ -24,7 +24,11 @@ const Dashboard = () => {
     const { openedTab, setOpenedTab, selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);
 
     useEffect(() => {
+        if (!user) {
+            window.location.href = "/";
+        }
         setOpenedItem("dashboard");
+        
     }, []);
 
     useEffect(() => {

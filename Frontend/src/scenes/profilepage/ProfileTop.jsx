@@ -103,49 +103,56 @@ const ProfileTop = ({ userInfo }) => {
 
             <Box
                 sx={{
-                    marginTop: "-2rem",
+                    marginTop: isNonMobileScreens ? "-2rem" : isMobileScreens ? "1rem" : "-1rem",
                     display: "flex",
-                    justifyContent: "flex-start",
+                    justifyContent: isMobileScreens ? "space-between" : "flex-start",
                     alignItems: "flex-end",
+                    width: "100%",
+                    // border: "1px solid #ccc",
                 }}
             >
                 <img
                     src={userInfo?.picturePath ? `${import.meta.env.VITE_REACT_APP_URL}/images/${userInfo?.picturePath}` : "/images/dummyPerson.jpeg"}
                     style={{
-                        width: isNonMobileScreens ? "180px" : "120px",
-                        height: isNonMobileScreens ? "180px" : "120px",
+                        width: isNonMobileScreens ? "180px" : isMobileScreens ? "120px" : "130px",
+                        height: isNonMobileScreens ? "180px" : isMobileScreens ? "120px" : "130px",
                         objectFit: "cover",
                         borderRadius: "50%",
                         // thumbnail
                         boxShadow: "0 0 0 5px rgba(0, 0, 0, 0.2)",
-                        transform: "translateY(40%)",
+                        transform: isMobileScreens ? "translateY(20%)" : "translateY(40%)",
                     }}
                     alt="profile"
                 />
                 <FlexBetween
                     sx={{
                         marginLeft: "2rem",
-                        mb: "1rem",
+                        mb: isNonMobileScreens ? "1rem" : "0.5rem",
                         flexGrow: 1,
+                        "&&": {
+                            justifyContent: isMobileScreens ? "flex-end": "space-between",
+                        },
                         alignItems: "flex-end",
                     }}
                 >
-                    <FlexBetween
-                        sx={{
-                            "&&": {
-                                flexDirection: "column",
-                                gap: "0.5rem",
-                                alignItems: "flex-start",
-                            },
-                        }}
-                    >
-                        <Typography sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>{userInfo?.name}</Typography>
-                        <Typography sx={{ fontSize: "1rem" }}>{getQualifications()}</Typography>
-                    </FlexBetween>
+                    {!isMobileScreens && (
+                        <FlexBetween
+                            sx={{
+                                "&&": {
+                                    flexDirection: "column",
+                                    gap: "0.5rem",
+                                    alignItems: "flex-start",
+                                },
+                            }}
+                        >
+                            <Typography sx={{ fontSize: isNonMobileScreens ? "1.5rem" : "1.2rem", fontWeight: "bold" }}>{userInfo?.name}</Typography>
+                            <Typography sx={{ fontSize: "1rem" }}>{getQualifications()}</Typography>
+                        </FlexBetween>
+                    )}
                     <StyledButton
                         sx={{
                             "&&": {
-                                px: "2rem",
+                                px: isMobileScreens ? "1rem" : "2rem",
                             },
                         }}
                         onClick={() => {
@@ -157,12 +164,17 @@ const ProfileTop = ({ userInfo }) => {
                             }
                         }}
                     >
-                        {userInfo?._id == user?._id ? "Edit Profile" : userInfo?.followers.length > 0 && userInfo?.followers?.reduce((prev, cur) => {
-                            if (cur._id == user?._id) {
-                                return true;
-                            }
-                            return prev || false;
-                        }) ? "Unfollow" : "Follow"}
+                        {userInfo?._id == user?._id
+                            ? "Edit Profile"
+                            : userInfo?.followers.length > 0 &&
+                              userInfo?.followers?.reduce((prev, cur) => {
+                                  if (cur._id == user?._id) {
+                                      return true;
+                                  }
+                                  return prev || false;
+                              })
+                            ? "Unfollow"
+                            : "Follow"}
                     </StyledButton>
                 </FlexBetween>
             </Box>
