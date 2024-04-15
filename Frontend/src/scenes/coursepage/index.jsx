@@ -50,7 +50,7 @@ const CoursePage = () => {
         let element = document.querySelector(".coursepage-main");
         if (!element) return;
         const scrollEventListner = (document.querySelector(".coursepage-main").onscroll = (e) => {
-            console.log("scrolling", e.target.scrollTop);
+            // console.log("scrolling", e.target.scrollTop);
             if (e.target.scrollTop > 200) {
                 document.querySelector(".coursepage-sticky-top").style.position = "relative";
                 document.querySelector(".coursepage-sticky-top").style.top = "-100px";

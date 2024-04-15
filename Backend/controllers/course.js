@@ -256,4 +256,4 @@ const getMyCourses = async (req, res) => {
     }
 };
 
-export { newCourse, getDraftCourses, updateCourse, getCourseById, getAllCourses, getMyCourses };
+export { newCourse, getDraftCourses, updateCourse, getCourseById, getAllCourses, getMyCourses, getCourseByIdWithOutPopulate };

@@ -59,3 +59,8 @@ auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTM0N2MxN2U2MTQ3Nzh
 {
     "courseId": "64e3111a9ed3f219708a8de7"
 }
+
+###
+put http://localhost:5000/users/follow/64e326469ed3f219708a8f41
+Content-Type: application/json
+auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTMxMTBiOWVkM2YyMTk3MDhhOGRkOSIsImVtYWlsIjoiYnVja3lAZ21haWwuY29tIiwibmFtZSI6IkJ1Y2t5IFJvYmVydHMiLCJpYXQiOjE2OTk4MDkxODN9.sKzO1anqdNsVLEX8JcSlcT9IulHpePAS2aKULFCfggQ

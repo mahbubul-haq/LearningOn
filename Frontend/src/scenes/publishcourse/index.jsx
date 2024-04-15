@@ -82,7 +82,7 @@ const PublishCourse = () => {
         if (!user) {
             navigate("/");
         }
-        console.log(edit, id);
+        //console.log(edit, id);
         if (edit == "edit" && id) {
             getCoursePlainById(id);
             getUsers();
@@ -104,6 +104,10 @@ const PublishCourse = () => {
             updateCourse("published");
         }
     }, [uploadStatus]);
+
+    useEffect(() => {
+        console.log(courseState);
+    }, [courseState]);
 
     return (
         <>

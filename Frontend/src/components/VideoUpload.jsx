@@ -20,7 +20,7 @@ const VideoUpload = ({
     fileName,
     isImage,
     uploadText = "Upload Video",
-    maxHeight="400px"
+    maxHeight="400px" 
 }) => {
     const [preview, setPreview] = React.useState(null);
     const [uploadProgress, setUploadProgress] = React.useState(0);

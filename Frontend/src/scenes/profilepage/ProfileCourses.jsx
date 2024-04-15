@@ -173,8 +173,8 @@ const ProfileCourses = ({ userCourses }) => {
                             height: "100%",
                             width: "100%",
                             color: "rgba(0, 0, 0, 0.5)",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
+                            fontSize: "1rem",
+                            // fontWeight: "600",
                         }}
                     >
                         User has not published any courses yet

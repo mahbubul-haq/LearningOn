@@ -150,7 +150,7 @@ export const CreateCourseState = (props) => {
 
             const data = await response.json();
             if (data.success) {
-                setCourseState(data.courseInfo);
+                ///setCourseState(data.courseInfo);
                 if (status === "published" && uploadStatus == "publishing") setUploadStatus("published");
                 if (status === "draft" && updating == "updating") setUpdating("updated");
                 setErrors({});
