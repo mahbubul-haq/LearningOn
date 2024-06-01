@@ -21,7 +21,7 @@ export const GlobalState = (props) => {
     const getUser = async () => {
         try {
             const response = await fetch(
-                `${import.meta.env.VITE_REACT_APP_URL}/users/getuser`,
+                `${import.meta.env.VITE_SERVER_URL}/users/getuser`,
                 {
                     method: "GET",
                     headers: {
@@ -54,7 +54,7 @@ export const GlobalState = (props) => {
 
     const getCategories = async () => {
         const response = await fetch(
-            `${import.meta.env.VITE_REACT_APP_URL}/data/getcategories`,
+            `${import.meta.env.VITE_SERVER_URL}/data/getcategories`,
             {
                 method: "GET",
                 headers: {
@@ -93,7 +93,7 @@ export const GlobalState = (props) => {
 
     const getUsers = async () => {
         const response = await fetch(
-            `${import.meta.env.VITE_REACT_APP_URL}/users/all`,
+            `${import.meta.env.VITE_SERVER_URL}/users/all`,
             {
                 method: "GET",
                 headers: {
@@ -113,7 +113,7 @@ export const GlobalState = (props) => {
     const deleteFile = async (fileName) => {
         try {
             const response = await fetch(
-                `${import.meta.env.VITE_REACT_APP_URL}/filedelete/${fileName}`,
+                `${import.meta.env.VITE_SERVER_URL}/filedelete/${fileName}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -133,7 +133,7 @@ export const GlobalState = (props) => {
     const getUserById = async (userId) => {
         try {
             const response = await fetch(
-                `${import.meta.env.VITE_REACT_APP_URL}/users/getuser/${userId}`,
+                `${import.meta.env.VITE_SERVER_URL}/users/getuser/${userId}`,
                 {
                     method: "GET",
                     headers: {
@@ -161,7 +161,7 @@ export const GlobalState = (props) => {
         try {
             const response = await fetch(
                 `${
-                    import.meta.env.VITE_REACT_APP_URL
+                    import.meta.env.VITE_SERVER_URL
                 }/course/get/${courseId}`,
                 {
                     method: "GET",

@@ -610,7 +610,7 @@ const Navbar = () => {
                                     gap="1rem"
                                 >
                                     <img
-                                        src={n.imageLink ? `${import.meta.env.VITE_REACT_APP_URL}/images/${n.imageLink}` : "/images/dummyPerson.jpeg"}
+                                        src={n.imageLink ? `${import.meta.env.VITE_SERVER_URL}/images/${n.imageLink}` : "/images/dummyPerson.jpeg"}
                                         alt="user"
                                         style={{
                                             width: "2.5rem",
@@ -848,7 +848,7 @@ const Navbar = () => {
                                                             <img
                                                                 src={
                                                                     n.imageLink
-                                                                        ? `${import.meta.env.VITE_REACT_APP_URL}/images/${n.imageLink}`
+                                                                        ? `${import.meta.env.VITE_SERVER_URL}/images/${n.imageLink}`
                                                                         : "/images/dummyPerson.jpeg"
                                                                 }
                                                                 alt="user"

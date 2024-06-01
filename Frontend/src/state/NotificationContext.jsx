@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext } from "react";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -12,7 +13,7 @@ export const NotificationState = (props) => {
         try {
             const response = await fetch(
                 `${
-                    import.meta.env.VITE_REACT_APP_URL
+                    import.meta.env.VITE_SERVER_URL
                 }/notification/get/${userId}`,
                 {
                     method: "GET",
@@ -46,7 +47,7 @@ export const NotificationState = (props) => {
                 if (notification.status == "new") {
                     const res = await fetch(
                         `${
-                            import.meta.env.VITE_REACT_APP_URL
+                            import.meta.env.VITE_SERVER_URL
                         }/notification/update/${notification._id}/opened`,
                         {
                             method: "PUT",
@@ -73,7 +74,7 @@ export const NotificationState = (props) => {
         } else if (status == "clicked") {
             const res = await fetch(
                 `${
-                    import.meta.env.VITE_REACT_APP_URL
+                    import.meta.env.VITE_SERVER_URL
                 }/notification/update/${notificationId}/clicked`,
                 {
                     method: "PUT",

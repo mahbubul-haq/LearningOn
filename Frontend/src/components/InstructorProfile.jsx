@@ -17,7 +17,7 @@ const InstructorProfile = ({ instructorId }) => {
     }, 0);
 
     const profilePicture = instructor?.picturePath
-        ? `${import.meta.env.VITE_REACT_APP_URL}/images/${instructor.picturePath}`
+        ? `${import.meta.env.VITE_SERVER_URL}/images/${instructor.picturePath}`
         : "/images/dummyPerson.jpeg";
 
     // console.log("instructor", instructor);

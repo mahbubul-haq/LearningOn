@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -40,7 +41,7 @@ const CourseWidget = ({ courseInfo }) => {
                     maxWidth: "100%",
                     boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset",
                  }}
-                image={`${import.meta.env.VITE_REACT_APP_URL}/images/${courseInfo.courseThumbnail}`}
+                image={`${import.meta.env.VITE_SERVER_URL}/images/${courseInfo.courseThumbnail}`}
                 title="green iguana"
             />
             <CardContent

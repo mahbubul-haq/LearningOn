@@ -67,7 +67,7 @@ const DashboardLeft = () => {
                                     }}
                                 >
                                     <img
-                                        src={`${import.meta.env.VITE_REACT_APP_URL}/images/${course.courseThumbnail}`}
+                                        src={`${import.meta.env.VITE_SERVER_URL}/images/${course.courseThumbnail}`}
                                         alt=""
                                         style={{
                                             width: "100%",

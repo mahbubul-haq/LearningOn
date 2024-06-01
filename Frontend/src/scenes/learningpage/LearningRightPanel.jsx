@@ -171,7 +171,7 @@ const LearningRightPanel = ({ courseInfo }) => {
                                             src={
                                                 `${
                                                     import.meta.env
-                                                        .VITE_REACT_APP_URL
+                                                        .VITE_SERVER_URL
                                                 }/images/` +
                                                 courseInfo?.lessons[
                                                     openedLesson.lesson - 1

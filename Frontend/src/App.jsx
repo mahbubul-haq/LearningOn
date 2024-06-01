@@ -22,12 +22,16 @@ import { ProfilePageState } from "./state/ProfilePageContext";
 import Dashboard from "./scenes/dashboad";
 import { DashboardState } from "./state/DashboardContext";
 import { NotificationState } from "./state/NotificationContext";
+import UnderwayAlert from "./components/UnderwayAlert";
 
 function App() {
     const mode = useSelector((state) => state.mode);
     const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
-    useEffect(() => {}, [mode]);
+
+    useEffect(() => {
+        sessionStorage.setItem("firstTime", "true");
+    }, [mode]);
 
     return (
         <NotificationState>
@@ -39,6 +43,7 @@ function App() {
                                 <CreateCourseState>
                                     <ThemeProvider theme={theme}>
                                         <CssBaseline />
+                                        <UnderwayAlert />
                                         <BrowserRouter>
                                             <Routes>
                                                 <Route
@@ -83,6 +88,7 @@ function App() {
                                                 <Route path="dashboard/"
                                                     element={<Dashboard />}
                                                 />
+                                                <Route path="/underway" element={<UnderwayAlert />} />
                                             </Routes>
                                         </BrowserRouter>
                                     </ThemeProvider>

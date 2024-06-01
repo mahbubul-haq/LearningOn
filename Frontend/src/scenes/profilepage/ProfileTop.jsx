@@ -112,7 +112,7 @@ const ProfileTop = ({ userInfo }) => {
                 }}
             >
                 <img
-                    src={userInfo?.picturePath ? `${import.meta.env.VITE_REACT_APP_URL}/images/${userInfo?.picturePath}` : "/images/dummyPerson.jpeg"}
+                    src={userInfo?.picturePath ? `${import.meta.env.VITE_SERVER_URL}/images/${userInfo?.picturePath}` : "/images/dummyPerson.jpeg"}
                     style={{
                         width: isNonMobileScreens ? "180px" : isMobileScreens ? "120px" : "130px",
                         height: isNonMobileScreens ? "180px" : isMobileScreens ? "120px" : "130px",

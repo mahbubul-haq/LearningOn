@@ -63,7 +63,7 @@ const DashboardMiddle = () => {
                         }}
                     >
                         <StyledButton onClick={() => window.open(`/course/${selectedCourse?._id}`, "_self")}>Go to Course</StyledButton>
-                        {selectedCourse.owner == user._id && (
+                        {selectedCourse.owner == user?._id && (
                             <StyledButton onClick={() => window.open(`/publishcourse/edit/${selectedCourse?._id}`, "_self")}>
                                 Edit Course
                             </StyledButton>

@@ -45,7 +45,7 @@ const ProfileCard = ({ userInfo }) => {
                     }}
                 >
                     <img
-                        src={`${import.meta.env.VITE_REACT_APP_URL}/images/${userInfo?.picturePath}`}
+                        src={`${import.meta.env.VITE_SERVER_URL}/images/${userInfo?.picturePath}`}
                         alt="profile"
                         style={{
                             width: "3rem",

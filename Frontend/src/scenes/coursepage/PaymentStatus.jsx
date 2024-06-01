@@ -18,7 +18,7 @@ const PaymentStatus = () => {
 
     useEffect(() => {
         if (status === "success") {
-            const socket = socketIoClient(import.meta.env.VITE_REACT_APP_URL);
+            const socket = socketIoClient(import.meta.env.VITE_SERVER_URL);
             /// send roomId and userId to server, socket.emit("join-room")
 
             socket.emit("course-purchased", {

@@ -46,7 +46,7 @@ const TopSectionSmall = ({ courseInfo }) => {
 
     const enrollCourse = async () => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/data/create-payment-sesson`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/data/create-payment-sesson`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

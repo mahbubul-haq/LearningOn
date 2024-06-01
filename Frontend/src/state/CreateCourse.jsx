@@ -1,24 +1,25 @@
-import React, { createContext, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import React, { createContext} from "react";
 import { useSelector } from "react-redux";
-import state from ".";
+// import state from ".";
 import axios from "axios";
 
 export const CreateCourseContext = createContext();
 
-const initialCourseState = {
-    category: "",
-    courseTitle: "",
-    courseDescription: "",
-    studentRequirements: "",
-    skillTags: [],
-    courseThumbnail: "",
-    introVideo: "",
-    courseLanguage: "",
-    coursePrice: "",
-    approxTimeToComplete: "",
-    courseInstructors: [],
-    lessons: [],
-};
+// const initialCourseState = {
+//     category: "",
+//     courseTitle: "",
+//     courseDescription: "",
+//     studentRequirements: "",
+//     skillTags: [],
+//     courseThumbnail: "",
+//     introVideo: "",
+//     courseLanguage: "",
+//     coursePrice: "",
+//     approxTimeToComplete: "",
+//     courseInstructors: [],
+//     lessons: [],
+// };
 
 export const CreateCourseState = (props) => {
     const token = useSelector((state) => state.token);
@@ -82,7 +83,7 @@ export const CreateCourseState = (props) => {
     const getDraftCourse = async () => {
         if (isAnyError()) return;
 
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/draft`, {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/course/draft`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -97,7 +98,7 @@ export const CreateCourseState = (props) => {
         if (data.success) {
             setCourseState(data.courseInfo);
         } else {
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/new`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/course/new`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -116,7 +117,7 @@ export const CreateCourseState = (props) => {
     };
 
     const getCoursePlainById = async (courseId) => {
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/get/plain/${courseId}`, {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/course/get/plain/${courseId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -137,7 +138,7 @@ export const CreateCourseState = (props) => {
         //console.log(courseState);
         console.log("update course called");
         try {
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/update/${courseState._id}/${status}`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/course/update/${courseState._id}/${status}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -184,7 +185,7 @@ export const CreateCourseState = (props) => {
 
         try {
             const res = await axios.post(
-                `${import.meta.env.VITE_REACT_APP_URL}/fileupload`,
+                `${import.meta.env.VITE_SERVER_URL}/fileupload`,
                 data,
                 /// send both headers and options
                 {
@@ -202,7 +203,7 @@ export const CreateCourseState = (props) => {
                 setUploadProgress(100);
 
                 if (curValue) {
-                    const response = await fetch(`${import.meta.env.VITE_REACT_APP_URL}/filedelete/${curValue}`, {
+                    await fetch(`${import.meta.env.VITE_SERVER_URL}/filedelete/${curValue}`, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
@@ -210,11 +211,11 @@ export const CreateCourseState = (props) => {
                         },
                     });
 
-                    const data = await response.json();
+                    //const data = await response.json();
                     // console.log(data);
                 }
 
-                await fetch(`${import.meta.env.VITE_REACT_APP_URL}/course/update/${courseState._id}/draft`, {
+                await fetch(`${import.meta.env.VITE_SERVER_URL}/course/update/${courseState._id}/draft`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",

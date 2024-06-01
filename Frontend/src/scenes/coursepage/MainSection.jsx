@@ -159,7 +159,7 @@ const MainSection = ({ courseInfo }) => {
                         >
                             <video
                                 controls
-                                src={`${import.meta.env.VITE_REACT_APP_URL}/images/${courseInfo?.introVideo}`}
+                                src={`${import.meta.env.VITE_SERVER_URL}/images/${courseInfo?.introVideo}`}
                                 style={{
                                     // width: "100%",
                                     maxWidth: isMobileScreens ? "100%" : "400px",

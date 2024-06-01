@@ -12,6 +12,7 @@ import { useContext } from "react";
 import { NotificationContext } from "../../state/NotificationContext";
 import { useSelector } from "react-redux";
 import { GlobalContext } from "../../state/GlobalContext";
+import UnderwayAlert from "../../components/UnderwayAlert.jsx";
 
 const HomePage = () => {
     const prevScrollY = useRef(0);
@@ -22,7 +23,7 @@ const HomePage = () => {
         useContext(NotificationContext);
 
     useEffect(() => {
-        const socket = socketIoClient(import.meta.env.VITE_REACT_APP_URL);
+        const socket = socketIoClient(import.meta.env.VITE_SERVER_URL);
 
         socket.on("my-course-purchased", (data) => {
             getNotifications(user._id);
@@ -64,6 +65,7 @@ const HomePage = () => {
 
     return (
         <>
+          
             <Box
                 className="homepage-main"
                 sx={{

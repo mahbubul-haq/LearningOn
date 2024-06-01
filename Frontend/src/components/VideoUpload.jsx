@@ -46,7 +46,7 @@ const VideoUpload = ({
 
         try {
             const res = await axios.post(
-                `${import.meta.env.VITE_REACT_APP_URL}/fileupload`,
+                `${import.meta.env.VITE_SERVER_URL}/fileupload`,
                 formData,
                 {
                     headers: {
@@ -77,7 +77,7 @@ const VideoUpload = ({
     const deleteVideo = async (fileName) => {
         try {
             const res = await axios.delete(
-                `${import.meta.env.VITE_REACT_APP_URL}/filedelete/${fileName}`,
+                `${import.meta.env.VITE_SERVER_URL}/filedelete/${fileName}`,
                 {
                     headers: {
                         "auth-token": token,
@@ -153,7 +153,7 @@ const VideoUpload = ({
                         {isImage ? (
                             <img
                                 src={`${
-                                    import.meta.env.VITE_REACT_APP_URL
+                                    import.meta.env.VITE_SERVER_URL
                                 }/images/${fileName}`}
                                 style={{
                                     width: "100%",
@@ -166,7 +166,7 @@ const VideoUpload = ({
                         ) : (
                             <video
                                 src={`${
-                                    import.meta.env.VITE_REACT_APP_URL
+                                    import.meta.env.VITE_SERVER_URL
                                 }/images/${fileName}`}
                                 style={{
                                     width: "100%",

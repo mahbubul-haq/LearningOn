@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 import { createContext } from "react";
 import { useSelector } from "react-redux";
-import state from ".";
 import React from "react";
 
 export const HomePageContext = createContext();
@@ -12,7 +12,7 @@ export const HomePageState = (props) => {
     const getCourses = async () => {
         try {
             const response = await fetch(
-                `${import.meta.env.VITE_REACT_APP_URL}/course/all`,
+                `${import.meta.env.VITE_SERVER_URL}/course/all`,
                 {
                     method: "GET",
                     headers: {
@@ -28,7 +28,9 @@ export const HomePageState = (props) => {
             if (data.success) {
                 setCourses(data.courseInfo);
             }
-        } catch (err) {}
+        } catch (err) {
+            //console.log(err?.message);
+        }
     };
 
     return (
