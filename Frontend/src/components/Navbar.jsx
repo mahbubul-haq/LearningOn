@@ -817,6 +817,8 @@ const Navbar = () => {
                                                                     courseId = courseId[courseId.length - 1];
                                                                     navigate("/dashboard/" + courseId);
                                                                 } else {
+                                                                    console.log("link", n.link);
+                                                                    
                                                                     window.location.href = import.meta.env.VITE_CLIENT_URL + "/" + n.link;
                                                                 }
                                                             }
