@@ -5,7 +5,7 @@ import FlexBetween from "../../components/FlexBetween";
 import StyledTextField1 from "../../components/StyledInputField1";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InputLabel from "@mui/material/InputLabel";
-import { StyledButton } from "../../Components/StyledButton";
+import { StyledButton } from "../../components/StyledButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Wallet = ({ userInfo }) => {

@@ -26,7 +26,7 @@ import Chip from "@mui/material/Chip";
 import { languages } from "../../data";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InstructorProfile from "../../components/InstructorProfile";
-import { StyledButton } from "../../Components/StyledButton";
+import { StyledButton } from "../../components/StyledButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
