@@ -48,15 +48,6 @@ const getNotificationsByUserId = async (req, res) => {
             });
         }
 
-        notifications = notifications.map((notification) => {
-            let link = notification.link;
-            link = link.split("/");
-            link[0] = process.env.CLIENT_URL;
-            link = link.join("/");
-            notification.link = link;
-            return notification;
-        });
-
         res.status(200).json({
             success: true,
             notifications: notifications,
