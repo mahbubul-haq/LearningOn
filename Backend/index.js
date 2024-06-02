@@ -113,7 +113,7 @@ app.use("/users", userRoutes);
 app.use("/notification", notificationRoutes);
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.send("Hello World1");
 });
 
 const server = http.createServer(app);
