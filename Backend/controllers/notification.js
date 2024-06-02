@@ -2,19 +2,17 @@ import Notification from "../models/Notification.js";
 
 const createNotification = async (req, res) => {
     try {
-
         // delete one notification if there are more than 5 notifications
         const notifications = await Notification.find({
             userId: req.body.userId,
         });
         //console.log(notifications, notifications?.length);
-       // console.log("why not here");
+        // console.log("why not here");
         if (notifications?.length >= 50) {
             await Notification.deleteOne({
                 _id: notifications[0]._id,
             });
         }
-
 
         const notification = new Notification({
             userId: req.body.userId,
@@ -40,7 +38,7 @@ const createNotification = async (req, res) => {
 
 const getNotificationsByUserId = async (req, res) => {
     try {
-        const notifications = await Notification.find({
+        let notifications = await Notification.find({
             userId: req.params.userId,
         });
         if (!notifications) {
@@ -49,6 +47,15 @@ const getNotificationsByUserId = async (req, res) => {
                 message: "No notifications found",
             });
         }
+
+        notifications = notifications.map((notification) => {
+            let link = notification.link;
+            link = link.split("/");
+            link[0] = process.env.CLIENT_URL;
+            link = link.join("/");
+            notification.link = link;
+            return notification;
+        });
 
         res.status(200).json({
             success: true,
