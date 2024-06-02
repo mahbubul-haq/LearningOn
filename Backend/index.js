@@ -35,7 +35,7 @@ app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(
     {
-        origin: ["https://learning-on.vercel.app"],
+        origin: ["https://learning-on.vercel.app", "http://localhost:5173"],
         credentials: true,
     }
 ));
@@ -113,7 +113,7 @@ app.use("/users", userRoutes);
 app.use("/notification", notificationRoutes);
 
 app.get("/", (req, res) => {
-    res.send("Hello World1");
+    res.send("Hello World2");
 });
 
 const server = http.createServer(app);
@@ -122,7 +122,7 @@ const io = new Server(server, {
     cors: {
 
         // add multiple domains
-        origin: ["https://learning-on.vercel.app"],
+        origin: ["https://learning-on.vercel.app", "http://localhost:5173"],
         
     },
 });
