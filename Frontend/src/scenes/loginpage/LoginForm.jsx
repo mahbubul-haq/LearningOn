@@ -31,7 +31,7 @@ const LoginForm = ({ redirect }) => {
     const dispatch = useDispatch();
 
     const login = async (values, onSubmitProps) => {
-        const response = await fetch("http://localhost:5000/auth/login", {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {
             method: "POST",
             body: JSON.stringify({
                 email: values.email,
