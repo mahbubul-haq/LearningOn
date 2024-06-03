@@ -7,7 +7,7 @@ import { Box } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 function UnderwayAlert() {
-  const [open, setOpen] = React.useState(sessionStorage.getItem('firstTime') === 'true');
+  const [open, setOpen] = React.useState(sessionStorage.getItem('firstTime') !== 'true');
   const handleClose = () => setOpen(false);
 
   const isMobibleScreens = useMediaQuery('(max-width: 600px)');
