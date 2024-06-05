@@ -2,12 +2,23 @@ import bcrypt from "bcrypt";
 import People from "../models/People.js";
 import fs from "fs";
 import jwt from "jsonwebtoken";
+import { uploadImage, deleteImage } from "../utils/cloudinary.js";
 
 const register = async (req, res) => {
     try {
-        //console.log("req.body", { ...req.body });
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+        if (req.body.picture) {
+            const res = await uploadImage(req.body.picture);
+            if (res.success) {
+                req.body.picturePath = res.uploadResponse.public_id;
+            }
+        }
+
+        //remove picture from req.body
+        delete req.body.picture;
+        //console.log(req.body);
 
         const newUser = new People({
             ...req.body,
@@ -22,13 +33,20 @@ const register = async (req, res) => {
             user: savedUser,
         });
     } catch (error) {
-        if (req.body.picturePath) {
-            fs.unlink("assets/images/" + req.body.picturePath, (err) => {
-                if (err) {
-                    console.log(err);
-                }
-            });
-            console.log("File removed");
+        // if (req.body.picturePath) {
+        //     fs.unlink("assets/images/" + req.body.picturePath, (err) => {
+        //         if (err) {
+        //             console.log(err);
+        //         }
+        //     });
+        //     console.log("File removed");
+        // }
+        try {
+            if (req.body.picturePath) {
+                await deleteImage(req.body.picturePath);
+            }
+        } catch (err) {
+            //console.log(err);
         }
 
         res.status(400).json({
@@ -47,7 +65,9 @@ const login = async (req, res) => {
 
         const user = await People.findOne({
             email: email,
-        }).populate("courses").exec();
+        })
+            .populate("courses")
+            .exec();
 
         if (!user) {
             return res.status(401).json({

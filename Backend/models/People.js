@@ -27,6 +27,7 @@ const PeopleSchema = mongoose.Schema(
         picturePath: {
             type: String,
             required: false,
+            default: "",
         },
         qualifications: {
             type: [String],

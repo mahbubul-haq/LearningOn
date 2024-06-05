@@ -3,8 +3,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state";
-import FlexBetween from "../../components/FlexBetween.jsx";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import StyledTextField from "../../components/StyledInputField.jsx";
 import { useMediaQuery } from "@mui/material";
@@ -79,7 +78,7 @@ const LoginForm = ({ redirect }) => {
 
     return (
         <Formik initialValues={initialValuesLogin} validationSchema={loginSchema} onSubmit={handleFormSubmit}>
-            {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue, resetForm }) => (
+            {({ values, errors, touched, handleChange, handleBlur, handleSubmit}) => (
                 <form
                     style={{
                         width: "100%",
@@ -109,7 +108,7 @@ const LoginForm = ({ redirect }) => {
                         <StyledTextField
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            onInput={(e) => {
+                            onInput={() => {
                                 setEmailError("");
                             }}
                             value={values.email}
@@ -164,7 +163,7 @@ const LoginForm = ({ redirect }) => {
                                     fontSize: isNonMobileScreens ? "1rem" : "0.8rem",
                                 }}
                             >
-                                Don't have an account?{" "}
+                                Don&apos;t have an account?{" "}
                                 <Typography
                                     variant="body1"
                                     component="button"

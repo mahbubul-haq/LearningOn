@@ -1,17 +1,8 @@
 import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useDispatch } from "react-redux";
-import { setLogin } from "../../state";
-import FlexBetween from "../../components/FlexBetween.jsx";
-import {
-    Box,
-    Button,
-    TextField,
-    Typography,
-    Snackbar,
-    Alert,
-} from "@mui/material";
+
+import { Box, Typography, Snackbar, Alert } from "@mui/material";
 
 import StyledTextField from "../../components/StyledInputField.jsx";
 import { useMediaQuery } from "@mui/material";
@@ -43,15 +34,21 @@ const SignUpForm = () => {
     const navigate = useNavigate();
 
     const register = async (values, onSubmitProps) => {
-        const formData = new FormData();
-        for (let key in values) {
-            formData.append(key, values[key]);
-        }
-
-        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/register`, {
-            method: "POST",
-            body: formData,
-        });
+        const response = await fetch(
+            `${import.meta.env.VITE_SERVER_URL}/auth/register`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    name: values.name,
+                    email: values.email,
+                    password: values.password,
+                    picture: values.picture,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
 
         const data = await response.json();
         if (data.success) {
@@ -60,14 +57,14 @@ const SignUpForm = () => {
             onSubmitProps.resetForm();
 
             setTimeout(() => {
-            navigate("/login", {
-                state: {
-                    isLogin: true,
-                },
-            });
+                navigate("/login", {
+                    state: {
+                        isLogin: true,
+                    },
+                });
             }, 2000);
         } else {
-            console.log(data);
+            //console.log(data);
             if (data.errors.email) {
                 setEmailExists("Email already exists");
                 console.log("email exists");
@@ -76,8 +73,18 @@ const SignUpForm = () => {
     };
 
     const handleFormSubmit = async (values, onSubmitProps) => {
-        console.log(values);
-        await register(values, onSubmitProps);
+        if (values.picture) {
+            // make base64 image to file
+            const reader = new FileReader();
+            reader.readAsDataURL(values.picture);
+            reader.onloadend = async () => {
+                values.picture = reader.result;
+                await register(values, onSubmitProps);
+            };
+            reader.onerror = () => {
+                console.error("Signup file reader error");
+            };
+        }
     };
 
     return (
@@ -94,7 +101,6 @@ const SignUpForm = () => {
                 handleBlur,
                 handleSubmit,
                 setFieldValue,
-                resetForm,
             }) => (
                 <form
                     style={{
@@ -214,7 +220,7 @@ const SignUpForm = () => {
                         <StyledTextField
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            onInput={(e) => {
+                            onInput={() => {
                                 setEmailExists("");
                             }}
                             value={values.email}

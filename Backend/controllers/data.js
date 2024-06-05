@@ -3,7 +3,7 @@ import People from "../models/People.js";
 import Course from "../models/Course.js";
 import Notification from "../models/Notification.js";
 import Stripe from "stripe";
-const stripe = new Stripe("sk_test_51NkNkxSGLLKlVFdVYwxLLI6YoDKUCMiTj7nKkorP9eCrlyuPyyId4K9YvgUuaqTKCEHdQ1RqLiuzKfKlHQgH1d8T00J4fv9YEf");
+const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 const addCategory = async (req, res) => {
     try {

@@ -66,4 +66,7 @@ Content-Type: application/json
 auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTMxMTBiOWVkM2YyMTk3MDhhOGRkOSIsImVtYWlsIjoiYnVja3lAZ21haWwuY29tIiwibmFtZSI6IkJ1Y2t5IFJvYmVydHMiLCJpYXQiOjE2OTk4MDkxODN9.sKzO1anqdNsVLEX8JcSlcT9IulHpePAS2aKULFCfggQ
 
 ###
-put http://localhost:5000/notificaiton/removehttp
+put http://localhost:5000/notification/removehttp
+
+###
+delete http://localhost:5000/filedelete/ok_bro
