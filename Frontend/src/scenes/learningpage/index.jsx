@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useContext } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/navbar";
 import { Divider, useMediaQuery } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { HomePageContext } from "../../state/HomePageState";

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HomePageContext } from "../../state/HomePageState";
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/navbar";
 import { useMediaQuery } from "@mui/material";
 import TopSection from "./TopSection";
 import Box from "@mui/material/Box";

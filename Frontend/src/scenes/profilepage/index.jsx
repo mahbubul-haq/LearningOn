@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/navbar";
 import ProfileTop from "./ProfileTop";
 import { useContext } from "react";
 import { GlobalContext } from "../../state/GlobalContext";

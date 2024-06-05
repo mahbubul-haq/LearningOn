@@ -1,28 +1,24 @@
 import LandingView from "./LandingView";
-import Navbar from "../../components/Navbar.jsx";
 import CoursesView from "./CoursesView";
-import CourseWidget from "../../widgets/CourseWidget";
 import Box from "@mui/material/Box";
 import { useEffect, useRef } from "react";
 import socketIoClient from "socket.io-client";
-import Button from "@mui/material/Button";
-import useTheme from "@mui/material/styles/useTheme";
-import Typography from "@mui/material/Typography";
 import { useContext } from "react";
 import { NotificationContext } from "../../state/NotificationContext";
 import { useSelector } from "react-redux";
 import { GlobalContext } from "../../state/GlobalContext";
-import UnderwayAlert from "../../components/UnderwayAlert.jsx";
+import Navbar from "../../components/navbar/index.jsx";
 
 const HomePage = () => {
     const prevScrollY = useRef(0);
-    const theme = useTheme();
+
     const user = useSelector((state) => state.user);
     const {setOpenedItem} = useContext(GlobalContext);
-    const { notifications, setNotifications, getNotifications } =
+    const { getNotifications } =
         useContext(NotificationContext);
 
     useEffect(() => {
+
         const socket = socketIoClient(import.meta.env.VITE_SERVER_URL);
 
         socket.on("my-course-purchased", (data) => {

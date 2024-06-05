@@ -18,6 +18,7 @@ import http from "http";
 import { uploadFile, deleteFile } from "./controllers/uploads.js";
 import { upload } from "./configs/multer.config.js";
 import { cloudinaryConfig } from "./utils/cloudinary.js";
+import {connectSocket} from "./socket.io.js";
 // configurations
 
 
@@ -65,6 +66,8 @@ app.get("/", (req, res) => {
 
 const server = http.createServer(app);
 
+connectSocket(server);
+
 server.listen(5000, () => {
     console.log("Server is running on port 5000");
     mongoose
@@ -76,5 +79,3 @@ server.listen(5000, () => {
         .then(() => console.log("Connected to MongoDB"))
         .catch((err) => console.log("Database connection failed"));
 });
-
-export { server };

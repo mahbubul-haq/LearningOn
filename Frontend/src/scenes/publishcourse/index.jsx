@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Navbar from "../../components/Navbar";
+
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { StyledButton } from "../../components/StyledButton";
