@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/navbar";
 import DashboardTop from "./DashboardTop";
 import DashboardLeft from "./DashboardLeft";
 import DashboardMiddle from "./DashboardMiddle";
