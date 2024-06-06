@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { TextField } from "@mui/material";
-import { red } from "@mui/material/colors";
 import { useMediaQuery } from "@mui/material";
 
 const StyledTextField = styled(TextField)(({ theme }) => {
@@ -60,7 +59,6 @@ const StyledTextField = styled(TextField)(({ theme }) => {
             color: isNonMobileScreen ? theme.palette.error.secondary : theme.palette.error.secondary,
         },
         "& .MuiFormHelperText-root.Mui-error": {
-            color: theme.palette.primary.main,
             color: "red",
         },
     };

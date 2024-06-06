@@ -1,14 +1,10 @@
 /* eslint-disable react/prop-types */
-import React from "react";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Rating from "../components/Rating";
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
 import CustomSlider1 from "../components/CustomSlider1";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";

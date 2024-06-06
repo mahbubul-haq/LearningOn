@@ -1,4 +1,3 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import InstructorProfile from "../../components/InstructorProfile";
 import useMediaQuery from "@mui/material/useMediaQuery";

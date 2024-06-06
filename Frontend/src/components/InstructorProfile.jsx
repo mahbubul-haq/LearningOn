@@ -1,4 +1,3 @@
-import React from "react";
 import WidgetWrapper from "./WidgetWrapper";
 import Rating from "./Rating";
 import FlexBetween from "./FlexBetween";

@@ -3,11 +3,6 @@ import Box from "@mui/material/Box";
 import Dropzone from "react-dropzone";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import state from "../state";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Typography from "@mui/material/Typography";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -76,7 +71,7 @@ const VideoUpload = ({
 
     const deleteVideo = async (fileName) => {
         try {
-            const res = await axios.delete(
+            await axios.delete(
                 `${import.meta.env.VITE_SERVER_URL}/filedelete/${fileName}`,
                 {
                     headers: {

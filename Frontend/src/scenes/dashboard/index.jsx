@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Navbar from "../../components/navbar";
 import DashboardTop from "./DashboardTop";
@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { useContext } from "react";
 import { DashboardContext } from "../../state/DashboardContext";
 import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { GlobalContext } from "../../state/GlobalContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -18,10 +17,9 @@ const Dashboard = () => {
     const theme = useTheme();
     const user = useSelector((state) => state.user);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const params = useParams();
     const { setOpenedItem } = useContext(GlobalContext);
-    const { openedTab, setOpenedTab, selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);
+    const {selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);
 
     useEffect(() => {
         if (!user) {

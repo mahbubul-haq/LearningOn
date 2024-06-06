@@ -8,6 +8,8 @@ import CoursePageLessons from "./CoursePageLessons";
 import CoursePageInstructors from "./CoursePageInstructors";
 import CoursePageReviews from "./CoursePageReviews";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import MainSectionNav from "./MainSectionNav";
+import { HeaderTypography2 } from "../../components/StyledTypography";
 
 const MainSection = ({ courseInfo }) => {
     const theme = useTheme();
@@ -26,114 +28,28 @@ const MainSection = ({ courseInfo }) => {
                     boxShadow: "0px 4px 4px 0px rgba(0,0,0,0.1)",
                 }}
             >
-                <FlexBetween
-                    sx={{
-                        py: isNonMobileScreens ? "0.7rem" : "0.5rem",
-                    }}
-                >
-                    <nav id="coursepage-mainsection" className="navbar navbar-light">
-                        <ul
-                            className="nav"
-                            style={{
-                                display: "flex",
-                                gap: isNonMobileScreens ? "2.5rem" : isMobileScreens ? "1rem" : "2rem",
-                                justifyContent: "flex-start",
-                                flexWrap: "wrap",
-                                padding: "0",
-                                margin: "0",
-                            }}
-                        >
-                            <li
-                                className="nav-item"
-                                style={{
-                                    padding: "0",
-                                    margin: "0",
-                                }}
-                            >
-                                <a
-                                    className="nav-link"
-                                    style={{
-                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                        color: theme.palette.text.primary,
-                                        paddingLeft: "0",
-                                        margin: "0",
-                                    }}
-                                    href="#coursepage-mainsection-about"
-                                >
-                                    About
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    href="#coursepage-mainsection-learn"
-                                    className="nav-link"
-                                    style={{
-                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                        color: theme.palette.text.primary,
-                                    }}
-                                >
-                                    You'll Learn
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    href="#coursepage-mainsection-lessons"
-                                    className="nav-link"
-                                    style={{
-                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                        color: theme.palette.text.primary,
-                                    }}
-                                >
-                                    Lessons
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    href="#coursepage-mainsection-instructors"
-                                    className="nav-link"
-                                    style={{
-                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                        color: theme.palette.text.primary,
-                                    }}
-                                >
-                                    Instructors
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    href="#coursepage-mainsection-reviews"
-                                    className="nav-link"
-                                    style={{
-                                        fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                        color: theme.palette.text.primary,
-                                    }}
-                                >
-                                    Reviews
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <Box></Box>
-                </FlexBetween>
+                <MainSectionNav />
             </Box>
 
-            <Box data-bs-spy="scroll" data-bs-target="#coursepage-mainsection" data-bs-offset="0" data-bs-duration="800" tabIndex="0" sx={{}}>
+            <Box
+                data-bs-spy="scroll"
+                data-bs-target="#coursepage-mainsection"
+                data-bs-offset="0"
+                data-bs-duration="800"
+                tabIndex="0"
+                sx={{}}
+            >
                 <Box
                     id="coursepage-mainsection-about"
                     sx={{
-                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
+                        padding: isNonMobileScreens
+                            ? "2rem 5rem 3rem 5rem"
+                            : "2rem 1rem 3rem 1rem",
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: "600",
-                            mb: "1.5rem",
-                            color: theme.palette.grey.grey700,
-                        }}
-                    >
+                    <HeaderTypography2>
                         About this course
-                    </Typography>
+                    </HeaderTypography2>
                     {/* <pre> */}
                     <Box
                         sx={{
@@ -159,10 +75,14 @@ const MainSection = ({ courseInfo }) => {
                         >
                             <video
                                 controls
-                                src={`${import.meta.env.VITE_SERVER_URL}/images/${courseInfo?.introVideo}`}
+                                src={`${
+                                    import.meta.env.VITE_SERVER_URL
+                                }/images/${courseInfo?.introVideo}`}
                                 style={{
                                     // width: "100%",
-                                    maxWidth: isMobileScreens ? "100%" : "400px",
+                                    maxWidth: isMobileScreens
+                                        ? "100%"
+                                        : "400px",
                                     // minWidth: "100%",
                                     height: "auto",
                                     marginLeft: "1rem",
@@ -175,12 +95,14 @@ const MainSection = ({ courseInfo }) => {
                                 loading="lazy"
                             />
                             {/* convert newlines into <br> */}
-                            {courseInfo?.courseDescription?.split("\n").map((line, index) => (
-                                <React.Fragment key={index}>
-                                    {line}
-                                    <br />
-                                </React.Fragment>
-                            ))}
+                            {courseInfo?.courseDescription
+                                ?.split("\n")
+                                .map((line, index) => (
+                                    <React.Fragment key={index}>
+                                        {line}
+                                        <br />
+                                    </React.Fragment>
+                                ))}
                         </Typography>
                     </Box>
                     {/* </pre> */}
@@ -194,19 +116,14 @@ const MainSection = ({ courseInfo }) => {
                 <Box
                     id="coursepage-mainsection-learn"
                     sx={{
-                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
+                        padding: isNonMobileScreens
+                            ? "2rem 5rem 3rem 5rem"
+                            : "2rem 1rem 3rem 1rem",
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: "600",
-                            mb: "1.5rem",
-                            color: theme.palette.grey.grey700,
-                        }}
-                    >
-                        You'll learn
-                    </Typography>
+                    <HeaderTypography2>
+                        You&apos;ll learn
+                    </HeaderTypography2>
                     <FlexBetween
                         sx={{
                             gap: "1rem",
@@ -226,7 +143,9 @@ const MainSection = ({ courseInfo }) => {
                                     borderRadius: "2rem",
                                     fontSize: "1rem",
                                     padding: "1.2rem 0.5rem",
-                                    backgroundColor: (theme) => theme.palette.background.buttonBgLightPink,
+                                    backgroundColor: (theme) =>
+                                        theme.palette.background
+                                            .buttonBgLightPink,
                                 }}
                             />
                         ))}
@@ -241,19 +160,14 @@ const MainSection = ({ courseInfo }) => {
                 <Box
                     id="coursepage-mainsection-lessons"
                     sx={{
-                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
+                        padding: isNonMobileScreens
+                            ? "2rem 5rem 3rem 5rem"
+                            : "2rem 1rem 3rem 1rem",
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: "600",
-                            mb: "1.5rem",
-                            color: theme.palette.grey.grey700,
-                        }}
-                    >
+                    <HeaderTypography2>
                         Lessons
-                    </Typography>
+                    </HeaderTypography2>
                     <CoursePageLessons courseInfo={courseInfo} />
                 </Box>
                 <Divider
@@ -265,19 +179,14 @@ const MainSection = ({ courseInfo }) => {
                 <Box
                     id="coursepage-mainsection-instructors"
                     sx={{
-                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
+                        padding: isNonMobileScreens
+                            ? "2rem 5rem 3rem 5rem"
+                            : "2rem 1rem 3rem 1rem",
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: "600",
-                            mb: "1.5rem",
-                            color: theme.palette.grey.grey700,
-                        }}
-                    >
+                    <HeaderTypography2>
                         Instructors
-                    </Typography>
+                    </HeaderTypography2>
                     <CoursePageInstructors courseInfo={courseInfo} />
                 </Box>
 
@@ -291,19 +200,12 @@ const MainSection = ({ courseInfo }) => {
                 <Box
                     id="coursepage-mainsection-reviews"
                     sx={{
-                        padding: isNonMobileScreens ? "2rem 5rem 3rem 5rem" : "2rem 1rem 3rem 1rem",
+                        padding: isNonMobileScreens
+                            ? "2rem 5rem 3rem 5rem"
+                            : "2rem 1rem 3rem 1rem",
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: "600",
-                            mb: "1.5rem",
-                            color: theme.palette.grey.grey700,
-                        }}
-                    >
-                        Reviews
-                    </Typography>
+                    <HeaderTypography2>Reviews</HeaderTypography2>
 
                     <CoursePageReviews courseInfo={courseInfo} />
                 </Box>

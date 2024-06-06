@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { HomePageContext } from "../../state/HomePageState";
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import Navbar from "../../components/navbar";
-import { useMediaQuery } from "@mui/material";
 import TopSection from "./TopSection";
 import Box from "@mui/material/Box";
 import MainSection from "./MainSection";
-import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../state/GlobalContext";
-import { useSelector } from "react-redux";
-import TopSectionSmall from "./TopSectionSmall";
 
 const CoursePage = () => {
     const { courseId } = useParams();
     const [courseInfo, setCourseInfo] = React.useState({});
     const { courses, getCourses } = useContext(HomePageContext);
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const user = useSelector((state) => state.user);
-    const navigate = useNavigate();
     const { setOpenedItem } = useContext(GlobalContext);
 
     // useEffect(() => {
@@ -98,7 +91,7 @@ const CoursePage = () => {
                     //border: "4px solid green"
                 }}
                 >
-                    {isNonMobileScreens ? <TopSection courseInfo={courseInfo} /> : <TopSectionSmall courseInfo={courseInfo} />}
+                   <TopSection courseInfo={courseInfo} />
                 </Box>
 
                 <MainSection courseInfo={courseInfo} />

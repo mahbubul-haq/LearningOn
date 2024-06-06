@@ -19,7 +19,7 @@ import { LearningCourseState } from "./state/LearningCourseContex";
 import PaymentStatus from "./scenes/coursepage/PaymentStatus";
 import ProfilePage from "./scenes/profilepage";
 import { ProfilePageState } from "./state/ProfilePageContext";
-import Dashboard from "./scenes/dashboad";
+import Dashboard from "./scenes/dashboard";
 import { DashboardState } from "./state/DashboardContext";
 import { NotificationState } from "./state/NotificationContext";
 import UnderwayAlert from "./components/UnderwayAlert";

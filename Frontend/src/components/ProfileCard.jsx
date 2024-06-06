@@ -5,14 +5,12 @@ import Typography from "@mui/material/Typography";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useSelector } from "react-redux";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { ProfilePageContext } from "../state/ProfilePageContext";
 import { useNavigate } from "react-router-dom";
 
 const ProfileCard = ({ userInfo }) => {
     const user = useSelector((state) => state.user);
-    const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const { follow, followingDone, setFollowingDone } = React.useContext(ProfilePageContext);
+    const { follow, setFollowingDone } = React.useContext(ProfilePageContext);
     const navigate = useNavigate();
 
     const isFollowing = () => {

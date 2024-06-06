@@ -1,4 +1,3 @@
-import React from "react";
 import { useContext } from "react";
 import { DashboardContext } from "../../state/DashboardContext";
 import Box from "@mui/material/Box";
@@ -6,11 +5,11 @@ import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { Button, Chip } from "@mui/material";
+import { Chip } from "@mui/material";
 import { StyledButton } from "../../components/StyledButton";
 
 const DashboardLeft = () => {
-    const { openedTab, setOpenedTab, selectedCourse, setSelectedCourse } = useContext(DashboardContext);
+    const {selectedCourse, setSelectedCourse } = useContext(DashboardContext);
 
     const user = useSelector((state) => state.user);
     const theme = useTheme();

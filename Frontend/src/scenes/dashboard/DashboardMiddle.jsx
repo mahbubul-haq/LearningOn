@@ -1,4 +1,3 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import { useContext } from "react";
 import { DashboardContext } from "../../state/DashboardContext";
