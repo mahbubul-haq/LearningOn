@@ -44,7 +44,9 @@ const LandingView = () => {
                         mt: isNonMobileScreens ? "0" : "2rem",
                         display: "flex",
                         flexDirection: "column",
-                        alignItems: isNonMobileScreens ? "flex-start" : "center",
+                        alignItems: isNonMobileScreens
+                            ? "flex-start"
+                            : "center",
                         gap: isNonMobileScreens ? "2rem" : "1rem",
                         width: isNonMobileScreens ? "40%" : "100%",
                         pb: "3rem",
@@ -74,9 +76,15 @@ const LandingView = () => {
                             sx={{
                                 display: "flex",
                                 flexDirection: "column",
-                                alignItems: isNonMobileScreens ? "flex-start" : "center",
+                                alignItems: isNonMobileScreens
+                                    ? "flex-start"
+                                    : "center",
                                 gap: "1.5rem",
-                                mt: isNonMobileScreens ? (user ? "2rem" : "0") : "0",
+                                mt: isNonMobileScreens
+                                    ? user
+                                        ? "2rem"
+                                        : "0"
+                                    : "0",
                             }}
                         >
                             <StyledButton
@@ -91,12 +99,20 @@ const LandingView = () => {
                                 }}
                                 sx={{
                                     "&&": {
-                                        padding: isNonMobileScreens ? "0.5rem 2rem" : "0.4rem 1.5rem",
+                                        padding: isNonMobileScreens
+                                            ? "0.5rem 2rem"
+                                            : "0.4rem 1.5rem",
                                         borderRadius: "2rem",
                                     },
                                 }}
                             >
-                                <Typography variant="h4">{user ? "Publish a Course" : isNonMobileScreens ? "Get Started" : "Sign Up"}</Typography>
+                                <Typography variant="h4">
+                                    {user
+                                        ? "Publish a Course"
+                                        : isNonMobileScreens
+                                        ? "Get Started"
+                                        : "Sign Up"}
+                                </Typography>
                             </StyledButton>
                             {user && isNonMobileScreens && (
                                 <FlexBetween
@@ -104,8 +120,12 @@ const LandingView = () => {
                                         gap: "1.5rem",
                                         flexWrap: "wrap",
                                         "&&": {
-                                            flexDirection: isNonMobileScreens ? "row" : "column",
-                                            alignItems: isNonMobileScreens ? "flex-start" : "center",
+                                            flexDirection: isNonMobileScreens
+                                                ? "row"
+                                                : "column",
+                                            alignItems: isNonMobileScreens
+                                                ? "flex-start"
+                                                : "center",
                                         },
                                     }}
                                 >
@@ -117,16 +137,24 @@ const LandingView = () => {
                                         }}
                                         sx={{
                                             "&&": {
-                                                padding: isNonMobileScreens ? "0.5rem 2rem" : "0.4rem 1.5rem",
+                                                padding: isNonMobileScreens
+                                                    ? "0.5rem 2rem"
+                                                    : "0.4rem 1.5rem",
                                                 borderRadius: "2rem",
-                                                backgroundColor: (theme) => theme.palette.background.buttonBgPink,
+                                                backgroundColor: (theme) =>
+                                                    theme.palette.background
+                                                        .buttonBgPink,
                                                 "&:hover": {
-                                                    backgroundColor: (theme) => theme.palette.background.buttonBgPinkDark,
+                                                    backgroundColor: (theme) =>
+                                                        theme.palette.background
+                                                            .buttonBgPinkDark,
                                                 },
                                             },
                                         }}
                                     >
-                                        <Typography variant="h4">Start Tutoring</Typography>
+                                        <Typography variant="h4">
+                                            Start Tutoring
+                                        </Typography>
                                     </StyledButton>
                                     {isNonMobileScreens && (
                                         <StyledButton
@@ -137,16 +165,27 @@ const LandingView = () => {
                                             }}
                                             sx={{
                                                 "&&": {
-                                                    padding: isNonMobileScreens ? "0.5rem 2rem" : "0.4rem 1.5rem",
+                                                    padding: isNonMobileScreens
+                                                        ? "0.5rem 2rem"
+                                                        : "0.4rem 1.5rem",
                                                     borderRadius: "2rem",
-                                                    backgroundColor: (theme) => theme.palette.background.buttonBgLightPink,
+                                                    backgroundColor: (theme) =>
+                                                        theme.palette.background
+                                                            .buttonBgLightPink,
                                                     "&:hover": {
-                                                        backgroundColor: (theme) => theme.palette.background.buttonBgLightPinkDark,
+                                                        backgroundColor: (
+                                                            theme
+                                                        ) =>
+                                                            theme.palette
+                                                                .background
+                                                                .buttonBgLightPinkDark,
                                                     },
                                                 },
                                             }}
                                         >
-                                            <Typography variant="h4">Browse Blogs</Typography>
+                                            <Typography variant="h4">
+                                                Browse Blogs
+                                            </Typography>
                                         </StyledButton>
                                     )}
                                 </FlexBetween>
@@ -175,41 +214,6 @@ const LandingView = () => {
                         }}
                     />
                 </Box>
-                {/* {showDashboard() && !isNonMobileScreens && (
-                    <Box
-                        sx={{
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "flex-end",
-                        }}
-                    >
-                        <Button
-                            sx={{
-                                borderRadius: "0.25rem",
-                                mt: "5rem",
-                                border: "1px solid " + theme.palette.primary.darker,
-                                padding: "0.5rem 1rem",
-                                color: (theme) => theme.palette.primary.darker,
-
-                                "&:hover": {
-                                    backgroundColor: (theme) => theme.palette.primary.light3,
-                                },
-                            }}
-                            onClick={() => {
-                                navigate("/dashboard");
-                            }}
-                        >
-                            <DashboardIcon
-                                sx={{
-                                    mr: "0.5rem",
-                                }}
-                            />
-                            <Typography sx={{}} variant="h6">
-                                Open Dashboard
-                            </Typography>
-                        </Button>
-                    </Box>
-                )} */}
             </FlexBetween>
             {showDashboard() && isNonMobileScreens && (
                 <Button
@@ -220,7 +224,8 @@ const LandingView = () => {
                         color: (theme) => theme.palette.primary.darker,
 
                         "&:hover": {
-                            backgroundColor: (theme) => theme.palette.primary.light3,
+                            backgroundColor: (theme) =>
+                                theme.palette.primary.light3,
                         },
                     }}
                     onClick={() => {

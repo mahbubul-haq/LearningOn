@@ -37,7 +37,7 @@ const LearningPageTop = ({ courseInfo }) => {
                     mb: isNonMobileScreens ? "1rem" : "0.5rem",
                     textAlign: "center",
                     textTransform: "capitalize",
-                    px: isNonMobileScreens ? "2rem" : "0.5",
+                    // px: isNonMobileScreens ? "2rem" : "0.5",
                     cursor: "pointer",
                     px: isNonMobileScreens ? "0" : isMobileScreens ? "0.5rem" : "1rem",
                     py: isNonMobileScreens ? "0" : isMobileScreens ? "1rem" : "1rem",

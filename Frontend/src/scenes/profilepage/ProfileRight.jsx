@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import { useContext } from "react";
 import { ProfilePageContext } from "../../state/ProfilePageContext";
-import BasicProfile from "./BasicProfile";
 import { useSelector } from "react-redux";
 import Wallet from "./Wallet";
 import { Divider } from "@mui/material";

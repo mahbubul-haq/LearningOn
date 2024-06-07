@@ -1,5 +1,5 @@
 import LandingView from "./LandingView";
-import CoursesView from "./CoursesView";
+import HomeCourses from "./HomeCourses.jsx";
 import Box from "@mui/material/Box";
 import { useEffect, useRef } from "react";
 import socketIoClient from "socket.io-client";
@@ -93,7 +93,7 @@ const HomePage = () => {
                 >
                     
                 </Box> */}
-                <CoursesView />
+                <HomeCourses />
             </Box>
         </>
     );

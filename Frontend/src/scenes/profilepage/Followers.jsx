@@ -1,4 +1,3 @@
-import React from "react";
 import ProfileCard from "../../components/ProfileCard";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -33,8 +32,8 @@ const Followers = ({ user, followers }) => {
                             No followers
                         </Typography>
                     )}
-                    {user?.followers?.map((userInfo) => (
-                        <ProfileCard userInfo={userInfo} />
+                    {user?.followers?.map((userInfo, uIndex) => (
+                        <ProfileCard key={uIndex} userInfo={userInfo} />
                     ))}
                 </>
             ) : (
@@ -53,8 +52,8 @@ const Followers = ({ user, followers }) => {
                             Not following anyone
                         </Typography>
                     )}
-                    {user?.following?.map((userInfo) => (
-                        <ProfileCard userInfo={userInfo} />
+                    {user?.following?.map((userInfo, uIndex) => (
+                        <ProfileCard key={uIndex} userInfo={userInfo} />
                     ))}
                 </>
             )}

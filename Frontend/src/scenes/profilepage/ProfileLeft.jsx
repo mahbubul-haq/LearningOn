@@ -1,4 +1,3 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import useTheme from "@mui/material/styles/useTheme";
 import MenuList from "@mui/material/MenuList";

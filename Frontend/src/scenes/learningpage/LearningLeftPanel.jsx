@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
-import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import FlexBetween from "../../components/FlexBetween";
 
 // import Checkbox from "@mui/material/Checkbox";
@@ -9,8 +8,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { StyledCheckbox } from "../../components/StyledButton";
 import { useContext } from "react";
-import { CreateCourseContext } from "../../state/CreateCourse";
-import state from "../../state";
 import { useTheme } from "@emotion/react";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";

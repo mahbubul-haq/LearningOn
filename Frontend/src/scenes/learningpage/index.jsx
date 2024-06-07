@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useContext } from "react";
 import Navbar from "../../components/navbar";
-import { Divider, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { HomePageContext } from "../../state/HomePageState";
 import Box from "@mui/material/Box";
 import LearningPageTop from "./LearningPageTop";
 import { LearningLeftPanel } from "./LearningLeftPanel";
@@ -21,12 +20,11 @@ import { GlobalContext } from "../../state/GlobalContext";
 const LearningPage = () => {
     const { courseId } = useParams();
     const [courseInfo, setCourseInfo] = React.useState({});
-    const { getCourseById, courseById, setCourseById, setOpenedItem } = useContext(GlobalContext);
+    const { getCourseById, courseById, setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const theme = useTheme();
     const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons } = useContext(LearningCourseContext);
-    const scrollPositionRef = React.useRef(0);
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
 

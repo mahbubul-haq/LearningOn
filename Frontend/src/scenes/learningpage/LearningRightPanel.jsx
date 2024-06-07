@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const LearningRightPanel = ({ courseInfo }) => {
-    const { openedLesson, setOpenedLesson } = useContext(LearningCourseContext);
+    const { openedLesson} = useContext(LearningCourseContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const theme = useTheme();
 

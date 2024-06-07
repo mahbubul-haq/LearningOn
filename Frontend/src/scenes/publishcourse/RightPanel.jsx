@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import BasicInfo from "./BasicInfo";
 import { CreateCourseContext } from "../../state/CreateCourse";
-import { GlobalContext } from "../../state/GlobalContext";
 import { useContext } from "react";
-import { Alert, Button, Divider, Snackbar, Typography } from "@mui/material";
+import { Alert, Divider, Snackbar, Typography } from "@mui/material";
 import { StyledButton } from "../../components/StyledButton";
 import CourseMedia from "./CourseMedia";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
@@ -14,8 +13,7 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const RightPanel = () => {
-    const { inputSection, setInputSection, updateCourse, errors, isAnyError, updating, setUpdating, editMode } = useContext(CreateCourseContext);
-    const { categories, listOfCategories } = useContext(GlobalContext);
+    const { inputSection, setInputSection, updateCourse, isAnyError, updating, setUpdating, editMode } = useContext(CreateCourseContext);
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
 

@@ -2,7 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FlexBetween from "../../components/FlexBetween";
-import StyledTextField1 from "../../components/StyledInputField1";
+import StyledTextField1 from "../../components/StyledTextField1";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InputLabel from "@mui/material/InputLabel";
 import { StyledButton } from "../../components/StyledButton";

@@ -1,11 +1,7 @@
-import React from "react";
 import Box from "@mui/material/Box";
-import { useContext } from "react";
 import CourseWidget from "../../widgets/CourseWidget";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Typography from "@mui/material/Typography";
-
 
 const ProfileCourses = ({ userCourses }) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -28,8 +24,12 @@ const ProfileCourses = ({ userCourses }) => {
         }
 
         setTimeout(() => {
-            let leftArrow = document.querySelector(".profile-course-left-arrow");
-            let rightArrow = document.querySelector(".profile-course-right-arrow");
+            let leftArrow = document.querySelector(
+                ".profile-course-left-arrow"
+            );
+            let rightArrow = document.querySelector(
+                ".profile-course-right-arrow"
+            );
 
             if (container.scrollLeft === 0) {
                 leftArrow.style.visibility = "hidden";
@@ -37,7 +37,10 @@ const ProfileCourses = ({ userCourses }) => {
                 leftArrow.style.visibility = "visible";
             }
 
-            if (container.scrollLeft + container.clientWidth + 10 >= container.scrollWidth) {
+            if (
+                container.scrollLeft + container.clientWidth + 10 >=
+                container.scrollWidth
+            ) {
                 rightArrow.style.visibility = "hidden";
             } else {
                 rightArrow.style.visibility = "visible";
@@ -67,7 +70,9 @@ const ProfileCourses = ({ userCourses }) => {
                             position: "absolute",
                             right: isNonMobileScreens ? "0" : "-25px",
                             top: isNonMobileScreens ? "0" : "50%",
-                            transform: isNonMobileScreens ? "none" : "translateY(-50%)",
+                            transform: isNonMobileScreens
+                                ? "none"
+                                : "translateY(-50%)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -88,7 +93,9 @@ const ProfileCourses = ({ userCourses }) => {
                     >
                         <ArrowForwardIosIcon
                             sx={{
-                                fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
+                                fontSize: isNonMobileScreens
+                                    ? "3rem"
+                                    : "1.5rem",
                                 color: "rgba(255, 255, 255, 1)",
                                 alignSelf: "center",
                             }}
@@ -116,7 +123,9 @@ const ProfileCourses = ({ userCourses }) => {
                             width: isNonMobileScreens ? "auto" : "45px",
                             borderRadius: isNonMobileScreens ? "0" : "50%",
                             top: isNonMobileScreens ? "0" : "50%",
-                            transform: isNonMobileScreens ? "none" : "translateY(-50%)",
+                            transform: isNonMobileScreens
+                                ? "none"
+                                : "translateY(-50%)",
                         }}
                         onClick={() => {
                             handleScroll("left");
@@ -124,7 +133,9 @@ const ProfileCourses = ({ userCourses }) => {
                     >
                         <ArrowForwardIosIcon
                             sx={{
-                                fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
+                                fontSize: isNonMobileScreens
+                                    ? "3rem"
+                                    : "1.5rem",
                                 color: "rgba(255, 255, 255, 1)",
                                 alignSelf: "center",
                                 transform: "rotate(180deg)",
@@ -144,7 +155,8 @@ const ProfileCourses = ({ userCourses }) => {
                         }}
                     >
                         {userCourses?.map((course) => {
-                            if (course?.courseStatus !== "published") return null;
+                            if (course?.courseStatus !== "published")
+                                return null;
                             return (
                                 <Box
                                     key={course._id}

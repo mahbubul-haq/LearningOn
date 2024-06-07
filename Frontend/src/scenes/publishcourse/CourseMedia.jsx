@@ -1,61 +1,18 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import { GlobalContext } from "../../state/GlobalContext";
 import { useContext } from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import StyledTextField from "../../components/StyledInputField";
-import StyledTextField1 from "../../components/StyledInputField1";
 import { CreateCourseContext } from "../../state/CreateCourse";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Divider from "@mui/material/Divider";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
-import axios from "axios";
-import { useTheme } from "@emotion/react";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
-import { StyledButton } from "../../components/StyledButton";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Dropzone from "react-dropzone";
-import VideoCallIcon from "@mui/icons-material/VideoCall";
-import { Alert, Snackbar } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import VideoUpload from "../../components/VideoUpload";
+import VideoUpload from "../../components/videoUpload/VideoUpload";
 
 const CourseMedia = () => {
-    const { categoriesWithLabel } = useContext(GlobalContext);
-    const [uploading, setUploading] = React.useState(false);
     const {
         courseState,
         setCourseState,
-        setIntroVideoInput,
-        introVideoInput,
-        setCourseThumbnailInput,
-        courseThumbnailInput,
-        uploadFile,
-        uploadProgress,
-        setUploadProgress,
         updateCourse,
         editMode,
-        courseId,
     } = useContext(CreateCourseContext);
-    const [addSkill, setAddSkill] = React.useState(false);
-    const [skillName, setSkillName] = React.useState("");
-    const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const theme = useTheme();
 
     // useEffect(() => {
     //     console.log(courseState);

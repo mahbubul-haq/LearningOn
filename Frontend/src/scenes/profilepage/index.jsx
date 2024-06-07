@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
 import Navbar from "../../components/navbar";
@@ -16,10 +16,10 @@ import Divider from "@mui/material/Divider";
 
 const ProfilePage = () => {
     const { userId } = useParams();
-    const { userById, getUserById, setUserById, setOpenedItem } = useContext(GlobalContext);
+    const { userById, getUserById,  setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
+    const { setOpenedTab } = useContext(ProfilePageContext);
     const theme = useTheme();
 
     const getQualifications = () => {
