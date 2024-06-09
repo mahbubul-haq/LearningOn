@@ -10,6 +10,9 @@ export const StyledButton = styled(Button)(({ theme }) => ({
     padding: "0.5rem 1rem",
     textTransform: "capitalize",
     borderRadius: "0.2rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     "&:hover": {
         backgroundColor: theme.palette.primary.dark,
         

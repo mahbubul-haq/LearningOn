@@ -151,10 +151,22 @@ const CourseContent = () => {
         // console.log(videoLinks);
     }, [videoLinks]);
 
+    useEffect(() => {
+        let element = document.querySelector(".right-panel-course-content");
+        if (element) {
+            element.style.opacity = 1;
+            element.style.transform = "translateY(0)";
+        }
+    }
+        , []);
+
     return (
-        <Box
+        <Box className="right-panel-course-content"
             sx={{
                 width: "100%",
+                opacity: 0,
+                transform: "translateY(4rem)",
+                transition: "opacity 0.5s, transform 0.5s",
             }}
         >
             <>

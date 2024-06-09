@@ -26,8 +26,17 @@ const CourseMedia = () => {
         }
     }, [courseState.courseThumbnail, courseState.introVideo]);
 
+    useEffect(() => {
+        let element = document.querySelector(".right-panel-course-media");
+        //console.log("media", element);
+        if (element) {
+            element.style.opacity = 1;
+            element.style.transform = "translateY(0)";
+        }
+    }, []);
+
     return (
-        <Box
+        <Box className="right-panel-course-media"
             sx={{
                 width: "100%",
                 display: "flex",
@@ -35,6 +44,9 @@ const CourseMedia = () => {
                 gap: "2.5rem",
                 mt: "0rem",
                 mb: "1rem",
+                opacity: 0,
+                transform: "translateY(4rem)",
+                transition: "opacity 0.5s, transform 0.5s",
             }}
         >
             <Box>

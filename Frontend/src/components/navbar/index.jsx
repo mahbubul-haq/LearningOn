@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import FlexBetween from "../FlexBetween.jsx";
-import {  StyledBox1 } from "../StyledButton.jsx";
+import { StyledBox1 } from "../StyledButton.jsx";
 import { useMediaQuery } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -27,8 +27,8 @@ const Navbar = () => {
     const [openNotificationDrawer, setOpenNotificationDrawer] = useState(false);
 
     const { openedItem } = useContext(GlobalContext);
-    const { notifications, getNotifications, updateNotifications } = useContext(NotificationContext);
-
+    const { notifications, getNotifications, updateNotifications } =
+        useContext(NotificationContext);
 
     const calculateNewNotifications = () => {
         let count = 0;
@@ -90,109 +90,126 @@ const Navbar = () => {
                 updateNotifications={updateNotifications}
                 setOpenDrawer={setOpenDrawer}
             />
-        )
-    }
+        );
+    };
 
     return (
         <Box
             sx={{
-                flexGrow: 1,
-                padding: 0,
                 // very light gray boxShadow
                 position: "sticky",
                 top: 0,
                 backgroundColor: "white",
                 zIndex: 100,
-                display: "flex",
-                alignItems: "center",
+                boxShadow: (theme) =>
+                    `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,
                 width: "100%",
             }}
         >
-            {!isNonMobileScreens && mobileNav()}
-            {!isNonMobileScreens && notificationDrawer()}
             <Box
                 sx={{
+                    maxWidth: "2000px",
+                    mx: "auto",
                     display: "flex",
                     alignItems: "center",
-                    width: "100%",
-                    height: isNonMobileScreens ? "5rem" : "4rem",
-                    backgroundColor: "white",
-                    boxShadow: (theme) => `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,
-                    padding: isNonMobileScreens ? "0.5rem 1.5rem" : "0rem 1.3rem",
+                    flexGrow: 1,
+                    padding: 0,
                 }}
             >
-                <FlexBetween
+                {!isNonMobileScreens && mobileNav()}
+                {!isNonMobileScreens && notificationDrawer()}
+                <Box
                     sx={{
-                        flexGrow: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        height: isNonMobileScreens ? "5rem" : "4rem",
+                        backgroundColor: "white",
+                        
+                        padding: isNonMobileScreens
+                            ? "0.5rem 64px"
+                            : "0rem 24px",
                     }}
                 >
-                    <FlexBetween gap="7rem">
-                        <Box>
-                            <Typography
-                                variant="h2"
-                                component="div"
-                                sx={{
-                                    fontWeight: "600",
-                                    fontSize: isNonMobileScreens ? "2rem" : "1rem",
-                                    cursor: "pointer",
-                                }}
-                                onClick={() => navigate("/")}
-                            >
-                                Learning
-                                <Box
+                    <FlexBetween
+                        sx={{
+                            flexGrow: 1,
+                        }}
+                    >
+                        <FlexBetween gap="7rem">
+                            <Box>
+                                <Typography
+                                    variant="h2"
+                                    component="div"
                                     sx={{
-                                        display: "inline-block",
-                                        color: (theme) => theme.palette.primary.main,
+                                        fontWeight: "600",
+                                        fontSize: isNonMobileScreens
+                                            ? "2rem"
+                                            : "1rem",
+                                        cursor: "pointer",
                                     }}
+                                    onClick={() => navigate("/")}
                                 >
-                                    On
-                                </Box>
-                            </Typography>
-                        </Box>
-                        {isNonMobileScreens && (
-                            <FlexBetween
-                                gap="2rem"
-                                sx={{
-                                    fontSize: "1.2rem",
-                                    color: (theme) => theme.palette.text.primary,
-                                }}
-                            >
-                                <StyledBox1>
-                                    <span
-                                        style={{
-                                            fontWeight: openedItem == "courses" ? "600" : "400",
+                                    Learning
+                                    <Box
+                                        sx={{
+                                            display: "inline-block",
+                                            color: (theme) =>
+                                                theme.palette.primary.main,
                                         }}
                                     >
-                                        Courses
-                                    </span>
-                                    <ExpandMoreIcon
-                                        sx={{
-                                            fontSize: "1.5rem",
-                                        }}
-                                    />
-                                </StyledBox1>
-                                <StyledBox1>
-                                    Blogs
-                                    <ExpandMoreIcon
-                                        sx={{
-                                            fontSize: "1.5rem",
-                                        }}
-                                    />
-                                </StyledBox1>
-                                <StyledBox1>
-                                    Tutors
-                                    <ExpandMoreIcon
-                                        sx={{
-                                            fontSize: "1.5rem",
-                                        }}
-                                    />
-                                </StyledBox1>
-                            </FlexBetween>
-                        )}
+                                        On
+                                    </Box>
+                                </Typography>
+                            </Box>
+                            {isNonMobileScreens && (
+                                <FlexBetween
+                                    gap="2rem"
+                                    sx={{
+                                        fontSize: "1.2rem",
+                                        color: (theme) =>
+                                            theme.palette.text.primary,
+                                    }}
+                                >
+                                    <StyledBox1>
+                                        <span
+                                            style={{
+                                                fontWeight:
+                                                    openedItem == "courses"
+                                                        ? "600"
+                                                        : "400",
+                                            }}
+                                        >
+                                            Courses
+                                        </span>
+                                        <ExpandMoreIcon
+                                            sx={{
+                                                fontSize: "1.5rem",
+                                            }}
+                                        />
+                                    </StyledBox1>
+                                    <StyledBox1>
+                                        Blogs
+                                        <ExpandMoreIcon
+                                            sx={{
+                                                fontSize: "1.5rem",
+                                            }}
+                                        />
+                                    </StyledBox1>
+                                    <StyledBox1>
+                                        Tutors
+                                        <ExpandMoreIcon
+                                            sx={{
+                                                fontSize: "1.5rem",
+                                            }}
+                                        />
+                                    </StyledBox1>
+                                </FlexBetween>
+                            )}
+                        </FlexBetween>
+                        {navRight()}
                     </FlexBetween>
-                    {navRight()}
-
-                </FlexBetween>
+                </Box>
             </Box>
         </Box>
     );

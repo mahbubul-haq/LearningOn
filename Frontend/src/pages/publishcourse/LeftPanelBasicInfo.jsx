@@ -2,17 +2,18 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import useTheme from "@mui/material/styles/useTheme";
 import { StyledCheckbox } from "../../components/StyledButton";
 import FlexBetween from "../../components/FlexBetween";
+// import useTheme from "@mui/material/styles/useTheme";
 
-const LeftPanelMoreInfo = ({
-    moreInfo,
+const LeftPanelBasicInfo = ({
+    basicInfo,
     courseState,
     setInputSection,
-    inputSection,
+    // inputSection,
 }) => {
-    const theme = useTheme();
+    // const theme = useTheme();
+
     return (
         <Box
             sx={{
@@ -20,10 +21,9 @@ const LeftPanelMoreInfo = ({
                 flexDirection: "column",
                 gap: "0.4rem",
 
-                // backgroundColor: inputSection === "basic info" ? backgroundColor : "",
                 cursor: "pointer",
             }}
-            onClick={() => setInputSection("more info")}
+            onClick={() => setInputSection("basic info")}
         >
             <Typography
                 variant="h6"
@@ -33,23 +33,24 @@ const LeftPanelMoreInfo = ({
                     cursor: "pointer",
                     padding: "0 0rem 0rem 2rem",
                 }}
-                onClick={() => setInputSection("more info")}
+                onClick={() => setInputSection("basic info")}
             >
-                More Info
+                Basic Info
             </Typography>
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "column",
                     gap: "0.5rem",
-                    borderLeft:
-                        inputSection === "more info"
-                            ? `4px solid ${theme.palette.grey.grey400}`
-                            : "",
+                    // borderLeft:
+                    //     inputSection === "basic info"
+                    //         ? `4px solid ${theme.palette.grey.grey400}`
+                    //         : "",
                     padding: "0 0rem 0rem 2rem",
+                    transition: "border 0.3s",
                 }}
             >
-                {moreInfo.map((item) => (
+                {basicInfo.map((item) => (
                     <FlexBetween
                         key={item}
                         gap="0.5rem"
@@ -60,7 +61,7 @@ const LeftPanelMoreInfo = ({
                                 cursor: "pointer",
                             },
                         }}
-                        onClick={() => setInputSection("more info")}
+                        onClick={() => setInputSection("basic info")}
                     >
                         <StyledCheckbox
                             icon={
@@ -91,10 +92,13 @@ const LeftPanelMoreInfo = ({
                                 // border: "1px solid #E0E0E0"
                             }}
                         />
+
                         <Typography
                             variant="body1"
                             sx={{
-                                color: (theme) => theme.palette.grey.grey600,
+                                color: (theme) => theme.palette.text.secondary,
+                                // border: "1px solid #E0E0E0",
+                                padding: "0",
                                 fontSize: "0.9rem",
                             }}
                         >
@@ -107,4 +111,4 @@ const LeftPanelMoreInfo = ({
     );
 };
 
-export default LeftPanelMoreInfo;
+export default LeftPanelBasicInfo;

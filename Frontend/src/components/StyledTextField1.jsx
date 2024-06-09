@@ -8,7 +8,7 @@ const StyledTextField1 = styled(TextField)(({ theme }) => {
         variant: "standard",
         marginBottom: "1rem",
         "& .MuiOutlinedInput-root": {
-            backgroundColor: "white",
+            backgroundColor: "transparent",
 
             // input text color
             "& input": {

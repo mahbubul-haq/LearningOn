@@ -47,12 +47,13 @@ const LeftPanelCourseContent = ({
                         display: "flex",
                         flexDirection: "column",
                         gap: "0.5rem",
-                        borderLeft:
-                            inputSection === "course content"
-                                ? `4px solid ${theme.palette.grey.grey400}`
-                                : "",
+                        // borderLeft:
+                        //     inputSection === "course content"
+                        //         ? `4px solid ${theme.palette.grey.grey400}`
+                        //         : "",
                         padding: "0 0rem 0rem 2rem",
                         cursor: "pointer",
+                        transition: "border 0.3s",
                     }}
                     onClick={() => setInputSection("course content")}
                 >

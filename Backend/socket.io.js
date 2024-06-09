@@ -4,7 +4,7 @@ export const connectSocket = (server) => {
     const io = new Server(server, {
         cors: {
             // add multiple domains
-            origin: ["https://learning-on.vercel.app", "http://localhost:5173"],
+            origin: ["https://learning-on.vercel.app", "http://localhost:5173", process.env.CLIENT_URL],
             
         },
     });

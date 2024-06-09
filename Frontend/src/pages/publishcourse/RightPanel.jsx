@@ -70,8 +70,9 @@ const RightPanel = () => {
     return (
         <Box
             sx={{
-                backgroundColor: isMobileScreens ? "transparent" : "white",
-                padding: isMobileScreens ? "0rem" : "2rem",
+                //backgroundColor: isMobileScreens ? "transparent" : "white",
+                backgroundColor: "transparent",
+                padding: 0,
                 borderRadius: "0.25rem",
                 // minHeight: "100%",
                 // border: "2px solid green"

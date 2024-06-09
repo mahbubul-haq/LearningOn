@@ -12,7 +12,7 @@ import CoursesBottom from "./CoursesBottom";
 const HomeCourses = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const [courseType, setCourseType] = React.useState("Popular Courses");
-    const {listOfCategories, getCategories } = useContext(GlobalContext);
+    const { listOfCategories, getCategories } = useContext(GlobalContext);
     const [categoriesWithCourse, setCategoriesWithCourse] = React.useState([]);
     const [selectedItem, setSelectedItem] = React.useState("");
     const { courses, getCourses } = useContext(HomePageContext);
@@ -177,54 +177,62 @@ const HomeCourses = () => {
     };
 
     return (
+
         <Box
             sx={{
                 backgroundColor: (theme) => theme.palette.background.default,
-                padding: isNonMobileScreens ? "3rem 5rem" : "2rem",
+
+                width: "100%",
             }}
         >
-            <CoursesTop
-                courseType={courseType}
-                setCourseType={setCourseType}
-                handleChange={handleChange}
-            />
-            <Box
-                sx={{
-                    p: isNonMobileScreens ? "2rem" : "0",
-                    backgroundColor: isNonMobileScreens ? "white" : "transparent",
-                    borderRadius: "0.25rem",
-                    width: "100%",
-                    height: "600px",
-                }}
-            >
-                {isNonMobileScreens && (
-                    <Box
-                        sx={{
-                            mb: "2rem",
-                        }}
-                    >
-                        <CustomSlider items={categoriesWithCourse} selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
-                    </Box>
-                )}
+            <Box sx={{
+                maxWidth: "2000px",
+                padding: isNonMobileScreens ? "3rem 64px" : "2rem 24px",
+                mx: "auto",
+            }}>
+                <CoursesTop
+                    courseType={courseType}
+                    setCourseType={setCourseType}
+                    handleChange={handleChange}
+                />
                 <Box
                     sx={{
-                        position: "relative",
-
+                        p: isNonMobileScreens ? "2rem" : "0",
+                        backgroundColor: isNonMobileScreens ? "white" : "transparent",
+                        borderRadius: "0.25rem",
                         width: "100%",
+                        height: "600px",
                     }}
                 >
-                    <CoursesContent
-                        handleScroll={handleScroll}
-                        selectedItem={selectedItem}
-                        selectedCourses={selectedCourses}
-                    />
+                    {isNonMobileScreens && (
+                        <Box
+                            sx={{
+                                mb: "2rem",
+                            }}
+                        >
+                            <CustomSlider items={categoriesWithCourse} selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
+                        </Box>
+                    )}
+                    <Box
+                        sx={{
+                            position: "relative",
 
-                    <CoursesBottom
-                         categoriesWithCourse = {categoriesWithCourse}
-                         selectedItem = {selectedItem}
-                         setSelectedItem = {setSelectedItem}
-                         selectedCourses = {selectedCourses}
-                    />
+                            width: "100%",
+                        }}
+                    >
+                        <CoursesContent
+                            handleScroll={handleScroll}
+                            selectedItem={selectedItem}
+                            selectedCourses={selectedCourses}
+                        />
+
+                        <CoursesBottom
+                            categoriesWithCourse={categoriesWithCourse}
+                            selectedItem={selectedItem}
+                            setSelectedItem={setSelectedItem}
+                            selectedCourses={selectedCourses}
+                        />
+                    </Box>
                 </Box>
             </Box>
         </Box>
