@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { createContext} from "react";
+import React, { createContext, useEffect} from "react";
 import { useSelector } from "react-redux";
 // import state from ".";
 import axios from "axios";
@@ -38,6 +38,7 @@ export const CreateCourseState = (props) => {
         courseInstructors: [],
         lessons: [],
     });
+    const [introVideoUrl, setIntroVideoUrl] = React.useState("");
     const [courseThumbnailInput, setCourseThumbnailInput] = React.useState("");
     const [introVideoInput, setIntroVideoInput] = React.useState("");
     const [inputSection, setInputSection] = React.useState("basic info");
@@ -52,6 +53,41 @@ export const CreateCourseState = (props) => {
     // useEffect(() => {
     //     console.log(isCourseValid());
     // }, [courseState]);
+
+    // useEffect(() => {
+    //     //short youtube link with id -> https://youtu.be/3v1n5b0Uu3g
+    //     console.log(courseState.introVideo);
+    //     setIntroVideoUrl(`https://youtu.be/${courseState.introVideo}`);
+    // }, []);
+
+    useEffect(() => {
+        setCourseState({
+            ...courseState,
+            introVideo: getYouTubeId(introVideoUrl),
+        });
+    }, [introVideoUrl]);
+
+    const getYouTubeId = (url) => {
+        if (url) {
+
+            let ampersandPosition = url.indexOf("&");
+            if (ampersandPosition != -1) {
+                url = url.substring(0, ampersandPosition);
+            }
+
+            if (url.includes("v=")) {
+                let id = url.split("v=")[1];
+                return id;
+            }
+            else {
+                let id = url.split("/");
+                //console.log(id[id.length - 1]);
+                return id[id.length - 1];
+            }
+        }
+        return "";
+    };
+
 
     const isCourseValid = () => {
         if (
@@ -97,6 +133,7 @@ export const CreateCourseState = (props) => {
 
         if (data.success) {
             setCourseState(data.courseInfo);
+            setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
         } else {
             const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/course/new`, {
                 method: "POST",
@@ -112,6 +149,7 @@ export const CreateCourseState = (props) => {
 
             if (data.success) {
                 setCourseState(data.courseInfo);
+                setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
             }
         }
     };
@@ -156,6 +194,7 @@ export const CreateCourseState = (props) => {
                 if (status === "draft" && updating == "updating") setUpdating("updated");
                 setErrors({});
                 getDraftCourse();
+                setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
             } else {
                 if (status === "published" && uploadStatus == "publishing") setUploadStatus("unpublished");
                 if (status === "draft" && updating == "updating") setUpdating("failed");
@@ -278,6 +317,8 @@ export const CreateCourseState = (props) => {
                 editMode,
                 setEditMode,
                 getCoursePlainById,
+                introVideoUrl,
+                setIntroVideoUrl,
             }}
         >
             {props.children}

@@ -5,18 +5,22 @@ const CourseSchema = new mongoose.Schema(
         category: {
             type: String,
             // required: true,
+            default: "",
         },
         courseTitle: {
             type: String,
             // required: true,
+            default: "",
         },
         courseDescription: {
             type: String,
             // required: true,
+            default: "",
         },
         studentRequirements: {
             type: String,
             // required: true,
+            default: "",
         },
         skillTags: {
             type: [String],
@@ -25,12 +29,15 @@ const CourseSchema = new mongoose.Schema(
         },
         courseThumbnail: {
             type: String,
+            default: "",
         },
         introVideo: {
             type: String,
+            default: "",
         },
         courseLanguage: {
             type: String,
+            default: "",
         },
         coursePrice: {
             type: String,
@@ -38,6 +45,7 @@ const CourseSchema = new mongoose.Schema(
         },
         approxTimeToComplete: {
             type: String,
+            default: "",
         },
         courseInstructors: {
             type: [mongoose.Schema.Types.ObjectId],
