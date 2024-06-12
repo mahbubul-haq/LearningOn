@@ -1,13 +1,15 @@
 import Box from "@mui/material/Box";
 import { StyledButton } from "../StyledButton";
-
+import {cloudinaryCld} from "../../configs/cloudinary.config";
+import { AdvancedImage, lazyload } from "@cloudinary/react";
 
 const VideoUploadedFile = ({
     fileName,
     isImage,
     deleteVideo,
     maxHeight,
-
+    deleting,
+    setDeleting,
 }) => {
     return (
         <Box
@@ -26,18 +28,31 @@ const VideoUploadedFile = ({
                 }}
             >
                 {isImage ? (
-                    <img
-                        src={`${import.meta.env.VITE_SERVER_URL
-                            }/images/${fileName}`}
-                        style={{
-                            width: "100%",
-                            height: "auto",
-                            maxHeight: maxHeight,
-                            objectFit: "cover",
-                            aspectRatio: "16/9",
-                        }}
-                        alt="preview"
-                    />
+                    <AdvancedImage
+                    plugins={[lazyload()]}
+                    cldImg={cloudinaryCld.image(fileName)}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        // borderRadius: "50%",
+                        opacity: deleting ? 0.3 : 1,
+                        aspectRatio: "16/9",
+                    }}
+                />
+                    // <img
+                    //     src={`${import.meta.env.VITE_SERVER_URL
+                    //         }/images/${fileName}`}
+                    //     style={{
+                    //         width: "100%",
+                    //         height: "auto",
+                    //         maxHeight: maxHeight,
+                    //         objectFit: "cover",
+                    //         aspectRatio: "16/9",
+                    //         opacity: deleting ? 0.3 : 1,
+                    //     }}
+                    //     alt="preview"
+                    // />
                 ) : (
                     <video
                         src={`${import.meta.env.VITE_SERVER_URL
@@ -73,6 +88,7 @@ const VideoUploadedFile = ({
                     }}
                     onClick={() => {
                         deleteVideo(fileName);
+                        setDeleting(true);
                     }}
                 >
                     Delete {isImage ? "Photo" : "Video"}

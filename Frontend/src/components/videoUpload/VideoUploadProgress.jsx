@@ -21,6 +21,7 @@ const VideoUploadProgress = ({ uploadProgress }) => {
                 "&:hover": {
                     border: `2px dashed #aaa`,
                 },
+                aspectRatio: "16/9",
             }}
         >
             <Box

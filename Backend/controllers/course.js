@@ -107,20 +107,33 @@ const updateCourse = async (req, res) => {
             }
         }
 
+        // extract the fields which are modified
+
+        let newObj = {};
+
+        for (let key in req.body) {
+            if (req.body[key] != course._doc[key]) {
+                newObj[key] = req.body[key];
+            }
+        }
+
+
         const courseInfo = {
-            ...course._doc,
-            category: req.body.category ? req.body.category : "",
-            courseTitle: req.body.courseTitle ? req.body.courseTitle : "",
-            courseDescription: req.body.courseDescription ? req.body.courseDescription : "",
-            studentRequirements: req.body.studentRequirements ? req.body.studentRequirements : "",
-            skillTags: req.body.skillTags ? req.body.skillTags : [],
-            courseThumbnail: req.body.courseThumbnail ? req.body.courseThumbnail : "",
-            introVideo: req.body.introVideo ? req.body.introVideo : "",
-            courseLanguage: req.body.courseLanguage ? req.body.courseLanguage : "",
-            coursePrice: req.body.coursePrice ? req.body.coursePrice : "",
-            approxTimeToComplete: req.body.approxTimeToComplete ? req.body.approxTimeToComplete : "",
-            courseInstructors: req.body.courseInstructors ? req.body.courseInstructors : [],
-            lessons: req.body.lessons ? req.body.lessons : [],
+            // ...course._doc,
+            // category: req.body.category ? req.body.category : "",
+            // courseTitle: req.body.courseTitle ? req.body.courseTitle : "",
+            // courseDescription: req.body.courseDescription ? req.body.courseDescription : "",
+            // studentRequirements: req.body.studentRequirements ? req.body.studentRequirements : "",
+            // skillTags: req.body.skillTags ? req.body.skillTags : [],
+            // courseThumbnail: req.body.courseThumbnail ? req.body.courseThumbnail : "",
+            // introVideo: req.body.introVideo ? req.body.introVideo : "",
+            // courseLanguage: req.body.courseLanguage ? req.body.courseLanguage : "",
+            // coursePrice: req.body.coursePrice ? req.body.coursePrice : "",
+            // approxTimeToComplete: req.body.approxTimeToComplete ? req.body.approxTimeToComplete : "",
+            // courseInstructors: req.body.courseInstructors ? req.body.courseInstructors : [],
+            // lessons: req.body.lessons ? req.body.lessons : [],
+            // courseStatus: status,
+            ...newObj,
             courseStatus: status,
             owner: req.userId,
         };

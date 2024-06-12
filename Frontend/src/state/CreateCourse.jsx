@@ -174,7 +174,7 @@ export const CreateCourseState = (props) => {
 
     const updateCourse = async (status) => {
         //console.log(courseState);
-        console.log("update course called");
+        console.log("update course called", status, courseState);
         try {
             const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/course/update/${courseState._id}/${status}`, {
                 method: "PUT",
@@ -188,13 +188,14 @@ export const CreateCourseState = (props) => {
             });
 
             const data = await response.json();
+            console.log("done", data);
             if (data.success) {
                 ///setCourseState(data.courseInfo);
                 if (status === "published" && uploadStatus == "publishing") setUploadStatus("published");
                 if (status === "draft" && updating == "updating") setUpdating("updated");
                 setErrors({});
                 getDraftCourse();
-                setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
+                //setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
             } else {
                 if (status === "published" && uploadStatus == "publishing") setUploadStatus("unpublished");
                 if (status === "draft" && updating == "updating") setUpdating("failed");

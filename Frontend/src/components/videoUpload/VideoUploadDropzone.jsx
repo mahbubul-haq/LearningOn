@@ -52,6 +52,7 @@ const VideoUploadDropzone = ({
                         alignItems: "center",
                         width: "100%",
                         height: "100%",
+                        aspectRatio: "16/9",
                         cursor: "pointer",
                         padding: "2rem",
                         gap: "1.5rem",
