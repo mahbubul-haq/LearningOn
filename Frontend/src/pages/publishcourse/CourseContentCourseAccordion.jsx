@@ -86,10 +86,10 @@ const CourseContentCourseAccordion = ({
                             padding: "0.3rem 1rem",
                         },
                     }}
-                    onClick={(event) => {
+                    onClick={async (event) => {
                         event.stopPropagation();
 
-                        deleteLesson(index);
+                        await deleteLesson(index);
                     }}
                 >
                     Delete

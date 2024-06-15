@@ -110,10 +110,13 @@ export const GlobalState = (props) => {
         }
     };
 
-    const deleteFile = async (fileName) => {
+    const deleteFile = async (fileName, isVideo) => {
         try {
+
+            let modifiedFileName = fileName.replace(/\//g, "@");
+
             const response = await fetch(
-                `${import.meta.env.VITE_SERVER_URL}/filedelete/${fileName}`,
+                `${import.meta.env.VITE_SERVER_URL}/filedelete/${modifiedFileName}/${isVideo ? "true" : "false"}`,
                 {
                     method: "DELETE",
                     headers: {

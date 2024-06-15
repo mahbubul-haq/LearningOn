@@ -58,7 +58,7 @@ app.use("/notification", notificationRoutes);
 app.use("/cloudinary", cloudinaryRoutes);
 
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);
-app.delete("/filedelete/:fileName", deleteFile);
+app.delete("/filedelete/:fileName/:isVideo", deleteFile);
 
 app.get("/", (req, res) => {
     res.send("Hello World2");

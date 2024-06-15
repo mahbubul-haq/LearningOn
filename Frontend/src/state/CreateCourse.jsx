@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { createContext, useEffect} from "react";
+import React, { createContext} from "react";
 import { useSelector } from "react-redux";
 // import state from ".";
 import axios from "axios";
@@ -60,33 +60,33 @@ export const CreateCourseState = (props) => {
     //     setIntroVideoUrl(`https://youtu.be/${courseState.introVideo}`);
     // }, []);
 
-    useEffect(() => {
-        setCourseState({
-            ...courseState,
-            introVideo: getYouTubeId(introVideoUrl),
-        });
-    }, [introVideoUrl]);
+    // useEffect(() => {
+    //     setCourseState({
+    //         ...courseState,
+    //         introVideo: getYouTubeId(introVideoUrl),
+    //     });
+    // }, [introVideoUrl]);
 
-    const getYouTubeId = (url) => {
-        if (url) {
+    // const getYouTubeId = (url) => {
+    //     if (url) {
 
-            let ampersandPosition = url.indexOf("&");
-            if (ampersandPosition != -1) {
-                url = url.substring(0, ampersandPosition);
-            }
+    //         let ampersandPosition = url.indexOf("&");
+    //         if (ampersandPosition != -1) {
+    //             url = url.substring(0, ampersandPosition);
+    //         }
 
-            if (url.includes("v=")) {
-                let id = url.split("v=")[1];
-                return id;
-            }
-            else {
-                let id = url.split("/");
-                //console.log(id[id.length - 1]);
-                return id[id.length - 1];
-            }
-        }
-        return "";
-    };
+    //         if (url.includes("v=")) {
+    //             let id = url.split("v=")[1];
+    //             return id;
+    //         }
+    //         else {
+    //             let id = url.split("/");
+    //             //console.log(id[id.length - 1]);
+    //             return id[id.length - 1];
+    //         }
+    //     }
+    //     return "";
+    // };
 
 
     const isCourseValid = () => {

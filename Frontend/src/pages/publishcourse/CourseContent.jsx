@@ -16,13 +16,15 @@ const CourseContent = () => {
     const [expanded, setExpanded] = React.useState("");
     const [subExpanded, setSubExpanded] = React.useState(""); // [panelIndex, subPanelIndex
     const [videoLinks, setVideoLinks] = React.useState([]); // [panelIndex, subPanelIndex
+    const [deleteLessonStatus, setDeleteLessonStatus] = React.useState("");
 
-    const deleteLesson = (index) => {
+    const deleteLesson = async (index) => {
         setExpanded("");
+        setDeleteLessonStatus("deleting");
         for (const subLesson of courseState.lessons[index].subLessons) {
             const videoLink = subLesson.videoLink;
             if (videoLink) {
-                deleteFile(videoLink);
+                await deleteFile(videoLink, true);
             }
         }
 
@@ -34,14 +36,18 @@ const CourseContent = () => {
                 }),
             ],
         });
+
+        setDeleteLessonStatus("deleted");
+        
     };
 
-    const deleteSubLesson = (index, subIndex) => {
+    const deleteSubLesson = async (index, subIndex) => {
         setSubExpanded("");
+        setDeleteLessonStatus("deleting");
         const videoLink =
             courseState.lessons[index].subLessons[subIndex].videoLink;
         if (videoLink) {
-            deleteFile(videoLink);
+            await deleteFile(videoLink, true);
         }
 
         setCourseState({
@@ -64,6 +70,8 @@ const CourseContent = () => {
                 }),
             ],
         });
+
+        setDeleteLessonStatus("deleted");
     };
 
     const handleExpand = (event, index, subIndex) => {
@@ -143,13 +151,21 @@ const CourseContent = () => {
         }
         setVideoLinks(links);
     }, []);
-    // useEffect calls when videoLink is updated
+    //useEffect calls when videoLink is updated
     useEffect(() => {
-        if (videoLinks.length === 0) return;
-        updateCourse("draft");
-        // console.log("videoLink updated");
-        // console.log(videoLinks);
-    }, [videoLinks]);
+        if (deleteLessonStatus === "")  return;
+        // deleteLessonStatus will at least be "deleting" in case of any file deletion
+        // because file deletion is async and takes time -> so before setState is called, it will be "deleting"
+        // in case of no file deletion, it is not mandatory to call updateCourse
+        
+        console.log(deleteLessonStatus, "updateCourse.lessons");
+        const callUpdate = async () => {
+            await updateCourse("draft");
+        };
+        callUpdate();
+       
+        setDeleteLessonStatus("");
+    }, [courseState.lessons]);
 
     useEffect(() => {
         let element = document.querySelector(".right-panel-course-content");

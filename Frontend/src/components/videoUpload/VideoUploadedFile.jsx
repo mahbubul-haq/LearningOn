@@ -1,13 +1,12 @@
 import Box from "@mui/material/Box";
 import { StyledButton } from "../StyledButton";
 import {cloudinaryCld} from "../../configs/cloudinary.config";
-import { AdvancedImage, lazyload } from "@cloudinary/react";
+import { AdvancedImage, lazyload, AdvancedVideo } from "@cloudinary/react";
 
 const VideoUploadedFile = ({
     fileName,
     isImage,
     deleteVideo,
-    maxHeight,
     deleting,
     setDeleting,
 }) => {
@@ -54,18 +53,31 @@ const VideoUploadedFile = ({
                     //     alt="preview"
                     // />
                 ) : (
-                    <video
-                        src={`${import.meta.env.VITE_SERVER_URL
-                            }/images/${fileName}`}
-                        style={{
-                            width: "100%",
-                            height: "auto",
-                            maxHeight: maxHeight,
-                            objectFit: "contain",
-                            aspectRatio: "16/9",
-                        }}
-                        controls
-                    />
+                    // <video
+                    //     src={`${import.meta.env.VITE_SERVER_URL
+                    //         }/images/${fileName}`}
+                    //     style={{
+                    //         width: "100%",
+                    //         height: "auto",
+                    //         maxHeight: maxHeight,
+                    //         objectFit: "contain",
+                    //         aspectRatio: "16/9",
+                    //     }}
+                    //     controls
+                    // />
+                    <AdvancedVideo
+                    plugins={[lazyload()]}
+                    cldVid={cloudinaryCld.video(fileName)}
+                    style={{
+                        width: "100%",
+                        height: "auto",
+                        
+                        objectFit: "contain",
+                        aspectRatio: "16/9",
+                        opacity: deleting ? 0.3 : 1,
+                    }}
+                    controls
+                />
                 )}
             </Box>
             <Box

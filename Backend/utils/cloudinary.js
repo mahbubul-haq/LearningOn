@@ -8,11 +8,13 @@ const cloudinaryConfig = () => {
     });
 };
 
-const uploadImage = async (file) => {
+const uploadImage = async (file, isVideo) => {
+    console.log("uploadImage", file, isVideo);
     try {
         const uploadResponse = await cloudinary.uploader.upload(file, {
             upload_preset: "learningon",
             folder: "learningon",
+            resource_type: isVideo ? "video" : "image",
         });
         return {
             success: true,
@@ -26,17 +28,21 @@ const uploadImage = async (file) => {
     }
 };
 
-const deleteImage = async (id) => {
+const deleteImage = async (id, resource_type) => {
     try {
-        await cloudinary.uploader.destroy(id);
+        const deleteRes = await cloudinary.uploader.destroy(id, {
+            resource_type: resource_type,
+        });
         //console.log("Image deleted successfully");
         return {
             success: true,
+            deleteRes: deleteRes,
         };
     } catch (err) {
         //console.error(err);
         return {
             success: false,
+            errors: err,
         };
     }
 };

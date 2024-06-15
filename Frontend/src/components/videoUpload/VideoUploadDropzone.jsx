@@ -10,7 +10,9 @@ const VideoUploadDropzone = ({
     uploadVideo,
     isImage,
     setOpenSnackbar,
-    uploadText
+    uploadText,
+    setSnackbarMessage,
+    setSnackbarSeverity,
 }) => {
     return (
         <Dropzone
@@ -33,7 +35,19 @@ const VideoUploadDropzone = ({
                     )
                 ) {
                     setOpenSnackbar(true);
-                } else {
+                    setSnackbarMessage("Invalid file type");
+                    setSnackbarSeverity("error");
+                } else if (isImage && acceptedFiles[0].size > 1000000) {
+                    setOpenSnackbar(true);
+                    setSnackbarMessage("File size must be less than 1MB");
+                    setSnackbarSeverity("error");
+                }
+                else if (!isImage && acceptedFiles[0].size > 5000000) {
+                    setOpenSnackbar(true);
+                    setSnackbarMessage("File size must be less than 5MB");
+                    setSnackbarSeverity("error");
+                }
+                else {
                     setPreview(URL.createObjectURL(acceptedFiles[0]));
 
                     uploadVideo(acceptedFiles[0]);

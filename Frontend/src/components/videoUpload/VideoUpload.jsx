@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
@@ -19,6 +19,8 @@ const VideoUpload = ({
   const [preview, setPreview] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
   const [waitingFile, setWaitingFile] = useState(fileName);
   const token = useSelector((state) => state.token);
   const initialRender = useRef(true);
@@ -27,24 +29,29 @@ const VideoUpload = ({
   useEffect(() => {
     if (!updateCallBack) return;
     if (initialRender.current) {
-        initialRender.current = false;
-        return;
+      initialRender.current = false;
+      return;
     }
 
     async function updateResource() {
-        await updateCallBack();
+      await updateCallBack();
 
-        setWaitingFile(fileName);
+      setWaitingFile(fileName);
 
-        if (fileName.length > 0) {
-            setPreview(null);
-            setUploadProgress(100);
-        }
-        else {
-            setUploadProgress(0);
-            setPreview(null);
-            setDeleting(false);
-        }
+      if (fileName.length > 0) {
+        setPreview(null);
+        setUploadProgress(100);
+        setOpenSnackbar(true);
+        setSnackbarMessage("File uploaded successfully!");
+        setSnackbarSeverity("success");
+      } else {
+        setUploadProgress(0);
+        setPreview(null);
+        setDeleting(false);
+        setOpenSnackbar(true);
+        setSnackbarMessage("File Deleted!");
+        setSnackbarSeverity("error");
+      }
     }
     updateResource();
   }, [fileName]);
@@ -53,6 +60,7 @@ const VideoUpload = ({
     const formData = new FormData();
 
     formData.append("picture", fileToUpload);
+    formData.append("isVideo", isImage ? "false" : "true");
 
     const options = {
       onUploadProgress: (progressEvent) => {
@@ -83,27 +91,39 @@ const VideoUpload = ({
       if (res.data.success) {
         setFileName(res.data.fileName);
 
-       
         //   setUploadProgress(100);
         //   setWaitingFile(res.data.fileName);
         //   setPreview(null);
-        
+      } else {
+        if (fileName === "") {
+          setOpenSnackbar(true);
+          setSnackbarMessage("File upload failed!");
+          setSnackbarSeverity("error");
+          setPreview(null);
+        }
+        setFileName("");
       }
     } catch (err) {
       console.log(err);
-    //   setUploadProgress(0);
+      //   setUploadProgress(0);
+      if (fileName === "") {
+        setOpenSnackbar(true);
+        setSnackbarMessage("File upload failed!");
+        setSnackbarSeverity("error");
+        setPreview(null);
+      }
       setFileName("");
-    //   setWaitingFile("");
-    //   setPreview(null);
+      //   setWaitingFile("");
+      //   setPreview(null);
     }
   };
 
   const deleteVideo = async (fileName) => {
     try {
-    let modifiedFileName = fileName.replace(/\//g, "@");
-    console.log(modifiedFileName);
+      let modifiedFileName = fileName.replace(/\//g, "@");
+      console.log(modifiedFileName);
       const res = await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/filedelete/${modifiedFileName}`,
+        `${import.meta.env.VITE_SERVER_URL}/filedelete/${modifiedFileName}/${isImage ? "false" : "true"}`,
         {
           headers: {
             "auth-token": token,
@@ -113,19 +133,17 @@ const VideoUpload = ({
 
       //.log(res.data);
       if (res.data.success) {
-        console.log("deleted", res.data);
+       // console.log("deleted", res.data);
         setFileName("");
-       
-      }
-      else {
-        setFileName("");// 
+      } else {
+        setFileName(""); //
       }
     } catch (err) {
       console.log(err);
-    //   setUploadProgress(0);
+      //   setUploadProgress(0);
       setFileName("");
 
-    //   setPreview(null);
+      //   setPreview(null);
     }
   };
 
@@ -136,22 +154,22 @@ const VideoUpload = ({
         autoHideDuration={4000}
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{
-          vertical: "bottom",
+          vertical: "top",
           horizontal: "right",
         }}
         sx={{
-          zIndex: 1000,
+          zIndex: 10000,
         }}
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
-          severity="error"
+          severity={snackbarSeverity}
           sx={{
             width: "100%",
 
             zIndex: 1000,
-            backgroundColor: (theme) =>
-              theme.palette.background.buttonBgLightPink,
+            backgroundColor: snackbarSeverity == "error" ? (theme) =>
+              theme.palette.background.buttonBgLightPink : (theme) => theme.palette.background.bottom,
           }}
         >
           <Typography
@@ -159,13 +177,13 @@ const VideoUpload = ({
               fontWeight: "600",
             }}
           >
-            File type not supported!
+            {snackbarMessage}
           </Typography>
         </Alert>
       </Snackbar>
       {waitingFile && waitingFile.length > 0 ? (
         <VideoUploadedFile
-          fileName={waitingFile}
+          fileName={isImage ? waitingFile : fileName}
           isImage={isImage}
           deleteVideo={deleteVideo}
           maxHeight={maxHeight}
@@ -181,6 +199,8 @@ const VideoUpload = ({
           isImage={isImage}
           setOpenSnackbar={setOpenSnackbar}
           uploadText={uploadText}
+          setSnackbarMessage={setSnackbarMessage}
+          setSnackbarSeverity={setSnackbarSeverity}
         />
       )}
     </>

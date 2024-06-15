@@ -24,18 +24,18 @@ const CourseMedia = () => {
   //     console.log(courseState);
   // }, [courseState]);
 
-//   useEffect(() => {
-//     console.log("courseState here", courseState);
-//     if (
-//       editMode == "edit" &&
-//       courseState.courseThumbnail != "" &&
-//       courseState.introVideo != ""
-//     ) {
-//       updateCourse("published");
-//     } else if (editMode != "edit") {
-//       updateCourse("draft");
-//     }
-//   }, [courseState.courseThumbnail, courseState.introVideo]);
+  //   useEffect(() => {
+  //     console.log("courseState here", courseState);
+  //     if (
+  //       editMode == "edit" &&
+  //       courseState.courseThumbnail != "" &&
+  //       courseState.introVideo != ""
+  //     ) {
+  //       updateCourse("published");
+  //     } else if (editMode != "edit") {
+  //       updateCourse("draft");
+  //     }
+  //   }, [courseState.courseThumbnail, courseState.introVideo]);
 
   useEffect(() => {
     let element = document.querySelector(".right-panel-course-media");
@@ -115,103 +115,26 @@ const CourseMedia = () => {
                 color: (theme) => theme.palette.grey.grey600,
               }}
             >
-              Course Intro Video (Youtube Link)
+              Course Intro Video
             </Typography>
           </InputLabel>
         </Box>
 
-        <Box
-          sx={{
-            marginLeft: isMobileScreens ? "0rem" : "2rem",
-            mb: "1rem",
-            color: (theme) => theme.palette.grey.grey400,
-          }}
-        >
-          <Typography
-            sx={{
-              color: (theme) => theme.palette.grey.grey600,
-              my: "1rem",
-            }}
-          >
-            Upload your course intro video on Youtube and paste video url here.
-            Keep the video unlisted.
-          </Typography>
 
-          <details>
-            <summary style={{ color: (theme) => theme.palette.grey.grey600 }}>
-              Click to see URL formats
-            </summary>
-            <Typography
-              variant="body1"
-              sx={{
-                fontWeight: "400",
-                color: (theme) => theme.palette.grey.grey400,
-                ml: "1rem",
-              }}
-            >
-              Any of the following url formats are accepted:
-            </Typography>
-            <ul
-              style={{
-                color: (theme) => theme.palette.grey.grey400,
-              }}
-            >
-              <li>https://www.youtube.com/watch?v=randomvideoID</li>
-              <li>https://youtu.be/randomvideoID</li>
-              <li>https://www.youtube.com/embed/randomvideoID</li>
-              <li>https://www.youtube.com/watch?v=randomvideoID&query=value</li>
-              <li>https://m.youtube.com/watch?v=randomvideoID</li>
-            </ul>
-          </details>
-        </Box>
-
-        <StyledTextField1
-          placeholder="Paste Youtube video link here"
-          id="youtube-link"
-          inputProps={{
-            maxLength: 200,
+        <VideoUpload
+          updateCallBack={async () => {
+            await updateCourse("draft");
           }}
-          // change font size of input
-          onChange={(event) => {
-            setIntroVideoUrl(event.target.value);
+          setFileName={(fileName) => {
+            setCourseState({
+              ...courseState,
+              introVideo: fileName,
+            });
           }}
-          value={introVideoUrl}
-          sx={{
-            p: 0,
-            "& .MuiInputBase-input": {
-              fontSize: "0.9rem",
-              letterSpacing: "0.01rem",
-              lineHeight: "1.5rem",
-              fontWeight: "400",
-
-              color: (theme) => theme.palette.grey.grey600,
-            },
-            width: "100%",
-          }}
+          fileName={courseState.introVideo}
+          isImage={false}
+          uploadText="Upload Intro Video"
         />
-
-        <iframe
-          width="100%"
-          src={"https://www.youtube.com/embed/" + courseState.introVideo}
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-          style={{
-            marginTop: "1rem",
-            aspectRatio: "16/9",
-          }}
-        />
-
-        {/* <VideoUpload
-                    setFileName={(fileName) => {
-                        setCourseState({
-                            ...courseState,
-                            introVideo: fileName,
-                        });
-                    }}
-                    fileName={courseState.introVideo}
-                    isImage={false}
-                    uploadText="Upload Intro Video"
-                /> */}
       </Box>
     </Box>
   );
