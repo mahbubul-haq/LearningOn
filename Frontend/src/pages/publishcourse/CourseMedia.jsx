@@ -5,37 +5,15 @@ import { useContext } from "react";
 import Typography from "@mui/material/Typography";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import VideoUpload from "../../components/videoUpload/VideoUpload";
-import StyledTextField1 from "../../components/StyledTextField1";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { theme } from "@cloudinary/url-gen/actions/effect";
 
 const CourseMedia = () => {
-  const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const {
     courseState,
     setCourseState,
-    updateCourse,
-    editMode,
-    introVideoUrl,
-    setIntroVideoUrl,
+    updateCallback,
   } = useContext(CreateCourseContext);
 
-  // useEffect(() => {
-  //     console.log(courseState);
-  // }, [courseState]);
-
-  //   useEffect(() => {
-  //     console.log("courseState here", courseState);
-  //     if (
-  //       editMode == "edit" &&
-  //       courseState.courseThumbnail != "" &&
-  //       courseState.introVideo != ""
-  //     ) {
-  //       updateCourse("published");
-  //     } else if (editMode != "edit") {
-  //       updateCourse("draft");
-  //     }
-  //   }, [courseState.courseThumbnail, courseState.introVideo]);
+  
 
   useEffect(() => {
     let element = document.querySelector(".right-panel-course-media");
@@ -82,9 +60,7 @@ const CourseMedia = () => {
         </Box>
 
         <VideoUpload
-          updateCallBack={async () => {
-            await updateCourse("draft");
-          }}
+          updateCallBack={updateCallback}
           setFileName={(fileName) => {
             setCourseState({
               ...courseState,
@@ -120,11 +96,8 @@ const CourseMedia = () => {
           </InputLabel>
         </Box>
 
-
         <VideoUpload
-          updateCallBack={async () => {
-            await updateCourse("draft");
-          }}
+          updateCallBack={updateCallback}
           setFileName={(fileName) => {
             setCourseState({
               ...courseState,

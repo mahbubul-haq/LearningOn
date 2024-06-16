@@ -22,7 +22,9 @@ const CourseContentSublesson = ({
   videoLinks,
 }) => {
   const theme = useTheme();
-  const { updateCourse } = useContext(CreateCourseContext);
+  const {updateCallback } =
+    useContext(CreateCourseContext);
+
 
   return (
     <>
@@ -156,9 +158,7 @@ const CourseContentSublesson = ({
             <VideoUpload
               id="sublesson-video"
               name="videoLink"
-              updateCallBack={async () => {
-                await updateCourse("draft");
-              }}
+              updateCallBack={updateCallback}
               fileName={subLesson.videoLink}
               setFileName={(fileName) => {
                 const e = {

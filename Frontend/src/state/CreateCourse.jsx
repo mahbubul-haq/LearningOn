@@ -47,8 +47,9 @@ export const CreateCourseState = (props) => {
     const [uploadStatus, setUploadStatus] = React.useState("");
     const [errors, setErrors] = React.useState({});
     const [updating, setUpdating] = React.useState("");
-    const [editMode, setEditMode] = React.useState(false);
+    const [editMode, setEditMode] = React.useState("");
     const [courseId, setCourseId] = React.useState("");
+    const [newDraft, setNewDraft] = React.useState(false);
 
     // useEffect(() => {
     //     console.log(isCourseValid());
@@ -116,6 +117,23 @@ export const CreateCourseState = (props) => {
         return true;
     };
 
+    const updateCallback = async () => {
+        if (newDraft) {
+          setTimeout(() => {
+            setNewDraft(false);
+          }, 2000);
+          
+          return { success: false };
+        } else {
+          if (editMode == "edit") {
+            await updateCourse("unpublished");
+          } else {
+            await updateCourse("draft");
+          }
+          return { success: true };
+        }
+      };
+
     const getDraftCourse = async () => {
         if (isAnyError()) return;
 
@@ -133,7 +151,7 @@ export const CreateCourseState = (props) => {
 
         if (data.success) {
             setCourseState(data.courseInfo);
-            setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
+            
         } else {
             const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/course/new`, {
                 method: "POST",
@@ -149,7 +167,6 @@ export const CreateCourseState = (props) => {
 
             if (data.success) {
                 setCourseState(data.courseInfo);
-                setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
             }
         }
     };
@@ -194,7 +211,14 @@ export const CreateCourseState = (props) => {
                 if (status === "published" && uploadStatus == "publishing") setUploadStatus("published");
                 if (status === "draft" && updating == "updating") setUpdating("updated");
                 setErrors({});
-                getDraftCourse();
+                if (status === "published") {
+                    setNewDraft(true);
+                    getDraftCourse();
+                }
+                setCourseState({
+                    ...courseState,
+                    courseStatus: status,
+                });
                 //setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
             } else {
                 if (status === "published" && uploadStatus == "publishing") setUploadStatus("unpublished");
@@ -320,6 +344,9 @@ export const CreateCourseState = (props) => {
                 getCoursePlainById,
                 introVideoUrl,
                 setIntroVideoUrl,
+                setNewDraft,
+                newDraft,
+                updateCallback,
             }}
         >
             {props.children}

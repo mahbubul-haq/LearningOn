@@ -22,6 +22,7 @@ const PublishCourse = () => {
     // const [courseId, setCourseId] = React.useState(useParams().courseId);
     const edit = useParams().edit;
     const id = useParams().courseId;
+   //console.log("edit and id", edit, id);
 
     const {
         courseState,
@@ -34,6 +35,7 @@ const PublishCourse = () => {
         setCourseId,
         getCoursePlainById,
         inputSection,
+        editMode,
     } = useContext(CreateCourseContext);
     const { getUsers, getCategories, getUser } = useContext(GlobalContext);
     const navigate = useNavigate();
@@ -51,10 +53,14 @@ const PublishCourse = () => {
         if (edit == "edit" && id) {
             setCourseId(id);
             setEditMode(edit);
+        }else {
+            setEditMode("");
+            setCourseId("");
         }
     }, []);
 
     useEffect(() => {
+        console.log("publish course mounted");
         if (!user) {
             navigate("/");
         }
@@ -89,6 +95,8 @@ const PublishCourse = () => {
         document.querySelector(".publish-course-container")?.scrollTo(0, 0);
     }, [inputSection]);
 
+    
+
     return (
         <>
             <PublishStatusDialog
@@ -115,6 +123,7 @@ const PublishCourse = () => {
                     handleClose={handleClose}
                     setUploadStatus={setUploadStatus}
                     isCourseValid={isCourseValid}
+                    editMode={editMode}
                 />
                 <Box
                     className="publish-course-main"

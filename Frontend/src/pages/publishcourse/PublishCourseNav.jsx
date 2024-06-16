@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { StyledButton } from "../../components/StyledButton";
 import LeftPanel from "./LeftPanel";
+import { useContext } from "react";
+import { CreateCourseContext } from "../../state/CreateCourse";
 
 const PublishCourseNav = ({
     anchorEl,
@@ -17,10 +19,16 @@ const PublishCourseNav = ({
     handleClose,
     setUploadStatus,
     isCourseValid,
+    editMode
 }) => {
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
+    const { courseState} = useContext(CreateCourseContext);
+
+    // useEffect(() => {
+    //     console.log("courseState publish nav", courseState);
+    // }, [courseState]);
 
     return (
         <Box
@@ -62,7 +70,10 @@ const PublishCourseNav = ({
                             }}
                             onClick={() => {
                                 // navigate(-1);
-                                navigate("/");
+                                if (editMode) {
+                                    navigate(`/dashboard/${courseState._id}`);
+                                }
+                                else navigate("/");
                             }}
                         >
                             Back
@@ -141,7 +152,8 @@ const PublishCourseNav = ({
                                 color: (theme) => theme.palette.grey.grey400,
                             }}
                         >
-                            Create new course
+                            {editMode ? "Edit Course Info" : "Create new course"}
+                            
                         </Typography>
                     </Box>
                 )}

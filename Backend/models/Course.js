@@ -106,7 +106,7 @@ const CourseSchema = new mongoose.Schema(
         },
         courseStatus: {
             type: String,
-            enum: ["draft", "published", "unpublished"],
+            enum: ["draft", "pending", "published", "unpublished"],
             default: "draft",
         },
         owner: {

@@ -130,6 +130,7 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                             "& .MuiInputBase-input": {
                                 fontSize: isMobileScreens ? "1rem" : "1.6rem",
                                 fontWeight: "600",
+                                lineHeight:  isMobileScreens ? "1.5rem" : "2rem",
                                 color: (theme) => theme.palette.grey.grey600,
                             },
                             width: "100%",

@@ -34,7 +34,10 @@ const VideoUpload = ({
     }
 
     async function updateResource() {
-      await updateCallBack();
+      console.log("updating resource from video upload", fileName);
+      const res = await updateCallBack();
+
+      if (!res.success) return;
 
       setWaitingFile(fileName);
 
