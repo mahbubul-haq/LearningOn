@@ -50,6 +50,7 @@ export const CreateCourseState = (props) => {
     const [editMode, setEditMode] = React.useState("");
     const [courseId, setCourseId] = React.useState("");
     const [newDraft, setNewDraft] = React.useState(false);
+    const [deleteCourseStatus, setDeleteCourseStatus] = React.useState("");
 
     // useEffect(() => {
     //     console.log(isCourseValid());
@@ -116,6 +117,33 @@ export const CreateCourseState = (props) => {
 
         return true;
     };
+
+    const deleteCourse = async (courseId) => {
+        setDeleteCourseStatus("deleting");
+
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_SERVER_URL}/course/delete/${courseId}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                }
+            );
+            const data = await response.json();
+            console.log("deleted", data);
+            if (data.success) {
+                setDeleteCourseStatus("deleted");
+            }
+            else {
+                setDeleteCourseStatus("failed");
+            }
+        } catch (error) {
+            setDeleteCourseStatus("failed");
+        }
+    }
 
     const updateCallback = async () => {
         if (newDraft) {
@@ -347,6 +375,9 @@ export const CreateCourseState = (props) => {
                 setNewDraft,
                 newDraft,
                 updateCallback,
+                deleteCourseStatus,
+                setDeleteCourseStatus,
+                deleteCourse
             }}
         >
             {props.children}

@@ -9,6 +9,7 @@ import CustomSlider1 from "../components/CustomSlider1";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 
+
 const CourseWidget = ({ courseInfo }) => {
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -37,7 +38,9 @@ const CourseWidget = ({ courseInfo }) => {
                     maxWidth: "100%",
                     boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset",
                  }}
-                image={`${import.meta.env.VITE_SERVER_URL}/images/${courseInfo.courseThumbnail}`}
+                image={
+                `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${courseInfo.courseThumbnail}`
+                }
                 title="green iguana"
             />
             <CardContent

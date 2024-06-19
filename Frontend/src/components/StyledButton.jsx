@@ -13,6 +13,7 @@ export const StyledButton = styled(Button)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    fontSize: "0.9rem",
     "&:hover": {
         backgroundColor: theme.palette.primary.dark,
         

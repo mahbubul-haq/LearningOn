@@ -123,6 +123,7 @@ export const themeSettings = (mode) => {
                     rating: "#F4B30A",
                     error: {
                         main: "#CD103E",
+                        main1: "#F31C1C",
                         secondary: "#EEA4B6",
                         light: "#FFB5B5",
                         light1: "#FFD7D7"

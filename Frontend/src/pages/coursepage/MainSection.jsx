@@ -10,6 +10,8 @@ import CoursePageReviews from "./CoursePageReviews";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MainSectionNav from "./MainSectionNav";
 import { HeaderTypography2 } from "../../components/StyledTypography";
+import { cloudinaryCld } from "../../configs/cloudinary.config";
+import { AdvancedVideo, lazyload } from "@cloudinary/react";
 
 const MainSection = ({ courseInfo }) => {
     const theme = useTheme();
@@ -73,17 +75,12 @@ const MainSection = ({ courseInfo }) => {
                                 // width: isNonMobileScreens ? "65%" : "100%",
                             }}
                         >
-                            <video
-                                controls
-                                src={`${
-                                    import.meta.env.VITE_SERVER_URL
-                                }/images/${courseInfo?.introVideo}`}
+                           
+                            <AdvancedVideo
+                                cldVid={cloudinaryCld.video(courseInfo?.introVideo)}
+                                plugins={[lazyload()]}
                                 style={{
-                                    // width: "100%",
-                                    maxWidth: isMobileScreens
-                                        ? "100%"
-                                        : "400px",
-                                    // minWidth: "100%",
+                                    maxWidth: isMobileScreens ? "100%" : "400px",
                                     height: "auto",
                                     marginLeft: "1rem",
                                     marginBottom: "1rem",
@@ -92,7 +89,7 @@ const MainSection = ({ courseInfo }) => {
                                 //add title and caption
                                 title={"Intro: " + courseInfo?.courseTitle}
                                 alt="Intro video"
-                                loading="lazy"
+                                controls
                             />
                             {/* convert newlines into <br> */}
                             {courseInfo?.courseDescription
