@@ -11,6 +11,7 @@ const LeftPanelMedia = ({
     courseState,
     setInputSection,
     inputSection,
+    setMobileDrawerOpen,
 }) => {
     const theme = useTheme();
 
@@ -24,7 +25,10 @@ const LeftPanelMedia = ({
                 // backgroundColor: inputSection === "basic info" ? backgroundColor : "",
                 cursor: "pointer",
             }}
-            onClick={() => setInputSection("course media")}
+            onClick={() => {
+                setInputSection("course media");
+                setMobileDrawerOpen(false);
+            }}
         >
             <Typography
                 variant="h6"

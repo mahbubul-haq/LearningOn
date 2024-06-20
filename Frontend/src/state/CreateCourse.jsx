@@ -51,7 +51,7 @@ export const CreateCourseState = (props) => {
     const [courseId, setCourseId] = React.useState("");
     const [newDraft, setNewDraft] = React.useState(false);
     const [deleteCourseStatus, setDeleteCourseStatus] = React.useState("");
-
+    const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
     // useEffect(() => {
     //     console.log(isCourseValid());
     // }, [courseState]);
@@ -377,7 +377,9 @@ export const CreateCourseState = (props) => {
                 updateCallback,
                 deleteCourseStatus,
                 setDeleteCourseStatus,
-                deleteCourse
+                deleteCourse,
+                mobileDrawerOpen,
+                setMobileDrawerOpen,
             }}
         >
             {props.children}

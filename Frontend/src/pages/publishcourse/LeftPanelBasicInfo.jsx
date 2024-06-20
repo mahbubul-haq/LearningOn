@@ -10,6 +10,7 @@ const LeftPanelBasicInfo = ({
     basicInfo,
     courseState,
     setInputSection,
+    setMobileDrawerOpen,
     // inputSection,
 }) => {
     // const theme = useTheme();
@@ -23,7 +24,10 @@ const LeftPanelBasicInfo = ({
 
                 cursor: "pointer",
             }}
-            onClick={() => setInputSection("basic info")}
+            onClick={() => {
+                setInputSection("basic info")
+                setMobileDrawerOpen(false)
+            }}
         >
             <Typography
                 variant="h6"

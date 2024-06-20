@@ -300,6 +300,28 @@ const deleteCourse = async (req, res) => {
       });
     }
 
+    let instructors = course.courseInstructors;
+
+    for (let i = 0; i < instructors.length; i++) {
+      let instructor = await People.findById(instructors[i]);
+      if (instructor) {
+        let index = instructor.courses.indexOf(courseId);
+        if (index > -1) {
+          instructor.courses.splice(index, 1);
+          await instructor.save();
+        }
+      }
+    }
+
+    let owner = await People.findById(req.userId);
+    if (owner) {
+      let index = owner.courses.indexOf(courseId);
+      if (index > -1) {
+        owner.courses.splice(index, 1);
+        await owner.save();
+      }
+    }
+
     await Course.findByIdAndDelete(courseId);
 
     res.status(200).json({
@@ -313,6 +335,8 @@ const deleteCourse = async (req, res) => {
     });
   }
 };
+
+
 
 export {
   newCourse,

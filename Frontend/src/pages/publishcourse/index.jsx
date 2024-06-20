@@ -15,12 +15,13 @@ import PublishStatusDialog from "./PublishStatusDialog";
 import { StyledButton } from "../../components/StyledButton";
 import useTheme from "@mui/material/styles/useTheme";
 import DeleteCourseDialog from "./DeleteCourseDialog";
+import RightButtons from "./RightButtons";
 
 const PublishCourse = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   //const [dialogOpen, setDialogOpen] = React.useState(0);
   const user = useSelector((state) => state.user);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  
   const theme = useTheme();
   const edit = useParams().edit;
   const id = useParams().courseId;
@@ -39,17 +40,18 @@ const PublishCourse = () => {
     inputSection,
     editMode,
     setDeleteCourseStatus,
+    mobileDrawerOpen,
+    setMobileDrawerOpen,
   } = useContext(CreateCourseContext);
   const { getUsers, getCategories, getUser } = useContext(GlobalContext);
   const navigate = useNavigate();
 
-  const handleClick = (event) => {
-    if (anchorEl) setAnchorEl(null);
-    else setAnchorEl(event.currentTarget);
+  const handleClick = () => {
+    mobileDrawerOpen ? setMobileDrawerOpen(false) : setMobileDrawerOpen(true);
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setMobileDrawerOpen(false);
   };
 
   useEffect(() => {
@@ -125,7 +127,7 @@ const PublishCourse = () => {
         }}
       >
         <PublishCourseNav
-          anchorEl={anchorEl}
+          mobileDrawerOpen={mobileDrawerOpen}
           handleClick={handleClick}
           handleClose={handleClose}
           setUploadStatus={setUploadStatus}
@@ -138,8 +140,8 @@ const PublishCourse = () => {
             //height: "100%",
             // overflow: "auto",
             width: "100%",
-            position: "sticky",
-            top: "4rem",
+            //position: "sticky",
+            // top: `calc(4rem + 1px)`,
             // scrollBehavior: "smooth",
             display: "flex",
             mx: "auto",
@@ -151,12 +153,12 @@ const PublishCourse = () => {
           <Box
             sx={{
               position: "sticky",
-              height: `calc(100vh - 4rem)`,
+              height: `calc(100vh - 4rem - 1px)`,
 
               // zIndex: "1000",
               // border: "2px solid red",
               overflowY: "auto",
-              top: "4rem",
+              top: `calc(4rem + 1px)`,
               width: "25%",
               display: isNonMobileScreens ? "grid" : "none",
               //gridTemplateRows: "100",
@@ -205,87 +207,19 @@ const PublishCourse = () => {
               width: "20%",
               //   display: isNonMobileScreens ? "block" : "none",
               position: "sticky",
-              top: "4rem",
+              top: `calc(4rem + 1px)`,
               pl: "2rem",
               pt: "2rem",
               height: "100%",
-              display: isNonMobileScreens ? "flex" : "none",
-              flexDirection: "column",
-              gap: "0.7rem",
+              display: isNonMobileScreens ? "block" : "none",
             }}
           >
-            <Typography
-              sx={{
-                color: "text.secondary",
-
-                mb: "1rem",
-              }}
-            >
-              Please provide all the necessary information to publish your
-              course.
-            </Typography>
-            <StyledButton
-              disabled={!isCourseValid()}
-              onClick={() => {
-                setUploadStatus("publishing");
-                //updateCourse("published");
-              }}
-              sx={{
-                // cursor: isCourseValid() ? "pointer" : "not-allowed",
-                // pointerEvents: isCourseValid() ? "auto" : "none",
-
-                "&&": {
-                  padding: "0.2rem 1rem",
-                  background: isCourseValid()
-                    ? (theme) => theme.palette.primary.main
-                    : (theme) => theme.palette.grey.grey100,
-                  height: "40px",
-                },
-              }}
-            >
-              <Typography
-                sx={{
-                  fontWeight: "600",
-                }}
-              >
-                Publish
-              </Typography>
-            </StyledButton>
-
-            <StyledButton
-              //   disabled={!isCourseValid()}
-              onClick={() => {
-                setDeleteCourseStatus("initiated");
-                //updateCourse("published");
-              }}
-              sx={{
-                "&&": {
-                  outline: `1px solid ${theme.palette.error.secondary}`,
-                  padding: "0.2rem 1rem",
-                  //   background:  (theme) => theme.palette.error.light1,
-                  background: "transparent",
-                  "&:hover": {
-                    background: (theme) => theme.palette.error.light,
-                    outline: `1px solid ${theme.palette.error.secondary}`,
-                  },
-                  "&:active": {
-                    outline: `1px solid ${theme.palette.error.secondary}`,
-                  },
-                  "&:focus": {
-                    outline: `1px solid ${theme.palette.error.secondary}`,
-                  },
-                  height: "40px",
-                },
-              }}
-            >
-              <Typography
-                sx={{
-                  fontWeight: "600",
-                }}
-              >
-                Delete
-              </Typography>
-            </StyledButton>
+            <RightButtons 
+              isCourseValid={isCourseValid}
+              setUploadStatus={setUploadStatus}
+              setDeleteCourseStatus={setDeleteCourseStatus}
+            />
+            
           </Box>
         </Box>
       </Box>

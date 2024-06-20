@@ -28,7 +28,7 @@ const moreInfo = [
 ];
 
 const LeftPanel = () => {
-    const { courseState, inputSection, setInputSection } =
+    const { courseState, inputSection, setInputSection, setMobileDrawerOpen } =
         useContext(CreateCourseContext);
 
 
@@ -82,6 +82,7 @@ const LeftPanel = () => {
                     courseState={courseState}
                     setInputSection={setInputSection}
                     inputSection={inputSection}
+                    setMobileDrawerOpen={setMobileDrawerOpen}
                 />
             </Box>
             <Box sx={{
@@ -115,6 +116,7 @@ const LeftPanel = () => {
                     courseState={courseState}
                     setInputSection={setInputSection}
                     inputSection={inputSection}
+                    setMobileDrawerOpen={setMobileDrawerOpen}
                 />
             </Box>
 
@@ -148,6 +150,7 @@ const LeftPanel = () => {
                     courseState={courseState}
                     setInputSection={setInputSection}
                     inputSection={inputSection}
+                    setMobileDrawerOpen={setMobileDrawerOpen}
                 />
             </Box>
 
@@ -180,6 +183,7 @@ const LeftPanel = () => {
                     courseState={courseState}
                     setInputSection={setInputSection}
                     inputSection={inputSection}
+                    setMobileDrawerOpen={setMobileDrawerOpen}
                 />
             </Box>
         </Box>

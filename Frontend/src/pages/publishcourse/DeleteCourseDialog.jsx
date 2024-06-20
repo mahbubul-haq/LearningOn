@@ -18,6 +18,8 @@ const DeleteCourseDialog = ({getUser }) => {
     setDeleteCourseStatus,
     courseState,
     deleteCourse,
+    editMode,
+    setMobileDrawerOpen,
   } = useContext(CreateCourseContext);
   const theme = useTheme();
 
@@ -140,6 +142,7 @@ const DeleteCourseDialog = ({getUser }) => {
               },
             }}
             onClick={() => {
+              setMobileDrawerOpen(false);
               if (deleteCourseStatus === "initiated") {
                 deleteCourse(courseState._id);
               } 
@@ -147,8 +150,13 @@ const DeleteCourseDialog = ({getUser }) => {
                 setDeleteCourseStatus("");
               }
               else if (deleteCourseStatus === "deleted") {
-                navigate("/dashboard");
-                getUser();
+                setDeleteCourseStatus("");
+                if (editMode) {
+                  navigate("/dashboard");
+                  getUser();
+                } else {
+                  navigate("/");
+                }
               }
             }}
           >

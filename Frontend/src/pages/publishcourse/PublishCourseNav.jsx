@@ -8,23 +8,32 @@ import ListIcon from "@mui/icons-material/List";
 import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { StyledButton } from "../../components/StyledButton";
 import LeftPanel from "./LeftPanel";
 import { useContext } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
+import { IoCloseOutline } from "react-icons/io5";
+import useTheme from "@mui/material/styles/useTheme";
+import { HiOutlineMenu } from "react-icons/hi";
+import { Drawer } from "@mui/material";
+import RightButtons from "./RightButtons";
+
 
 const PublishCourseNav = ({
-  anchorEl,
+  mobileDrawerOpen,
   handleClick,
   handleClose,
-  setUploadStatus,
-  isCourseValid,
   editMode,
 }) => {
   const navigate = useNavigate();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
-  const { courseState } = useContext(CreateCourseContext);
+  const { courseState,
+    isCourseValid,
+    setUploadStatus,
+    setDeleteCourseStatus,
+    inputSection
+   } = useContext(CreateCourseContext);
+  const theme = useTheme();
 
   // useEffect(() => {
   //     console.log("courseState publish nav", courseState);
@@ -98,117 +107,79 @@ const PublishCourseNav = ({
                 navigate("/");
               }}
             />
-
-            <IconButton onClick={handleClick}>
-              <ListIcon
-                sx={{
-                  cursor: "pointer",
-                  color: (theme) => theme.palette.grey.grey400,
-                  fontSize: "2rem",
-                  "&:hover": {
-                    color: (theme) => theme.palette.grey.grey800,
-                  },
-                }}
-              />
-            </IconButton>
-            <Menu
-              id="publish-course-menu"
-              aria-labelledby="publish-course-menu"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-            >
-              <Box
-                sx={{
-                  padding: "1rem",
-                }}
-                onClick={() => {
-                  if (isMobileScreens) handleClose();
-                }}
-              >
-                <LeftPanel />
-              </Box>
-            </Menu>
           </FlexBetween>
         )}
-        {isNonMobileScreens && (
+        
           <Box>
             <Typography
               variant="h5"
               sx={{
                 fontWeight: "600",
                 color: (theme) => theme.palette.grey.grey400,
+                textTransform: "capitalize",
               }}
             >
-              {editMode ? "Edit Course Info" : "Create new course"}
+              {!isNonMobileScreens? inputSection : editMode ? "Edit Course Info" : "Create new course"}
             </Typography>
           </Box>
-        )}
-        <Box></Box>
-        {/* <FlexBetween gap="1.5rem">
-          <StyledButton
-            disabled={!isCourseValid()}
-            onClick={() => {
-              setUploadStatus("publishing");
-              //updateCourse("published");
-            }}
+        
+        <Box>
+          {!isNonMobileScreens && (
+            <IconButton sx={{
+              
+            }}onClick={handleClick}>
+              <HiOutlineMenu
+              size={25}
+                sx={{
+                  cursor: "pointer",
+                  color: "black",
+                  "&:hover": {
+                    color: (theme) => theme.palette.grey.grey800,
+                  },
+                }}
+              />
+            </IconButton>
+          
+          )}
+        </Box>
+        <Drawer
+            anchor="right"
+            open={mobileDrawerOpen}
+            onClose={() => handleClose()}
             sx={{
-              // cursor: isCourseValid() ? "pointer" : "not-allowed",
-              // pointerEvents: isCourseValid() ? "auto" : "none",
+                "& .MuiDrawer-paper": {
+                    width: "fit-content",
+                    maxWidth: "400px",
+                  padding: isMobileScreens ? "4rem 2rem 2rem 1rem" : "4rem 1rem 3rem 1rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3rem",
+                },
+            }}
 
-              "&&": {
-                padding: "0.2rem 1rem",
-                background: isCourseValid()
-                  ? (theme) => theme.palette.primary.main
-                  : (theme) => theme.palette.grey.grey100,
-                height: "36px",
-              },
-            }}
-          >
-            <Typography
-              sx={{
-                fontWeight: "600",
-              }}
+        >
+          <IconButton
+           
+                onClick={() => handleClose()}
+                sx={{
+                    position: "fixed",
+                    right: "2rem",
+                    top: "1rem",
+                    color: theme => theme.palette.grey.grey800,
+                }}
             >
-              Publish
-            </Typography>
-          </StyledButton>
-          <StyledButton
-            disabled={!isCourseValid()}
-            onClick={() => {
-              setUploadStatus("publishing");
-              //updateCourse("published");
-            }}
-            sx={{
-              // cursor: isCourseValid() ? "pointer" : "not-allowed",
-              // pointerEvents: isCourseValid() ? "auto" : "none",
+                <IoCloseOutline size={25}/>
+            </IconButton>
 
-              "&&": {
-                padding: "0.2rem 1rem",
-                background: isCourseValid()
-                  ? (theme) => theme.palette.primary.main
-                  : (theme) => theme.palette.grey.grey100,
-                height: "36px",
-              },
-            }}
-          >
-            <Typography
-              sx={{
-                fontWeight: "600",
-              }}
-            >
-              Publish
-            </Typography>
-          </StyledButton>
-        </FlexBetween> */}
+         
+           <LeftPanel />
+           
+           <RightButtons isCourseValid={isCourseValid}
+            setUploadStatus={setUploadStatus}
+            setDeleteCourseStatus={setDeleteCourseStatus}
+            />
+         
+        </Drawer>
       </Box>
     </Box>
   );
