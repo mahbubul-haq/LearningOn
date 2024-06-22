@@ -64,7 +64,7 @@ const InstructorProfile = ({ instructorId }) => {
                     >
                         <img
                             // load image from public/image folder
-                            src={profilePicture}
+                            src={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${instructor?.picturePath}`}
                             alt="instructor"
                             style={{
                                 width: isMobileScreens ? "3rem" : "4rem",

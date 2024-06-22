@@ -35,9 +35,9 @@ const CoursePage = () => {
         setOpenedItem("courses");
     }, []);
 
-    // useEffect(() => {
-    //     console.log("index", courseInfo);
-    // }, [courseInfo]);
+    useEffect(() => {
+        console.log("index", courseInfo);
+    }, [courseInfo]);
 
     useEffect(() => {
         let element = document.querySelector(".coursepage-main");

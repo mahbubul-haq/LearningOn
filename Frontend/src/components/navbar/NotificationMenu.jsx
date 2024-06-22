@@ -60,10 +60,11 @@ const NotificationMenu = ({
                             } else {
                                 //console.log("link", n.link);
 
-                                window.location.href =
-                                    import.meta.env.VITE_CLIENT_URL +
-                                    "/" +
-                                    n.link;
+                                // window.location.href =
+                                //     import.meta.env.VITE_CLIENT_URL +
+                                //     "/" +
+                                //     n.link;
+                                navigate("/" + n.link);
                             }
                         }
                         handleClose();
@@ -94,9 +95,8 @@ const NotificationMenu = ({
                         <img
                             src={
                                 n.imageLink
-                                    ? `${
-                                          import.meta.env.VITE_SERVER_URL
-                                      }/images/${n.imageLink}`
+                                    ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                                      }/image/upload/v${n.imageLink}`
                                     : "/images/dummyPerson.jpeg"
                             }
                             alt="user"

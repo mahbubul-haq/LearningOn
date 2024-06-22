@@ -9,13 +9,13 @@ const uploadFile = async (req, res) => {
   // follow up of multer upload.single("picture")
 
   // upload the image in cloudinary using uploadImage function
-  console.log(req.body);
+  //console.log(req.body);
   let isVideo = req.body.isVideo === "true";
 
   if (req.file?.filename) {
-    console.log("here", req.file);
+    //console.log("here", req.file);
     const uploadRes = await uploadImage(req.file.path, isVideo);
-    console.log('not sure what is happening here', uploadRes);
+    //console.log('not sure what is happening here', uploadRes);
     fs.unlink(
       path.join(__dirname, "../assets/images", req.file.filename),
       (err) => {
@@ -48,10 +48,10 @@ const deleteFile = async (req, res) => {
   let fileName = req.params.fileName;
   let resource_type = req.params.isVideo === "true" ? "video" : "image";
   fileName = fileName.replace(/@/g, "/");
-  console.log(resource_type, fileName)
+  //console.log(resource_type, fileName)
 
   const deleteRes = await deleteImage(fileName, resource_type);
-  console.log(deleteRes, fileName);
+  //console.log(deleteRes, fileName);
 
   if (deleteRes.success) {
     res.status(200).json({

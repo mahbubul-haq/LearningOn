@@ -119,7 +119,7 @@ const makePayment = async (req, res) => {
                         currency: "usd",
                         product_data: {
                             name: courseInfo.courseTitle,
-                            images: [`http://localhost:5000/images/${courseInfo.courseThumbnail}`],
+                            images: [`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${courseInfo.courseThumbnail}`],
                             // images: [
                             //     `${process.env.SERVER_URL}/images/${courseInfo.courseThumbnail}`,
                             // ],
@@ -276,7 +276,7 @@ const stripeWebHook = async (req, res) => {
                         const notification = new Notification({
                             userId: curUser._id,
                             message: `<b>${user.name}</b> enrolled in your course <b>${course.courseTitle} </b>`,
-                            link: `${process.env.CLIENT_URL}/dashboard/${course._id}`,
+                            link: `dashboard/${course._id}`,
                             status: "new",
                             imageLink: user.picturePath,
                         });

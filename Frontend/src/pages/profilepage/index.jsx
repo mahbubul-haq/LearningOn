@@ -19,7 +19,11 @@ const ProfilePage = () => {
     const { userById, getUserById,  setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const { setOpenedTab } = useContext(ProfilePageContext);
+    const { setOpenedTab,
+        editProfileStatus,
+        setEditProfileStatus,
+        setProfileInfoChanged,
+     } = useContext(ProfilePageContext);
     const theme = useTheme();
 
     const getQualifications = () => {
@@ -50,11 +54,17 @@ const ProfilePage = () => {
     }, [userId]);
 
     useEffect(() => {
+        if (editProfileStatus === "editing") {
+            setProfileInfoChanged(true);
+        }
         console.log(userById);
     }, [userById]);
 
     useEffect(() => {
         setOpenedItem("profile");
+        setProfileInfoChanged(false);
+        setEditProfileStatus("");
+
     }, []);
 
     return (
@@ -67,6 +77,7 @@ const ProfilePage = () => {
                 paddingBottom: "2rem",
                 scrollBehavior: "smooth",
                 overflowX: "hidden",
+                minWidth: "300px",
             }}
         >
             <Navbar />
@@ -100,7 +111,10 @@ const ProfilePage = () => {
             <Box
                 sx={{
                     width: "100%",
-                    padding: isNonMobileScreens ? "7rem 5rem 5rem 5rem" : isMobileScreens ? "0rem 1rem 0 1rem" : "5rem 2rem 5rem 2rem",
+                    maxWidth: "2000px",
+                    mx: "auto",
+                    padding: isNonMobileScreens ? "7rem 64px" : isMobileScreens ? "0rem 24px" : "5rem 24px",
+                    //padding: isNonMobileScreens ? "7rem 5rem 5rem 5rem" : isMobileScreens ? "0rem 1rem 0 1rem" : "5rem 2rem 5rem 2rem",
                     display: "flex",
                     gap: "4rem",
                 }}
