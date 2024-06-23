@@ -21,6 +21,10 @@ const CoursePage = () => {
     // }, []);
 
     useEffect(() => {
+        console.log("coursepage rendered");
+    });
+
+    useEffect(() => {
         //console.log(courseId, courses);
         if (courseId && courses && courses.length > 0) {
             const course = courses.find((c) => c._id == courseId);

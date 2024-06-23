@@ -6,7 +6,6 @@ import LeftPanelCourseContent from "./LeftPanelCourseContent";
 import LeftPanelMoreInfo from "./LeftPanelMoreInfo";
 import LeftPanelBasicInfo from "./LeftPanelBasicInfo";
 import LeftPanelMedia from "./LeftPanelMedia";
-import { FaChevronRight } from "react-icons/fa";
 
 const basicInfo = [
     ["Category", "category", 1],

@@ -4,16 +4,13 @@ import FlexBetween from "../../components/FlexBetween";
 import { StyledCheckbox } from "../../components/StyledButton";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import useTheme from "@mui/material/styles/useTheme";
 
 const LeftPanelMedia = ({
     media,
     courseState,
     setInputSection,
-    inputSection,
     setMobileDrawerOpen,
 }) => {
-    const theme = useTheme();
 
     return (
         <Box

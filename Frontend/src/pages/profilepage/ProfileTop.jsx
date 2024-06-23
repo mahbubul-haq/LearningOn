@@ -238,6 +238,7 @@ const ProfileTop = ({ userInfo }) => {
               aspectRatio: "1/1",
             }}
           >
+            {userInfo?.picturePath ? (
             <AdvancedImage
               cldImg={cloudinaryCld.image(userInfo?.picturePath)}
               style={{
@@ -247,6 +248,14 @@ const ProfileTop = ({ userInfo }) => {
                 borderRadius: "50%",
               }}
             />
+          ) : (
+            <img src="/images/dummyPerson.jpeg"  style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "50%",
+            }}/>
+          )}
             {editProfileStatus === "editing" && (
               <Box
                 title="Change Photo"

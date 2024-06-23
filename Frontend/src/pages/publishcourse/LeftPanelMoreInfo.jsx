@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import useTheme from "@mui/material/styles/useTheme";
 import { StyledCheckbox } from "../../components/StyledButton";
 import FlexBetween from "../../components/FlexBetween";
 
@@ -10,10 +9,9 @@ const LeftPanelMoreInfo = ({
     moreInfo,
     courseState,
     setInputSection,
-    inputSection,
     setMobileDrawerOpen,
 }) => {
-    const theme = useTheme();
+    
     return (
         <Box
             sx={{

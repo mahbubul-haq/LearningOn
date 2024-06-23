@@ -14,11 +14,6 @@ const InstructorProfile = ({ instructorId }) => {
     const numberOfEnrolledStudents = instructor?.courses?.reduce((acc, course) => {
         return acc + (course.enrolledStudents ? course.enrolledStudents.length : 0);
     }, 0);
-
-    const profilePicture = instructor?.picturePath
-        ? `${import.meta.env.VITE_SERVER_URL}/images/${instructor.picturePath}`
-        : "/images/dummyPerson.jpeg";
-
     // console.log("instructor", instructor);
     const navigate = useNavigate();
 
@@ -64,7 +59,7 @@ const InstructorProfile = ({ instructorId }) => {
                     >
                         <img
                             // load image from public/image folder
-                            src={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${instructor?.picturePath}`}
+                            src={instructor?.picturePath ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${instructor?.picturePath}` : "/images/dummyPerson.jpeg"}
                             alt="instructor"
                             style={{
                                 width: isMobileScreens ? "3rem" : "4rem",

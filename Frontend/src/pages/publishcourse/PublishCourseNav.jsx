@@ -4,15 +4,12 @@ import Button from "@mui/material/Button";
 import FlexBetween from "../../components/FlexBetween";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import IconButton from "@mui/material/IconButton";
-import ListIcon from "@mui/icons-material/List";
-import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import LeftPanel from "./LeftPanel";
 import { useContext } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { IoCloseOutline } from "react-icons/io5";
-import useTheme from "@mui/material/styles/useTheme";
 import { HiOutlineMenu } from "react-icons/hi";
 import { Drawer } from "@mui/material";
 import RightButtons from "./RightButtons";
@@ -33,7 +30,6 @@ const PublishCourseNav = ({
     setDeleteCourseStatus,
     inputSection
    } = useContext(CreateCourseContext);
-  const theme = useTheme();
 
   // useEffect(() => {
   //     console.log("courseState publish nav", courseState);

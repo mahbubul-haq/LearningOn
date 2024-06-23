@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import LeftPanel from "./LeftPanel";
 import RightPanel from "./RightPanel";
@@ -12,8 +11,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import PublishCourseNav from "./PublishCourseNav";
 import PublishStatusDialog from "./PublishStatusDialog";
-import { StyledButton } from "../../components/StyledButton";
-import useTheme from "@mui/material/styles/useTheme";
 import DeleteCourseDialog from "./DeleteCourseDialog";
 import RightButtons from "./RightButtons";
 
@@ -21,8 +18,6 @@ const PublishCourse = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   //const [dialogOpen, setDialogOpen] = React.useState(0);
   const user = useSelector((state) => state.user);
-  
-  const theme = useTheme();
   const edit = useParams().edit;
   const id = useParams().courseId;
   //console.log("edit and id", edit, id);
