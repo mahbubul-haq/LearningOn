@@ -3,7 +3,12 @@ import People from "../models/People.js";
 import Course from "../models/Course.js";
 import Notification from "../models/Notification.js";
 import Stripe from "stripe";
-const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
+let stripe;
+//console.log(process.env.STRIPE_PRIVATE_KEY);
+export const initializeStripe = () => {
+    stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
+    //console.log(process.env.STRIPE_PRIVATE_KEY);
+}
 
 const addCategory = async (req, res) => {
     try {
@@ -82,7 +87,7 @@ const deleteAllData = async (req, res) => {
             courses,
         });
     } catch (err) {
-        console.log(err);
+        ///console.log(err);
         res.status(500).json({
             success: false,
             message: "Data deletion unsuccessful",
@@ -91,6 +96,7 @@ const deleteAllData = async (req, res) => {
 };
 
 const makePayment = async (req, res) => {
+    console.log("makePayment", req.body, req.userId);
     try {
         const courseInfo = await Course.findOne({ _id: req.body.courseId });
         // console.log(courseInfo.courseThumbnail);
@@ -279,6 +285,7 @@ const stripeWebHook = async (req, res) => {
                             link: `dashboard/${course._id}`,
                             status: "new",
                             imageLink: user.picturePath,
+                            userFrom: user._id,
                         });
 
                         await notification.save();

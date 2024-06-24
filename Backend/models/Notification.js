@@ -13,6 +13,11 @@ const NotificationSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    userFrom: {
+        type: String,
+        required: false,
+        default: "",
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "People",
@@ -27,6 +32,7 @@ const NotificationSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+
 });
 
 const Notification = mongoose.model("Notification", NotificationSchema);

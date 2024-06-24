@@ -126,9 +126,9 @@ const MoreInfoBottom = ({
                         gridAutoRows: "1fr",
                     }}
                 >
-                    {courseState.courseInstructors.map((id) => (
+                    {courseState.courseInstructors.map((id, index) => (
                         <Box
-                            key={id}
+                            key={id + index}
                             sx={{
                                 position: "relative",
                                 // mb: "1rem",

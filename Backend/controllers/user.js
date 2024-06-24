@@ -1,4 +1,5 @@
 import People from "../models/People.js";
+import Notification from "../models/Notification.js";
 
 const getAllUsers = async (req, res) => {
   try {
@@ -103,6 +104,18 @@ const updateUser = async (req, res) => {
       },
       { new: true }
     ).exec();
+
+    if (req.body.picturePath) {
+      const updatedNotifications = await Notification.updateMany(
+        {
+           userFrom: user._id,
+        },
+        {
+          $set: { imageLink: req.body.picturePath },
+        }
+      );
+    }
+
     res.status(200).json({
       success: true,
       user: user,

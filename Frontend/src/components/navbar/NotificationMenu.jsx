@@ -96,7 +96,7 @@ const NotificationMenu = ({
                             src={
                                 n.imageLink
                                     ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-                                      }/image/upload/v${n.imageLink}`
+                                      }/image/upload/${n.imageLink}`
                                     : "/images/dummyPerson.jpeg"
                             }
                             alt="user"
@@ -104,6 +104,8 @@ const NotificationMenu = ({
                                 width: "2.5rem",
                                 height: "2.5rem",
                                 borderRadius: "50%",
+                                aspectRatio: "1/1",
+                                objectFit: "cover"
                             }}
                         />
                         <Box

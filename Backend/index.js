@@ -19,6 +19,7 @@ import { uploadFile, deleteFile } from "./controllers/uploads.js";
 import { upload } from "./configs/multer.config.js";
 import { cloudinaryConfig } from "./utils/cloudinary.js";
 import {connectSocket} from "./socket.io.js";
+import { initializeStripe } from "./controllers/data.js";
 // configurations
 
 
@@ -29,6 +30,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 cloudinaryConfig();
+initializeStripe();
 
 // middlewares
 app.use(express.json({
@@ -63,6 +65,13 @@ app.delete("/filedelete/:fileName/:isVideo", deleteFile);
 app.get("/", (req, res) => {
     res.send("Hello World2");
 });
+
+app.use((req, res, next) => {
+    res.status(404).send({
+        success: false,
+        error: "404 Not found"
+    })
+})
 
 const server = http.createServer(app);
 
