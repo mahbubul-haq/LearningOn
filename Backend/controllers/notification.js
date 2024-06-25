@@ -1,6 +1,7 @@
 import Notification from "../models/Notification.js";
 
 const createNotification = async (req, res) => {
+    console.log("create notification called");
     try {
         // delete one notification if there are more than 5 notifications
         const notifications = await Notification.find({

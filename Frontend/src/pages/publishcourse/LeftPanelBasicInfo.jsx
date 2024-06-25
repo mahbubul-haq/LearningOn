@@ -82,7 +82,7 @@ const LeftPanelBasicInfo = ({
                                     }}
                                 />
                             }
-                            checked={courseState[item[1]].length > 0}
+                            checked={courseState[item[1]]?.length > 0}
                             sx={{
                                 "&&": {
                                     // different color if checked vs unchecked

@@ -217,7 +217,7 @@ const CourseContentCourseAccordion = ({
                                                     ...curLesson.subLessons,
                                                     {
                                                         title: "",
-                                                        lectureNode: "",
+                                                        lectureNote: "",
                                                         videoLink: "",
                                                     },
                                                 ],

@@ -175,27 +175,11 @@ export const CreateCourseState = (props) => {
 
         const data = await response.json();
 
-        //console.log(data);
+        console.log(data);
 
         if (data.success) {
             setCourseState(data.courseInfo);
             
-        } else {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/course/new`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "auth-token": token,
-                },
-            });
-
-            const data = await response.json();
-
-            //console.log(data);
-
-            if (data.success) {
-                setCourseState(data.courseInfo);
-            }
         }
     };
 
@@ -244,7 +228,7 @@ export const CreateCourseState = (props) => {
                     getDraftCourse();
                 }
                 setCourseState({
-                    ...courseState,
+                    ...data.courseInfo,
                     courseStatus: status,
                 });
                 //setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);

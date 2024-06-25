@@ -20,6 +20,7 @@ const DeleteCourseDialog = ({getUser }) => {
     deleteCourse,
     editMode,
     setMobileDrawerOpen,
+    setCourseState,
   } = useContext(CreateCourseContext);
   const theme = useTheme();
 
@@ -151,6 +152,8 @@ const DeleteCourseDialog = ({getUser }) => {
               }
               else if (deleteCourseStatus === "deleted") {
                 setDeleteCourseStatus("");
+                setCourseState("");
+                
                 if (editMode) {
                   navigate("/dashboard");
                   getUser();

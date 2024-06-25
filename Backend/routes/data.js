@@ -3,7 +3,7 @@ import express from 'express';
 
 import { addCategory, deleteAllData, getCategories, makePayment, stripeWebHook } from '../controllers/data.js';
 import verifyToken from '../middlewares/auth.js';
-import { deleteAllNotifications } from '../controllers/data.delete.js';
+import { deleteAllDraftCourses, deleteAllNotifications } from '../controllers/data.delete.js';
 
 const router = Router();
 
@@ -14,5 +14,6 @@ router.get('/getcategories', getCategories);
 router.post('/create-payment-sesson', verifyToken, makePayment);
 router.post('/stripe/webhook', express.raw({type: 'application/json'}), stripeWebHook);
 //router.delete('/allNotifications', deleteAllNotifications);
+//router.delete('/allDraftCourses', deleteAllDraftCourses);
 export default router;
 

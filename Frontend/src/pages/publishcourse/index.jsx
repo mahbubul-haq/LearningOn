@@ -88,7 +88,7 @@ const PublishCourse = () => {
   }, [uploadStatus]);
 
   useEffect(() => {
-    console.log("updatedd index", courseState);
+    console.log("publish course index", courseState);
   }, [courseState]);
 
   useEffect(() => {

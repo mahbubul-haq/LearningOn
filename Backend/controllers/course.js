@@ -1,5 +1,6 @@
 import Course from "../models/Course.js";
 import People from "../models/People.js";
+import { deleteImage } from "../utils/cloudinary.js";
 
 const newCourse = async (req, res) => {
   //console.log(req.userId);
@@ -60,7 +61,8 @@ const getDraftCourses = async (req, res) => {
     });
     //console.log(courses);
     if (!courses || courses.length === 0) {
-      return res.status(404).json({
+      // status 200 because it is ok to not draft course
+      return res.status(200).json({
         success: false,
         message: "No courses found",
       });
@@ -70,7 +72,7 @@ const getDraftCourses = async (req, res) => {
       courseInfo: courses[0],
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(200).json({
       success: false,
       message: error.message,
     });
@@ -78,17 +80,34 @@ const getDraftCourses = async (req, res) => {
 };
 
 const updateCourse = async (req, res) => {
-  const courseId = req.params.courseId;
+  let courseId = req.params.courseId;
   const status = req.params.status;
+  
+  console.log("update course", courseId, status);
 
   try {
-    const course = await Course.findById(courseId);
-    if (!course) {
-      return res.status(404).json({
-        success: false,
-        message: "No course found",
+    let course;
+    if (courseId == undefined || courseId == "undefined") {
+      course = new Course({
+        ...req.body,
+        courseStatus: status,
+        owner: req.userId,
       });
+      course = await course.save();
+    } else {
+      course = await Course.findById(courseId);
     }
+
+    if (!course) {
+      course = new Course({
+        ...req.body,
+        courseStatus: status,
+        owner: req.userId,
+      });
+      course = await course.save();
+    }
+
+    courseId = course._id;
 
     if (parseFloat(req.body.coursePrice) < 0) {
       return res.status(400).json({
@@ -288,16 +307,33 @@ const getMyCourses = async (req, res) => {
 
 const deleteCourse = async (req, res) => {
   let courseId = req.params.courseId;
-  
+
   try {
     let course = await Course.findById(courseId);
-   // console.log(course);
+    // console.log(course);
 
     if (!courseId || !course || course.owner != req.userId) {
       return res.status(404).json({
         success: false,
         message: "No course found",
       });
+    }
+
+    if (course.courseThumbnail) {
+      await deleteImage(course.courseThumbnail, "image");
+    }
+    if (course.introVideo) {
+      await deleteImage(course.introVideo, "video");
+    }
+
+    //console.log("course", course);
+
+    for (let i = 0; i < course.lessons?.length; i++) {
+      for (let j = 0; j < course.lessons[i].subLessons?.length; j++) {
+        if (course.lessons[i].subLessons[j]?.videoLink) {
+          await deleteImage(course.lessons[i].subLessons[j].videoLink, "video");
+        }
+      }
     }
 
     let instructors = course.courseInstructors;
@@ -335,8 +371,6 @@ const deleteCourse = async (req, res) => {
     });
   }
 };
-
-
 
 export {
   newCourse,

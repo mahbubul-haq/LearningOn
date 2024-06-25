@@ -2,15 +2,18 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { StyledButton } from "../../components/StyledButton";
 import useTheme from "@mui/material/styles/useTheme";
+import { CreateCourseContext } from "../../state/CreateCourse";
+import { useContext } from "react";
 
 const RightButtons = ({
     isCourseValid,
     setUploadStatus,
     setDeleteCourseStatus,
-
+    
 }) => {
 
     const theme = useTheme();
+    const {courseState} = useContext(CreateCourseContext);
 
   return (
     <Box
@@ -60,7 +63,7 @@ const RightButtons = ({
               </StyledButton>
 
               <StyledButton
-                //   disabled={!isCourseValid()}
+                  disabled={!courseState._id}
                 onClick={() => {
                   setDeleteCourseStatus("initiated");
                   //updateCourse("published");
