@@ -14,8 +14,6 @@ const CourseWidget = ({ courseInfo }) => {
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
-
-
     return (
         <Card
             sx={{
@@ -107,7 +105,7 @@ const CourseWidget = ({ courseInfo }) => {
                         />
                     </Box>
                     <Box>
-                        <CustomSlider1 items={["Programming", "Python"]} selectedItem="" setSelectedItem="" />
+                        <CustomSlider1 items={courseInfo.skillTags} selectedItem="" setSelectedItem="" />
                     </Box>
                 </Box>
             </CardContent>
