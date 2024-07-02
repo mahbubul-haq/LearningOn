@@ -1,32 +1,10 @@
-import React, { useEffect } from "react";
-import { Box, Button, Chip, IconButton } from "@mui/material";
+import{ useEffect } from "react";
+import { Box, Chip} from "@mui/material";
 //import arrow left and right icon
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import { useTheme } from "@mui/material/styles";
 
-
-const testItems = [
-    "Programming",
-    "Web Development",
-    "Mobile Development",
-    "Game Development",
-    "Database",
-    "Software Testing",
-    "Software Engineering",
-    "Development Tools",
-    "No-Code Development",
-    "Cybersecurity",
-    "DevOps",
-    "Data Science",
-    "Machine Learning",
-    "Deep Learning",
-    "Artificial Intelligence",
-    "Data Analysis",
-    "Data Visualization",
-];
 
 const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
     const theme = useTheme();
@@ -156,7 +134,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     flexWrap: "nowrap",
                     alignItems: "center",
                     justifyContent: "flex-start",
-                    gap: "1rem",
+                    gap: "0.4rem",
                     // px: "3rem",
                 }}
             >
@@ -166,25 +144,15 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                         label={item}
                         size="small"
                         sx={{
-                            
+                            px: "0.1rem",
                             background:
                                 item === selectedItem
                                     ? theme.palette.text.primary
-                                    : theme.palette.grey.grey200,
+                                    : theme.palette.grey.grey100,
                             color:
                                 item === selectedItem
                                     ? "white"
                                     : theme.palette.text.primary,
-                            // "&:hover": {
-                            //     background:
-                            //         item === selectedItem
-                            //             ? theme.palette.text.primary
-                            //             : theme.palette.grey.grey200,
-                            //     color:
-                            //         item === selectedItem
-                            //             ? "white"
-                            //             : theme.palette.text.primary,
-                            // },
                         }}
                         
                     />

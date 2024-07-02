@@ -69,6 +69,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                             sx={{
                                 display: "grid",
                                 gridTemplateRows: "1",
+                                gridTemplateColumns: isNonMobileScreens ? "repeat(auto-fit, 300px)" : "repeat(auto-fit, 250px)",
                             }}
                         >
                             <CourseWidget courseInfo={course} />

@@ -168,6 +168,12 @@ export const themeSettings = (mode) => {
             h4: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
                 fontSize: 20,
+                
+            },
+            h4bold: {
+                fontFamily: ["Roboto", 'sans-serif'].join(","),
+                fontSize: 20,
+                fontWeight: 600,
             },
             h5: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),

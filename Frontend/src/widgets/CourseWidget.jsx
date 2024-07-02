@@ -8,25 +8,26 @@ import Box from "@mui/material/Box";
 import CustomSlider1 from "../components/CustomSlider1";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
-
+import useTheme from '@mui/material/styles/useTheme';
 
 const CourseWidget = ({ courseInfo }) => {
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const theme = useTheme();
 
     return (
         <Card
             sx={{
-                maxWidth: isNonMobileScreens ? "340px" : "230px",
-                minWidth: isNonMobileScreens ? "300px" : "230px",
+                maxWidth: isNonMobileScreens ? "400px" : "320px",
+                minWidth: isNonMobileScreens ? "300px" : "220px",
+
+                width: "100%",
                 borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
                 boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset",
                 // border: "4px solid black",
                 height: "auto",
                 minHeight: isNonMobileScreens ? "250px" : "250px",
-                // show for overflow
-                //do not hide for overflow
-                // overflow: "visible",
+                padding: 0,
             }}
         >
             <CardMedia
@@ -35,6 +36,8 @@ const CourseWidget = ({ courseInfo }) => {
                     height: isNonMobileScreens ? "150px" : "130px",
                     maxWidth: "100%",
                     boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset",
+                    objectFit: "cover",
+                    borderRadius: isNonMobileScreens ? "0.5rem" : '0.2rem',
                  }}
                 image={
                 `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${courseInfo.courseThumbnail}`
@@ -49,6 +52,7 @@ const CourseWidget = ({ courseInfo }) => {
                     gap: "0",
                     justifyContent: "space-between",
                     // border: "2px solid black",
+                    paddingBottom: 0,
                 }}
             >
                 <Box>
@@ -58,6 +62,9 @@ const CourseWidget = ({ courseInfo }) => {
                             fontSize: isNonMobileScreens ? "1.1rem" : "1rem",
                             fontWeight: "600",
                             cursor: "pointer",
+                            lineHeight: "1.2",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
                             "&:hover": {
                                 textDecoration: "underline",
                             },
@@ -70,30 +77,29 @@ const CourseWidget = ({ courseInfo }) => {
                     </Typography>
                     <Typography
                         sx={{
-                            fontSize: "1rem",
-                            fontWeight: "600",
-                            color: (theme) => theme.palette.grey.grey400,
+                            mt: "-0.2rem",
+                            fontSize: "0.9rem",
+                            fontWeight: "400",
+                            color: (theme) => theme.palette.grey.grey600,
                             cursor: "pointer",
                             "&:hover": {
-                                color: (theme) => theme.palette.grey.grey500,
+                                color: (theme) => theme.palette.grey.grey700,
                             },
                         }}
                         onClick={() => {
                             navigate(`/profile/${courseInfo.owner._id}`);
                         }}
                     >
-                        {courseInfo.owner.name}
+                     &mdash; {courseInfo.owner.name}
                     </Typography>
                 </Box>
 
-                <Box sx={{
-                    mt: "1rem",
-                }}>
+                <Box>
                     <Box
                         sx={{
                             mt: "1rem",
 
-                            mb: "0.5rem",
+                            mb: "0rem",
                         }}
                     >
                         <Rating
@@ -104,7 +110,12 @@ const CourseWidget = ({ courseInfo }) => {
                             }}
                         />
                     </Box>
-                    <Box>
+                    <Typography variant="h4bold" sx={{
+                        color: theme.palette.grey.grey700,
+                    }}>
+                        ${courseInfo.coursePrice}
+                    </Typography>
+                    <Box sx={{mt: "1rem"}}>
                         <CustomSlider1 items={courseInfo.skillTags} selectedItem="" setSelectedItem="" />
                     </Box>
                 </Box>
