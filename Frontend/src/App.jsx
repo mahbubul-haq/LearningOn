@@ -85,7 +85,7 @@ function App() {
                                                     path="/dashboard/:courseId"
                                                     element={<Dashboard />}
                                                 />
-                                                <Route path="dashboard/"
+                                                <Route path="/dashboard/"
                                                     element={<Dashboard />}
                                                 />
                                                 <Route path="/underway" element={<UnderwayAlert />} />

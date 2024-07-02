@@ -15,6 +15,7 @@ import { GlobalContext } from "../../state/GlobalContext.jsx";
 import MobileNav from "./MobileNav.jsx";
 import NotificationDrawer from "./NotificationDrawer.jsx";
 import NavRight from "./NavRight.jsx";
+import useTheme from "@mui/material/styles/useTheme";
 
 const Navbar = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -25,6 +26,7 @@ const Navbar = () => {
     const open = Boolean(anchorEl);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [openNotificationDrawer, setOpenNotificationDrawer] = useState(false);
+    const theme = useTheme();
 
     const { openedItem } = useContext(GlobalContext);
     const { notifications, getNotifications, updateNotifications } =
@@ -101,8 +103,7 @@ const Navbar = () => {
                 top: 0,
                 backgroundColor: "white",
                 zIndex: 100,
-                boxShadow: (theme) =>
-                    `0px 4px 8px 0px ${theme.palette.nav.boxShadow}`,
+                borderBottom: `1px solid ${theme.palette.grey.grey100}`,
                 width: "100%",
             }}
         >

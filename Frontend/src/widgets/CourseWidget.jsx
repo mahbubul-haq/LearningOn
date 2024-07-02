@@ -39,7 +39,7 @@ const CourseWidget = ({ courseInfo }) => {
                 image={
                 `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${courseInfo.courseThumbnail}`
                 }
-                title="green iguana"
+                title={courseInfo?.courseTitle}
             />
             <CardContent
                 sx={{
