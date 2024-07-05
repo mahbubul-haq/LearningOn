@@ -28,7 +28,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                 "none";
         } else {
             document.querySelector(`.custom-slider-right-arrow1-${random}`).style.display =
-                "block";
+                "flex";
         }
 
         // check if slider has reached start
@@ -37,7 +37,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                 "none";
         } else {
             document.querySelector(`.custom-slider-left-arrow1-${random}`).style.display =
-                "block";
+                "flex";
         }
     };
 
@@ -47,7 +47,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                 "none";
         } else {
             document.querySelector(`.custom-slider-left-arrow1-${random}`).style.display =
-                "block";
+                "flex";
         }
         let slider = document.querySelector(`.custom-slider-items1-${random}`);
         if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
@@ -55,7 +55,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                 "none";
         } else {
             document.querySelector(`.custom-slider-right-arrow1-${random}`).style.display =
-                "block";
+                "flex";
         }
 
         if (items?.length > 0) {
@@ -86,10 +86,11 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     bottom: "0",
                     // set color if parent elements content has overflown
                     cursor: "pointer",
-                    background: "white",
-
-                    pr: "0.5rem",
+                    backgroundImage: "linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
+                    pr: "3rem",
                     zIndex: "1",
+                    display: "flex",
+                    alignItems: "center"
                 }}
                 onClick={() => {
                     handleNext("prev");
@@ -106,14 +107,18 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                 sx={{
                     position: "absolute",
                     right: "0",
-                    top: "0",
-                    bottom: "0",
+                    top: 0,
+                    bottom: 0,
+                    // border: "2px solid red",
                     // set color if parent elements content has overflown
                     cursor: "pointer",
-                    background: "white",
-                    pl: "0.5rem",
-
+                    backgroundImage: "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))",
+                    pl: "3rem",
                     zIndex: "1",
+                    display: "flex",
+                    alignItems: "center",
+                   
+                    // backdropFilter: "blur(10px)"
                 }}
                 onClick={() => {
                     handleNext("next");
@@ -121,7 +126,8 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
             >
                 <KeyboardDoubleArrowRightIcon
                     sx={{
-                        color: theme.palette.grey.grey600,
+                        color: theme.palette.grey.grey700,
+                        // border: "2px solid green",
                     }}
                 />
             </Box>
@@ -135,6 +141,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     alignItems: "center",
                     justifyContent: "flex-start",
                     gap: "0.4rem",
+                    scrollBehavior: "smooth",
                     // px: "3rem",
                 }}
             >

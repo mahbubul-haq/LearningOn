@@ -80,7 +80,6 @@ const ProfilePage = () => {
                 minWidth: "300px",
             }}
         >
-            <Navbar />
             <ProfileTop userInfo={userById} />
             {isMobileScreens && (
                 <>

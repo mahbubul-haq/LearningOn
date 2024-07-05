@@ -94,10 +94,10 @@ const Dashboard = () => {
         <Box
             className="dashboard"
             sx={{
-                height: "100%",
+                // height: "100%",
                 width: "100%",
                 // minHeight: "600px",
-                overflow: "auto",
+                // overflow: "auto",
                 scrollBehavior: "smooth",
             }}
         >
@@ -110,9 +110,9 @@ const Dashboard = () => {
                     
                 }}
             >
-                <Box>
+                {/* <Box>
                     <Navbar />
-                </Box>
+                </Box> */}
                 <Box
                     className="dashboard-top"
                     sx={{

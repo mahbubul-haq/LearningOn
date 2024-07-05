@@ -38,6 +38,7 @@ const HomeCourses = () => {
     useEffect(() => {
         getCourses();
         if (!listOfCategories || listOfCategories.length === 0) {
+            console.log("calling for categories from home");
             getCategories();
         }
     }, []);

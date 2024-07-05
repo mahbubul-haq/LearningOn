@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useContext } from "react";
-import Navbar from "../../components/navbar";
 import { useMediaQuery } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -115,13 +114,13 @@ const LearningPage = () => {
                 // ref={scrollPositionRef}
                 sx={{
                     // marginTop: isNonMobileScreens ? "5rem" : "4rem",
-                    height: "100%",
-                    overflowY: "auto",
+                    // height: "100%",
+                    // overflowY: "auto",
                     width: "100%",
                     scrollBehavior: "smooth",
                 }}
             >
-                <Box
+                {/* <Box
                     className="learning-page-navbar"
                     sx={{
                         top: "0",
@@ -130,12 +129,12 @@ const LearningPage = () => {
                     }}
                 >
                     <Navbar />
-                </Box>
+                </Box> */}
                 <Box
                     sx={{
                         position: isNonMobileScreens ? "relative" : "sticky",
                         top: "0",
-                        zIndex: "100",
+                        zIndex: "1",
 
                     }}
                 >

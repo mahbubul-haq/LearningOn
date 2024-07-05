@@ -81,9 +81,11 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
                     bottom: "0",
                     // set color if parent elements content has overflown
                     cursor: "pointer",
-                    background: "white",
+                    backgroundImage: "linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
+                    display: "flex",
+                    alignItems: "center",
 
-                    pr: "1rem",
+                    pr: "3rem",
                     zIndex: "1",
                 }}
                 onClick={() => {
@@ -105,9 +107,10 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
                     bottom: "0",
                     // set color if parent elements content has overflown
                     cursor: "pointer",
-                    background: "white",
-                    pl: "1rem",
-
+                    backgroundImage: "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))",
+                    pl: "3rem",
+                    display: "flex",
+                    alignItems: "center",
                     zIndex: "1",
                 }}
                 onClick={() => {

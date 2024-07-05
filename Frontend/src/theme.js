@@ -1,4 +1,3 @@
-import { FontWeight } from "@cloudinary/url-gen/qualifiers";
 
 export const colorTokens = {
     grey: {
@@ -151,7 +150,7 @@ export const themeSettings = (mode) => {
                 }),
         },
         typography: {
-            fontFamily: ["Rubik", "sans-serif"].join(","),
+            fontFamily: ["Roboto", "sans-serif"].join(","),
             fontSize: 12,
             h1: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
@@ -189,6 +188,10 @@ export const themeSettings = (mode) => {
                 fontSize: 14,
                 fontWeight: 300,
                 color: colorTokens.grey[500],
+            },
+            body: {
+                fontSize: 16,
+                fontWeight: 400,
             }
 
         },

@@ -1,0 +1,10 @@
+{
+    "overrides": [
+        {
+            "files": ["src/App.jsx"],
+            "options": {
+                "printWidth": 150
+            }
+        }
+    ]
+  }

@@ -106,6 +106,7 @@ const InstructorProfile = ({ instructorId }) => {
                                 rating: instructor ? instructor.rating.rating : 0,
                                 count: instructor ? instructor.rating.count : 0,
                                 showText: false,
+                                oneStar: true,
                             }}
                         />
                     </Box>

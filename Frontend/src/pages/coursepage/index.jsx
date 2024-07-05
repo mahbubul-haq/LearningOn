@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { HomePageContext } from "../../state/HomePageState";
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
-import Navbar from "../../components/navbar";
 import TopSection from "./TopSection";
 import Box from "@mui/material/Box";
 import MainSection from "./MainSection";
@@ -43,24 +42,24 @@ const CoursePage = () => {
         console.log("index", courseInfo);
     }, [courseInfo]);
 
-    useEffect(() => {
-        let element = document.querySelector(".coursepage-main");
-        if (!element) return;
-        const scrollEventListner = (document.querySelector(".coursepage-main").onscroll = (e) => {
-            // console.log("scrolling", e.target.scrollTop);
-            if (e.target.scrollTop > 200) {
-                document.querySelector(".coursepage-sticky-top").style.position = "relative";
-                document.querySelector(".coursepage-sticky-top").style.top = "-100px";
-            } else {
-                document.querySelector(".coursepage-sticky-top").style.position = "relative";
-                document.querySelector(".coursepage-sticky-top").style.top = "0";
-            }
-        });
-        return () => {
-            let element = document.querySelector(".coursepage-main");
-            if (element) element.removeEventListener("scroll", scrollEventListner);
-        };
-    }, []);
+    // useEffect(() => {
+    //     let element = document.querySelector(".coursepage-main");
+    //     if (!element) return;
+    //     const scrollEventListner = (document.querySelector(".coursepage-main").onscroll = (e) => {
+    //         // console.log("scrolling", e.target.scrollTop);
+    //         if (e.target.scrollTop > 200) {
+    //             document.querySelector(".coursepage-sticky-top").style.position = "relative";
+    //             document.querySelector(".coursepage-sticky-top").style.top = "-100px";
+    //         } else {
+    //             document.querySelector(".coursepage-sticky-top").style.position = "relative";
+    //             document.querySelector(".coursepage-sticky-top").style.top = "0";
+    //         }
+    //     });
+    //     return () => {
+    //         let element = document.querySelector(".coursepage-main");
+    //         if (element) element.removeEventListener("scroll", scrollEventListner);
+    //     };
+    // }, []);
 
     return (
         <>
@@ -69,13 +68,13 @@ const CoursePage = () => {
                 sx={{
                     marginTop: "0",
                     width: "100%",
-                    overflowX: "auto",
-                    height: "100%",
+                    // overflowX: "auto",
+                    // height: "100%",
                     paddingBottom: "4rem",
                     scrollBehavior: "smooth",
                 }}
             >
-                <Box
+                {/* <Box
                     className="coursepage-sticky-top"
                     sx={{
                         // transition: "all 0.5s ease",
@@ -86,7 +85,7 @@ const CoursePage = () => {
                     }}
                 >
                     <Navbar />
-                </Box>
+                </Box> */}
                 <Box
                 // sx={{
                 //     paddingTop: "5rem",

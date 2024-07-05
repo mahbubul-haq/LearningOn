@@ -21,13 +21,16 @@ const MainSection = ({ courseInfo }) => {
         <Box>
             <Box
                 sx={{
+                    height: isNonMobileScreens ? "5rem" : "4rem",
                     width: "100%",
                     padding: isNonMobileScreens ? "0.1rem 5rem" : "0rem 1rem",
                     backgroundColor: theme.palette.background.buttonBgPink,
                     position: "sticky",
                     top: "0",
-                    zIndex: "100",
+                    zIndex: 100,
                     boxShadow: "0px 4px 4px 0px rgba(0,0,0,0.1)",
+                    display: "flex",
+                    alignItems: "center",
                 }}
             >
                 <MainSectionNav />
