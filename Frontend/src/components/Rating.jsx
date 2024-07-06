@@ -14,7 +14,7 @@ const StyledRating = styled(MuiRating)(() => {
 });
 
 const Rating = ({ rating }) => {
-    console.log(rating);
+   // console.log(rating);
     return (
         <Box
             sx={{

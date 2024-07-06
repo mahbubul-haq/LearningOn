@@ -9,6 +9,7 @@ export const CourseExplorerState = (props) => {
   const [closeBtnClicked, setCloseBtnClicked] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [closeLeftHover, setCloseLeftHover] = useState(false);
 
   const disableScroll1 = useCallback((e) => {
     e.stopPropagation();
@@ -20,19 +21,19 @@ export const CourseExplorerState = (props) => {
     let appContainer = document.querySelector(".app-container");
     let explorerLeft = document.querySelector(".explorer-left");
     let explorerLeftHover = document.querySelector(".explorer-left-hover");
-    
+
     let timeoutId, timeoutId1, timeoutId2;
     if (showCourseExplorer && !closeBtnClicked) {
       if (navCourse) navCourse.style.height = "100%";
       if (appContainer) appContainer.style.overflow = "hidden";
       if (explorerLeft) {
         timeoutId1 = setTimeout(() => {
-            explorerLeft.style.overflow="auto";
+          explorerLeft.style.overflow = "auto";
         }, 300);
       }
       if (explorerLeftHover) {
         timeoutId2 = setTimeout(() => {
-            explorerLeftHover.style.overflow = "auto"
+          explorerLeftHover.style.overflow = "auto";
         }, 300);
       }
       if (courseExplorer) {
@@ -59,12 +60,18 @@ export const CourseExplorerState = (props) => {
     }
 
     return () => {
-        if (timeoutId) clearTimeout(timeoutId);
-        if (timeoutId1) clearTimeout(timeoutId1);
-        if (timeoutId2) clearTimeout(timeoutId2);
-    }
-
+      if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutId1) clearTimeout(timeoutId1);
+      if (timeoutId2) clearTimeout(timeoutId2);
+    };
   }, [showCourseExplorer]);
+
+  useEffect(() => {
+    let explorerRightContainer = document.querySelector(
+      ".explorer-right-container"
+    );
+    if (explorerRightContainer) explorerRightContainer.scrollTo(0, 0);
+  }, [selectedCategory, selectedSubCategory]);
 
   return (
     <CourseExplorerContext.Provider
@@ -81,6 +88,8 @@ export const CourseExplorerState = (props) => {
         setSelectedCategory,
         selectedSubCategory,
         setSelectedSubCategory,
+        closeLeftHover,
+        setCloseLeftHover,
       }}
     >
       {props.children}

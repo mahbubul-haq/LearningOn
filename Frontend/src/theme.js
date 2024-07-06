@@ -1,4 +1,3 @@
-import { light } from "@mui/material/styles/createPalette";
 
 export const colorTokens = {
     grey: {
@@ -174,6 +173,12 @@ export const themeSettings = (mode) => {
                 fontFamily: ["Roboto", 'sans-serif'].join(","),
                 fontSize: 20,
                 fontWeight: 600,
+            },
+
+            h4grey: {
+                fontSize: 16,
+                fontWeight: 400,
+                color: colorTokens.grey[400],
             },
             h5: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),

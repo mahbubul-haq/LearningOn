@@ -8,22 +8,27 @@ import { GlobalContext } from "../../state/GlobalContext";
 
 const CourseExplorerLeftHover = () => {
   const theme = useTheme();
-  const { showLeftHover, setShowLeftHover, categoryIndex, setSelectedCategory, setSelectedSubCategory } = useContext(
-    CourseExplorerContext
-  );
+  const {
+    closeLeftHover,
+    setCloseLeftHover,
+    showLeftHover,
+    setShowLeftHover,
+    categoryIndex,
+    setSelectedCategory,
+    setSelectedSubCategory,
+  } = useContext(CourseExplorerContext);
   const { categories } = useContext(GlobalContext);
 
   useEffect(() => {
     let leftHover = document.querySelector(".explorer-left-hover");
 
     if (!leftHover) return;
-    if (showLeftHover) {
+    if (showLeftHover && !closeLeftHover) {
       leftHover.style.width = "300px";
-        
     } else {
       leftHover.style.width = 0;
     }
-  }, [showLeftHover]);
+  }, [showLeftHover, closeLeftHover]);
 
   return (
     <Box
@@ -39,6 +44,7 @@ const CourseExplorerLeftHover = () => {
         background: theme.palette.background.light300,
         transition: "width 0.3s ease-out",
         width: 0,
+        zIndex: "5000000",
       }}
       onMouseOver={() => setShowLeftHover(true)}
       onMouseOut={() => setShowLeftHover(false)}
@@ -48,9 +54,10 @@ const CourseExplorerLeftHover = () => {
           <FlexBetween
             key={index}
             onClick={() => {
-                setSelectedCategory(categories[categoryIndex].name);
-                setSelectedSubCategory(subcategory)}
-            }
+              setSelectedCategory(categories[categoryIndex].name);
+              setSelectedSubCategory(subcategory);
+              setCloseLeftHover(true);
+            }}
             sx={{
               "&&": {
                 padding: "0.7rem 2rem",
@@ -60,7 +67,6 @@ const CourseExplorerLeftHover = () => {
                 background: theme.palette.background.imagesBg,
               },
             }}
-
           >
             <Typography variant="body">{subcategory}</Typography>
           </FlexBetween>
