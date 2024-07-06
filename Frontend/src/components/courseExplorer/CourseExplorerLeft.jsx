@@ -9,25 +9,31 @@ import { GlobalContext } from "../../state/GlobalContext";
 
 const CourseExplorerLeft = () => {
   const theme = useTheme();
-  const { setShowLeftHover, setCategoryIndex } = useContext(
+  const { setShowLeftHover, setCategoryIndex, setSelectedCategory, setSelectedSubCategory } = useContext(
     CourseExplorerContext
   );
   const { categories } = useContext(GlobalContext);
   return (
     <Box
+      className="explorer-left"
       sx={{
         width: "100%",
         height: "100%",
-        overflowY: "auto",
+        overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         py: "2rem",
       }}
     >
+      
       {categories?.length > 0 &&
         categories.map((category, index) => (
           <FlexBetween
             key={index}
+            onClick={() => {
+                setSelectedSubCategory("");
+                setSelectedCategory(category.name)
+            }}
             onMouseOver={() => {
               setCategoryIndex(index);
               setShowLeftHover(true);

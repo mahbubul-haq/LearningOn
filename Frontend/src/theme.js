@@ -1,3 +1,4 @@
+import { light } from "@mui/material/styles/createPalette";
 
 export const colorTokens = {
     grey: {
@@ -188,6 +189,11 @@ export const themeSettings = (mode) => {
                 fontSize: 14,
                 fontWeight: 300,
                 color: colorTokens.grey[500],
+            },
+            grey: {
+                fontSize: 16,
+                fontWeight: 400,
+                color: colorTokens.grey[500]
             },
             body: {
                 fontSize: 16,

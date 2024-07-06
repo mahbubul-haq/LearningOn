@@ -5,6 +5,8 @@ import useTheme from "@mui/material/styles/useTheme";
 import CourseExplorerLeft from "./CourseExplorerLeft";
 import CourseExplorerLeftHover from "./CourseExplorerLeftHover";
 import { GlobalContext } from "../../state/GlobalContext";
+import CourseExplorerRightTop from "./CourseExplorerRightTop";
+import CourseExplorerRIghtBottom from "./CourseExplorerRIghtBottom";
 const CourseExplorer = () => {
   const { setShowCourseExplorer } = useContext(
     CourseExplorerContext
@@ -63,9 +65,11 @@ const CourseExplorer = () => {
           height: "100%",
           overflow: "auto",
           flex: 1,
-          padding: "2rem 1rem",
+          padding: "0",
         }}
       >
+        <CourseExplorerRightTop />
+        <CourseExplorerRIghtBottom />
        
       </Box>
     </Box>

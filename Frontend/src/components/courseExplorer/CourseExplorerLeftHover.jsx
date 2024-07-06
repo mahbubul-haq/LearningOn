@@ -8,17 +8,18 @@ import { GlobalContext } from "../../state/GlobalContext";
 
 const CourseExplorerLeftHover = () => {
   const theme = useTheme();
-  const { showLeftHover, setShowLeftHover, categoryIndex } = useContext(
+  const { showLeftHover, setShowLeftHover, categoryIndex, setSelectedCategory, setSelectedSubCategory } = useContext(
     CourseExplorerContext
   );
   const { categories } = useContext(GlobalContext);
 
   useEffect(() => {
-    let leftHover = document.querySelector(".course-explore-left-hover");
+    let leftHover = document.querySelector(".explorer-left-hover");
 
     if (!leftHover) return;
     if (showLeftHover) {
       leftHover.style.width = "300px";
+        
     } else {
       leftHover.style.width = 0;
     }
@@ -26,11 +27,11 @@ const CourseExplorerLeftHover = () => {
 
   return (
     <Box
-      className="course-explore-left-hover"
+      className="explorer-left-hover"
       sx={{
         position: "absolute",
         height: "100%",
-        overflow: "auto",
+        overflow: "hidden",
         padding: "2rem 0rem",
         right: 0,
         transform: "translateX(100%)",
@@ -46,6 +47,10 @@ const CourseExplorerLeftHover = () => {
         categories[categoryIndex].subcategories.map((subcategory, index) => (
           <FlexBetween
             key={index}
+            onClick={() => {
+                setSelectedCategory(categories[categoryIndex].name);
+                setSelectedSubCategory(subcategory)}
+            }
             sx={{
               "&&": {
                 padding: "0.7rem 2rem",
@@ -55,6 +60,7 @@ const CourseExplorerLeftHover = () => {
                 background: theme.palette.background.imagesBg,
               },
             }}
+
           >
             <Typography variant="body">{subcategory}</Typography>
           </FlexBetween>

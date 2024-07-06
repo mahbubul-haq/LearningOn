@@ -16,7 +16,6 @@ import NotificationDrawer from "./NotificationDrawer.jsx";
 import NavRight from "./NavRight.jsx";
 import useTheme from "@mui/material/styles/useTheme";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext.jsx";
-import CourseExplorer from "../courseExplorer/index.jsx";
 
 const Navbar = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -33,7 +32,7 @@ const Navbar = () => {
   const { notifications, getNotifications, updateNotifications } =
     useContext(NotificationContext);
 
-  const { setShowCourseExplorer } = useContext(CourseExplorerContext);
+  const { setShowCourseExplorer, setCloseBtnClicked } = useContext(CourseExplorerContext);
 
   const calculateNewNotifications = () => {
     let count = 0;
@@ -182,6 +181,7 @@ const Navbar = () => {
                   <StyledBox1
                     className="nav-course"
                     onMouseOver={() => {
+                      setCloseBtnClicked(false);
                       setShowCourseExplorer(true);
                     }}
                     onMouseOut={() => setShowCourseExplorer(false)}
