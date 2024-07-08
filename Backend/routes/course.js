@@ -2,7 +2,8 @@ import { Router } from "express";
 
 import verifyToken from "../middlewares/auth.js";
 import { newCourse, getDraftCourses } from "../controllers/course.js";
-import { updateCourse, deleteCourse, getCourseById, getAllCourses, getCourseByIdWithOutPopulate } from "../controllers/course.js";
+import { updateCourse, deleteCourse, getCourseById, getAllCourses, getCourseByIdWithOutPopulate} from "../controllers/course.js";
+import { getFilteredCourses } from "../controllers/course.search.js";
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.get("/get/plain/:courseId", verifyToken, getCourseByIdWithOutPopulate);
 router.get("/all", getAllCourses);
 router.get("/getmycourses", verifyToken, getAllCourses);
 router.delete("/delete/:courseId", verifyToken, deleteCourse);
+router.get("/getfiltered", verifyToken, getFilteredCourses);
 
 export default router;

@@ -32,7 +32,9 @@ const Navbar = () => {
   const { notifications, getNotifications, updateNotifications } =
     useContext(NotificationContext);
 
-  const { setShowCourseExplorer, setCloseBtnClicked } = useContext(CourseExplorerContext);
+  const { setShowCourseExplorer, setCloseBtnClicked } = useContext(
+    CourseExplorerContext
+  );
 
   const calculateNewNotifications = () => {
     let count = 0;
@@ -149,13 +151,22 @@ const Navbar = () => {
               <Box>
                 <Typography
                   variant="h2"
-                  component="div"
+                  component="a"
+                  href={`${import.meta.env.VITE_CLIENT_URL}`}
                   sx={{
+                    textDecoration: "none",
                     fontWeight: "600",
                     fontSize: isNonMobileScreens ? "2rem" : "1rem",
                     cursor: "pointer",
+                    color: "inherit",
+                    "&:hover": {
+                        color: "inherit",
+                    }
                   }}
-                  onClick={() => navigate("/")}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/");
+                  }}
                 >
                   Learning
                   <Box

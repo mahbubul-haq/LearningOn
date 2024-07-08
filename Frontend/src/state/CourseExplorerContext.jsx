@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 
 export const CourseExplorerContext = createContext();
 
@@ -10,6 +11,12 @@ export const CourseExplorerState = (props) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [closeLeftHover, setCloseLeftHover] = useState(false);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [totalDocuments, setTotalDocuments] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [coursePerPage, setCoursePerPage] = useState(12);
+
+  const { token } = useSelector((state) => state);
 
   const disableScroll1 = useCallback((e) => {
     e.stopPropagation();
@@ -33,7 +40,7 @@ export const CourseExplorerState = (props) => {
       }
       if (explorerLeftHover) {
         timeoutId2 = setTimeout(() => {
-          explorerLeftHover.style.overflow = "auto";
+          explorerLeftHover.style.overflowY = "auto";
         }, 300);
       }
       if (courseExplorer) {
@@ -45,7 +52,7 @@ export const CourseExplorerState = (props) => {
     } else {
       if (navCourse) navCourse.style.height = "auto";
       if (explorerLeft) explorerLeft.style.overflow = "hidden";
-      if (explorerLeftHover) explorerLeftHover.style.overflow = "hidden";
+      if (explorerLeftHover) explorerLeftHover.style.overflowY = "hidden";
       if (courseExplorer) {
         courseExplorer.style.height = 0;
         courseExplorer.removeEventListener("scroll", disableScroll1);
@@ -73,6 +80,39 @@ export const CourseExplorerState = (props) => {
     if (explorerRightContainer) explorerRightContainer.scrollTo(0, 0);
   }, [selectedCategory, selectedSubCategory]);
 
+  useEffect(() => {
+    console.log("Calling for filtered courss");
+    getFilteredCourses();
+  }, [selectedCategory, selectedSubCategory]);
+
+  const getFilteredCourses = async () => {
+
+    const encodedCategory = encodeURIComponent(selectedSubCategory ? selectedSubCategory : selectedCategory);
+
+    try {
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/course/getfiltered?page=${pageNumber}&coursePerPage=${coursePerPage}&category=${encodedCategory}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+        }
+      );
+
+      let data = await res.json();
+      if (data.success) {
+        setFilteredCourses(data.courses);
+        setTotalDocuments(data.totalDocuments);
+      }
+    } catch (err) {
+      ///
+    }
+  };
+
   return (
     <CourseExplorerContext.Provider
       value={{
@@ -90,6 +130,8 @@ export const CourseExplorerState = (props) => {
         setSelectedSubCategory,
         closeLeftHover,
         setCloseLeftHover,
+        filteredCourses, 
+        totalDocuments
       }}
     >
       {props.children}

@@ -52,10 +52,13 @@ const NavRightIsUser = ({
                 updateNotifications={updateNotifications}
             />
             <IconButton
+                component="a"
+                href={`${import.meta.env.VITE_CLIENT_URL}/profile/${user._id}`}
                 sx={{
                     color: (theme) => theme.palette.text.primary,
                 }}
-                onClick={() => {
+                onClick={(e) => {
+                    e.preventDefault();
                     navigate(`/profile/${user._id}`);
                 }}
             >

@@ -24,8 +24,12 @@ const CourseExplorerLeftHover = () => {
 
     if (!leftHover) return;
     if (showLeftHover && !closeLeftHover) {
+      setTimeout(() => {
+        leftHover.style.overflowY = "auto";
+      }, 300);
       leftHover.style.width = "300px";
     } else {
+      leftHover.style.overflowY = "hidden";
       leftHover.style.width = 0;
     }
   }, [showLeftHover, closeLeftHover]);
@@ -36,8 +40,9 @@ const CourseExplorerLeftHover = () => {
       sx={{
         position: "absolute",
         height: "100%",
-        overflow: "hidden",
-        padding: "2rem 0rem",
+        overflowY: "hidden",
+        overflowX: "hidden",
+        padding: "2rem 0rem 1rem 0rem",
         right: 0,
         transform: "translateX(100%)",
         top: 0,

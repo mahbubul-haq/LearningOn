@@ -19,6 +19,8 @@ const CourseExplorerRightTop = () => {
     selectedSubCategory,
     setSelectedCategory,
     setSelectedSubCategory,
+    filteredCourses,
+    totalDocuments,
   } = useContext(CourseExplorerContext);
   const { categoriesWithLabel } = useContext(GlobalContext);
   const { courses } = useContext(HomePageContext);
@@ -127,8 +129,7 @@ const CourseExplorerRightTop = () => {
               width: "fit-content",
             }}
           >
-            ({courses.length ? courses?.length : 0} /{" "}
-            {courses?.length ? courses.length : 0})
+            ({filteredCourses?.length} / {totalDocuments})
           </Typography>
         </FlexBetween>
         <Autocomplete

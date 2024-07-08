@@ -1,15 +1,11 @@
 import Box from "@mui/material/Box";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { HomePageContext } from "../../state/HomePageState";
 import CourseWidget from "../../widgets/CourseWidget";
-
+import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 const CourseExplorerRIghtBottom = () => {
-  const { courses } = useContext(HomePageContext);
+  const { filteredCourses} = useContext(CourseExplorerContext);
 
-  useEffect(() => {
-    console.log("right bottom ", courses);
-  }, []);
 
   return (
     <Box
@@ -17,11 +13,11 @@ const CourseExplorerRIghtBottom = () => {
         width: "100%",
         p: "2rem",
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
         gap: "1rem",
       }}
     >
-      {courses?.map((course, index) => (
+      {filteredCourses?.map((course, index) => (
         <CourseWidget key={index} courseInfo={course} />
       ))}
     </Box>

@@ -68,10 +68,8 @@ const CoursePage = () => {
                 sx={{
                     marginTop: "0",
                     width: "100%",
-                    // overflowX: "auto",
-                    // height: "100%",
+                   
                     paddingBottom: "4rem",
-                    scrollBehavior: "smooth",
                 }}
             >
                 {/* <Box

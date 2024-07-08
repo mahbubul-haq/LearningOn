@@ -63,19 +63,27 @@ const CourseWidget = ({ courseInfo }) => {
       >
         <Box>
           <Typography
+            component="a"
             gutterBottom
-            sx={{
+            style={{
+              textDecoration: "none",
+              color: "inherit",
               fontSize: isNonMobileScreens ? "1.1rem" : "1rem",
               fontWeight: "600",
               cursor: "pointer",
               lineHeight: "1.2",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              //   mb: "0.3rem",
+              display: "block",
               "&:hover": {
                 textDecoration: "underline",
+                color: "inherit",
               },
             }}
-            onClick={() => {
+            href={`${import.meta.env.VITE_CLIENT_URL}/course/${courseInfo._id}`}
+            onClick={(e) => {
+              e.preventDefault();
               if (showCourseExplorer) {
                 setCloseBtnClicked(true);
                 setShowCourseExplorer(false);
@@ -88,7 +96,9 @@ const CourseWidget = ({ courseInfo }) => {
             {courseInfo.courseTitle}
           </Typography>
           <Typography
+            component="a"
             sx={{
+              textDecoration: "none",
               mt: "-0.2rem",
               fontSize: "0.9rem",
               fontWeight: "400",
@@ -98,7 +108,11 @@ const CourseWidget = ({ courseInfo }) => {
                 color: (theme) => theme.palette.grey.grey700,
               },
             }}
-            onClick={() => {
+            href={`${import.meta.env.VITE_CLIENT_URL}/profile/${
+              courseInfo.owner._id
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
               if (showCourseExplorer) {
                 setCloseBtnClicked(true);
                 setShowCourseExplorer(false);

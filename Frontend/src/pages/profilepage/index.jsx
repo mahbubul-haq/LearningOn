@@ -70,13 +70,11 @@ const ProfilePage = () => {
     return (
         <Box
             sx={{
-                height: "100%",
+               
                 width: "100%",
                 minHeight: "600px",
-                overflow: "auto",
                 paddingBottom: "2rem",
-                scrollBehavior: "smooth",
-                overflowX: "hidden",
+                overflow: "hidden",
                 minWidth: "300px",
             }}
         >

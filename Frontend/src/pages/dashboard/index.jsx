@@ -96,9 +96,7 @@ const Dashboard = () => {
             sx={{
                 // height: "100%",
                 width: "100%",
-                // minHeight: "600px",
-                // overflow: "auto",
-                scrollBehavior: "smooth",
+                
             }}
         >
             <Box
