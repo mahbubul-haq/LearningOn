@@ -15,6 +15,7 @@ export const CourseExplorerState = (props) => {
   const [totalDocuments, setTotalDocuments] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [coursePerPage, setCoursePerPage] = useState(12);
+  const [loading, setLoading] = useState(false);
 
   const { token } = useSelector((state) => state);
 
@@ -82,18 +83,61 @@ export const CourseExplorerState = (props) => {
 
   useEffect(() => {
     console.log("Calling for filtered courss");
-    getFilteredCourses();
+    setPageNumber(1);
+    getFilteredCourses(true);
   }, [selectedCategory, selectedSubCategory]);
 
-  const getFilteredCourses = async () => {
+  useEffect(() => {
+    console.log("page number", pageNumber);
+    if (pageNumber > 1) {
+        getFilteredCourses(false);
+    }
+  }, [pageNumber]);
 
-    const encodedCategory = encodeURIComponent(selectedSubCategory ? selectedSubCategory : selectedCategory);
+  useEffect(() => {
+    setLoading(false);
+  }, [filteredCourses]);
+
+  useEffect(() => {
+    let explorerRightContainer = document.querySelector(
+      ".explorer-right-container"
+    );
+    if (explorerRightContainer)
+      explorerRightContainer.addEventListener("scroll", handleScroll);
+
+    return () => {
+      if (explorerRightContainer)
+        explorerRightContainer.removeEventListener("scroll", handleScroll);
+    };
+  });
+
+  const handleScroll = (e) => {
+    let explorerRightContainer = e.target;
+    
+    if (
+      explorerRightContainer.scrollTop +
+        explorerRightContainer.clientHeight +
+        1 >=
+      explorerRightContainer.scrollHeight
+    ) {
+      if (!loading && filteredCourses.length < totalDocuments) {
+        setLoading(true);
+        setPageNumber(pageNumber => pageNumber + 1);
+      }
+    }
+  };
+
+  const getFilteredCourses = async (changed) => {
+
+    const encodedCategory = encodeURIComponent(
+      selectedSubCategory ? selectedSubCategory : selectedCategory
+    );
 
     try {
       const res = await fetch(
         `${
           import.meta.env.VITE_SERVER_URL
-        }/course/getfiltered?page=${pageNumber}&coursePerPage=${coursePerPage}&category=${encodedCategory}`,
+        }/course/getfiltered?page=${changed ? 1 : pageNumber}&coursePerPage=${coursePerPage}&category=${encodedCategory}`,
         {
           method: "GET",
           headers: {
@@ -105,11 +149,15 @@ export const CourseExplorerState = (props) => {
 
       let data = await res.json();
       if (data.success) {
-        setFilteredCourses(data.courses);
+        if (changed) setFilteredCourses(data.courses);
+        else setFilteredCourses([...filteredCourses, ...data.courses]);
         setTotalDocuments(data.totalDocuments);
+       
       }
+      //setLoading(false);
     } catch (err) {
       ///
+      //setLoading(false);
     }
   };
 
@@ -130,8 +178,10 @@ export const CourseExplorerState = (props) => {
         setSelectedSubCategory,
         closeLeftHover,
         setCloseLeftHover,
-        filteredCourses, 
-        totalDocuments
+        filteredCourses,
+        totalDocuments,
+        loading,
+        setLoading,
       }}
     >
       {props.children}

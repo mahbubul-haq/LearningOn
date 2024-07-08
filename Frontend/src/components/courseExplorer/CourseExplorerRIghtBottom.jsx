@@ -1,11 +1,13 @@
 import Box from "@mui/material/Box";
-import { useEffect } from "react";
 import { useContext } from "react";
 import CourseWidget from "../../widgets/CourseWidget";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext";
-const CourseExplorerRIghtBottom = () => {
-  const { filteredCourses} = useContext(CourseExplorerContext);
+import CourseWidgetSkeleton from "../CourseWidgetSkeleton";
 
+const CourseExplorerRIghtBottom = () => {
+  const { filteredCourses, loading, totalDocuments } = useContext(
+    CourseExplorerContext
+  );
 
   return (
     <Box
@@ -20,6 +22,15 @@ const CourseExplorerRIghtBottom = () => {
       {filteredCourses?.map((course, index) => (
         <CourseWidget key={index} courseInfo={course} />
       ))}
+      {loading && (
+        <>
+          {new Array(Math.min(6, totalDocuments - filteredCourses.length))
+            .fill(0)
+            .map((_, index) => (
+              <CourseWidgetSkeleton key={index} />
+            ))}
+        </>
+      )}
     </Box>
   );
 };
