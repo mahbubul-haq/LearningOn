@@ -93,16 +93,16 @@ export const CreateCourseState = (props) => {
 
     const isCourseValid = () => {
         if (
-            courseState.category?.length === 0 ||
-            courseState.courseTitle?.length === 0 ||
-            courseState.courseDescription?.length === 0 ||
-            courseState.studentRequirements?.length === 0 ||
+            courseState.category.trim()?.length === 0 ||
+            courseState.courseTitle.trim()?.length === 0 ||
+            courseState.courseDescription.trim()?.length === 0 ||
+            courseState.studentRequirements.trim()?.length === 0 ||
             courseState.skillTags?.length === 0 ||
             courseState.courseThumbnail?.length === 0 ||
             courseState.introVideo?.length === 0 ||
-            courseState.courseLanguage?.length === 0 ||
-            courseState.coursePrice?.length === 0 ||
-            courseState.approxTimeToComplete?.length === 0 ||
+            courseState.courseLanguage.trim()?.length === 0 ||
+            courseState.coursePrice.trim()?.length === 0 ||
+            courseState.approxTimeToComplete.trim()?.length === 0 ||
             courseState.courseInstructors?.length === 0 ||
             courseState.lessons?.length === 0
         )

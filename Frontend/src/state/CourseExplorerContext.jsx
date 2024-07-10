@@ -14,8 +14,10 @@ export const CourseExplorerState = (props) => {
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [totalDocuments, setTotalDocuments] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [coursePerPage, setCoursePerPage] = useState(12);
   const [loading, setLoading] = useState(false);
+  const [categoryChanged, setCategoryChanged] = useState(false);
+
+  const coursePerPage = 12;
 
   const { token } = useSelector((state) => state);
 
@@ -75,9 +77,23 @@ export const CourseExplorerState = (props) => {
   }, [showCourseExplorer]);
 
   useEffect(() => {
+    let courseExplorerRightBottom = document.querySelector(
+      ".course-explorer-right-bottom"
+    );
+
+    if (categoryChanged) {
+      if (courseExplorerRightBottom)
+        courseExplorerRightBottom.style.opacity = 0.5;
+    } else if (courseExplorerRightBottom) {
+      courseExplorerRightBottom.style.opacity = 1;
+    }
+  }, [categoryChanged]);
+
+  useEffect(() => {
     let explorerRightContainer = document.querySelector(
       ".explorer-right-container"
     );
+
     if (explorerRightContainer) explorerRightContainer.scrollTo(0, 0);
   }, [selectedCategory, selectedSubCategory]);
 
@@ -90,7 +106,7 @@ export const CourseExplorerState = (props) => {
   useEffect(() => {
     console.log("page number", pageNumber);
     if (pageNumber > 1) {
-        getFilteredCourses(false);
+      getFilteredCourses(false);
     }
   }, [pageNumber]);
 
@@ -99,6 +115,31 @@ export const CourseExplorerState = (props) => {
   }, [filteredCourses]);
 
   useEffect(() => {
+    if (loading) setPageNumber(pageNumber => pageNumber + 1);
+  }, [loading]);
+
+  useEffect(() => {
+    const handleScroll = (e) => {
+      let explorerRightContainer = e.target;
+
+      // console.log(
+      //   explorerRightContainer.scrollTop,
+      //   explorerRightContainer.clientHeight,
+      //   explorerRightContainer.scrollHeight
+      // );
+
+      if (
+        explorerRightContainer.scrollTop +
+          explorerRightContainer.clientHeight +
+          5 >=
+        explorerRightContainer.scrollHeight
+      ) {
+        if (!loading && filteredCourses.length < totalDocuments) {
+          setLoading(true);
+        }
+      }
+    };
+
     let explorerRightContainer = document.querySelector(
       ".explorer-right-container"
     );
@@ -111,33 +152,18 @@ export const CourseExplorerState = (props) => {
     };
   });
 
-  const handleScroll = (e) => {
-    let explorerRightContainer = e.target;
-    
-    if (
-      explorerRightContainer.scrollTop +
-        explorerRightContainer.clientHeight +
-        1 >=
-      explorerRightContainer.scrollHeight
-    ) {
-      if (!loading && filteredCourses.length < totalDocuments) {
-        setLoading(true);
-        setPageNumber(pageNumber => pageNumber + 1);
-      }
-    }
-  };
-
   const getFilteredCourses = async (changed) => {
-
     const encodedCategory = encodeURIComponent(
       selectedSubCategory ? selectedSubCategory : selectedCategory
     );
 
+    if (changed) setCategoryChanged(true);
+
     try {
       const res = await fetch(
-        `${
-          import.meta.env.VITE_SERVER_URL
-        }/course/getfiltered?page=${changed ? 1 : pageNumber}&coursePerPage=${coursePerPage}&category=${encodedCategory}`,
+        `${import.meta.env.VITE_SERVER_URL}/course/getfiltered?page=${
+          changed ? 1 : pageNumber
+        }&coursePerPage=${coursePerPage}&category=${encodedCategory}`,
         {
           method: "GET",
           headers: {
@@ -152,12 +178,14 @@ export const CourseExplorerState = (props) => {
         if (changed) setFilteredCourses(data.courses);
         else setFilteredCourses([...filteredCourses, ...data.courses]);
         setTotalDocuments(data.totalDocuments);
-       
       }
+
+      setCategoryChanged(false);
       //setLoading(false);
     } catch (err) {
       ///
       //setLoading(false);
+      setCategoryChanged(false);
     }
   };
 
@@ -182,6 +210,7 @@ export const CourseExplorerState = (props) => {
         totalDocuments,
         loading,
         setLoading,
+        coursePerPage,
       }}
     >
       {props.children}

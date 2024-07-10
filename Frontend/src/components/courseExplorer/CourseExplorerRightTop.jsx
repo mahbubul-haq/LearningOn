@@ -8,7 +8,6 @@ import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 import StyledTextField2 from "../StyledTextField2";
 import { GlobalContext } from "../../state/GlobalContext";
 import useTheme from "@mui/material/styles/useTheme";
-import { HomePageContext } from "../../state/HomePageState";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const CourseExplorerRightTop = () => {
@@ -23,7 +22,6 @@ const CourseExplorerRightTop = () => {
     totalDocuments,
   } = useContext(CourseExplorerContext);
   const { categoriesWithLabel } = useContext(GlobalContext);
-  const { courses } = useContext(HomePageContext);
   const theme = useTheme();
   const minWidth300 = useMediaQuery("(min-width: 1300px)");
 

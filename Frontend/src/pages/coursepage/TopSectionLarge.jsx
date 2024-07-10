@@ -169,7 +169,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     fontSize: "0.9rem",
                 }}
             >
-                {courseInfo?.studentRequirements}
+                Requirements: {courseInfo?.studentRequirements}
             </Typography>
         </Box>
     );

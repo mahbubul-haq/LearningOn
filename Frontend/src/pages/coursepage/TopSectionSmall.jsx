@@ -61,7 +61,7 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
                         textAlign: "center",
                     }}
                 >
-                    {courseInfo?.studentRequirements}
+                    Requirements: {courseInfo?.studentRequirements}
                 </Typography>
                 <StyledButton
                     onClick={() => {

@@ -15,6 +15,6 @@ router.get("/get/plain/:courseId", verifyToken, getCourseByIdWithOutPopulate);
 router.get("/all", getAllCourses);
 router.get("/getmycourses", verifyToken, getAllCourses);
 router.delete("/delete/:courseId", verifyToken, deleteCourse);
-router.get("/getfiltered", verifyToken, getFilteredCourses);
+router.get("/getfiltered", getFilteredCourses);
 
 export default router;
