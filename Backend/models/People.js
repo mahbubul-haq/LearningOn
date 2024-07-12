@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
-import Course from "./Course.js";
 
-const PeopleSchema = mongoose.Schema(
+const PeopleSchema = new mongoose.Schema(
     {
         name: {
             type: String,

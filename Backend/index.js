@@ -1,25 +1,26 @@
-import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
-dotenv.config();
+import express from "express";
+import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
+dotenv.config();
 
 // internal imports
-import authRoutes from "./routes/auth.js";
-import dataRoutes from "./routes/data.js";
-import courseRoutes from "./routes/course.js";
-import verifyToken from "./middlewares/auth.js";
-import userRoutes from "./routes/user.js";
-import notificationRoutes from "./routes/notification.js";
-import cloudinaryRoutes from "./routes/cloudinary.js";
 import http from "http";
-import { uploadFile, deleteFile } from "./controllers/uploads.js";
 import { upload } from "./configs/multer.config.js";
-import { cloudinaryConfig } from "./utils/cloudinary.js";
-import {connectSocket} from "./socket.io.js";
 import { initializeStripe } from "./controllers/data.js";
+import { deleteFile, uploadFile } from "./controllers/uploads.js";
+import verifyToken from "./middlewares/auth.js";
+import adminRoutes from "./routes/admin.js";
+import authRoutes from "./routes/auth.js";
+import cloudinaryRoutes from "./routes/cloudinary.js";
+import courseRoutes from "./routes/course.js";
+import dataRoutes from "./routes/data.js";
+import notificationRoutes from "./routes/notification.js";
+import userRoutes from "./routes/user.js";
+import { connectSocket } from "./socket.io.js";
+import { cloudinaryConfig } from "./utils/cloudinary.js";
 // configurations
 
 
@@ -58,6 +59,7 @@ app.use("/data", dataRoutes);
 app.use("/users", userRoutes);
 app.use("/notification", notificationRoutes);
 app.use("/cloudinary", cloudinaryRoutes);
+app.use("/admin", adminRoutes);
 
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);
 app.delete("/filedelete/:fileName/:isVideo", deleteFile);
