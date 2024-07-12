@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import Admin from "../models/Admin.js";
 
 const register = async (req, res) => {
@@ -14,7 +15,7 @@ const register = async (req, res) => {
                 { username: req.body.username },
             ],
         });
-    
+
         if (istaken) {
             return res.status(200).json({
                 success: false,
@@ -40,5 +41,51 @@ const register = async (req, res) => {
     }
 };
 
-export { register };
+const login = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const admin = await Admin.findOne({
+            username: username,
+        });
+
+        if (!admin) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid username",
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, admin.password);
+
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid password",
+            });
+        }
+
+        const token = jwt.sign(
+            {
+                id: admin._id,
+                username: admin.username,
+                email: admin.email,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
+
+        res.status(200).json({
+            success: true,
+            token: token,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Login error",
+        });
+    }
+};
+
+export { login, register };
 
