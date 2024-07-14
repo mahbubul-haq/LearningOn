@@ -1,5 +1,5 @@
-import Course from "../models/Course.js";
 import Category from "../models/Category.js";
+import Course from "../models/Course.js";
 
 const getFilteredCourses = async (req, res) => {
     try {
@@ -55,4 +55,24 @@ const getFilteredCourses = async (req, res) => {
     }
 };
 
-export { getFilteredCourses };
+const getUnpublishedCourses = async (req, res) => {
+    try {
+        const courses = await Course.find({
+            courseStatus: "unpublished"
+        }).populate("owner");
+
+        res.status(200).json({
+            success: true,
+            courses: courses
+        });
+
+    }
+    catch(error) {
+        res.status(404).json({
+            success: false
+        })
+    }
+}
+
+export { getFilteredCourses, getUnpublishedCourses };
+

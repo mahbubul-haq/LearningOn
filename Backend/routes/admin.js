@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { login } from "../controllers/admin.auth.js";
+import { getUnpublishedCourses } from "../controllers/course.search.js";
+import { updateStatus } from "../controllers/course.update.js";
 import verifyAdminToken from "../middlewares/adminAuth.js";
 
 const router = Router();
@@ -11,5 +13,7 @@ router.get("/verify", verifyAdminToken, (req, res) => {
         success: true,
     });
 });
+router.get("/unpublished", verifyAdminToken, getUnpublishedCourses);
+router.put("/updateCourseStatus", verifyAdminToken, updateStatus);
 
 export default router;

@@ -8,11 +8,24 @@ export const AdminState = (props) => {
   );
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [data, setData] = useState([]);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (adminToken) localStorage.setItem("adminToken", adminToken);
     else localStorage.removeItem("adminToken");
   }, [adminToken]);
+
+  useEffect(() => {
+    if (loading && query === "unpublished-courses") {
+      getUnpublishedCourses();
+    }
+  }, [loading, query]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const login = async (e) => {
     e.preventDefault();
@@ -34,7 +47,7 @@ export const AdminState = (props) => {
 
       const data = await res.json();
 
-     // console.log(data);
+      // console.log(data);
 
       if (data.success) {
         setAdminToken(data.token);
@@ -58,12 +71,36 @@ export const AdminState = (props) => {
       );
 
       let data = await res.json();
-     // console.log(data);
+      // console.log(data);
       if (!data.success) {
         setAdminToken(null);
       }
     } catch (error) {
-      setAdminToken(null)
+      setAdminToken(null);
+    }
+  };
+
+  const getUnpublishedCourses = async () => {
+    try {
+      let res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/admin/unpublished`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": adminToken,
+          },
+        }
+      );
+
+      let data = await res.json();
+
+      if (data.success) {
+        setData(data.courses);
+      }
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
     }
   };
 
@@ -77,7 +114,14 @@ export const AdminState = (props) => {
         username,
         setUsername,
         password,
-        setPassword
+        setPassword,
+        data,
+        setData,
+        getUnpublishedCourses,
+        query,
+        setQuery,
+        loading,
+        setLoading
       }}
     >
       {props.children}

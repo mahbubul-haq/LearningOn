@@ -7,7 +7,10 @@ import Login from "./Login";
 const Admin = () => {
   const { adminToken } = useContext(AdminContext);
 
-  return <Box>{adminToken ? <AdminMain /> : <Login />}</Box>;
+  return <Box sx={{
+    height: "100%",
+    width: "100%",
+  }}>{adminToken ? <AdminMain /> : <Login />}</Box>;
 };
 
 export default Admin;
