@@ -1,19 +1,14 @@
-import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
-import { useContext } from "react";
 import Typography from "@mui/material/Typography";
-import { CreateCourseContext } from "../../state/CreateCourse";
+import { useContext, useEffect } from "react";
 import VideoUpload from "../../components/videoUpload/VideoUpload";
+import { CreateCourseContext } from "../../state/CreateCourse";
+import RightPanelBottom from "./RightPanelBottom";
 
 const CourseMedia = () => {
-  const {
-    courseState,
-    setCourseState,
-    updateCallback,
-  } = useContext(CreateCourseContext);
-
-  
+  const { courseState, setCourseState, updateCallback } =
+    useContext(CreateCourseContext);
 
   useEffect(() => {
     let element = document.querySelector(".right-panel-course-media");
@@ -25,91 +20,94 @@ const CourseMedia = () => {
   }, []);
 
   return (
-    <Box
-      className="right-panel-course-media"
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        gap: "2.5rem",
-        mt: "0rem",
-        mb: "1rem",
-        opacity: 0,
-        transform: "translateY(4rem)",
-        transition: "opacity 0.5s, transform 0.5s",
-      }}
-    >
-      <Box>
-        <Box
-          sx={{
-            mb: "0.5rem",
-          }}
-        >
-          <InputLabel htmlFor="thumbnail">
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: "600",
-
-                color: (theme) => theme.palette.grey.grey600,
-              }}
-            >
-              Course Thumbnail
-            </Typography>
-          </InputLabel>
-        </Box>
-
-        <VideoUpload
-          updateCallBack={updateCallback}
-          setFileName={(fileName) => {
-            setCourseState({
-              ...courseState,
-              courseThumbnail: fileName,
-            });
-          }}
-          fileName={courseState.courseThumbnail}
-          isImage={true}
-          uploadText="Upload Thumbnail Image"
-        />
-      </Box>
-
+    <>
       <Box
+        className="right-panel-course-media"
         sx={{
           width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          gap: "2.5rem",
+          mt: "0rem",
+          mb: "1rem",
+          opacity: 0,
+          transform: "translateY(4rem)",
+          transition: "opacity 0.5s, transform 0.5s",
         }}
       >
-        <Box
-          sx={{
-            mb: "0.5rem",
-          }}
-        >
-          <InputLabel htmlFor="youtube-link">
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: "600",
-                color: (theme) => theme.palette.grey.grey600,
-              }}
-            >
-              Course Intro Video
-            </Typography>
-          </InputLabel>
+        <Box>
+          <Box
+            sx={{
+              mb: "0.5rem",
+            }}
+          >
+            <InputLabel htmlFor="thumbnail">
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "600",
+
+                  color: (theme) => theme.palette.grey.grey600,
+                }}
+              >
+                Course Thumbnail
+              </Typography>
+            </InputLabel>
+          </Box>
+
+          <VideoUpload
+            updateCallBack={updateCallback}
+            setFileName={(fileName) => {
+              setCourseState({
+                ...courseState,
+                courseThumbnail: fileName,
+              });
+            }}
+            fileName={courseState.courseThumbnail}
+            isImage={true}
+            uploadText="Upload Thumbnail Image"
+          />
         </Box>
 
-        <VideoUpload
-          updateCallBack={updateCallback}
-          setFileName={(fileName) => {
-            setCourseState({
-              ...courseState,
-              introVideo: fileName,
-            });
+        <Box
+          sx={{
+            width: "100%",
           }}
-          fileName={courseState.introVideo}
-          isImage={false}
-          uploadText="Upload Intro Video"
-        />
+        >
+          <Box
+            sx={{
+              mb: "0.5rem",
+            }}
+          >
+            <InputLabel htmlFor="youtube-link">
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "600",
+                  color: (theme) => theme.palette.grey.grey600,
+                }}
+              >
+                Course Intro Video
+              </Typography>
+            </InputLabel>
+          </Box>
+
+          <VideoUpload
+            updateCallBack={updateCallback}
+            setFileName={(fileName) => {
+              setCourseState({
+                ...courseState,
+                introVideo: fileName,
+              });
+            }}
+            fileName={courseState.introVideo}
+            isImage={false}
+            uploadText="Upload Intro Video"
+          />
+        </Box>
       </Box>
-    </Box>
+      <RightPanelBottom />
+    </>
   );
 };
 

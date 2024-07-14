@@ -1,13 +1,13 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import InputLabel from "@mui/material/InputLabel";
+import CloseIcon from "@mui/icons-material/Close";
 import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import InstructorProfile from "../../components/InstructorProfile";
 import { StyledButton } from "../../components/StyledButton";
 import StyledTextField1 from "../../components/StyledTextField1";
-import CloseIcon from "@mui/icons-material/Close";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 const MoreInfoBottom = ({
     courseState,
@@ -43,6 +43,7 @@ const MoreInfoBottom = ({
                 <Box>
                     <Autocomplete
                         disablePortal
+                        // PopperComponent={StyledPopper}
                         onChange={(event, value) => {
                             setCourseState({
                                 ...courseState,
@@ -66,9 +67,11 @@ const MoreInfoBottom = ({
                                 value: index + 1,
                             })) || [{ label: "No data" }]
                         }
+                        
                         sx={{
                             width: isMobileScreens ? "100%" : "250px",
                             maxWidth: "100%",
+                            background: "white",
                         }}
                         renderInput={(params) => (
                             <StyledTextField1
@@ -77,6 +80,7 @@ const MoreInfoBottom = ({
                                 size="small"
                                 // change font size of input
                                 sx={{
+                                    // zIndex: 5000,
                                     p: 0,
                                     "& .MuiInputBase-input": {
                                         fontSize: "1rem",

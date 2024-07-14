@@ -22,7 +22,7 @@ const AdminMain = () => {
         // background: "black",
         mx: "auto",
         display: "grid",
-        gridTemplateColumns: "25% 80%",
+        gridTemplateColumns: "auto 80%",
     }}>
         <Box sx={{
             background: theme.palette.background.alt,
@@ -48,6 +48,7 @@ const AdminMain = () => {
         </Box>
         <Box sx={{
             p: "2rem 1rem",
+            flex: 1,
         }}>
             {query === "unpublished-courses" && <UnpublishedCourses />}
         </Box>

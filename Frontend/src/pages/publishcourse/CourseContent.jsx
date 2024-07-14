@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import { CreateCourseContext } from "../../state/CreateCourse.jsx";
-import { useContext } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import Box from "@mui/material/Box";
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
+import React, { useContext, useEffect } from "react";
+import { CreateCourseContext } from "../../state/CreateCourse.jsx";
 import { GlobalContext } from "../../state/GlobalContext.jsx";
 import CourseContentCourseAccordion from "./CourseContentCourseAccordion.jsx";
+import RightPanelBottom from "./RightPanelBottom.jsx";
 
 const CourseContent = () => {
   const { courseState, setCourseState, updateCallback } =
@@ -269,6 +269,7 @@ const CourseContent = () => {
           </Typography>
         </Fab>
       </>
+      <RightPanelBottom />
     </Box>
   );
 };

@@ -1,12 +1,12 @@
+import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import { StyledButton } from "../../components/StyledButton";
 import { useNavigate } from "react-router-dom";
+import { StyledButton } from "../../components/StyledButton";
 
 
 const PublishStatusDialog = ({
@@ -40,7 +40,7 @@ const PublishStatusDialog = ({
                     </Box>
                 )}
                 {uploadStatus === "unpublished" && <>There was an error publishing your course.</>}
-                {uploadStatus === "published" && <>Your course has been published successfully.</>}
+                {uploadStatus === "published" && <>Successfully Published - Waiting for Admin Approval.</>}
             </DialogContent>
             <DialogActions>
                 <StyledButton

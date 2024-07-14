@@ -1,18 +1,16 @@
-import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import LeftPanel from "./LeftPanel";
-import RightPanel from "./RightPanel";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { GlobalContext } from "../../state/GlobalContext";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import DeleteCourseDialog from "./DeleteCourseDialog";
+import LeftPanel from "./LeftPanel";
 import PublishCourseNav from "./PublishCourseNav";
 import PublishStatusDialog from "./PublishStatusDialog";
-import DeleteCourseDialog from "./DeleteCourseDialog";
 import RightButtons from "./RightButtons";
+import RightPanel from "./RightPanel";
 
 const PublishCourse = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -83,7 +81,7 @@ const PublishCourse = () => {
 
   useEffect(() => {
     if (uploadStatus == "publishing") {
-      updateCourse("published");
+      updateCourse("unpublished");
     }
   }, [uploadStatus]);
 

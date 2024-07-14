@@ -1,16 +1,16 @@
+import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import LinearProgress from "@mui/material/LinearProgress";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import { StyledButton } from "../../components/StyledButton";
-import { useNavigate } from "react-router-dom";
-import { CreateCourseContext } from "../../state/CreateCourse";
-import { useContext } from "react";
-import FlexBetween from "../../components/FlexBetween";
 import useTheme from "@mui/material/styles/useTheme";
+import Typography from "@mui/material/Typography";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import FlexBetween from "../../components/FlexBetween";
+import { StyledButton } from "../../components/StyledButton";
+import { CreateCourseContext } from "../../state/CreateCourse";
 const DeleteCourseDialog = ({getUser }) => {
   const navigate = useNavigate();
   const {
@@ -152,7 +152,7 @@ const DeleteCourseDialog = ({getUser }) => {
               }
               else if (deleteCourseStatus === "deleted") {
                 setDeleteCourseStatus("");
-                setCourseState("");
+                setCourseState({});
                 
                 if (editMode) {
                   navigate("/dashboard");

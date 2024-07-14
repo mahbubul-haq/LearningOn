@@ -12,30 +12,44 @@ import { useNavigate } from "react-router-dom";
 import { AdminContext } from "../../state/AdminContext";
 
 const UnpublishedCourses = () => {
-  const { data, adminToken} = useContext(AdminContext);
+  const { data, adminToken, setData } = useContext(AdminContext);
   const navigate = useNavigate();
 
-  const updateStatus = async (courseId) => {
+  const updateStatus = async (courseId, index) => {
     try {
-        let res = await fetch(`${import.meta.env.VITE_SERVER_URL}/admin/updateCourseStatus`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "auth-token": adminToken
-            },
-            body: JSON.stringify({
-                courseId: courseId,
-                status: "published"
-            })
-        });
-        
-        res = await res.json();
-        console.log(res);
+      let res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/admin/updateCourseStatus`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": adminToken,
+          },
+          body: JSON.stringify({
+            courseId: courseId,
+            status: "published",
+          }),
+        }
+      );
+
+      res = await res.json();
+      console.log(res);
+      if (res.success) {
+        setData((data) =>
+          data.map((course, i) => {
+            if (i == index) {
+              return {
+                ...course,
+                courseStatus: "published",
+              };
+            } else return course;
+          })
+        );
+      }
+    } catch (err) {
+      //
     }
-    catch(err) {
-        //
-    }
-  }
+  };
 
   return (
     <Box
@@ -79,13 +93,13 @@ const UnpublishedCourses = () => {
                     textDecoration: "none",
                     fontWeight: "600",
                     "&:hover": {
-                        textDecoration: "underline",
-                        color: "inherit",
-                    }
+                      textDecoration: "underline",
+                      color: "inherit",
+                    },
                   }}
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate(`/course/${course._id}`)
+                    navigate(`/course/${course._id}`);
                   }}
                 >
                   {course.courseTitle}
@@ -101,10 +115,18 @@ const UnpublishedCourses = () => {
                 p: "1rem",
               }}
             >
-              <Button onClick={() => {
-                updateStatus(course._id)
-              }} disableElevation variant="contained" color="success">
-                Approve
+              <Button
+                onClick={() => {
+                  if (course.courseStatus === "published") return;
+
+                  updateStatus(course._id, index);
+                }}
+                disableElevation
+                variant="contained"
+                color="success"
+                disabled={course.courseStatus === "published"}
+              >
+                {course.courseStatus == "published" ? "Approved" : "Approve"}
               </Button>
               <Button disableElevation variant="outlined" color="error">
                 Delete
