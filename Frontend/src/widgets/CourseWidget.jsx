@@ -1,16 +1,16 @@
 /* eslint-disable react/prop-types */
+import { useMediaQuery } from "@mui/material";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import Rating from "../components/Rating";
-import Box from "@mui/material/Box";
-import CustomSlider1 from "../components/CustomSlider1";
-import { useNavigate } from "react-router-dom";
-import { useMediaQuery } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
-import { CourseExplorerContext } from "../state/CourseExplorerContext";
+import Typography from "@mui/material/Typography";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import CustomSlider1 from "../components/CustomSlider1";
+import Rating from "../components/Rating";
+import { CourseExplorerContext } from "../state/CourseExplorerContext";
 
 const CourseWidget = ({ courseInfo }) => {
   const navigate = useNavigate();
@@ -43,9 +43,10 @@ const CourseWidget = ({ courseInfo }) => {
           objectFit: "cover",
           borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
         }}
-        image={`https://res.cloudinary.com/${
-          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-        }/image/upload/${courseInfo.courseThumbnail}`}
+        image="/images/login_light.svg"
+        // image={`https://res.cloudinary.com/${
+        //   import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+        // }/image/upload/${courseInfo.courseThumbnail}`}
         title={courseInfo?.courseTitle}
       />
       <CardContent
@@ -93,7 +94,8 @@ const CourseWidget = ({ courseInfo }) => {
               } else navigate(`/course/${courseInfo._id}`);
             }}
           >
-            {courseInfo.courseTitle}
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, eos?
+            {/* {courseInfo.courseTitle} */}
           </Typography>
           <Typography
             component="a"
@@ -109,7 +111,7 @@ const CourseWidget = ({ courseInfo }) => {
               },
             }}
             href={`${import.meta.env.VITE_CLIENT_URL}/profile/${
-              courseInfo.owner._id
+              courseInfo.owner?._id
             }`}
             onClick={(e) => {
               e.preventDefault();
@@ -117,12 +119,13 @@ const CourseWidget = ({ courseInfo }) => {
                 setCloseBtnClicked(true);
                 setShowCourseExplorer(false);
                 setTimeout(() => {
-                  navigate(`/profile/${courseInfo.owner._id}`);
+                  navigate(`/profile/${courseInfo.owner?._id}`);
                 }, 300);
-              } else navigate(`/profile/${courseInfo.owner._id}`);
+              } else navigate(`/profile/${courseInfo.owner?._id}`);
             }}
           >
-            &mdash; {courseInfo.owner.name}
+            &mdash; Online Academy
+            {/* &mdash; {courseInfo.owner?.name} */}
           </Typography>
         </Box>
 
@@ -136,8 +139,8 @@ const CourseWidget = ({ courseInfo }) => {
           >
             <Rating
               rating={{
-                rating: courseInfo.ratings.totalRating,
-                count: courseInfo.ratings.numberOfRatings,
+                rating: courseInfo.ratings?.totalRating,
+                count: courseInfo.ratings?.numberOfRatings,
                 showText: false,
               }}
             />

@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import CustomSlider from "../../components/CustomSlider";
 import { GlobalContext } from "../../state/GlobalContext";
 import { HomePageContext } from "../../state/HomePageState";
+import CoursesBottom from "./CoursesBottom";
 import CoursesContent from "./CoursesContent";
 import CoursesTop from "./CoursesTop";
 
@@ -207,7 +208,7 @@ const HomeCourses = () => {
             backgroundColor: isNonMobileScreens ? "white" : "transparent",
             borderRadius: "0.25rem",
             width: "100%",
-            height: "600px",
+            height: isNonMobileScreens ? "580px" : "auto",
           }}
         >
           <Box
@@ -234,13 +235,13 @@ const HomeCourses = () => {
               selectedItem={selectedItem}
               selectedCourses={selectedCourses}
             />
-{/* 
+
             <CoursesBottom
               categoriesWithCourse={categoriesWithCourse}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
               selectedCourses={selectedCourses}
-            /> */}
+            />
           </Box>
         </Box>
       </Box>

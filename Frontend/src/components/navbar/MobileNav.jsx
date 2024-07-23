@@ -1,11 +1,11 @@
+import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import { useContext } from "react";
 import { NotificationContext } from "../../state/NotificationContext";
-import MobileNavTop from "./MobileNavTop";
 import MobileNavBottom from "./MobileNavBottom";
+import MobileNavTop from "./MobileNavTop";
 
 const MobileNav = ({
     openDrawer,
@@ -25,6 +25,7 @@ const MobileNav = ({
                     width: "100%",
                     maxWidth: "400px",
                 },
+                zIndex: 5000000,
             }}
 
         >

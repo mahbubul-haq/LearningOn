@@ -12,6 +12,7 @@ import WithNav from "./components/withNav";
 import Admin from "./pages/admin";
 import CoursePage from "./pages/coursepage";
 import PaymentStatus from "./pages/coursepage/PaymentStatus";
+import Courses from "./pages/courses";
 import Dashboard from "./pages/dashboard";
 import HomePage from "./pages/homepage";
 import LearningPage from "./pages/learningpage";
@@ -64,6 +65,7 @@ function App() {
                             <Route path="/dashboard/" element={<WithNav showNav={true} component={<Dashboard />} />} />
                             <Route path="/underway" element={<UnderwayAlert />} />
                             <Route path="/admin" element={<Admin />} />
+                            <Route path="/courses" element={<WithNav showNav={true} component={<Courses/>} />} />
                           </Routes>
                         </BrowserRouter>
                       </ThemeProvider>

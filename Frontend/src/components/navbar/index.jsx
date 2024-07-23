@@ -1,21 +1,18 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import FlexBetween from "../FlexBetween.jsx";
 import { StyledBox1 } from "../StyledButton.jsx";
-import { useMediaQuery } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import useTheme from "@mui/material/styles/useTheme";
+import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { NotificationContext } from "../../state/NotificationContext.jsx";
-import { useEffect } from "react";
-import { useState } from "react";
-import { GlobalContext } from "../../state/GlobalContext.jsx";
-import MobileNav from "./MobileNav.jsx";
-import NotificationDrawer from "./NotificationDrawer.jsx";
-import NavRight from "./NavRight.jsx";
-import useTheme from "@mui/material/styles/useTheme";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext.jsx";
+import { GlobalContext } from "../../state/GlobalContext.jsx";
+import { NotificationContext } from "../../state/NotificationContext.jsx";
+import MobileNav from "./MobileNav.jsx";
+import NavRight from "./NavRight.jsx";
+import NotificationDrawer from "./NotificationDrawer.jsx";
 
 const Navbar = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -202,13 +199,22 @@ const Navbar = () => {
                       position: "relative",
                     }}
                   >
-                    <span
-                      style={{
+                    <Box
+                      component="a"
+                      href={`${import.meta.env.VITE_CLIENT_URL}/courses`}
+                      sx={{
                         fontWeight: openedItem == "courses" ? "600" : "400",
+                        textDecoration: "none",
+                        color: "inherit",
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCloseBtnClicked(true);
+                        navigate("/courses");
                       }}
                     >
                       Courses
-                    </span>
+                    </Box>
                     <ExpandMoreIcon
                       sx={{
                         fontSize: "1.5rem",

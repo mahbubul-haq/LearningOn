@@ -1,19 +1,17 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Autocomplete from "@mui/material/Autocomplete";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import StyledTextField1 from "../../components/StyledTextField1";
 
 const CoursesBottom = ({
-    categoriesWithCourse,
-    selectedItem,
-    setSelectedItem,
-    selectedCourses,
+  categoriesWithCourse,
+  selectedItem,
+  setSelectedItem,
+  selectedCourses,
 }) => {
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    return (
-        <>
-            {!isNonMobileScreens && categoriesWithCourse.length > 0 && (
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  return (
+    <>
+      {/* {!isNonMobileScreens && categoriesWithCourse.length > 0 && (
                 <Box
                     sx={{
                         width: "100%",
@@ -59,38 +57,35 @@ const CoursesBottom = ({
                         )}
                     />
                 </Box>
-            )}
+            )} */}
 
-            {selectedCourses.length > 5 && (
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "100%",
-                        mt: isNonMobileScreens ? "2rem" : "1rem",
-                        textAlign: "center"
-                    }}
-                >
-                    <Typography
-                        sx={{
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          mt: isNonMobileScreens ? "2rem" : "2rem",
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          sx={{
+            borderRadius: "0.25rem",
+            border: "1px solid rgba(0, 0, 0, 0.23)",
+            fontSize: "1rem",
+            px: "0.5rem",
+            cursor: "pointer",
+            "&:hover": {
+              backgroundColor: (theme) => theme.palette.grey.grey100,
+            },
+          }}
+        >
+          Browse more in courses page
+        </Typography>
+      </Box>
+    </>
+  );
+};
 
-                            borderRadius: "0.25rem",
-                            border: "1px solid rgba(0, 0, 0, 0.23)",
-                            fontSize: "1rem",
-                            px: "0.5rem",
-                            cursor: "pointer",
-                            "&:hover": {
-                                backgroundColor: (theme) => theme.palette.grey.grey100,
-                            },
-                        }}
-                    >
-                        Browse more courses on <b>{selectedItem}</b>
-                    </Typography>
-                </Box>
-            )}
-        </>
-    )
-}
-
-export default CoursesBottom
+export default CoursesBottom;

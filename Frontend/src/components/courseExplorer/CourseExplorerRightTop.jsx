@@ -1,16 +1,16 @@
-import Box from "@mui/material/Box";
-import FlexBetween from "../FlexBetween";
-import Autocomplete from "@mui/material/Autocomplete";
 import { Breadcrumbs, InputAdornment, Typography } from "@mui/material";
-import { MdSearch } from "react-icons/md";
-import { useContext } from "react";
-import { CourseExplorerContext } from "../../state/CourseExplorerContext";
-import StyledTextField2 from "../StyledTextField2";
-import { GlobalContext } from "../../state/GlobalContext";
+import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
 import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useContext } from "react";
+import { MdSearch } from "react-icons/md";
+import { CourseExplorerContext } from "../../state/CourseExplorerContext";
+import { GlobalContext } from "../../state/GlobalContext";
+import FlexBetween from "../FlexBetween";
+import StyledTextField2 from "../StyledTextField2";
 
-const CourseExplorerRightTop = () => {
+const CourseExplorerRightTop = ({ coursePage }) => {
   const {
     setShowCourseExplorer,
     setCloseBtnClicked,
@@ -24,12 +24,13 @@ const CourseExplorerRightTop = () => {
   const { categoriesWithLabel } = useContext(GlobalContext);
   const theme = useTheme();
   const minWidth300 = useMediaQuery("(min-width: 1300px)");
+  const isMobileScreens = useMediaQuery("(max-width: 600px)");
 
   return (
     <Box
       sx={{
         position: "sticky",
-        top: "-3.5rem",
+        top: coursePage ? 0 : "-3.5rem",
         padding: "1rem 2rem 0rem 2rem",
         display: "flex",
         flexDirection: "column",
@@ -40,65 +41,68 @@ const CourseExplorerRightTop = () => {
         zIndex: "500000",
       }}
     >
-      <FlexBetween
-        sx={{
-          width: "100%",
-        }}
-      >
-        <Breadcrumbs
+      {!coursePage && (
+        <FlexBetween
           sx={{
-            color: theme.palette.grey.grey300,
-            "& .MuiBreadcrumbs-separator": {
-              color: theme.palette.grey.grey300,
-            },
+            width: "100%",
           }}
-          aria-label="breadcrumb"
         >
-          <Typography sx={{ fontSize: "1rem" }}>Courses</Typography>
+          <Breadcrumbs
+            sx={{
+              color: theme.palette.grey.grey300,
+              "& .MuiBreadcrumbs-separator": {
+                color: theme.palette.grey.grey300,
+              },
+            }}
+            aria-label="breadcrumb"
+          >
+            <Typography sx={{ fontSize: "1rem" }}>Courses</Typography>
 
-          {selectedSubCategory && (
-            <Typography sx={{ fontSize: "1rem" }}>
-              {selectedCategory}
+            {selectedSubCategory && (
+              <Typography sx={{ fontSize: "1rem" }}>
+                {selectedCategory}
+              </Typography>
+            )}
+
+            <Typography
+              sx={{
+                fontSize: "1rem",
+                color: theme.palette.grey.grey600,
+              }}
+            >
+              {selectedSubCategory
+                ? selectedSubCategory
+                : selectedCategory || "all"}
             </Typography>
-          )}
+          </Breadcrumbs>
 
           <Typography
+            onClick={() => {
+              setShowCourseExplorer(false);
+              setCloseBtnClicked(true);
+            }}
+            variant="grey"
             sx={{
-              fontSize: "1rem",
-              color: theme.palette.grey.grey600,
+              cursor: "pointer",
             }}
           >
-            {selectedSubCategory
-              ? selectedSubCategory
-              : selectedCategory || "all"}
+            Close
           </Typography>
-        </Breadcrumbs>
-
-        <Typography
-          onClick={() => {
-            setShowCourseExplorer(false);
-            setCloseBtnClicked(true);
-          }}
-          variant="grey"
-          sx={{
-            cursor: "pointer",
-          }}
-        >
-          Close
-        </Typography>
-      </FlexBetween>
+        </FlexBetween>
+      )}
 
       <FlexBetween
         sx={{
           width: "100%",
           "&&": {
             alignItems: "center",
+            flexDirection: isMobileScreens ? "column" : "row"
           },
         }}
       >
         <FlexBetween
           sx={{
-            mb: "1rem",
+            mb: isMobileScreens ? "0rem" : "1rem",
             height: "100%",
             // flexWrap: "wrap",
 

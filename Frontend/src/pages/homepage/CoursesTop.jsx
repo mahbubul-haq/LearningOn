@@ -1,11 +1,11 @@
-import FlexBetween from "../../components/FlexBetween";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
+import FlexBetween from "../../components/FlexBetween";
 import StyledTextField1 from "../../components/StyledTextField1";
 
 const CoursesTop = ({
@@ -102,6 +102,11 @@ const CoursesTop = ({
                             value="Popular Courses"
                         />
                     </Tabs>
+                </Box>
+            )}
+            {user && isMobileScreens && (
+                <Box>
+                    
                 </Box>
             )}
             {user && isMobileScreens && (

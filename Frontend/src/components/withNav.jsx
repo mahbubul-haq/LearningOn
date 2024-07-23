@@ -1,20 +1,37 @@
+import Box from "@mui/material/Box";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import CourseExplorer from "./courseExplorer";
 import Navbar from "./navbar";
-import Box from "@mui/material/Box";
 
 const WithNav = ({ component, showNav }) => {
-    return (
-        <Box className="app-container"
-            sx={{
-                height: "100%",
-                overflow: "auto",
-            }}
-        >
-            <CourseExplorer />
-            {showNav && <Navbar />}
-            {component}
-        </Box>
-    );
+  const [basePath, setBasePath] = useState("/");
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setBasePath(location?.pathname?.split("/")[1]);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    let appContainer = document.querySelector(".app-container");
+    if (appContainer) appContainer.scrollTo(0, 0);
+  }, [basePath]);
+
+  return (
+    <Box
+      className="app-container"
+      sx={{
+        height: "100%",
+        overflow: "auto",
+        scrollBehavior: "smooth",
+      }}
+    >
+      <CourseExplorer />
+      {showNav && <Navbar />}
+      {component}
+    </Box>
+  );
 };
 
 export default WithNav;

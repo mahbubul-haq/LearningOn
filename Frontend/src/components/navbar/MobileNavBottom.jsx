@@ -1,13 +1,13 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
-import RssFeedIcon from "@mui/icons-material/RssFeed";
 import GroupIcon from "@mui/icons-material/Group";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import LogoutIcon from "@mui/icons-material/Logout";
+import RssFeedIcon from "@mui/icons-material/RssFeed";
+import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import useTheme from "@mui/material/styles/useTheme";
+import Typography from "@mui/material/Typography";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setLogout } from "../../state";
 
 
@@ -46,7 +46,7 @@ const MobileNavBottom = ({
                             borderRadius: "0.15rem",
                         }}
                         onClick={() => {
-                            navigate("/dashboard");
+                            navigate("/courses");
                             setOpenDrawer(false);
                         }}
                     >
@@ -76,10 +76,11 @@ const MobileNavBottom = ({
                             },
                             p: "0.8rem",
                             borderRadius: "0.15rem",
+                            opacity: 0.3
                         }}
                         onClick={() => {
-                            navigate("/dashboard");
-                            setOpenDrawer(false);
+                            // navigate("/dashboard");
+                            // setOpenDrawer(false);
                         }}
                     >
                         <RssFeedIcon
@@ -108,10 +109,11 @@ const MobileNavBottom = ({
                             },
                             p: "0.8rem",
                             borderRadius: "0.15rem",
+                            opacity: 0.3
                         }}
                         onClick={() => {
-                            navigate("/dashboard");
-                            setOpenDrawer(false);
+                            // navigate("/dashboard");
+                            // setOpenDrawer(false);
                         }}
                     >
                         <GroupIcon
