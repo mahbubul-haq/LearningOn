@@ -38,7 +38,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
         alignItems: "flex-end",
         background: theme.palette.background.default,
         borderBottom: `1px solid ${theme.palette.grey[300]}`,
-        zIndex: "500000",
+        zIndex: "5000",
       }}
     >
       {!coursePage && (

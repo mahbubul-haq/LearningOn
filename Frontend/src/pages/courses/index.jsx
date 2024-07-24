@@ -13,7 +13,11 @@ const Courses = () => {
     }, []);
 
   return (
-    <Box>
+    <Box sx={{
+        maxWidth: "2000px",
+        mx: "auto",
+        
+    }}>
         <CourseExplorerRightTop coursePage={true} />
         <CourseExplorerRIghtBottom />
     </Box>

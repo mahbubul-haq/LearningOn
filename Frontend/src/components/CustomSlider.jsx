@@ -63,7 +63,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
   useEffect(() => {
     let slider = document.querySelector(".custom-slider-items");
     if (!slider) return;
-
+    console.log("changed?", items);
     slider.scrollLeft = 0;
     handleNext("", 0);
   }, [items]);
@@ -95,9 +95,9 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
         curTouchX = event.touches[0].clientX;
         
         let distance = curTouchX - prevTouchX;
-        if (curTouchX > prevTouchX) handleNext("prev", distance * 3);
-        else handleNext("next", -distance * 3);
-        prevTouchX = curTouchX;
+        if (curTouchX > prevTouchX) handleNext("prev", distance);
+        else handleNext("next", -distance);
+        //prevTouchX = curTouchX;
     }
 
     const handleMouseOver = () => {

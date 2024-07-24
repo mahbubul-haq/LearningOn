@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { Box } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
-import { Box } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import * as React from 'react';
 
 function UnderwayAlert() {
   const [open, setOpen] = React.useState(sessionStorage.getItem('firstTime') !== 'true');
@@ -19,7 +19,7 @@ function UnderwayAlert() {
       height: '100%',
       // zIndex: open? 6000 : -1,
       visibility: open ? 'visible' : 'hidden',
-      zIndex: open ? 6000 : -100,
+      zIndex: open ? 50000 : -100,
     }}>
       <Modal
         open={open}
@@ -30,7 +30,7 @@ function UnderwayAlert() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: open ? 6002 : -100,
+          zIndex: open ? 50002 : -100,
         }}
       >
         <Alert severity="info" onClose={handleClose} sx={{ width: isMobibleScreens? '90%' : '50%', fontSize: "1rem" }}>

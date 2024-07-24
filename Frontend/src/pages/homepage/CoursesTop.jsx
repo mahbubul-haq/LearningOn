@@ -1,12 +1,11 @@
-import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
+import useTheme from "@mui/material/styles/useTheme";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import FlexBetween from "../../components/FlexBetween";
-import StyledTextField1 from "../../components/StyledTextField1";
 
 const CoursesTop = ({
     courseType,
@@ -18,7 +17,7 @@ const CoursesTop = ({
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const user = useSelector((state) => state.user);
-
+    const theme = useTheme();
 
     return (
         <FlexBetween
@@ -104,12 +103,31 @@ const CoursesTop = ({
                     </Tabs>
                 </Box>
             )}
-            {user && isMobileScreens && (
-                <Box>
-                    
+            {!user && isMobileScreens && (
+                <Box sx={{
+                    my: "1rem"
+                }}>
+                    <select style={{
+                        background: "transparent",
+                        padding: "0.5rem 1rem",
+                        // paddingRight: 0,
+                        // borderRadius: "0.2rem",
+                        borderRadius: "1000px",
+                        color: theme.palette.grey.grey700,
+                        border: `1px solid ${theme.palette.grey.grey200}`
+                    }}
+                    onChange={(e) => {
+                        console.log(e.target.value);
+                        setCourseType(e.target.value);
+                    }}
+                    >
+                        <option value="Popular Courses">Popular Courses</option>
+                        <option value="My Courses">My Courses</option>
+                        <option value="I am Learning">I am Learning</option>
+                    </select>
                 </Box>
             )}
-            {user && isMobileScreens && (
+            {/* {!user && isMobileScreens && (
                 <Box
                     sx={{
                         width: "100%",
@@ -158,7 +176,7 @@ const CoursesTop = ({
                         )}
                     />
                 </Box>
-            )}
+            )} */}
         </FlexBetween>
     )
 }

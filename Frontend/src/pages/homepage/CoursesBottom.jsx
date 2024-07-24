@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useNavigate } from "react-router-dom";
 
 const CoursesBottom = ({
   categoriesWithCourse,
@@ -9,6 +10,8 @@ const CoursesBottom = ({
   selectedCourses,
 }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const navigate = useNavigate();
+
   return (
     <>
       {/* {!isNonMobileScreens && categoriesWithCourse.length > 0 && (
@@ -60,6 +63,8 @@ const CoursesBottom = ({
             )} */}
 
       <Box
+        component='a'
+        href={`${import.meta.env.VITE_CLIENT_URL}/courses`}
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -67,6 +72,12 @@ const CoursesBottom = ({
           width: "100%",
           mt: isNonMobileScreens ? "2rem" : "2rem",
           textAlign: "center",
+          textDecoration: "none",
+          color: "inherit",
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          navigate('/courses');
         }}
       >
         <Typography

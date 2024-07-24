@@ -217,7 +217,8 @@ const HomeCourses = () => {
             }}
           >
             <CustomSlider
-              items={categoriesWithCourse}
+              // items={categoriesWithCourse}
+              items={React.useMemo(() => ["one", "random", "Data Structures", "Web Development", "Python", "Digital Marketing", "Health & Fitness",  "Web Development", "Python", "Digital Marketing", "Health & Fitness"], [])}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
             />
