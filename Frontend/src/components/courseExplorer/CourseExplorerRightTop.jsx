@@ -25,13 +25,14 @@ const CourseExplorerRightTop = ({ coursePage }) => {
   const theme = useTheme();
   const minWidth300 = useMediaQuery("(min-width: 1300px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
-
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   return (
     <Box
       sx={{
         position: "sticky",
         top: coursePage ? 0 : "-3.5rem",
-        padding: "1rem 2rem 0rem 2rem",
+        padding: isNonMobileScreens ? "1rem 64px 0 64px" : "1rem 24px 0rem 24px",
+
         display: "flex",
         flexDirection: "column",
         gap: "2rem",

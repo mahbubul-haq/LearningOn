@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useCallback } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export const CourseExplorerContext = createContext();
@@ -16,6 +16,7 @@ export const CourseExplorerState = (props) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(false);
   const [categoryChanged, setCategoryChanged] = useState(false);
+  const [coursePageOpened, setCoursePageOpened] = useState(false);
 
   const coursePerPage = 12;
 
@@ -77,15 +78,20 @@ export const CourseExplorerState = (props) => {
   }, [showCourseExplorer]);
 
   useEffect(() => {
-    let courseExplorerRightBottom = document.querySelector(
+    let courseExplorerRightBottom = document.querySelectorAll(
       ".course-explorer-right-bottom"
     );
 
     if (categoryChanged) {
-      if (courseExplorerRightBottom)
-        courseExplorerRightBottom.style.opacity = 0.5;
+      if (courseExplorerRightBottom) {
+        courseExplorerRightBottom.forEach((element) => {
+          element.style.opacity = 0.5;
+        });
+      }
     } else if (courseExplorerRightBottom) {
-      courseExplorerRightBottom.style.opacity = 1;
+      courseExplorerRightBottom.forEach((element) => {
+        element.style.opacity = 1;
+      });
     }
   }, [categoryChanged]);
 
@@ -98,7 +104,7 @@ export const CourseExplorerState = (props) => {
   }, [selectedCategory, selectedSubCategory]);
 
   useEffect(() => {
-    console.log("Calling for filtered courss");
+    //console.log("Calling for filtered courss");
     setPageNumber(1);
     getFilteredCourses(true);
   }, [selectedCategory, selectedSubCategory]);
@@ -115,7 +121,7 @@ export const CourseExplorerState = (props) => {
   }, [filteredCourses]);
 
   useEffect(() => {
-    if (loading) setPageNumber(pageNumber => pageNumber + 1);
+    if (loading) setPageNumber((pageNumber) => pageNumber + 1);
   }, [loading]);
 
   useEffect(() => {
@@ -143,12 +149,20 @@ export const CourseExplorerState = (props) => {
     let explorerRightContainer = document.querySelector(
       ".explorer-right-container"
     );
+
+    let appContainer = document.querySelector(".app-container");
+
+    if (appContainer && coursePageOpened)
+      appContainer.addEventListener("scroll", handleScroll);
+
     if (explorerRightContainer)
       explorerRightContainer.addEventListener("scroll", handleScroll);
 
     return () => {
       if (explorerRightContainer)
         explorerRightContainer.removeEventListener("scroll", handleScroll);
+      if (appContainer)
+        appContainer.removeEventListener("scroll", handleScroll);
     };
   });
 
@@ -211,6 +225,8 @@ export const CourseExplorerState = (props) => {
         loading,
         setLoading,
         coursePerPage,
+        coursePageOpened,
+        setCoursePageOpened,
       }}
     >
       {props.children}

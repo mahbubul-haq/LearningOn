@@ -9,6 +9,7 @@ const CourseExplorerRIghtBottom = () => {
   const { filteredCourses, loading, totalDocuments, coursePerPage } =
     useContext(CourseExplorerContext);
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   return (
     <Box
@@ -16,6 +17,7 @@ const CourseExplorerRIghtBottom = () => {
       sx={{
         width: "100%",
         p: isMobileScreens ? "1rem" : "2rem",
+        px: isNonMobileScreens ? "64px" : "24px",
         display: "grid",
         gridTemplateColumns: isMobileScreens ? "repeat(auto-fill, minmax(250px, 1fr))" : "repeat(auto-fill, minmax(300px, 1fr))",
         gap: "1rem",
@@ -26,9 +28,7 @@ const CourseExplorerRIghtBottom = () => {
       {filteredCourses?.map((course, index) => (
         <CourseWidget key={index} courseInfo={course} />
       ))}
-      {new Array(10).fill(0).map((_, index) => (
-        <CourseWidget key={index} courseInfo={{}} />
-      ))}
+
       {loading && (
         <>
           {new Array(

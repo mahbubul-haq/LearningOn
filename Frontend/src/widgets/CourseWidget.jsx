@@ -43,10 +43,9 @@ const CourseWidget = ({ courseInfo }) => {
           objectFit: "cover",
           borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
         }}
-        image="/images/login_light.svg"
-        // image={`https://res.cloudinary.com/${
-        //   import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-        // }/image/upload/${courseInfo.courseThumbnail}`}
+        image={`https://res.cloudinary.com/${
+          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+        }/image/upload/${courseInfo.courseThumbnail}`}
         title={courseInfo?.courseTitle}
       />
       <CardContent
@@ -94,8 +93,7 @@ const CourseWidget = ({ courseInfo }) => {
               } else navigate(`/course/${courseInfo._id}`);
             }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, eos?
-            {/* {courseInfo.courseTitle} */}
+            {courseInfo.courseTitle}
           </Typography>
           <Typography
             component="a"
@@ -124,8 +122,8 @@ const CourseWidget = ({ courseInfo }) => {
               } else navigate(`/profile/${courseInfo.owner?._id}`);
             }}
           >
-            &mdash; Online Academy
-            {/* &mdash; {courseInfo.owner?.name} */}
+           
+            &mdash; {courseInfo.owner?.name}
           </Typography>
         </Box>
 
