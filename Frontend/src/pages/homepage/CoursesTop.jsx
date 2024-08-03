@@ -103,36 +103,33 @@ const CoursesTop = ({ courseType, setCourseType, handleChange }) => {
             my: "1rem",
           }}
         >
-          <select
-            style={{
-              appearance: "none",
-              WebkitAppearance: "none",
-              MozAppearance: "none",
-              backgroundImage: `url('/images/down_arrow.svg')`,
-              backgroundRepeat: "no-repeat",
-              backgroundPositionX: "calc(100% - 0.8rem)",
-              backgroundSize: "12px 12px",
-              backgroundPositionY: "center",
-              //   paddingRight: "1rem",
-              zIndex: 1,
-
-              background: "transparent",
-              padding: "0.5rem 3.5rem 0.5rem 1rem",
-              // paddingRight: 0,
-              // borderRadius: "0.2rem",
-              borderRadius: "1000px",
-              color: theme.palette.grey.grey700,
-              border: `1px solid ${theme.palette.grey.grey200}`,
-            }}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setCourseType(e.target.value);
+          <Box
+            sx={{
+              position: "relative",
             }}
           >
-            <option value="Popular Courses">Popular Courses</option>
-            <option value="My Courses">My Courses</option>
-            <option value="I am Learning">I am Learning</option>
-          </select>
+            <select
+              style={{
+                appearance: "none",
+                WebkitAppearance: "none",
+                MozAppearance: "none",
+                background: "transparent",
+                padding: "0.5rem 3rem 0.5rem 1rem",
+                borderRadius: "1000px",
+                color: theme.palette.grey.grey700,
+                border: `1px solid ${theme.palette.grey.grey200}`,
+              }}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setCourseType(e.target.value);
+              }}
+            >
+              <option value="Popular Courses">Popular Courses</option>
+              <option value="My Courses">My Courses</option>
+              <option value="I am Learning">I am Learning</option>
+            </select>
+            <Box className="home-coursetype-select-arrow"></Box>
+          </Box>
         </Box>
       )}
       {/* {!user && isMobileScreens && (
