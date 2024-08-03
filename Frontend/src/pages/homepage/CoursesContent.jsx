@@ -1,12 +1,64 @@
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { CourseNextPrevButton } from "../../components/StyledBox";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useEffect } from "react";
+import { CourseNextPrevButton } from "../../components/StyledBox";
 import CourseWidget from "../../widgets/CourseWidget";
 
 const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+
+    useEffect(() => {
+
+        let coursesContainer = document.querySelector(".courses-container");
+
+        if (!coursesContainer) return;
+
+        let initialX, finalX, prevTouchX = 0, curTouchX;
+
+        const handleTouchStart = (event) => {
+            initialX = event.changedTouches[0].clientX;
+            prevTouchX = initialX;
+        }
+
+        const handleTouchEnd = (event) => {
+            finalX = event.changedTouches[0].clientX;
+            let swipeDistance = finalX - initialX;
+
+            if (swipeDistance > 0) {
+                handleScroll("left", swipeDistance * 10);
+            }
+            else {
+                handleScroll("right", -swipeDistance * 10);
+            }
+        }
+
+        const handleTouchMove = (event) => {
+            ///event.preventDefault();
+            curTouchX = event.touches[0].clientX;
+
+            let distance = curTouchX - prevTouchX;
+
+            if (distance > 0) {
+                handleScroll("left", distance);
+            }
+            else handleScroll("right", -distance);
+            prevTouchX = curTouchX;
+        }
+
+        coursesContainer.addEventListener("touchstart", handleTouchStart);
+        coursesContainer.addEventListener("touchend", handleTouchEnd);
+        coursesContainer.addEventListener("touchmove", handleTouchMove);
+
+        return () => {
+            coursesContainer.removeEventListener("touchstart", handleTouchStart);
+            coursesContainer.removeEventListener("touchend", handleTouchEnd);
+            coursesContainer.removeEventListener("touchmove", handleTouchMove);
+        }
+
+    }, []);
+
     return (
         <Box
             sx={{

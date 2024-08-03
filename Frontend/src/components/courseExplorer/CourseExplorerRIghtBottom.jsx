@@ -16,18 +16,29 @@ const CourseExplorerRIghtBottom = () => {
       className="course-explorer-right-bottom"
       sx={{
         width: "100%",
+       
         p: isMobileScreens ? "1rem" : "2rem",
         px: isNonMobileScreens ? "64px" : "24px",
-        display: "grid",
+        display: filteredCourses?.length ? "grid" : "flex",
         gridTemplateColumns: isMobileScreens ? "repeat(auto-fill, minmax(250px, 1fr))" : "repeat(auto-fill, minmax(300px, 1fr))",
         gap: "1rem",
         opacity: 1,
         transition: "opacity 0.3s ease-out",
+        alignItems: "center",
+        justifyContent: "center"
       }}
     >
       {filteredCourses?.map((course, index) => (
         <CourseWidget key={index} courseInfo={course} />
       ))}
+
+      {filteredCourses?.length == 0 && (
+        <img style={{
+          width: isNonMobileScreens ? "350px" : "250px",
+          height: "auto",
+          objectFit: "cover",
+        }}src="/images/not_found_1.svg" alt="not found"/>
+      )}
 
       {loading && (
         <>

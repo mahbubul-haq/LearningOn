@@ -126,9 +126,13 @@ const HomeCourses = () => {
 
   // });
 
-  const handleScroll = (direction) => {
+  const handleScroll = (direction, scrollValue) => {
     const container = document.querySelector(".courses-container");
-    const scrollStep = isNonMobileScreens ? 400 : 200;
+    const scrollStep = scrollValue
+      ? scrollValue
+      : isNonMobileScreens
+      ? 400
+      : 200;
 
     //console.log(container.scrollLeft);
 
@@ -140,22 +144,20 @@ const HomeCourses = () => {
 
     // console.log(container.scrollLeft, container.scrollWidth - container.clientWidth);
 
-    setTimeout(() => {
-      if (container.scrollLeft === 0) {
-        document.querySelector(".left-arrow").style.display = "none";
-      } else {
-        document.querySelector(".left-arrow").style.display = "flex";
-      }
+    if (container.scrollLeft === 0) {
+      document.querySelector(".left-arrow").style.display = "none";
+    } else {
+      document.querySelector(".left-arrow").style.display = "flex";
+    }
 
-      if (
-        container.scrollLeft + 1 >=
-        container.scrollWidth - container.clientWidth
-      ) {
-        document.querySelector(".right-arrow").style.display = "none";
-      } else {
-        document.querySelector(".right-arrow").style.display = "flex";
-      }
-    }, 100);
+    if (
+      container.scrollLeft + 1 >=
+      container.scrollWidth - container.clientWidth
+    ) {
+      document.querySelector(".right-arrow").style.display = "none";
+    } else {
+      document.querySelector(".right-arrow").style.display = "flex";
+    }
   };
 
   useEffect(() => {
@@ -208,7 +210,7 @@ const HomeCourses = () => {
             backgroundColor: isNonMobileScreens ? "white" : "transparent",
             borderRadius: "0.25rem",
             width: "100%",
-            height: isNonMobileScreens ? "580px" : "auto",
+            height: isNonMobileScreens ? "580px" : "520px",
           }}
         >
           <Box
@@ -218,7 +220,6 @@ const HomeCourses = () => {
           >
             <CustomSlider
               items={categoriesWithCourse}
-              
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
             />

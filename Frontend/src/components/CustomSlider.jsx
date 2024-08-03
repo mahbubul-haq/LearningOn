@@ -90,14 +90,13 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     };
 
     const handleTouchMove = (event) => {
-        event.preventDefault();
 
         curTouchX = event.touches[0].clientX;
         
         let distance = curTouchX - prevTouchX;
         if (curTouchX > prevTouchX) handleNext("prev", distance);
         else handleNext("next", -distance);
-        //prevTouchX = curTouchX;
+        prevTouchX = curTouchX;
     }
 
     const handleMouseOver = () => {
