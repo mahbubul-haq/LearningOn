@@ -20,6 +20,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     if (!slider || !leftArrow || !rightArrow) return;
 
     if (focus) slider.focus();
+   // console.log(slider.scrollLeft, swipeDistance);
 
     if (side === "next") {
       slider.scrollLeft += swipeDistance;
@@ -28,9 +29,10 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
       slider.scrollLeft -= swipeDistance;
     }
 
+    //console.log(slider.scrollLeft, swipeDistance);
     // console.log(slider.scrollLeft, slider.clientWidth, slider.scrollWidth);
 
-    if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
+    if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth && side != "prev") {
       setTimeout(() => {
         rightArrow.style.display = "none";
       }, 300);
@@ -39,9 +41,9 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
         rightArrow.style.display = "flex";
       }, 300);
     }
-
+    //console.log("slider scrolleft", slider.scrollLeft);
     // check if slider has reached start
-    if (slider.scrollLeft === 0) {
+    if (slider.scrollLeft === 0 && side != "next") {
       setTimeout(() => {
         leftArrow.style.display = "none";
       }, 300);
@@ -63,7 +65,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
   useEffect(() => {
     let slider = document.querySelector(".custom-slider-items");
     if (!slider) return;
-    console.log("changed?", items);
+    //console.log("changed?", items);
     slider.scrollLeft = 0;
     handleNext("", 0);
   }, [items]);

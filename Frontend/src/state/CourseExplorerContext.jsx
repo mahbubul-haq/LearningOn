@@ -118,6 +118,7 @@ export const CourseExplorerState = (props) => {
 
   useEffect(() => {
     setLoading(false);
+    console.log(filteredCourses);
   }, [filteredCourses]);
 
   useEffect(() => {

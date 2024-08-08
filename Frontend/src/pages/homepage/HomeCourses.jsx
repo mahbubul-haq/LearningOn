@@ -13,10 +13,11 @@ const HomeCourses = () => {
   const [courseType, setCourseType] = React.useState("Popular Courses");
   const { listOfCategories, getCategories } = useContext(GlobalContext);
   const [categoriesWithCourse, setCategoriesWithCourse] = React.useState([]);
-  const [selectedItem, setSelectedItem] = React.useState("");
-  const { courses, getCourses } = useContext(HomePageContext);
-  const [filteredCourses, setFilteredCourses] = React.useState([]);
-  const [selectedCourses, setSelectedCourses] = React.useState([]);
+  const [selectedItem, setSelectedItem] = React.useState("All");
+  const { courses, getCourses, setLoading, selectedCourses, setSelectedCourses, filteredCourses,
+    setFilteredCourses
+   } = useContext(HomePageContext);
+  
 
   const user = useSelector((state) => state.user);
 
@@ -26,43 +27,50 @@ const HomeCourses = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (listOfCategories.length > 0) {
-      setSelectedItem(listOfCategories[0]);
-    } else {
-      setSelectedItem("");
-    }
-  }, [listOfCategories]);
+  // useEffect(() => {
+  //   if (listOfCategories.length > 0) {
+  //     setSelectedItem(listOfCategories[0]);
+  //   } else {
+  //     setSelectedItem("");
+  //   }
+  // }, [listOfCategories]);
 
   useEffect(() => {
+    setLoading(true);
     getCourses();
     if (!listOfCategories || listOfCategories.length === 0) {
-      console.log("calling for categories from home");
+      ///console.log("calling for categories from home");
       getCategories();
     }
   }, []);
 
   useEffect(() => {
+    ///console.log("chaning course type");
     changeCourseType();
   }, [courses]);
 
-  useEffect(() => {
-    if (categoriesWithCourse.length > 0) {
-      setSelectedItem(categoriesWithCourse[0]);
-    } else {
-      setSelectedItem("");
-    }
-  }, [categoriesWithCourse]);
+  // useEffect(() => {
+  //   ///console.log("cat with couse", categoriesWithCourse);
+  //   if (categoriesWithCourse.length > 0) {
+  //     setSelectedItem(categoriesWithCourse[0]);
+  //   } else {
+  //     setSelectedItem("");
+  //   }
+  // }, [categoriesWithCourse]);
 
   useEffect(() => {
     //console.log(filteredCourses, listOfCategories);
+    //setSelectedItem("All");
+
+    if (courseType == "Popular Courses" && selectedItem != "All") return;
+
     if (filteredCourses.length > 0 && listOfCategories.length > 0) {
       const categoriesWithCourse = listOfCategories.filter((category) => {
         return filteredCourses.reduce((cur, course) => {
           return cur || course.category === category;
         }, false);
       });
-      setCategoriesWithCourse(categoriesWithCourse);
+      setCategoriesWithCourse(["All", ...categoriesWithCourse]);
     } else {
       setCategoriesWithCourse([]);
     }
@@ -70,7 +78,8 @@ const HomeCourses = () => {
 
   useEffect(() => {
     //console.log(selectedItem, courses);
-    if (selectedItem) {
+    if (selectedItem == "All" || courseType === "Popular Courses") setSelectedCourses(filteredCourses);
+    else if (selectedItem) {
       const curfilteredCourses = filteredCourses.filter((course) => {
         return course.category === selectedItem;
       });
@@ -80,51 +89,35 @@ const HomeCourses = () => {
 
   const changeCourseType = () => {
     if (courseType === "My Courses") {
-      const curFilteredCourses = [];
-
-      courses?.forEach((course) => {
-        //console.log(course.owner._id, user._id);
-        if (course.courseStatus == "draft") return;
-        if (course.owner._id == user._id) {
-          curFilteredCourses.push(course);
-        } else {
-          course.courseInstructors.forEach((instructor) => {
-            if (instructor._id == user._id) {
-              curFilteredCourses.push(course);
-            }
-          });
-        }
-      });
-
-      setFilteredCourses(curFilteredCourses);
+      
+      setFilteredCourses(user?.courses);
+      
+      
     } else if (courseType === "I am Learning") {
-      const curFilteredCourses = [];
-      user?.learning?.forEach(({ courseId }) => {
-        const course = courses.find((course) => course._id == courseId);
-        if (course) {
-          curFilteredCourses.push(course);
-        }
-      });
-
-      setFilteredCourses(curFilteredCourses);
+      setFilteredCourses(user?.learning?.map((course) => course.course));
+      
     } else if (courseType === "Popular Courses") {
-      const curFilteredCourses = [];
-      courses?.forEach((course) => {
-        if (course.courseStatus == "draft") return;
-        curFilteredCourses.push(course);
-      });
-
-      setFilteredCourses(curFilteredCourses);
+      setFilteredCourses(courses);
+      
     }
   };
 
   useEffect(() => {
+    setSelectedItem("All");
     changeCourseType();
+    if (courseType === "Popular Courses") {
+      setLoading(true);
+      getCourses("all");
+    }
   }, [courseType]);
 
-  // ueEffect(() => {
-
-  // });
+  useEffect(() => {
+    if (courseType == "Popular Courses") {
+      setLoading(true);
+      getCourses(selectedItem == "All" ? "all" : selectedItem);
+      
+    }
+  }, [selectedItem]);
 
   const handleScroll = (direction, scrollValue) => {
     const container = document.querySelector(".courses-container");
@@ -183,6 +176,8 @@ const HomeCourses = () => {
   const handleChange = (event, newValue) => {
     setCourseType(newValue);
   };
+
+  
 
   return (
     <Box

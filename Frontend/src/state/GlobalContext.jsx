@@ -1,7 +1,7 @@
 import React, { createContext, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import state, { setLogout, setLogin } from ".";
+import { setLogin } from ".";
 
 export const GlobalContext = createContext();
 
@@ -34,7 +34,7 @@ export const GlobalState = (props) => {
       const data = await response.json();
       if (data.success) {
         setUser(data.user);
-        //console.log("user fetched", data.user);
+        console.log("user fetched", data.user);
         dispatch(
           setLogin({
             token,

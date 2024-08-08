@@ -2,12 +2,14 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { CourseNextPrevButton } from "../../components/StyledBox";
+import { HomePageContext } from "../../state/HomePageState";
 import CourseWidget from "../../widgets/CourseWidget";
 
 const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const {loading} = useContext(HomePageContext);
 
     useEffect(() => {
 
@@ -112,6 +114,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                     width: "100%",
                     height: "100%",
                     scrollBehavior: "smooth",
+                    opacity: loading? 0.3 : 1,
                 }}
             >
                 {selectedCourses.map((course) => {
@@ -139,7 +142,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                             //border: "1px solid rgba(0, 0, 0, 0.23)",
                         }}
                     >
-                        {selectedItem === "" ? (
+                        {/* {selectedItem === "" ? ( */}
                             <Box
                                 sx={{
                                     display: "flex",
@@ -168,11 +171,11 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                                     }}
                                 />
                             </Box>
-                        ) : (
+                        {/* ) : (
                             <Typography variant="h4">
                                 No courses found on <b>{selectedItem}</b>
                             </Typography>
-                        )}
+                        )} */}
                     </Box>
                 )}
             </Box>
