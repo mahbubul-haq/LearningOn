@@ -29,7 +29,7 @@ export const HomePageState = (props) => {
            
 
             if (data.success) {
-                ///console.log("courses", data.courses);
+                //console.log("courses", data.courses);
                 setCourses(data.courses);
                 
             }

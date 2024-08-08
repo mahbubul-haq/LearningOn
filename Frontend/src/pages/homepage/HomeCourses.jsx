@@ -67,7 +67,7 @@ const HomeCourses = () => {
     if (filteredCourses.length > 0 && listOfCategories.length > 0) {
       const categoriesWithCourse = listOfCategories.filter((category) => {
         return filteredCourses.reduce((cur, course) => {
-          return cur || course.category === category;
+          return cur || course?.category === category;
         }, false);
       });
       setCategoriesWithCourse(["All", ...categoriesWithCourse]);
@@ -81,7 +81,7 @@ const HomeCourses = () => {
     if (selectedItem == "All" || courseType === "Popular Courses") setSelectedCourses(filteredCourses);
     else if (selectedItem) {
       const curfilteredCourses = filteredCourses.filter((course) => {
-        return course.category === selectedItem;
+        return course?.category === selectedItem;
       });
       setSelectedCourses(curfilteredCourses);
     }
