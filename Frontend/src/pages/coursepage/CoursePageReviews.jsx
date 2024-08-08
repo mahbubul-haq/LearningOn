@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 const CoursePageReviews = ({ courseInfo }) => {
     return (
         <>
-            {courseInfo.courseReviews?.length > 0 ? (
+            {courseInfo?.courseReviews?.length > 0 ? (
                 <Box>reviews</Box>
             ) : (
                 <Box

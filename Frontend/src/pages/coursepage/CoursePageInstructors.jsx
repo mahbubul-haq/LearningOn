@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
-import InstructorProfile from "../../components/InstructorProfile";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import InstructorProfile from "../../components/InstructorProfile";
 
 const CoursePageInstructors = ({ courseInfo }) => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
@@ -13,7 +13,7 @@ const CoursePageInstructors = ({ courseInfo }) => {
                 gridAutoRows: "1fr"
             }}
         >
-            {courseInfo.courseInstructors?.map((instructor, index) => (
+            {courseInfo?.courseInstructors?.map((instructor, index) => (
                 <InstructorProfile key={index} instructorId={instructor._id} />
             ))}
         </Box>

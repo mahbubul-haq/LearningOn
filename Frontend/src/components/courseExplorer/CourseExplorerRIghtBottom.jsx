@@ -29,7 +29,9 @@ const CourseExplorerRIghtBottom = () => {
       }}
     >
       {filteredCourses?.map((course, index) => (
+        <Box sx={{ height: "100%", display: "flex"}} key={index}>
         <CourseWidget key={index} courseInfo={course} />
+        </Box>
       ))}
 
       {filteredCourses?.length == 0 && (

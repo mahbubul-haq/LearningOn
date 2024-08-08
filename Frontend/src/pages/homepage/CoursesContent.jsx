@@ -17,22 +17,24 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
 
         if (!coursesContainer) return;
 
-        let initialX, finalX, prevTouchX = 0, curTouchX;
+        let initialX, finalX, prevTouchX = 0, curTouchX, startTime, endTime;
 
         const handleTouchStart = (event) => {
             initialX = event.changedTouches[0].clientX;
+            startTime = Date.now();
             prevTouchX = initialX;
         }
 
         const handleTouchEnd = (event) => {
             finalX = event.changedTouches[0].clientX;
             let swipeDistance = finalX - initialX;
-
+            endTime = Date.now();
+            let time = endTime - startTime;
             if (swipeDistance > 0) {
-                handleScroll("left", swipeDistance * 10);
+                handleScroll("left", swipeDistance * 1000 / time);
             }
             else {
-                handleScroll("right", -swipeDistance * 10);
+                handleScroll("right", -swipeDistance * 1000 / time);
             }
         }
 

@@ -1,17 +1,16 @@
-import React, { useEffect } from "react";
-import { HomePageContext } from "../../state/HomePageState";
-import { useParams } from "react-router-dom";
-import { useContext } from "react";
-import TopSection from "./TopSection";
 import Box from "@mui/material/Box";
-import MainSection from "./MainSection";
+import React, { useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../state/GlobalContext";
+import { HomePageContext } from "../../state/HomePageState";
+import MainSection from "./MainSection";
+import TopSection from "./TopSection";
 
 const CoursePage = () => {
     const { courseId } = useParams();
     const [courseInfo, setCourseInfo] = React.useState({});
     const { courses, getCourses } = useContext(HomePageContext);
-    const { setOpenedItem } = useContext(GlobalContext);
+    const { setOpenedItem, courseById, getCourseById} = useContext(GlobalContext);
 
     // useEffect(() => {
     //     if (!user) {
@@ -25,11 +24,12 @@ const CoursePage = () => {
 
     useEffect(() => {
         //console.log(courseId, courses);
-        if (courseId && courses && courses.length > 0) {
-            const course = courses.find((c) => c._id == courseId);
-            setCourseInfo(course);
-        }
-    }, [courseId, courses]);
+        getCourseById(courseId);
+    }, [courseId]);
+
+    useEffect(() => {
+        setCourseInfo(courseById);
+    }, [courseById]);
 
     useEffect(() => {
         if (!courses || courses.length == 0) {

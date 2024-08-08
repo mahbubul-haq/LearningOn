@@ -1,17 +1,17 @@
-import React from "react";
-import { useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import TableCell from "@mui/material/TableCell";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import Paper from "@mui/material/Paper";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import React from "react";
 
 const CoursePageLessons = ({ courseInfo }) => {
     const [expanded, setExpanded] = React.useState("");
@@ -31,7 +31,7 @@ const CoursePageLessons = ({ courseInfo }) => {
 
     return (
         <React.Fragment>
-            {courseInfo.lessons?.map((lesson, index) => (
+            {courseInfo?.lessons?.map((lesson, index) => (
                 <Accordion
                     key={index}
                     sx={{

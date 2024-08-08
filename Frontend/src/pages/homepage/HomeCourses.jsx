@@ -22,6 +22,11 @@ const HomeCourses = () => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
+    let coursesContainer = document.querySelector(".courses-container");
+    if (coursesContainer) coursesContainer.scrollLeft = 0;
+  }, [courseType, selectedItem]);
+
+  useEffect(() => {
     if (!user) {
       setCourseType("Popular Courses");
     }
