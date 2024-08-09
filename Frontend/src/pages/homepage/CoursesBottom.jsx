@@ -1,7 +1,9 @@
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
+import FlexBetween from "../../components/FlexBetween";
 
 const CoursesBottom = ({
   categoriesWithCourse,
@@ -63,7 +65,7 @@ const CoursesBottom = ({
             )} */}
 
       <Box
-        component='a'
+        component="a"
         href={`${import.meta.env.VITE_CLIENT_URL}/courses`}
         sx={{
           display: "flex",
@@ -77,23 +79,37 @@ const CoursesBottom = ({
         }}
         onClick={(e) => {
           e.preventDefault();
-          navigate('/courses');
+          navigate("/courses");
         }}
       >
-        <Typography
+        <FlexBetween
           sx={{
-            borderRadius: "0.25rem",
-            border: "1px solid rgba(0, 0, 0, 0.23)",
-            fontSize: "1rem",
-            px: "0.5rem",
+            mt: "1rem",
+            "&&" : {
+              gap: "0.5rem"
+            },
             cursor: "pointer",
+            color: (theme) => theme.palette.grey.grey500,
             "&:hover": {
-              backgroundColor: (theme) => theme.palette.grey.grey100,
+              color: (theme) => theme.palette.grey.grey700,
             },
           }}
         >
-          Browse more in courses page
-        </Typography>
+          <Typography
+            sx={{
+              fontSize: "0.9rem",
+
+              fontWeight: "600",
+            }}
+          >
+            Browse More
+          </Typography>
+          <OpenInNewIcon
+            sx={{
+              fontSize: "1.2rem",
+            }}
+          />
+        </FlexBetween>
       </Box>
     </>
   );

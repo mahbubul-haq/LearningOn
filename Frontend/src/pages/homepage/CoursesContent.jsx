@@ -149,10 +149,11 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                                 sx={{
                                     display: "flex",
                                     flexDirection: "column",
-                                    gap: "3rem",
-                                    mt: isNonMobileScreens ? "4rem" : "2rem",
+                                    gap: "1rem",
+                                    mt: isNonMobileScreens ? "2rem" : "2rem",
                                     alignItems: "center",
                                     height: "100%",
+                                    mb: "2rem"
                                     // width: "100%",
                                     // border: "1px solid rgba(0, 0, 0, 0.23)",
                                 }}

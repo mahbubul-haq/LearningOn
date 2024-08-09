@@ -4,8 +4,10 @@ import { useCallback, useEffect } from "react";
 // import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 // import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
-
+import {
+  MdOutlineKeyboardArrowLeft,
+  MdOutlineKeyboardArrowRight,
+} from "react-icons/md";
 
 import { useTheme } from "@mui/material/styles";
 
@@ -20,7 +22,8 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     if (!slider || !leftArrow || !rightArrow) return;
 
     if (focus) slider.focus();
-   // console.log(slider.scrollLeft, swipeDistance);
+    // console.log(slider.scrollLeft, swipeDistance);
+    console.log("handleNext");
 
     if (side === "next") {
       slider.scrollLeft += swipeDistance;
@@ -28,28 +31,25 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     if (side === "prev") {
       slider.scrollLeft -= swipeDistance;
     }
+    if (side == "") slider.scrollLeft = 0;
 
-    //console.log(slider.scrollLeft, swipeDistance);
-    // console.log(slider.scrollLeft, slider.clientWidth, slider.scrollWidth);
-
-    if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth && side != "prev") {
-      setTimeout(() => {
-        rightArrow.style.display = "none";
-      }, 300);
-    } else {
-      setTimeout(() => {
-        rightArrow.style.display = "flex";
-      }, 300);
-    }
-    //console.log("slider scrolleft", slider.scrollLeft);
-    // check if slider has reached start
-    if (slider.scrollLeft === 0 && side != "next") {
+    if (slider.scrollLeft === 0) {
       setTimeout(() => {
         leftArrow.style.display = "none";
       }, 300);
     } else {
       setTimeout(() => {
         leftArrow.style.display = "flex";
+      }, 300);
+    }
+
+    if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
+      setTimeout(() => {
+        rightArrow.style.display = "none";
+      }, 300);
+    } else {
+      setTimeout(() => {
+        rightArrow.style.display = "flex";
       }, 300);
     }
   }, []);
@@ -63,12 +63,44 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
   }, []);
 
   useEffect(() => {
-    let slider = document.querySelector(".custom-slider-items");
-    if (!slider) return;
-    //console.log("changed?", items);
-    slider.scrollLeft = 0;
     handleNext("", 0);
   }, [items]);
+
+  useEffect(() => {
+    let slider = document.querySelector(".custom-slider-items");
+    let leftArrow = document.querySelector(".custom-slider-left-arrow");
+    let rightArrow = document.querySelector(".custom-slider-right-arrow");
+    if (!slider || !leftArrow || !rightArrow) return;
+
+    const handleScroll = () => {
+      console.log("handleScroll");
+      if (slider.scrollLeft === 0) {
+        setTimeout(() => {
+          leftArrow.style.display = "none";
+        }, 300);
+      } else {
+        setTimeout(() => {
+          leftArrow.style.display = "flex";
+        }, 300);
+      }
+
+      if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
+        setTimeout(() => {
+          rightArrow.style.display = "none";
+        }, 300);
+      } else {
+        setTimeout(() => {
+          rightArrow.style.display = "flex";
+        }, 300);
+      }
+    };
+
+    slider.addEventListener("scroll", handleScroll);
+
+    return () => {
+      slider.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     let customSlider = document.querySelector(".custom-slider");
@@ -76,7 +108,10 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     let slider = document.querySelector(".custom-slider-items");
     if (!slider || !customSlider) return;
 
-    let initialX, finalX, prevTouchX = 0, curTouchX;
+    let initialX,
+      finalX,
+      prevTouchX = 0,
+      curTouchX;
     const handleTouchStart = (event) => {
       initialX = event.changedTouches[0].clientX;
       prevTouchX = initialX;
@@ -92,14 +127,13 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     };
 
     const handleTouchMove = (event) => {
+      curTouchX = event.touches[0].clientX;
 
-        curTouchX = event.touches[0].clientX;
-        
-        let distance = curTouchX - prevTouchX;
-        if (curTouchX > prevTouchX) handleNext("prev", distance);
-        else handleNext("next", -distance);
-        prevTouchX = curTouchX;
-    }
+      let distance = curTouchX - prevTouchX;
+      if (curTouchX > prevTouchX) handleNext("prev", distance);
+      else handleNext("next", -distance);
+      prevTouchX = curTouchX;
+    };
 
     const handleMouseOver = () => {
       // console.log("focusing");
@@ -120,7 +154,6 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     slider.addEventListener("touchstart", handleTouchStart);
     slider.addEventListener("touchend", handleTouchEnd);
     slider.addEventListener("touchmove", handleTouchMove);
-
 
     return () => {
       if (slider) {
@@ -164,7 +197,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
             : "linear-gradient(to right, rgba(0, 0, 0, 0.7) 50%, rgba(255, 255, 255, 0))",
 
           background: "rgba(0, 0, 0, 0.7)",
-          display: "flex",
+          display: "none",
           alignItems: "center",
           justifyContent: "center",
 
@@ -202,7 +235,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
             : "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.7) 50%)",
           // pl: isMobileScreens ? "1rem" : "1rem",
           background: "rgba(0, 0, 0, 0.7)",
-          display: "flex",
+          display: "none",
           alignItems: "center",
           justifyContent: "center",
           transform: "translateY(-50%)",

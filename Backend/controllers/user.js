@@ -33,6 +33,10 @@ const getUser = async (req, res) => {
                 populate: {
                     path: "courseId",
                     select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice",
+                    populate: {
+                        path: "owner",
+                        select: "name _id"
+                    }
                 },
             })
             .exec();
@@ -61,6 +65,10 @@ const getUser = async (req, res) => {
               skillTags: course._doc.courseId?.skillTags,
               courseThumbnail: course._doc.courseId?.courseThumbnail,
               _id: course._doc.courseId?._id,
+              owner: {
+                _id: course._doc.courseId?.owner?._id,
+                name: course._doc.courseId?.owner?.name
+              },
               ratings: {
                 totalRating: course._doc.courseId?.ratings?.totalRating,
                 numberOfRatings: course._doc.courseId?.ratings?.numberOfRatings

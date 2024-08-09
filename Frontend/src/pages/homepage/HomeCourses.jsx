@@ -142,7 +142,7 @@ const HomeCourses = () => {
 
     // console.log(container.scrollLeft, container.scrollWidth - container.clientWidth);
 
-    if (container.scrollLeft === 0) {
+    if (container.scrollLeft === 0 && direction != "right") {
       document.querySelector(".left-arrow").style.display = "none";
     } else {
       document.querySelector(".left-arrow").style.display = "flex";
@@ -150,7 +150,7 @@ const HomeCourses = () => {
 
     if (
       container.scrollLeft + 1 >=
-      container.scrollWidth - container.clientWidth
+      container.scrollWidth - container.clientWidth && direction != "left"
     ) {
       document.querySelector(".right-arrow").style.display = "none";
     } else {

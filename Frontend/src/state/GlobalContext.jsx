@@ -151,7 +151,7 @@ export const GlobalState = (props) => {
       //console.log(data);
       if (data.success) {
         setUserById(data.user);
-        //console.log("user fetched", data.user);
+        console.log("user fetched", data.user);
       } else {
         setUserById(null);
       }

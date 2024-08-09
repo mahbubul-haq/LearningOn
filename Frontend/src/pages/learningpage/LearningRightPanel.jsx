@@ -1,17 +1,64 @@
-import React from "react";
-import { useContext } from "react";
-import { LearningCourseContext } from "../../state/LearningCourseContex";
-import { useTheme } from "@mui/material/styles";
+import { AdvancedVideo, lazyload } from "@cloudinary/react";
 import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import React, { useContext, useEffect } from "react";
 import { cloudinaryCld } from "../../configs/cloudinary.config";
-import { AdvancedVideo, lazyload } from "@cloudinary/react";
+import { LearningCourseContext } from "../../state/LearningCourseContex";
 
 const LearningRightPanel = ({ courseInfo }) => {
   const { openedLesson } = useContext(LearningCourseContext);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const theme = useTheme();
+
+  useEffect(() => {
+    const video = document.querySelector(".lecture-video");
+    if (!video) return;
+
+    let startTime = 0,
+      totalPlayedTime = 0;
+
+    let handlePlay = () => {
+      startTime = Date.now();
+    };
+
+    const handlePause = () => {
+      const endTime = Date.now();
+      totalPlayedTime += (endTime - startTime) / 1000;
+    };
+
+    const handleEnd = () => {
+      const endTime = Date.now();
+      totalPlayedTime += (endTime - startTime) / 1000;
+    };
+
+    const handleTimeUpdate = () => {
+      //console.log(video.currentTime);
+      const percentagePlayed = (video.currentTime / video.duration) * 100;
+      if (video.currentTime <= 0.01) totalPlayedTime = 0;
+      console.log("Percentage played:", percentagePlayed);
+      if (percentagePlayed > 80) {
+        const endTime = Date.now();
+        totalPlayedTime += (endTime - startTime) / 1000;
+        startTime = Date.now();
+      }
+      console.log(totalPlayedTime / video.duration * 100);
+
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("play", handlePlay);
+    video.addEventListener("pause", handlePause);
+    video.addEventListener("ended", handleEnd);
+
+    return () => {
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("play", handlePlay);
+      video.removeEventListener("pause", handlePause);
+      video.removeEventListener("ended", handleEnd);
+    };
+  }, []);
 
   return (
     <>
@@ -157,6 +204,7 @@ const LearningRightPanel = ({ courseInfo }) => {
                     }}
                   >
                     <AdvancedVideo
+                      className="lecture-video"
                       cldVid={cloudinaryCld.video(
                         courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
                           openedLesson.subLesson - 1
