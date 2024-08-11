@@ -1,14 +1,14 @@
-import React from "react";
-import { Formik } from "formik";
-import * as yup from "yup";
-import { useDispatch } from "react-redux";
-import { setLogin } from "../../state";
 import { Box, Typography } from "@mui/material";
+import { Formik } from "formik";
+import React from "react";
+import { useDispatch } from "react-redux";
+import * as yup from "yup";
+import { setLogin } from "../../state";
 
-import StyledTextField from "../../components/StyledInputField.jsx";
 import { useMediaQuery } from "@mui/material";
-import { StyledButton } from "../../components/StyledButton.jsx";
 import { useNavigate } from "react-router-dom";
+import { StyledButton } from "../../components/StyledButton.jsx";
+import StyledTextField from "../../components/StyledInputField.jsx";
 
 const loginSchema = yup.object().shape({
     email: yup.string().required("Email is required"),
@@ -183,6 +183,7 @@ const LoginForm = ({ redirect }) => {
                                         navigate("/signup", {
                                             state: {
                                                 isLogin: false,
+                                                redirect: redirect
                                             },
                                         });
                                     }}

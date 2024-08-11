@@ -1,14 +1,14 @@
-import React from "react";
 import { Formik } from "formik";
+import React from "react";
 import * as yup from "yup";
 
-import { Box, Typography, Snackbar, Alert } from "@mui/material";
+import { Alert, Box, Snackbar, Typography } from "@mui/material";
 
-import StyledTextField from "../../components/StyledInputField.jsx";
 import { useMediaQuery } from "@mui/material";
-import { StyledButton } from "../../components/StyledButton.jsx";
 import Dropzone from "react-dropzone";
 import { useNavigate } from "react-router-dom";
+import { StyledButton } from "../../components/StyledButton.jsx";
+import StyledTextField from "../../components/StyledInputField.jsx";
 
 const registerSchema = yup.object().shape({
     name: yup.string().trim().required("Name is required"),
@@ -26,7 +26,7 @@ const initialValuesRegister = {
     password: "",
 };
 
-const SignUpForm = () => {
+const SignUpForm = ({redirect}) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const [picturePath, setPicturePath] = React.useState("");
     const [emailExists, setEmailExists] = React.useState("");
@@ -60,6 +60,7 @@ const SignUpForm = () => {
                 navigate("/login", {
                     state: {
                         isLogin: true,
+                        redirect: redirect
                     },
                 });
             }, 2000);
@@ -321,6 +322,7 @@ const SignUpForm = () => {
                                         navigate("/login", {
                                             state: {
                                                 isLogin: true,
+                                                redirect: redirect
                                             },
                                         });
                                     }}

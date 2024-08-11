@@ -122,7 +122,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                 {selectedCourses.map((course) => {
                     return (
                         <Box
-                            key={course._id}
+                            key={course?._id}
                             sx={{
                                 display: "grid",
                                 gridTemplateRows: "1",
@@ -159,7 +159,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                                 }}
                             >
                                 <Typography
-                                    variant={isNonMobileScreens ? "h3" : "h4"}
+                                    variant="h4grey"
                                 >
                                     No courses found
                                 </Typography>

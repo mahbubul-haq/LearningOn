@@ -164,6 +164,11 @@ export const themeSettings = (mode) => {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
                 fontSize: 24,
             },
+            h3grey: {
+                fontFamily: ["Rubik", "sans-serif"].join(","),
+                fontSize: 24,
+                color: colorTokens.grey[400],
+            },
             h4: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
                 fontSize: 20,
@@ -176,7 +181,7 @@ export const themeSettings = (mode) => {
             },
 
             h4grey: {
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: 400,
                 color: colorTokens.grey[400],
             },

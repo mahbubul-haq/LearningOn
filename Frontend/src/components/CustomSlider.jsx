@@ -23,7 +23,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
 
     if (focus) slider.focus();
     // console.log(slider.scrollLeft, swipeDistance);
-    console.log("handleNext");
+    ///console.log("handleNext");
 
     if (side === "next") {
       slider.scrollLeft += swipeDistance;
@@ -73,7 +73,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     if (!slider || !leftArrow || !rightArrow) return;
 
     const handleScroll = () => {
-      console.log("handleScroll");
+      //console.log("handleScroll");
       if (slider.scrollLeft === 0) {
         setTimeout(() => {
           leftArrow.style.display = "none";

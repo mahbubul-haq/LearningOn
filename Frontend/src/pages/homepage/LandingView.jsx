@@ -1,12 +1,12 @@
 import FlexBetween from "../../components/FlexBetween.jsx";
 
-import { Box, useMediaQuery, Typography } from "@mui/material";
-import { StyledButton } from "../../components/StyledButton.jsx";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import Button from "@mui/material/Button";
 import useTheme from "@mui/material/styles/useTheme";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { StyledButton } from "../../components/StyledButton.jsx";
 
 const LandingView = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -107,8 +107,8 @@ const LandingView = () => {
                                             navigate("/publishcourse");
                                             return;
                                         }
-                                        navigate("/signup", {
-                                            state: { isLogin: false },
+                                        navigate("/login", {
+                                            state: { isLogin: true, redirect: "/publishcourse" },
                                         });
                                     }}
                                     sx={{
@@ -121,14 +121,10 @@ const LandingView = () => {
                                     }}
                                 >
                                     <Typography variant="h4">
-                                        {user
-                                            ? "Publish a Course"
-                                            : isNonMobileScreens
-                                            ? "Get Started"
-                                            : "Sign Up"}
+                                        {"Publish a Course"}
                                     </Typography>
                                 </StyledButton>
-                                {user && isNonMobileScreens && (
+                                {isNonMobileScreens && (
                                     <FlexBetween
                                         sx={{
                                             gap: "1.5rem",
@@ -144,13 +140,14 @@ const LandingView = () => {
                                             },
                                         }}
                                     >
-                                        <StyledButton
+                                        <StyledButton disabled
                                             onClick={() => {
                                                 navigate("/signup", {
                                                     state: { isLogin: false },
                                                 });
                                             }}
                                             sx={{
+                                                opacity: 0.5,
                                                 "&&": {
                                                     padding: isNonMobileScreens
                                                         ? "0.5rem 2rem"
@@ -175,7 +172,7 @@ const LandingView = () => {
                                             </Typography>
                                         </StyledButton>
                                         {isNonMobileScreens && (
-                                            <StyledButton
+                                            <StyledButton disabled
                                                 onClick={() => {
                                                     navigate("/signup", {
                                                         state: {
@@ -184,6 +181,7 @@ const LandingView = () => {
                                                     });
                                                 }}
                                                 sx={{
+                                                    opacity: 0.5,
                                                     "&&": {
                                                         padding:
                                                             isNonMobileScreens

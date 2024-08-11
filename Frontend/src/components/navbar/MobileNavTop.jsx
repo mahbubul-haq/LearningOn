@@ -1,16 +1,17 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { StyledButton } from "../StyledButton";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import useTheme from "@mui/material/styles/useTheme";
-import Divider from "@mui/material/Divider";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { cloudinaryCld } from "../../configs/cloudinary.config";
 import { AdvancedImage, lazyload } from "@cloudinary/react";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import useTheme from "@mui/material/styles/useTheme";
+import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { cloudinaryCld } from "../../configs/cloudinary.config";
 import FlexBetween from "../FlexBetween";
+import { MobileNavItem } from "../StyledBox";
+import { StyledButton } from "../StyledButton";
 
 const MobileNavTop = ({
     setOpenDrawer,
@@ -193,19 +194,7 @@ const MobileNavTop = ({
                                 {newNotifications > 0 && newNotifications}
                             </Typography>
                         </FlexBetween>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "flex-start",
-                                alignItems: "center",
-                                gap: "1.2rem",
-                                cursor: "pointer",
-                                "&:hover": {
-                                    backgroundColor: theme.palette.background.default,
-                                },
-                                p: "0.8rem",
-                                borderRadius: "0.15rem",
-                            }}
+                        <MobileNavItem
                             onClick={() => {
                                 navigate("/dashboard");
                                 setOpenDrawer(false);
@@ -224,7 +213,7 @@ const MobileNavTop = ({
                             >
                                 Dashboard
                             </Typography>
-                        </Box>
+                        </MobileNavItem>
                     </Box>
                     <Divider
                         sx={{

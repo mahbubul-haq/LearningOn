@@ -1,9 +1,8 @@
-import { Box, Typography, useMediaQuery } from "@mui/material";
-import { useLocation } from "react-router-dom";
-import SignUpForm from "./SignupForm";
-import LoginForm from "./LoginForm";
-import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Box, Typography, useMediaQuery } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import LoginForm from "./LoginForm";
+import SignUpForm from "./SignupForm";
 
 const LoginSignUp = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -130,7 +129,7 @@ const LoginSignUp = () => {
                     {isLogin ? (
                         <LoginForm redirect={redirect} />
                     ) : (
-                        <SignUpForm />
+                        <SignUpForm redirect={redirect}/>
                     )}
                 </Box>
             </Box>
