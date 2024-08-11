@@ -145,6 +145,8 @@ const LearningPage = () => {
 
                         padding: isNonMobileScreens ? "0 5rem" : isMobileScreens ? "0 1rem" : "0 2rem",
                         width: "100%",
+                        maxWidth: "2000px",
+                        mx: "auto"
                     }}
                 >
                     {isNonMobileScreens && (

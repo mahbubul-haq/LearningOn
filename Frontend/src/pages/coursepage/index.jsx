@@ -68,7 +68,8 @@ const CoursePage = () => {
                 sx={{
                     marginTop: "0",
                     width: "100%",
-                   
+                    maxWidth: "2000px",
+                    mx: "auto",
                     paddingBottom: "4rem",
                 }}
             >

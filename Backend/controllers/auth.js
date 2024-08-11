@@ -1,8 +1,7 @@
 import bcrypt from "bcrypt";
-import People from "../models/People.js";
-import fs from "fs";
 import jwt from "jsonwebtoken";
-import { uploadImage, deleteImage } from "../utils/cloudinary.js";
+import People from "../models/People.js";
+import { deleteImage, uploadImage } from "../utils/cloudinary.js";
 
 const register = async (req, res) => {
     try {
@@ -63,10 +62,29 @@ const login = async (req, res) => {
         const { email, password } = req.body;
         //console.log(emailOrPhone, password);
 
-        const user = await People.findOne({
+        let user = await People.findOne({
             email: email,
         })
-            .populate("courses")
+            .populate("followers following")
+            .populate({
+                path: "courses",
+                select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice",
+                populate: {
+                    path: "owner",
+                    select: "name _id",
+                },
+            })
+            .populate({
+                path: "learning",
+                populate: {
+                    path: "courseId",
+                    select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice",
+                    populate: {
+                        path: "owner",
+                        select: "name _id",
+                    },
+                },
+            })
             .exec();
 
         if (!user) {
@@ -95,6 +113,48 @@ const login = async (req, res) => {
 
         user.password = undefined;
 
+        user = user._doc;
+
+        user.courses = user.courses.map((course) => {
+            return {
+                ...course._doc,
+                ratings: {
+                    totalRating: course._doc.ratings.totalRating,
+                    numberOfRatings: course._doc.ratings.numberOfRatings,
+                },
+            };
+        });
+
+        user.learning = user.learning.map((course) => {
+            if (!course._doc.courseId) return null;
+
+            let modified = {
+                ...course._doc,
+                course: {
+                    category: course._doc.courseId?.category,
+                    coursePrice: course._doc.courseId?.coursePrice,
+                    courseTitle: course._doc.courseId?.courseTitle,
+                    skillTags: course._doc.courseId?.skillTags,
+                    courseThumbnail: course._doc.courseId?.courseThumbnail,
+                    _id: course._doc.courseId?._id,
+                    owner: {
+                        _id: course._doc.courseId?.owner?._id,
+                        name: course._doc.courseId?.owner?.name,
+                    },
+                    ratings: {
+                        totalRating: course._doc.courseId?.ratings?.totalRating,
+                        numberOfRatings:
+                            course._doc.courseId?.ratings?.numberOfRatings,
+                    },
+                },
+            };
+            delete modified.courseId;
+
+            return modified;
+        });
+
+        user.learning = user.learning.filter((user) => user);
+
         const token = jwt.sign(
             {
                 id: user._id,
@@ -119,4 +179,5 @@ const login = async (req, res) => {
     }
 };
 
-export { register, login };
+export { login, register };
+

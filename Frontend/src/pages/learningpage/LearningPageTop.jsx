@@ -1,149 +1,162 @@
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import ListIcon from "@mui/icons-material/List";
+import { Drawer, IconButton, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
 import useTheme from "@mui/material/styles/useTheme";
-import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import FlexBetween from "../../components/FlexBetween";
+import { LearningCourseContext } from "../../state/LearningCourseContex";
 import { LearningLeftPanel } from "./LearningLeftPanel";
 
 const LearningPageTop = ({ courseInfo }) => {
-    const theme = useTheme();
-    const navigate = useNavigate();
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const [anchorEl, setAnchorEl] = React.useState(null);
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isMobileScreens = useMediaQuery("(max-width: 600px)");
+  const minWidth300 = useMediaQuery("(min-width:300px)");
+  const minWidth250 = useMediaQuery("(min-width: 250px)");
+  const { openedLesson, openDrawer, setOpenDrawer } = useContext(
+    LearningCourseContext
+  );
 
-    return (
+  return (
+    <Box
+      sx={{
+        //padding: isNonMobileScreens ? "3rem 5rem 1.5rem 5rem" : "0rem",
+        backgroundColor: theme.palette.background.bottom,
+        backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
+        // background: "transparent",
+        height: isNonMobileScreens ? "5rem" : "4rem",
+        color: theme.palette.text.primary,
+        display: "flex",
+        justifyContent: isNonMobileScreens ? "center" : "space-between",
+        position: "sticky",
+        top: 0,
+        alignItems: "center",
+        // gap: "2rem",
+      }}
+    >
+      <Drawer
+        anchor="right"
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: "100%",
+            maxWidth: "400px",
+          },
+          zIndex: 5000000,
+        }}
+      >
         <Box
-            sx={{
-                //padding: isNonMobileScreens ? "3rem 5rem 1.5rem 5rem" : "0rem",
-                backgroundColor: theme.palette.background.bottom,
-                backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
-                // background: "transparent",
-                height: isNonMobileScreens ? "5rem" : "4rem",
-                color: theme.palette.text.primary,
-                display: "flex",
-                justifyContent: isNonMobileScreens ? "center" : "space-between",
-                position: "sticky",
-                top: 0,
-                alignItems: "center",
-                // gap: "2rem",
-            }}
+          sx={{
+            padding: "0.5rem",
+            pb: "0",
+            // paddingLeft: "2rem",
+            display: "flex",
+            justifyContent: "flex-end",
+            width: "100%",
+            // border: "1px solid black",
+            alignItems: "center",
+          }}
         >
-            <Typography
-                variant={isNonMobileScreens ? "h2" : isMobileScreens ? "h6" : "h4"}
-                sx={{
-                    fontWeight: "bold",
-                    mb: isNonMobileScreens ? "1rem" : "0.5rem",
-                    textAlign: "center",
-                    textTransform: "capitalize",
-                    // px: isNonMobileScreens ? "2rem" : "0.5",
-                    cursor: "pointer",
-                    px: isNonMobileScreens ? "0" : isMobileScreens ? "0.5rem" : "1rem",
-                    py: isNonMobileScreens ? "0" : isMobileScreens ? "1rem" : "1rem",
-                    //height: "100%",
-                    width: "80%",
-                }}
-                onClick={() => {
-                    navigate(`/course/${courseInfo._id}`);
-                }}
-            >
-                {courseInfo?.courseTitle}
-            </Typography>
-            {!isNonMobileScreens && (
-                <Box
-                    sx={{
-                        width: "20%",
-                        backgroundColor: theme.palette.background.default,
-                        position: "absolute",
-                        right: "0",
-                        top: "0",
-                        bottom: "0",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    <IconButton
-                        onClick={(event) => {
-                            if (anchorEl) {
-                                setAnchorEl(null);
-                            } else {
-                                setAnchorEl(event.currentTarget);
-                            }
-                        }}
-                    >
-                        <FormatListBulletedIcon
-                            sx={{
-                                fontSize: "2rem",
-                                cursor: "pointer",
-                                color: theme.palette.grey.grey600,
-                                "&:hover": {
-                                    color: theme.palette.grey.grey800,
-                                },
-                            }}
-                        />
-                    </IconButton>
-                    <Menu
-                        id="learning-top-menu"
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={() => {
-                            setAnchorEl(null);
-                        }}
-                        MenuListProps={{
-                            "aria-labelledby": "basic-button",
-                        }}
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right",
-                        }}
-                        transformOrigin={{
-                            vertical: "top",
-                            horizontal: "right",
-                        }}
-                        sx={
-                            {
-                                //position: "relative",
-                            }
-                        }
-                    >
-                        <Box
-                            sx={{
-                                padding: "1rem",
-                                position: "relative",
-                            }}
-                            onClick={() => {
-                                setAnchorEl(null);
-                            }}
-                        >
-                            <CloseIcon
-                                sx={{
-                                    position: "absolute",
-                                    top: "1rem",
-                                    right: "1rem",
-                                    cursor: "pointer",
-                                    color: theme.palette.grey.grey600,
-                                    "&:hover": {
-                                        color: theme.palette.grey.grey800,
-                                    },
-                                }}
-                                onClick={() => {
-                                    setAnchorEl(null);
-                                }}
-                            />
-
-                            <LearningLeftPanel courseInfo={courseInfo} />
-                        </Box>
-                    </Menu>
-                </Box>
-            )}
+          <IconButton onClick={() => setOpenDrawer(false)}>
+            <CloseIcon
+              sx={{
+                fontSize: "1.5rem",
+              }}
+            />
+          </IconButton>
         </Box>
-    );
+        <Box
+          sx={{
+            padding: "0 1rem 1rem 1rem",
+          }}
+        >
+          <LearningLeftPanel courseInfo={courseInfo} />
+        </Box>
+      </Drawer>
+      <FlexBetween
+        sx={{
+          padding: isNonMobileScreens
+            ? "0 5rem"
+            : isMobileScreens
+            ? "0 1rem"
+            : "0 2rem",
+          width: "100%",
+          maxWidth: "2000px",
+          mx: "auto",
+        }}
+      >
+        <FlexBetween sx={{ width: "100%" }}>
+          <FlexBetween sx={{ width: isNonMobileScreens ? "100%" : "80%" }}>
+            <IconButton onClick={() => navigate(`/course/${courseInfo._id}`)}>
+              <ArrowBackIcon
+                sx={{
+                  color: theme.palette.grey.grey400,
+                  fontSize: isNonMobileScreens ? "2rem" : "1.5rem",
+                  
+                }}
+              />
+            </IconButton>
+            <Box sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "1rem",
+                alignItems: "center",
+                justifySelf: isNonMobileScreens ? "center" : "flex-start",
+                width: isNonMobileScreens ? "100%" : "85%",
+            }}>
+              {minWidth250 && (
+                <Typography
+                  variant={isNonMobileScreens ? "h3600" : "h5600"}
+                  sx={{
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Lesson {openedLesson?.lesson}
+                  {openedLesson?.subLesson ? "." + openedLesson.subLesson : ""}
+                </Typography>
+              )}
+              {minWidth300 && (
+                <Typography
+                  variant={isNonMobileScreens ? "h3" : "h5"}
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {openedLesson?.subLesson === 0
+                    ? courseInfo?.lessons && courseInfo?.lessons[openedLesson?.lesson - 1]?.title
+                    : courseInfo?.lessons[openedLesson?.lesson - 1]?.subLessons[
+                        openedLesson?.subLesson - 1
+                      ]?.title}
+                </Typography>
+              )}
+            </Box>
+          </FlexBetween>
+          {!isNonMobileScreens && (
+            <IconButton onClick={() => setOpenDrawer(!openDrawer)}>
+              <ListIcon
+                sx={{
+                  fontSize: "2rem",
+                  cursor: "pointer",
+                  color: theme.palette.grey.grey600,
+                  "&:hover": {
+                    color: theme.palette.grey.grey800,
+                  },
+                }}
+              />
+            </IconButton>
+          )}
+        </FlexBetween>
+      </FlexBetween>
+    </Box>
+  );
 };
 
 export default LearningPageTop;

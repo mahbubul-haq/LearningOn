@@ -21,6 +21,7 @@ const MobileNav = ({
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
             sx={{
+               
                 "& .MuiDrawer-paper": {
                     width: "100%",
                     maxWidth: "400px",
