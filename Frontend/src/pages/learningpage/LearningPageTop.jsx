@@ -132,7 +132,7 @@ const LearningPageTop = ({ courseInfo }) => {
                 >
                   {openedLesson?.subLesson === 0
                     ? courseInfo?.lessons && courseInfo?.lessons[openedLesson?.lesson - 1]?.title
-                    : courseInfo?.lessons[openedLesson?.lesson - 1]?.subLessons[
+                    : courseInfo?.lessons && courseInfo?.lessons[openedLesson?.lesson - 1]?.subLessons[
                         openedLesson?.subLesson - 1
                       ]?.title}
                 </Typography>
