@@ -84,6 +84,7 @@ const CourseSchema = new mongoose.Schema(
                         },
 
                         rating: Number,
+                        review: String,
                     },
                 ],
             },
@@ -94,10 +95,6 @@ const CourseSchema = new mongoose.Schema(
                 numberOfRatings: 0,
                 ratings: [],
             },
-        },
-        reviews: {
-            type: [Object],
-            default: [],
         },
 
         lessons: {

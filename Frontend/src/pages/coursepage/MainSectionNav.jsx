@@ -1,7 +1,7 @@
-import FlexBetween from "../../components/FlexBetween"
 import Box from "@mui/material/Box"
 import useTheme from "@mui/material/styles/useTheme"
 import useMediaQuery from "@mui/material/useMediaQuery"
+import FlexBetween from "../../components/FlexBetween"
 
 
 const MainSectionNav = () => {
@@ -14,6 +14,7 @@ const MainSectionNav = () => {
         <FlexBetween
             sx={{
                 py: isNonMobileScreens ? "0.7rem" : "0.5rem",
+                
             }}
         >
             <nav id="coursepage-mainsection" className="navbar navbar-light">
@@ -33,6 +34,7 @@ const MainSectionNav = () => {
                         style={{
                             padding: "0",
                             margin: "0",
+                            
                         }}
                     >
                         <a

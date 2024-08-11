@@ -1,17 +1,17 @@
-import React from "react";
+import { AdvancedVideo, lazyload } from "@cloudinary/react";
+import { Chip, Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
-import FlexBetween from "../../components/FlexBetween";
-import { Chip, Divider } from "@mui/material";
-import CoursePageLessons from "./CoursePageLessons";
-import CoursePageInstructors from "./CoursePageInstructors";
-import CoursePageReviews from "./CoursePageReviews";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import MainSectionNav from "./MainSectionNav";
+import React from "react";
+import FlexBetween from "../../components/FlexBetween";
 import { HeaderTypography2 } from "../../components/StyledTypography";
 import { cloudinaryCld } from "../../configs/cloudinary.config";
-import { AdvancedVideo, lazyload } from "@cloudinary/react";
+import CoursePageInstructors from "./CoursePageInstructors";
+import CoursePageLessons from "./CoursePageLessons";
+import CoursePageReviews from "./CoursePageReviews";
+import MainSectionNav from "./MainSectionNav";
 
 const MainSection = ({ courseInfo }) => {
     const theme = useTheme();
@@ -21,7 +21,7 @@ const MainSection = ({ courseInfo }) => {
         <Box>
             <Box
                 sx={{
-                    height: isNonMobileScreens ? "5rem" : "4rem",
+                    height: isNonMobileScreens ? "5rem" : "auto",
                     width: "100%",
                     padding: isNonMobileScreens ? "0.1rem 5rem" : "0rem 1rem",
                     backgroundColor: theme.palette.background.buttonBgPink,

@@ -1,14 +1,14 @@
-import React from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
 import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import Menu from "@mui/material/Menu";
 import { LearningLeftPanel } from "./LearningLeftPanel";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 
 const LearningPageTop = ({ courseInfo }) => {
     const theme = useTheme();
@@ -20,13 +20,17 @@ const LearningPageTop = ({ courseInfo }) => {
     return (
         <Box
             sx={{
-                padding: isNonMobileScreens ? "3rem 5rem 1.5rem 5rem" : "0rem",
+                //padding: isNonMobileScreens ? "3rem 5rem 1.5rem 5rem" : "0rem",
                 backgroundColor: theme.palette.background.bottom,
                 backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
+                // background: "transparent",
+                height: isNonMobileScreens ? "5rem" : "4rem",
                 color: theme.palette.text.primary,
                 display: "flex",
                 justifyContent: isNonMobileScreens ? "center" : "space-between",
-                position: "relative",
+                position: "sticky",
+                top: 0,
+                alignItems: "center",
                 // gap: "2rem",
             }}
         >

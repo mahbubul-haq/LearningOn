@@ -58,7 +58,7 @@ function App() {
                             <Route path="/publishcourse" element={<PublishCourse />} />
                             <Route path="/publishcourse/:edit/:courseId" element={<PublishCourse />} />
                             <Route path="/course/:courseId" element={<WithNav showNav={true} component={<CoursePage />} />} />
-                            <Route path="/learning/course/:courseId" element={<WithNav showNav={true} component={<LearningPage />} />} />
+                            <Route path="/learning/course/:courseId" element={<LearningPage />} />
                             <Route path="/payment/:status/:courseId" element={<PaymentStatus />} />
                             <Route path="/profile/:userId" element={<WithNav showNav={true} component={<ProfilePage />} />} />
                             <Route path="/dashboard/:courseId" element={<WithNav showNav={true} component={<Dashboard />} />} />

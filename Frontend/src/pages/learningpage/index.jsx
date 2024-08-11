@@ -1,20 +1,18 @@
-import React, { useEffect } from "react";
-import { useContext } from "react";
-import { useMediaQuery } from "@mui/material";
-import { useParams } from "react-router-dom";
-import Box from "@mui/material/Box";
-import LearningPageTop from "./LearningPageTop";
-import { LearningLeftPanel } from "./LearningLeftPanel";
-import LearningRightPanel from "./LearningRightPanel";
-import { useTheme } from "@mui/material/styles";
-import { StyledButton } from "../../components/StyledButton";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import Typography from "@mui/material/Typography";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import { LearningCourseContext } from "../../state/LearningCourseContex";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import { useMediaQuery } from "@mui/material";
+import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import React, { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { StyledButton } from "../../components/StyledButton";
 import { GlobalContext } from "../../state/GlobalContext";
+import { LearningCourseContext } from "../../state/LearningCourseContex";
+import { LearningLeftPanel } from "./LearningLeftPanel";
+import LearningPageTop from "./LearningPageTop";
+import LearningRightPanel from "./LearningRightPanel";
 
 const LearningPage = () => {
     const { courseId } = useParams();
@@ -114,8 +112,8 @@ const LearningPage = () => {
                 // ref={scrollPositionRef}
                 sx={{
                     // marginTop: isNonMobileScreens ? "5rem" : "4rem",
-                    // height: "100%",
-                    // overflowY: "auto",
+                    height: "100%",
+                    overflowY: "auto",
                     width: "100%",
                     scrollBehavior: "smooth",
                 }}
@@ -132,7 +130,7 @@ const LearningPage = () => {
                 </Box> */}
                 <Box
                     sx={{
-                        position: isNonMobileScreens ? "relative" : "sticky",
+                        position: "sticky",
                         top: "0",
                         zIndex: "1",
 
