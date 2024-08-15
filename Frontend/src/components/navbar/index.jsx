@@ -16,7 +16,7 @@ import NotificationDrawer from "./NotificationDrawer.jsx";
 
 const Navbar = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const [newNotifications, setNewNotifications] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -206,6 +206,9 @@ const Navbar = () => {
                         fontWeight: openedItem == "courses" ? "600" : "400",
                         textDecoration: "none",
                         color: "inherit",
+                        "&:hover": {
+                          color: "inherit"
+                        }
                       }}
                       onClick={(e) => {
                         e.preventDefault();

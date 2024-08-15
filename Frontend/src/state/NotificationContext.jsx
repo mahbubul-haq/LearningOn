@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
-import { createContext } from "react";
-import React from "react";
+import React, { createContext } from "react";
 import { useSelector } from "react-redux";
 
 export const NotificationContext = createContext();
 
 export const NotificationState = (props) => {
     const [notifications, setNotifications] = React.useState([]);
-    const token = useSelector((state) => state.token);
+    const token = useSelector((state) => state.auth.token);
 
     const getNotifications = async (userId) => {
         try {

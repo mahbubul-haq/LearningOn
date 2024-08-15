@@ -10,7 +10,7 @@ import { StyledButton } from "../../components/StyledButton.jsx";
 
 const LandingView = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -102,7 +102,10 @@ const LandingView = () => {
                                 }}
                             >
                                 <StyledButton
-                                    onClick={() => {
+                                    component="a"
+                                    href={`${import.meta.env.VITE_CLIENT_URL}/publishcourse`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
                                         if (user) {
                                             navigate("/publishcourse");
                                             return;
@@ -112,6 +115,10 @@ const LandingView = () => {
                                         });
                                     }}
                                     sx={{
+                                        color: "inherit",
+                                        "&:hover": {
+                                            color: "inherit",
+                                        },
                                         "&&": {
                                             padding: isNonMobileScreens
                                                 ? "0.5rem 2rem"
@@ -239,6 +246,8 @@ const LandingView = () => {
                 </FlexBetween>
                 {showDashboard() && isNonMobileScreens && (
                     <Button
+                        component="a"
+                        href={`${import.meta.env.VITE_CLIENT_URL}/dashboard`}
                         sx={{
                             borderRadius: "0.25rem",
                             border: "1px solid " + theme.palette.primary.darker,
@@ -248,9 +257,11 @@ const LandingView = () => {
                             "&:hover": {
                                 backgroundColor: (theme) =>
                                     theme.palette.primary.light3,
+                                color: "inherit",
                             },
                         }}
-                        onClick={() => {
+                        onClick={(e) => {
+                            e.preventDefault();
                             navigate("/dashboard");
                         }}
                     >

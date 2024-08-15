@@ -10,7 +10,7 @@ import FlexBetween from "../../components/FlexBetween";
 const CoursesTop = ({ courseType, setCourseType, handleChange }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.user);
   const theme = useTheme();
 
   return (

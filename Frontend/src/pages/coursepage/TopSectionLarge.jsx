@@ -1,15 +1,15 @@
 import { Box, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import Rating from "../../components/Rating";
 import { StyledButton } from "../../components/StyledButton";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { getEnrollmentStatus} from "../../utils/course";
+import { getEnrollmentStatus } from "../../utils/course";
 
 const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
-    const { user } = useSelector((state) => state);
+    const { user } = useSelector((state) => state.auth);
 
     const navigate = useNavigate();
     const theme = useTheme();
@@ -103,7 +103,8 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     Instructors{" "}
                     {courseInfo?.courseInstructors?.map((instructor, index) => {
                         return (
-                            <Button
+                            <Button component="a"
+                                href={`${import.meta.env.VITE_CLIENT_URL}/profile/${instructor?._id}`}
                                 key={index}
                                 sx={{
                                     fontWeight: "bold",
@@ -115,7 +116,8 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                                         textDecoration: "underline",
                                     },
                                 }}
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.preventDefault();
                                     navigate(`/profile/${instructor._id}`);
                                 }}
                             >
@@ -132,9 +134,13 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     Language <b>{courseInfo?.courseLanguage}</b>
                 </Typography>
                 <StyledButton
-                    onClick={() => {
+                    component="a"
+                    href={`${import.meta.env.VITE_CLIENT_URL}/learning/course/${courseInfo?._id}`}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        
                         if (purchased) {
-                            navigate(`/learning/course/${courseInfo._id}`);
+                            navigate(`/learning/course/${courseInfo?._id}`);
                         } else {
                             if (user) {
                                 enrollCourse();
@@ -142,7 +148,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                                 navigate("/login", {
                                     state: {
                                         isLogin: true,
-                                        redirect: `/course/${courseInfo._id}`,
+                                        redirect: `/course/${courseInfo?._id}`,
                                     },
                                 });
                             }
@@ -151,10 +157,12 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     sx={{
                         fontSize: "1.1rem",
                         fontWeight: "bold",
+                        color: "inherit",
                         "&&": {
                             backgroundColor: theme.palette.primary.main1,
                             "&:hover": {
                                 backgroundColor: theme.palette.primary.dark,
+                                color: "inherit"
                             },
                         },
                     }}

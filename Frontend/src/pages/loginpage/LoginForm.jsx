@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import { setLogin } from "../../state";
+import { setLogin } from "../../state/reduxStore/authSlice.js";
 
 import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";

@@ -1,9 +1,9 @@
-import React from 'react'
-import TopSectionLarge from './TopSectionLarge';
-import TopSectionSmall from './TopSectionSmall';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { isPurchased } from '../../utils/course';
+import TopSectionLarge from './TopSectionLarge';
+import TopSectionSmall from './TopSectionSmall';
 
 
 const TopSection = ({
@@ -12,7 +12,7 @@ const TopSection = ({
 
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
-    const { user, token } = useSelector((state) => state);
+    const { user, token } = useSelector((state) => state.auth);
 
     const [purchased, setPurchased] = React.useState(
         courseInfo?.enrolledStudents?.reduce((cur, enrollMent) => {

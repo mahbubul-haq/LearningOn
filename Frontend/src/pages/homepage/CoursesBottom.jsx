@@ -65,8 +65,6 @@ const CoursesBottom = ({
             )} */}
 
       <Box
-        component="a"
-        href={`${import.meta.env.VITE_CLIENT_URL}/courses`}
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -74,19 +72,21 @@ const CoursesBottom = ({
           width: "100%",
           mt: isNonMobileScreens ? "2rem" : "2rem",
           textAlign: "center",
-          textDecoration: "none",
           color: "inherit",
-        }}
-        onClick={(e) => {
-          e.preventDefault();
-          navigate("/courses");
         }}
       >
         <FlexBetween
+          component="a"
+          href={`${import.meta.env.VITE_CLIENT_URL}/courses`}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/courses");
+          }}
           sx={{
             mt: "1rem",
-            "&&" : {
-              gap: "0.5rem"
+            textDecoration: "none",
+            "&&": {
+              gap: "0.5rem",
             },
             cursor: "pointer",
             color: (theme) => theme.palette.grey.grey500,

@@ -1,18 +1,18 @@
-import Box from "@mui/material/Box";
-import { useContext } from "react";
-import { DashboardContext } from "../../state/DashboardContext";
-import Typography from "@mui/material/Typography";
-import { useSelector } from "react-redux";
-import DashboardCard from "../../widgets/DashboardCard";
 import { Divider } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useContext } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import { StyledButton } from "../../components/StyledButton";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useNavigate } from "react-router-dom";
+import { DashboardContext } from "../../state/DashboardContext";
+import DashboardCard from "../../widgets/DashboardCard";
 
 const DashboardMiddle = () => {
   const { selectedCourse } = useContext(DashboardContext);
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.user);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const navigate = useNavigate();
 

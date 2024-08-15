@@ -174,5 +174,50 @@ const getPopularCourses = async (req, res) => {
     }
 };
 
-export { getFilteredCourses, getPopularCourses, getUnpublishedCourses };
+const getCourseLessons = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const courseId = req.params.courseId;
+
+        let course = await Course.findById(courseId, {
+            lessons: 1,
+            courseInstructors: 1,
+            owner: 1,
+        });
+
+        if (
+            course?.owner == userId ||
+            course?.courseInstructors?.reduce(
+                (res, ins) => res || ins == userId,
+                false
+            )
+        ) {
+
+            let courseInfo = {
+                _id: course._doc?._id,
+                lessons: course._doc?.lessons
+            }
+
+            res.status(200).json({
+                success: true,
+                courseInfo: courseInfo,
+            });
+        } else {
+            res.status(401).json({
+                success: false,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+        });
+    }
+};
+
+export {
+    getCourseLessons,
+    getFilteredCourses,
+    getPopularCourses,
+    getUnpublishedCourses
+};
 

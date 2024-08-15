@@ -1,16 +1,16 @@
 import { Box, Typography } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { StyledButton } from "../../components/StyledButton";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { StyledButton } from "../../components/StyledButton";
 import { getEnrollmentStatus } from "../../utils/course";
 import TopSectionSmallInfo from "./TopSectionSmallInfo";
 
 const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
     const isMobibleScreen = useMediaQuery("(max-width: 600px)");
 
-    const { user } = useSelector((state) => state);
+    const { user } = useSelector((state) => state.auth);
 
     const navigate = useNavigate();
     const theme = useTheme();
@@ -66,7 +66,7 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
                 <StyledButton
                     onClick={() => {
                         if (purchased) {
-                            navigate(`/learning/course/${courseInfo._id}`);
+                            navigate(`/learning/course/${courseInfo?._id}`);
                         } else {
                             if (user) {
                                 enrollCourse();
@@ -74,7 +74,7 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
                                 navigate("/login", {
                                     state: {
                                         isLogin: true,
-                                        redirect: `/course/${courseInfo._id}`,
+                                        redirect: `/course/${courseInfo?._id}`,
                                     },
                                 });
                             }

@@ -1,7 +1,7 @@
 import React, { createContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setLogin } from ".";
+import { setLogin } from "./reduxStore/authSlice";
 
 export const GlobalContext = createContext();
 
@@ -15,7 +15,7 @@ export const GlobalState = (props) => {
   const [courseById, setCourseById] = React.useState(null);
   const [openedItem, setOpenedItem] = React.useState("");
 
-  const token = useSelector((state) => state.token);
+  const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
   const getUser = async () => {
@@ -177,6 +177,8 @@ export const GlobalState = (props) => {
       const data = await response.json();
 
       if (data.success) {
+
+        console.log("course by id", data.courseInfo);
         setCourseById(data.courseInfo);
       }
     } catch (err) {

@@ -235,7 +235,7 @@ const CourseContent = () => {
                           {
                             title: "",
                             videoLink: "",
-                            lectureNode: "",
+                            lectureNote: "",
                           },
                         ],
                       },
@@ -249,7 +249,7 @@ const CourseContent = () => {
                           {
                             title: "",
                             videoLink: "",
-                            lectureNode: "",
+                            lectureNote: "",
                           },
                         ],
                       },

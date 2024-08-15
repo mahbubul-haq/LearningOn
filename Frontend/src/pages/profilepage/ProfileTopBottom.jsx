@@ -1,16 +1,16 @@
-import Box from "@mui/material/Box";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { AdvancedImage, lazyload } from "@cloudinary/react";
-import { cloudinaryCld } from "../../configs/cloudinary.config";
-import { useContext } from "react";
-import { ProfilePageContext } from "../../state/ProfilePageContext";
+import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
-import FlexBetween from "../../components/FlexBetween";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useContext } from "react";
 import { MdAddPhotoAlternate } from "react-icons/md";
-import { StyledButton } from "../../components/StyledButton";
 import { useSelector } from "react-redux";
+import FlexBetween from "../../components/FlexBetween";
+import { StyledButton } from "../../components/StyledButton";
+import { cloudinaryCld } from "../../configs/cloudinary.config";
+import { ProfilePageContext } from "../../state/ProfilePageContext";
 
 const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -23,7 +23,7 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
     profileInfoChanged,
   } = useContext(ProfilePageContext);
   const theme = useTheme();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <Box

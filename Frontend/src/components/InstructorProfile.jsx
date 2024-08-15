@@ -1,11 +1,11 @@
-import WidgetWrapper from "./WidgetWrapper";
-import Rating from "./Rating";
-import FlexBetween from "./FlexBetween";
 import { Box, Typography } from "@mui/material";
-import { GlobalContext } from "../state/GlobalContext";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { GlobalContext } from "../state/GlobalContext";
+import FlexBetween from "./FlexBetween";
+import Rating from "./Rating";
+import WidgetWrapper from "./WidgetWrapper";
 
 const InstructorProfile = ({ instructorId }) => {
     const { users } = useContext(GlobalContext);
@@ -80,6 +80,8 @@ const InstructorProfile = ({ instructorId }) => {
                         }}
                     >
                         <Typography
+                            component="a"
+                            href={`${import.meta.env.VITE_CLIENT_URL}/profile/${instructor?._id}`}
                             sx={{
                                 fontWeight: "600",
                                 fontSize: "1rem",
@@ -91,11 +93,14 @@ const InstructorProfile = ({ instructorId }) => {
                                 maxWidth: "100%",
                                 // ellipsis after 20 characters
                                 cursor: "pointer",
+                                color: "inherit",
                                 "&:hover": {
                                     textDecoration: "underline",
+                                    color: "inherit"
                                 },
                             }}
-                            onClick={() => {
+                            onClick={(e) => {
+                                e.preventDefault();
                                 navigate(`/profile/${instructor?._id}`);
                             }}
                         >

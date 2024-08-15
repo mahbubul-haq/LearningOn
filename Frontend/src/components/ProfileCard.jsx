@@ -1,15 +1,15 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import FlexBetween from "./FlexBetween";
-import Typography from "@mui/material/Typography";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import React from "react";
 import { useSelector } from "react-redux";
-import { ProfilePageContext } from "../state/ProfilePageContext";
 import { useNavigate } from "react-router-dom";
+import { ProfilePageContext } from "../state/ProfilePageContext";
+import FlexBetween from "./FlexBetween";
 
 const ProfileCard = ({ userInfo }) => {
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
     const { follow, setFollowingDone } = React.useContext(ProfilePageContext);
     const navigate = useNavigate();
 

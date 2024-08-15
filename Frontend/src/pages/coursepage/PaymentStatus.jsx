@@ -1,18 +1,18 @@
-import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+import DoneIcon from "@mui/icons-material/Done";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
-import Button from "@mui/material/Button";
-import DoneIcon from "@mui/icons-material/Done";
-import CloseIcon from "@mui/icons-material/Close";
-import socketIoClient from "socket.io-client";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import socketIoClient from "socket.io-client";
 
 const PaymentStatus = () => {
     const { status, courseId } = useParams();
     const theme = useTheme();
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
 
     useEffect(() => {
         if (status === "success") {

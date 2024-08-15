@@ -1,22 +1,21 @@
-import Box from "@mui/material/Box";
-import useTheme from "@mui/material/styles/useTheme";
-import MenuList from "@mui/material/MenuList";
-import MenuItem from "@mui/material/MenuItem";
-import { useContext } from "react";
-import { ProfilePageContext } from "../../state/ProfilePageContext";
-import { useSelector } from "react-redux";
-import FlexBetween from "../../components/FlexBetween";
-import Typography from "@mui/material/Typography";
-import { StyledButton } from "../../components/StyledButton";
 import { Divider } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { setLogout } from "../../state";
+import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import useTheme from "@mui/material/styles/useTheme";
+import Typography from "@mui/material/Typography";
+import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import FlexBetween from "../../components/FlexBetween";
+import { StyledButton } from "../../components/StyledButton";
+import { ProfilePageContext } from "../../state/ProfilePageContext";
+import { setLogout } from "../../state/reduxStore/authSlice";
 
 const ProfileLeft = ({ userInfo }) => {
     const theme = useTheme();
     const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
-    const { user } = useSelector((state) => state);
+    const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 

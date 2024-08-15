@@ -8,7 +8,7 @@ import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setLogout } from "../../state";
+import { setLogout } from "../../state/reduxStore/authSlice";
 import { MobileNavItem } from "../StyledBox";
 import { StyledButton } from "../StyledButton";
 
@@ -16,7 +16,7 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <>

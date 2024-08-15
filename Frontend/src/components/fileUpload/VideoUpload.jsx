@@ -1,12 +1,12 @@
-import React from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import Typography from "@mui/material/Typography";
-import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import VideoUploadProgress from "./VideoUploadProgress";
+import Snackbar from "@mui/material/Snackbar";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
+import React from "react";
+import { useSelector } from "react-redux";
 import VideoUploadDropzone from "./VideoUploadDropzone";
 import VideoUploadedFile from "./VideoUploadedFile";
+import VideoUploadProgress from "./VideoUploadProgress";
 
 const VideoUpload = ({
     setFileName,
@@ -19,7 +19,7 @@ const VideoUpload = ({
     const [uploadProgress, setUploadProgress] = React.useState(0);
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
-    const token = useSelector((state) => state.token);
+    const token = useSelector((state) => state.auth.token);
 
     const uploadVideo = async (fileToUpload) => {
         const formData = new FormData();

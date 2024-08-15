@@ -14,12 +14,17 @@ const HomeCourses = () => {
   const { listOfCategories, getCategories } = useContext(GlobalContext);
   const [categoriesWithCourse, setCategoriesWithCourse] = React.useState([]);
   const [selectedItem, setSelectedItem] = React.useState("All");
-  const { courses, getCourses, setLoading, selectedCourses, setSelectedCourses, filteredCourses,
-    setFilteredCourses
-   } = useContext(HomePageContext);
-  
+  const {
+    courses,
+    getCourses,
+    setLoading,
+    selectedCourses,
+    setSelectedCourses,
+    filteredCourses,
+    setFilteredCourses,
+  } = useContext(HomePageContext);
 
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     let coursesContainer = document.querySelector(".courses-container");
@@ -83,7 +88,8 @@ const HomeCourses = () => {
 
   useEffect(() => {
     //console.log(selectedItem, courses);
-    if (selectedItem == "All" || courseType === "Popular Courses") setSelectedCourses(filteredCourses);
+    if (selectedItem == "All" || courseType === "Popular Courses")
+      setSelectedCourses(filteredCourses);
     else if (selectedItem) {
       const curfilteredCourses = filteredCourses.filter((course) => {
         return course?.category === selectedItem;
@@ -94,16 +100,11 @@ const HomeCourses = () => {
 
   const changeCourseType = () => {
     if (courseType === "My Courses") {
-      
       setFilteredCourses(user?.courses);
-      
-      
     } else if (courseType === "I am Learning") {
       setFilteredCourses(user?.learning?.map((course) => course.course));
-      
     } else if (courseType === "Popular Courses") {
       setFilteredCourses(courses);
-      
     }
   };
 
@@ -120,7 +121,6 @@ const HomeCourses = () => {
     if (courseType == "Popular Courses") {
       setLoading(true);
       getCourses(selectedItem == "All" ? "all" : selectedItem);
-      
     }
   }, [selectedItem]);
 
@@ -142,15 +142,20 @@ const HomeCourses = () => {
 
     // console.log(container.scrollLeft, container.scrollWidth - container.clientWidth);
 
-    if (container.scrollLeft === 0 && direction != "right") {
+    if (
+      !(selectedCourses?.length > 0) ||
+      (container.scrollLeft === 0 && direction != "right")
+    ) {
       document.querySelector(".left-arrow").style.display = "none";
     } else {
       document.querySelector(".left-arrow").style.display = "flex";
     }
 
     if (
-      container.scrollLeft + 1 >=
-      container.scrollWidth - container.clientWidth && direction != "left"
+      !(selectedCourses?.length > 0) ||
+      (container.scrollLeft + 1 >=
+        container.scrollWidth - container.clientWidth &&
+        direction != "left")
     ) {
       document.querySelector(".right-arrow").style.display = "none";
     } else {
@@ -161,15 +166,16 @@ const HomeCourses = () => {
   useEffect(() => {
     const container = document.querySelector(".courses-container");
     if (container) {
-      if (container.scrollLeft === 0) {
+      if (!(selectedCourses?.length > 0) || container.scrollLeft === 0) {
         document.querySelector(".left-arrow").style.display = "none";
       } else {
         document.querySelector(".left-arrow").style.display = "flex";
       }
 
       if (
+        !(selectedCourses?.length > 0) ||
         container.scrollLeft + 1 >=
-        container.scrollWidth - container.clientWidth
+          container.scrollWidth - container.clientWidth
       ) {
         document.querySelector(".right-arrow").style.display = "none";
       } else {
@@ -181,8 +187,6 @@ const HomeCourses = () => {
   const handleChange = (event, newValue) => {
     setCourseType(newValue);
   };
-
-  
 
   return (
     <Box

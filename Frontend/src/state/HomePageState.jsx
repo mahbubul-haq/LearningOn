@@ -6,7 +6,7 @@ export const HomePageContext = createContext();
 
 export const HomePageState = (props) => {
     const [courses, setCourses] = React.useState([]);
-    const token = useSelector((state) => state.token);
+    const token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = React.useState(false);
     const [filteredCourses, setFilteredCourses] = React.useState([]);
     const [selectedCourses, setSelectedCourses] = React.useState([]);

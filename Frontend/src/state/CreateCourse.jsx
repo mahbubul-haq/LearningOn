@@ -22,7 +22,7 @@ export const initialCourseState = {
 };
 
 export const CreateCourseState = (props) => {
-  const token = useSelector((state) => state.token);
+  const token = useSelector((state) => state.auth.token);
 
   const [courseState, setCourseState] = React.useState({
     category: "",

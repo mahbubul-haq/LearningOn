@@ -1,9 +1,9 @@
-import React from "react";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import React from "react";
 import FlexBetween from "../../components/FlexBetween";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { StyledCheckbox } from "../../components/StyledButton";
 
 const LeftPanelCourseContent = ({

@@ -1,17 +1,17 @@
-import { useContext } from "react";
-import { DashboardContext } from "../../state/DashboardContext";
+import { Chip } from "@mui/material";
 import Box from "@mui/material/Box";
-import { useSelector } from "react-redux";
+import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import { Chip } from "@mui/material";
+import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { StyledButton } from "../../components/StyledButton";
+import { DashboardContext } from "../../state/DashboardContext";
 
 const DashboardLeft = () => {
     const {selectedCourse, setSelectedCourse } = useContext(DashboardContext);
 
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
     const theme = useTheme();
 
     return (
@@ -94,7 +94,7 @@ const DashboardLeft = () => {
                                         }}
                                     >
                                         {/* <Typography> You are </Typography> */}
-                                        {course.owner == user._id && (
+                                        {course?.owner == user._id && (
                                             <Chip
                                                 sx={{
                                                     color: "white",
@@ -105,7 +105,7 @@ const DashboardLeft = () => {
                                                 variant="contained"
                                             />
                                         )}
-                                        {course.courseInstructors.reduce((acc, curr) => {
+                                        {course?.courseInstructors?.reduce((acc, curr) => {
                                             if (curr == user._id) return true;
                                             else return acc;
                                         }, false) && (

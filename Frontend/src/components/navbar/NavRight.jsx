@@ -1,10 +1,10 @@
-import FlexBetween from "../FlexBetween";
+import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
+import FlexBetween from "../FlexBetween";
 import { StyledButton } from "../StyledButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import NavRightIsUser from "./NavRightIsUser";
 
 const NavRight = ({
@@ -19,7 +19,7 @@ const NavRight = ({
 }) => {
 
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const navRightIsUser = (
         <NavRightIsUser

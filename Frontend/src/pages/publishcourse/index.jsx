@@ -15,7 +15,7 @@ import RightPanel from "./RightPanel";
 const PublishCourse = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   //const [dialogOpen, setDialogOpen] = React.useState(0);
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.user);
   const edit = useParams().edit;
   const id = useParams().courseId;
   //console.log("edit and id", edit, id);
@@ -60,7 +60,12 @@ const PublishCourse = () => {
   useEffect(() => {
     console.log("publish course mounted");
     if (!user) {
-      navigate("/");
+      navigate("/login", {
+        state: {
+          isLogin: true,
+          redirect: "/publishcourse"
+        }
+      });
     }
     //console.log(edit, id);
     if (edit == "edit" && id) {

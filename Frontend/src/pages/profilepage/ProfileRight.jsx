@@ -1,20 +1,19 @@
-import { useEffect } from "react";
-import Box from "@mui/material/Box";
-import { useContext } from "react";
-import { ProfilePageContext } from "../../state/ProfilePageContext";
-import { useSelector } from "react-redux";
-import Wallet from "./Wallet";
-import { Divider } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import ProfileCourses from "./ProfileCourses";
-import FlexBetween from "../../components/FlexBetween";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { Divider } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
+import FlexBetween from "../../components/FlexBetween";
+import { ProfilePageContext } from "../../state/ProfilePageContext";
 import Followers from "./Followers";
+import ProfileCourses from "./ProfileCourses";
+import Wallet from "./Wallet";
 
 const ProfileRight = ({ userInfo }) => {
     const { openedTab } = useContext(ProfilePageContext);
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
 
     useEffect(() => {

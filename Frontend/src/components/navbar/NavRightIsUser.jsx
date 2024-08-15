@@ -1,12 +1,12 @@
+import { AdvancedImage, lazyload } from "@cloudinary/react";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { AdvancedImage, lazyload } from "@cloudinary/react";
-import { cloudinaryCld } from "../../configs/cloudinary.config";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { cloudinaryCld } from "../../configs/cloudinary.config";
 import NotificationMenu from "./NotificationMenu";
 
 const NavRightIsUser = ({
@@ -18,7 +18,7 @@ const NavRightIsUser = ({
     notifications,
     updateNotifications,
 }) => {
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
 
     return (

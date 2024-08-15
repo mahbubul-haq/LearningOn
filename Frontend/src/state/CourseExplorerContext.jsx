@@ -20,7 +20,7 @@ export const CourseExplorerState = (props) => {
 
   const coursePerPage = 12;
 
-  const { token } = useSelector((state) => state);
+  const { token } = useSelector((state) => state.auth);
 
   const disableScroll1 = useCallback((e) => {
     e.stopPropagation();

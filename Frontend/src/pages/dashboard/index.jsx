@@ -1,21 +1,19 @@
-import { useEffect } from "react";
 import Box from "@mui/material/Box";
-import Navbar from "../../components/navbar";
-import DashboardTop from "./DashboardTop";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { DashboardContext } from "../../state/DashboardContext";
+import { GlobalContext } from "../../state/GlobalContext";
 import DashboardLeft from "./DashboardLeft";
 import DashboardMiddle from "./DashboardMiddle";
 import DashboardRight from "./DashboardRight";
-import { useTheme } from "@mui/material/styles";
-import { useSelector } from "react-redux";
-import { useContext } from "react";
-import { DashboardContext } from "../../state/DashboardContext";
-import { useParams } from "react-router-dom";
-import { GlobalContext } from "../../state/GlobalContext";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import DashboardTop from "./DashboardTop";
 
 const Dashboard = () => {
     const theme = useTheme();
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const params = useParams();
     const { setOpenedItem } = useContext(GlobalContext);
@@ -51,7 +49,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (selectedCourse) {
-            const enrollments = selectedCourse.enrolledStudents.map((enrollment) => {
+            const enrollments = selectedCourse.enrolledStudents?.map((enrollment) => {
                 return {
                     enrolledOn: enrollment.enrolledOn,
                     userId: enrollment.userId,
@@ -60,7 +58,7 @@ const Dashboard = () => {
                 };
             });
 
-            enrollments.sort((a, b) => {
+            enrollments?.sort((a, b) => {
                 return new Date(b.enrolledOn) - new Date(a.enrolledOn);
             });
 
@@ -68,7 +66,7 @@ const Dashboard = () => {
         } else {
             const enrollments = [];
             user?.courses?.forEach((course) => {
-                course.enrolledStudents.forEach((enrollment) => {
+                course.enrolledStudents?.forEach((enrollment) => {
                     enrollments.push({
                         enrolledOn: enrollment.enrolledOn,
                         userId: enrollment.userId,
@@ -79,7 +77,7 @@ const Dashboard = () => {
                 });
             });
 
-            enrollments.sort((a, b) => {
+            enrollments?.sort((a, b) => {
                 return new Date(b.enrolledOn) - new Date(a.enrolledOn);
             });
             setRecentEnrollments(enrollments);

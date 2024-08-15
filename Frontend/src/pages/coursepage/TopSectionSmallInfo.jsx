@@ -1,8 +1,8 @@
+import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Rating from "../../components/Rating";
 import { StyledGrid2Cols } from "../../components/StyledBox";
-import { useMediaQuery } from "@mui/material";
 
 const TopSectionSmallInfo = ({
     courseInfo

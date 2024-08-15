@@ -40,7 +40,17 @@ const CourseExplorerRIghtBottom = () => {
       }}
     >
       {filteredCourses?.map((course, index) => (
-        <Box sx={{ height: "100%", display: "flex" }} key={index}>
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            transition: "transform 0.2s ease-out",
+            "&:hover": {
+              transform: "scale(1.02)",
+            },
+          }}
+          key={index}
+        >
           <CourseWidget key={index} courseInfo={course} />
         </Box>
       ))}
@@ -81,8 +91,8 @@ const CourseExplorerRIghtBottom = () => {
         </>
       )}
       {filteredCourses?.length !== totalDocuments && !loading && (
-
-        <Box onClick={() => setLoading(true)}
+        <Box
+          onClick={() => setLoading(true)}
           sx={{
             border: `1px solid ${theme.palette.grey.grey200}`,
             height: "100%",
@@ -90,10 +100,9 @@ const CourseExplorerRIghtBottom = () => {
             alignItems: "center",
             borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
             cursor: "pointer",
-            minHeight: "300px"
+            minHeight: "300px",
           }}
         >
-
           <StyledButton
             onClick={() => setLoading(true)}
             sx={{

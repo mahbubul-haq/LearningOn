@@ -22,6 +22,7 @@ const MainSection = ({ courseInfo }) => {
             <Box
                 sx={{
                     height: isNonMobileScreens ? "5rem" : "auto",
+                    minHeight: isNonMobileScreens ? "5rem": "4rem",
                     width: "100%",
                     padding: isNonMobileScreens ? "0.1rem 5rem" : "0rem 1rem",
                     backgroundColor: theme.palette.background.buttonBgPink,

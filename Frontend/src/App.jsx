@@ -30,7 +30,7 @@ import { NotificationState } from "./state/NotificationContext";
 import { ProfilePageState } from "./state/ProfilePageContext";
 
 function App() {
-  const mode = useSelector((state) => state.mode);
+  const mode = useSelector((state) => state.auth.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   useEffect(() => {

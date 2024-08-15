@@ -2,15 +2,13 @@ import Box from "@mui/material/Box";
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../state/GlobalContext";
-import { HomePageContext } from "../../state/HomePageState";
 import MainSection from "./MainSection";
 import TopSection from "./TopSection";
 
 const CoursePage = () => {
     const { courseId } = useParams();
     const [courseInfo, setCourseInfo] = React.useState({});
-    const { courses, getCourses } = useContext(HomePageContext);
-    const { setOpenedItem, courseById, getCourseById} = useContext(GlobalContext);
+    const { courseById, getCourseById} = useContext(GlobalContext);
 
     // useEffect(() => {
     //     if (!user) {
@@ -30,13 +28,6 @@ const CoursePage = () => {
     useEffect(() => {
         setCourseInfo(courseById);
     }, [courseById]);
-
-    useEffect(() => {
-        if (!courses || courses.length == 0) {
-            getCourses();
-        }
-        setOpenedItem("courses");
-    }, []);
 
     useEffect(() => {
         console.log("index", courseInfo);

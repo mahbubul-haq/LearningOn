@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
-import { createContext } from "react";
-import React from "react";
+import React, { createContext } from "react";
 import { useSelector } from "react-redux";
 
 export const ProfilePageContext = createContext();
 
 export const ProfilePageState = (props) => {
   const [openedTab, setOpenedTab] = React.useState("profile");
-  const { token } = useSelector((state) => state);
+  const { token } = useSelector((state) => state.auth);
   const [followingDone, setFollowingDone] = React.useState(false);
   const [editProfileStatus, setEditProfileStatus] = React.useState("");
   const [profileInfoChanged, setProfileInfoChanged] = React.useState(false);

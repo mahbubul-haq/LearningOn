@@ -1,22 +1,22 @@
-import React, { useEffect } from "react";
-import Box from "@mui/material/Box";
-import useTheme from "@mui/material/styles/useTheme";
-import BreadCrumbs from "@mui/material/Breadcrumbs";
 import HomeIcon from "@mui/icons-material/Home";
-import FlexBetween from "../../components/FlexBetween";
+import Box from "@mui/material/Box";
+import BreadCrumbs from "@mui/material/Breadcrumbs";
+import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { ProfilePageContext } from "../../state/ProfilePageContext";
-import { GlobalContext } from "../../state/GlobalContext";
 import axios from "axios";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import FlexBetween from "../../components/FlexBetween";
+import { GlobalContext } from "../../state/GlobalContext";
+import { ProfilePageContext } from "../../state/ProfilePageContext";
 import ProfileTopBottom from "./ProfileTopBottom";
 
 const ProfileTop = ({ userInfo }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { token } = useSelector((state) => state);
+  const { token } = useSelector((state) => state.auth);
   //console.log(user, token);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");

@@ -4,26 +4,33 @@ import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import React, { useContext, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useContext, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton";
 import { GlobalContext } from "../../state/GlobalContext";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
+import { fetchLessons, setCourseId } from "../../state/reduxStore/learningPageSlice";
 import { LearningLeftPanel } from "./LearningLeftPanel";
 import LearningPageTop from "./LearningPageTop";
 import LearningRightPanel from "./LearningRightPanel";
 
 const LearningPage = () => {
     const { courseId } = useParams();
-    const [courseInfo, setCourseInfo] = React.useState({});
-    const { getCourseById, courseById, setOpenedItem } = useContext(GlobalContext);
+    const {setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const theme = useTheme();
     const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons } = useContext(LearningCourseContext);
     const navigate = useNavigate();
-    const user = useSelector((state) => state.user);
+    const {user, token} = useSelector((state) => state.auth);
+    const {courseInfo} = useSelector((state) => state.course);
+    const dispatch = useDispatch();
+    
+    //const state = useSelector(state => state);
+    //console.log("learning page", user, token, state);
+
+    
 
     useEffect(() => {
         setExpandedLessons([]);
@@ -39,16 +46,16 @@ const LearningPage = () => {
 
     useEffect(() => {
         ///console.log("courseId", courseId);
+        console.log(courseId)
         if (courseId) {
-            getCourseById(courseId);
+            dispatch(setCourseId({courseId: courseId}));
+            dispatch(fetchLessons({courseId: courseId, token: token}));
         }
     }, [courseId]);
 
     useEffect(() => {
-        if (courseById) {
-            setCourseInfo(courseById);
-        }
-    }, [courseById]);
+        console.log("courseId + info", courseInfo);
+    }, [courseInfo]);
 
     const handleNext = () => {
         if (openedLesson.subLesson === 0) {

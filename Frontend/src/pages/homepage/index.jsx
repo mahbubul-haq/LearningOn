@@ -1,16 +1,16 @@
-import LandingView from "./LandingView";
-import HomeCourses from "./HomeCourses.jsx";
 import Box from "@mui/material/Box";
-import { useEffect } from "react";
-import socketIoClient from "socket.io-client";
-import { useContext } from "react";
-import { NotificationContext } from "../../state/NotificationContext";
+import { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
+import socketIoClient from "socket.io-client";
 import { GlobalContext } from "../../state/GlobalContext";
+import { NotificationContext } from "../../state/NotificationContext";
+import HomeCourses from "./HomeCourses.jsx";
+import LandingView from "./LandingView";
 
 const HomePage = () => {
 
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
+    console.log(user);
     const { setOpenedItem } = useContext(GlobalContext);
     const { getNotifications } = useContext(NotificationContext);
 

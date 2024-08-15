@@ -35,6 +35,18 @@ const CourseWidget = ({ courseInfo }) => {
       }}
     >
       <CardMedia
+        component="a"
+        href={`${import.meta.env.VITE_CLIENT_URL}/course/${courseInfo?._id}`}
+        onClick={(e) => {
+          e.preventDefault();
+          if (showCourseExplorer) {
+            setCloseBtnClicked(true);
+            setShowCourseExplorer(false);
+            setTimeout(() => {
+              navigate(`/course/${courseInfo?._id}`);
+            }, 300);
+          } else navigate(`/course/${courseInfo?._id}`);
+        }}
         sx={{
           width: "100%",
           height: isNonMobileScreens ? "150px" : "130px",
@@ -42,6 +54,7 @@ const CourseWidget = ({ courseInfo }) => {
           boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset",
           objectFit: "cover",
           borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
+          cursor: "pointer",
         }}
         image={`https://res.cloudinary.com/${
           import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
@@ -81,7 +94,9 @@ const CourseWidget = ({ courseInfo }) => {
                 color: "inherit",
               },
             }}
-            href={`${import.meta.env.VITE_CLIENT_URL}/course/${courseInfo?._id}`}
+            href={`${import.meta.env.VITE_CLIENT_URL}/course/${
+              courseInfo?._id
+            }`}
             onClick={(e) => {
               e.preventDefault();
               if (showCourseExplorer) {
@@ -122,7 +137,6 @@ const CourseWidget = ({ courseInfo }) => {
               } else navigate(`/profile/${courseInfo?.owner?._id}`);
             }}
           >
-           
             &mdash; {courseInfo?.owner?.name}
           </Typography>
         </Box>
