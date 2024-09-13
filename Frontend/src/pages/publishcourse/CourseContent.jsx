@@ -28,14 +28,14 @@ const CourseContent = () => {
       }
     }
 
-    setCourseState({
-      ...courseState,
+    setCourseState((prevState) => ({
+      ...prevState,
       lessons: [
-        ...courseState.lessons.filter((lesson, curIndex) => {
+        ...prevState.lessons.filter((lesson, curIndex) => {
           return curIndex !== index;
         }),
       ],
-    });
+    }));
 
     setDeleteLessonStatus("deleted");
   };
@@ -48,10 +48,10 @@ const CourseContent = () => {
       await deleteFile(videoLink, true);
     }
 
-    setCourseState({
-      ...courseState,
+    setCourseState((prevState) => ({
+      ...prevState,
       lessons: [
-        ...courseState.lessons.map((lesson, curIndex) => {
+        ...prevState.lessons.map((lesson, curIndex) => {
           if (curIndex === index) {
             return {
               ...lesson,
@@ -65,7 +65,7 @@ const CourseContent = () => {
           return lesson;
         }),
       ],
-    });
+    }));
 
     setDeleteLessonStatus("deleted");
   };
@@ -90,10 +90,10 @@ const CourseContent = () => {
 
   const handleInput = (event, index, subIndex) => {
     if (subIndex === undefined) {
-      setCourseState({
-        ...courseState,
+      setCourseState((prevState) => ({
+        ...prevState,
         lessons: [
-          ...courseState.lessons.map((lesson, curIndex) => {
+          ...prevState.lessons.map((lesson, curIndex) => {
             if (curIndex === index) {
               return {
                 ...lesson,
@@ -103,12 +103,12 @@ const CourseContent = () => {
             return lesson;
           }),
         ],
-      });
+      }));
     } else {
-      setCourseState({
-        ...courseState,
+      setCourseState((prevState) => ({
+        ...prevState,
         lessons: [
-          ...courseState.lessons.map((lesson, curIndex) => {
+          ...prevState.lessons.map((lesson, curIndex) => {
             if (curIndex === index) {
               return {
                 ...lesson,
@@ -128,7 +128,7 @@ const CourseContent = () => {
             return lesson;
           }),
         ],
-      });
+      }));
     }
   };
 
@@ -223,10 +223,10 @@ const CourseContent = () => {
             },
           }}
           onClick={() => {
-            setCourseState({
-              ...courseState,
+            setCourseState((prevState) => ({
+              ...prevState,
               lessons:
-                courseState.lessons.length == 0
+                prevState.lessons.length == 0
                   ? [
                       {
                         title: "",
@@ -241,7 +241,7 @@ const CourseContent = () => {
                       },
                     ]
                   : [
-                      ...courseState.lessons,
+                      ...prevState.lessons,
                       {
                         title: "",
                         description: "",
@@ -254,7 +254,7 @@ const CourseContent = () => {
                         ],
                       },
                     ],
-            });
+            }));
           }}
         >
           <AddIcon sx={{ mr: "0.5rem" }} />

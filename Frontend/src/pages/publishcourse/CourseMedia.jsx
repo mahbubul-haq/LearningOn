@@ -58,10 +58,10 @@ const CourseMedia = () => {
           <VideoUpload
             updateCallBack={updateCallback}
             setFileName={(fileName) => {
-              setCourseState({
-                ...courseState,
+              setCourseState((prevState) => ({
+                ...prevState,
                 courseThumbnail: fileName,
-              });
+              }));
             }}
             fileName={courseState.courseThumbnail}
             isImage={true}
@@ -95,10 +95,10 @@ const CourseMedia = () => {
           <VideoUpload
             updateCallBack={updateCallback}
             setFileName={(fileName) => {
-              setCourseState({
-                ...courseState,
+              setCourseState((prevState) => ({
+                ...prevState,
                 introVideo: fileName,
-              });
+              }));
             }}
             fileName={courseState.introVideo}
             isImage={false}
