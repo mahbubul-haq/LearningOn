@@ -1,10 +1,11 @@
-import People from "../models/People.js";
 import jwt from "jsonwebtoken";
+import People from "../models/People.js";
 
 
 const verifyToken = async (req, res, next) => {
     try {
         const authToken = req.headers["auth-token"];
+        //console.log("authToken verify", authToken);
         if (!authToken) {
             return res.status(401).json({
                 success: false,
@@ -23,6 +24,7 @@ const verifyToken = async (req, res, next) => {
         }
 
         //console.log(verified);
+       // console.log("verified", verified);
         req.userId = verified.id;
         next();
     } catch (error) {

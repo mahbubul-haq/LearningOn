@@ -37,6 +37,7 @@ const getFilteredCourses = async (req, res) => {
                     // 'ratings.ratings': 0,
                     coursePrice: 1,
                     skillTags: 1,
+                    courseStatus: 1,
                 }
             )
                 .skip(skip)
@@ -58,6 +59,7 @@ const getFilteredCourses = async (req, res) => {
                     // 'ratings.ratings': 0,
                     coursePrice: 1,
                     skillTags: 1,
+                    courseStatus: 1,
                 }
             )
                 .skip(skip)
@@ -127,6 +129,7 @@ const getPopularCourses = async (req, res) => {
                     coursePrice: 1,
                     skillTags: 1,
                     category: 1,
+                    courseStatus: 1,
                 }
             )
                 .sort({ "ratings.totalRating": -1 })
@@ -147,6 +150,7 @@ const getPopularCourses = async (req, res) => {
                     coursePrice: 1,
                     skillTags: 1,
                     category: 1,
+                    courseStatus: 1,
                 }
             )
                 .sort({ "ratings.totalRating": -1 })
@@ -183,20 +187,25 @@ const getCourseLessons = async (req, res) => {
             lessons: 1,
             courseInstructors: 1,
             owner: 1,
+            enrolledStudents: 1, ///improvement -> just select the ids instead of whole objects
         });
+        console.log(course, userId);
 
         if (
             course?.owner == userId ||
             course?.courseInstructors?.reduce(
                 (res, ins) => res || ins == userId,
                 false
+            ) ||
+            course?.enrolledStudents?.reduce(
+                (res, enrollment) => res || enrollment?.userId == userId,
+                false
             )
         ) {
-
             let courseInfo = {
                 _id: course._doc?._id,
-                lessons: course._doc?.lessons
-            }
+                lessons: course._doc?.lessons,
+            };
 
             res.status(200).json({
                 success: true,

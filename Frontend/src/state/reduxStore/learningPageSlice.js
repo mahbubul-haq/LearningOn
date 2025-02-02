@@ -8,7 +8,7 @@ const initialState = {
 export const fetchLessons = createAsyncThunk(
   "/course/fetchLessons",
   async ({ courseId, token }) => {
-    //console.log(courseId, token);
+    console.log("In fetchLessons", courseId, token);
     const res = await fetch(
       `${import.meta.env.VITE_SERVER_URL}/course/getlessons/${courseId}`,
       {
@@ -23,7 +23,7 @@ export const fetchLessons = createAsyncThunk(
 
     const data = await res.json();
 
-    /// console.log("lessons", data);
+    console.log("lessons", data);
     return data.courseInfo;
   }
 );

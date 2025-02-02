@@ -121,6 +121,8 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
         }}
       >
         {selectedCourses.map((course) => {
+          if (course.courseStatus != "published") return null;
+          
           return (
             <Box
               key={course?._id}

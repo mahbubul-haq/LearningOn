@@ -27,6 +27,11 @@ const HomeCourses = () => {
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
+    console.log(user);
+    console.log(selectedCourses);
+  }, [selectedCourses]);
+
+  useEffect(() => {
     let coursesContainer = document.querySelector(".courses-container");
     if (coursesContainer) coursesContainer.scrollLeft = 0;
   }, [courseType, selectedItem]);

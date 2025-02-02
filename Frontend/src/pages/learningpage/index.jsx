@@ -46,7 +46,7 @@ const LearningPage = () => {
 
     useEffect(() => {
         ///console.log("courseId", courseId);
-        console.log(courseId)
+        console.log(courseId, token);
         if (courseId) {
             dispatch(setCourseId({courseId: courseId}));
             dispatch(fetchLessons({courseId: courseId, token: token}));

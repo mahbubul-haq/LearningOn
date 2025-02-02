@@ -22,7 +22,7 @@ const getUser = async (req, res) => {
             .populate("followers following")
             .populate({
                 path: "courses",
-                select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice",
+                select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice courseStatus",
                 populate: {
                     path: "owner",
                     select: "name _id",
@@ -32,7 +32,7 @@ const getUser = async (req, res) => {
                 path: "learning",
                 populate: {
                     path: "courseId",
-                    select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice",
+                    select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice courseStatus",
                     populate: {
                         path: "owner",
                         select: "name _id"
@@ -64,7 +64,9 @@ const getUser = async (req, res) => {
               courseTitle: course._doc.courseId?.courseTitle,
               skillTags: course._doc.courseId?.skillTags,
               courseThumbnail: course._doc.courseId?.courseThumbnail,
+              courseStatus: course._doc.courseId?.courseStatus,
               _id: course._doc.courseId?._id,
+
               owner: {
                 _id: course._doc.courseId?.owner?._id,
                 name: course._doc.courseId?.owner?.name
