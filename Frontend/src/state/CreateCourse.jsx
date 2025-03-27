@@ -114,8 +114,16 @@ export const CreateCourseState = (props) => {
           return false;
       }
     }
-
-    return true;
+    let flag = true;
+    courseState.lessons?.forEach((lesson) => {
+      lesson.questions?.forEach((question) => {
+        if (!question.question || !question.answer) flag = false;
+        question.options?.forEach((option) => {
+          if (!option) flag = false;
+        });
+      });
+    });
+    return flag;
   };
 
   const deleteCourse = async (courseId) => {

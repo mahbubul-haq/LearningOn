@@ -9,6 +9,8 @@ import {
 import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
+import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
+import { PiWarningFill } from "react-icons/pi";
 import { StyledButton } from "../../components/StyledButton";
 import StyledTextField1 from "../../components/StyledTextField1";
 import QuestionFormDetails from "./QuestionFormDetails";
@@ -22,7 +24,7 @@ const QuestionForm = ({
 }) => {
   const theme = useTheme();
   const isMobileScreens = useMediaQuery("(max-width:600px)");
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const setQuestion = (event) => {
     setCourseState((prevState) => ({
@@ -115,15 +117,15 @@ const QuestionForm = ({
             backgroundColor: "transparent",
           },
           /// no background for focused and not hovered -> when it happens simultaneously
-          
+
           "&:not(:hover):not(:focus):not(:active)": {
             backgroundColor: "transparent",
           },
-          '& .MuiAccordionSummary-content': {
-            margin: '1rem 0.3rem', // Adjust margins as needed
+          "& .MuiAccordionSummary-content": {
+            margin: "1rem 0.3rem", // Adjust margins as needed
           },
-          '& .MuiAccordionSummary-content.Mui-expanded': {
-            margin: '1rem 0.3rem', // Ensure consistent margin when expanded
+          "& .MuiAccordionSummary-content.Mui-expanded": {
+            margin: "1rem 0.3rem", // Ensure consistent margin when expanded
           },
 
           // add styl
@@ -147,6 +149,27 @@ const QuestionForm = ({
               width: "fit-content",
             }}
           >
+            {question.question &&
+            question.answer &&
+            question.options?.reduce((acc, cur) => acc && cur, true) ? (
+              <IoCheckmarkDoneCircleSharp
+                title="Question is complete"
+                style={{
+                  color: theme.palette.primary.main1,
+                  fontSize: "1.5rem",
+                  marginRight: "0.5rem",
+                }}
+              />
+            ) : (
+              <PiWarningFill
+                title="The question is incomplete"
+                style={{
+                  color: theme.palette.warning.main,
+                  fontSize: "1.5rem",
+                  marginRight: "0.5rem",
+                }}
+              />
+            )}
             <Typography
               sx={{
                 fontSize: "1rem",
@@ -159,7 +182,8 @@ const QuestionForm = ({
                   fontWeight: "500",
                 }}
               >
-                Question {lessonIdx + 1}.{questionNo + 1}
+                {isMobileScreens ? "Q" : "Question"} {lessonIdx + 1}.
+                {questionNo + 1}
                 {/* Lesson 
             {question.question}
             {question.options}
@@ -173,7 +197,7 @@ const QuestionForm = ({
                 ml: "auto",
                 //mr: "1rem",
                 color: (theme) => theme.palette.grey.grey600,
-                
+
                 borderColor: (theme) => theme.palette.grey.grey600,
                 border: "none",
                 "&&": {
@@ -187,7 +211,6 @@ const QuestionForm = ({
                 "&:hover": {
                   border: "none",
                 },
-                
               }}
               onClick={async (event) => {
                 event.stopPropagation();
@@ -195,10 +218,11 @@ const QuestionForm = ({
                 deleteQuestion();
               }}
             >
-            
               Delete
             </StyledButton>
+            
           </Box>
+
           <Box>
             <StyledTextField1
               placeholder="Write question here"
@@ -226,7 +250,7 @@ const QuestionForm = ({
         </Box>
       </AccordionSummary>
       <AccordionDetails>
-        <QuestionFormDetails 
+        <QuestionFormDetails
           question={question}
           courseState={courseState}
           setCourseState={setCourseState}

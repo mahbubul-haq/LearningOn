@@ -11,6 +11,19 @@ const LeftPanelCourseContent = ({
   setInputSection,
   setMobileDrawerOpen,
 }) => {
+
+  const checkQuestions = (questions) => {
+    let flag = true;
+    questions?.forEach((question) => {
+      if (question.question === "") flag = false;
+      question.options?.forEach((option) => {
+        if (option === "") flag = false;
+      });
+      if (!question.answer) flag = false;
+    });
+    return flag;
+  }
+
   return (
     <Box
       sx={{
@@ -93,6 +106,8 @@ const LeftPanelCourseContent = ({
                           subLesson.videoLink?.length > 0 ||
                           subLesson.lectureNote?.length > 0
                       )
+                      && checkQuestions(lesson.questions)
+                      
                     }
                     sx={{
                       "&&": {
@@ -163,6 +178,8 @@ const LeftPanelCourseContent = ({
                         Boolean(subLesson.title) &&
                         (Boolean(subLesson.videoLink) ||
                           Boolean(subLesson.lectureNote))
+
+                        
                       }
                       sx={{
                         "&&": {

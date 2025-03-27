@@ -129,6 +129,9 @@ export const themeSettings = (mode) => {
                         light: "#FFB5B5",
                         light1: "#FFD7D7"
                     },
+                    warning: {
+                        main: "#ff9966",
+                    },
                     customDivider: {
                         main: "#909090",
                     },
