@@ -5,14 +5,17 @@ import Accordion from "@mui/material/Accordion";
 import AccordionActions from "@mui/material/AccordionActions";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import InputLabel from "@mui/material/InputLabel";
 import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { StyledButton } from "../../components/StyledButton";
 import StyledTextField1 from "../../components/StyledTextField1";
 import AddQuestions from "./AddQuestions";
 import CourseContentSublesson from "./CourseContentSublesson";
+import QuestionForm from "./QuestionForm";
 
 const CourseContentCourseAccordion = ({
   lesson,
@@ -29,6 +32,7 @@ const CourseContentCourseAccordion = ({
   setVideoLinks,
 }) => {
   const theme = useTheme();
+  const isMobileScreens = useMediaQuery("(max-width:600px)");
 
   return (
     <Accordion
@@ -242,22 +246,45 @@ const CourseContentCourseAccordion = ({
         </Fab>
         <Divider
           sx={{
-            my: "2rem",
-            mb: "1rem",
-          }}
-        />
-        <Typography
-          variant="body2"
-          sx={{
-            color: (theme) => theme.palette.grey.grey400,
-            mt: "0rem",
-            mb: "0rem",
-            fontSize: "1.2rem",
+            my: "3rem",
+            mb: "0.2rem",
           }}
         >
-          Add questions for lesson {index + 1}
-        </Typography>
-        <AddQuestions prefix={index + 1 + "."} courseState={courseState} lesson={index} />
+          Questions for <b>Lesson {index + 1}</b>
+        </Divider>
+
+        <Box
+          sx={{
+            //backgroundColor: isMobileScreens ? "transparent" : theme.palette.grey.grey10,
+            //padding: isMobileScreens ? 0 : "1rem",
+            mt: "2rem",
+            borderRadius: "0.2rem",
+          }}
+        >
+          {courseState?.lessons[index]?.questions?.map((question, index1) => {
+            return (
+              <QuestionForm
+                key={index1}
+                question={question}
+                questionNo={index1}
+                courseState={courseState}
+                setCourseState={setCourseState}
+                lessonIdx={index}
+              />
+            );
+          })}
+          <Box sx={{
+            mt: "1rem",
+          }}>
+
+          <AddQuestions
+            prefix={index + 1 + "."}
+            courseState={courseState}
+            setCourseState={setCourseState}
+            lesson={index}
+            />
+            </Box>
+        </Box>
       </AccordionDetails>
       <AccordionActions></AccordionActions>
     </Accordion>

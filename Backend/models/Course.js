@@ -96,9 +96,9 @@ const CourseSchema = new mongoose.Schema(
                 ratings: [],
             },
         },
-
+ 
         lessons: {
-            type: [Object],
+            type: [Object],/// lesson: title, descriptions, subLessions, questions: [{question: , options: [], answer: }]
             default: [],
         },
         courseStatus: {

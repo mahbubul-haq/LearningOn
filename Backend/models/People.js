@@ -90,10 +90,18 @@ const PeopleSchema = new mongoose.Schema(
                         type: mongoose.Schema.Types.ObjectId,
                         ref: "Course",
                     },
-                    completedLessons: {
+                    completedLessons: {//array of sublessons that are completed
                         type: [String],
                         default: [],
                     },
+                    answers: {
+                        type: [{
+                            question: String,//2.4 -> Lesson 2, 4 number question
+                            response: String// a, b, c, d, e etc
+                        }],
+                        default: [],
+                    },
+                    
                     status: {
                         type: String,
                         enum: ["active", "postponed", "completed"],

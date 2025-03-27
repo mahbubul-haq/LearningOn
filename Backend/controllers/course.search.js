@@ -189,7 +189,7 @@ const getCourseLessons = async (req, res) => {
             owner: 1,
             enrolledStudents: 1, ///improvement -> just select the ids instead of whole objects
         });
-        console.log(course, userId);
+        ///console.log(course, userId);
 
         if (
             course?.owner == userId ||
