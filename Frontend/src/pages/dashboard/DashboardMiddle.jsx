@@ -2,7 +2,7 @@ import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
@@ -43,6 +43,10 @@ const DashboardMiddle = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("selectedCourse", selectedCourse);
+    console.log("user", user?._id)
+  })
   return (
     <Box>
       {selectedCourse && (
@@ -68,7 +72,7 @@ const DashboardMiddle = () => {
             >
               Go to Course
             </StyledButton>
-            {selectedCourse.owner == user?._id && (
+            {selectedCourse.owner?._id == user?._id && (
               <StyledButton
                 onClick={() =>
                   navigate(`/publishcourse/edit/${selectedCourse?._id}`)

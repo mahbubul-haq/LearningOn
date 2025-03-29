@@ -286,6 +286,91 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                       </Box>
                     </FlexBetween>
                   ))}
+                  {lesson.questions?.length > 0 && (
+                  <FlexBetween
+                      key={lesson.questions[0].question + index}
+                      gap="0.8rem"
+                      sx={{
+                        "&&": {
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                          cursor: "pointer",
+                          p: "1rem 1rem",
+                          paddingLeft: "2rem",
+                        },
+                        backgroundColor:
+                          openedLesson.subLesson === lesson.subLessons.length + 1 &&
+                          openedLesson.lesson === index + 1
+                            ? theme.palette.primary.main
+                            : "transparent",
+                        "&:hover": {
+                          backgroundColor: theme.palette.primary.light,
+                        },
+                      }}
+                      onClick={() => {
+                        setOpenedLesson({
+                          lesson: index + 1,
+                          subLesson: lesson.subLessons.length + 1,
+                        });
+                        setOpenDrawer(false);
+                      }}
+                    >
+                      <StyledCheckbox
+                        icon={
+                          <RadioButtonUncheckedIcon
+                            sx={{
+                              fontSize: "1.1rem",
+                            }}
+                          />
+                        }
+                        checkedIcon={
+                          <CheckCircleIcon
+                            sx={{
+                              fontSize: "1.1rem",
+                            }}
+                          />
+                        }
+                        checked={false}
+                        sx={{
+                          "&&": {
+                            // different color if checked vs unchecked
+                            color: theme.palette.grey.grey400,
+                          },
+                          // border: "1px solid #E0E0E0"
+                        }}
+                      />
+                      <Box
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                          gap: "1rem",
+                          display: "flex",
+                          // border: "2px solid black"
+                        }}
+                      >
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: (theme) => theme.palette.grey.grey600,
+                            fontSize: "0.9rem",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {index + 1}.{lesson.subLessons.length + 1}{" "}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: (theme) => theme.palette.grey.grey600,
+                            fontSize: "0.9rem",
+                            fontWeight: "600",
+                          }}
+                        >
+                         Lesson {index + 1} Questions
+                        </Typography>
+                      </Box>
+                    </FlexBetween>
+                  )}
                 </Box>
               </React.Fragment>
             ))}

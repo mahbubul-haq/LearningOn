@@ -6,6 +6,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import React, { useContext, useEffect } from "react";
 import { cloudinaryCld } from "../../configs/cloudinary.config";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
+import Questions from "./Questions";
 
 const LearningRightPanel = ({ courseInfo }) => {
   const { openedLesson } = useContext(LearningCourseContext);
@@ -43,8 +44,7 @@ const LearningRightPanel = ({ courseInfo }) => {
         totalPlayedTime += (endTime - startTime) / 1000;
         startTime = Date.now();
       }
-      console.log(totalPlayedTime / video.duration * 100);
-
+      console.log((totalPlayedTime / video.duration) * 100);
     };
 
     video.addEventListener("timeupdate", handleTimeUpdate);
@@ -152,149 +152,152 @@ const LearningRightPanel = ({ courseInfo }) => {
               </Box>
             </Box>
           )}
-
-          {openedLesson.subLesson !== 0 && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-start",
-                gap: "2rem",
-              }}
-            >
-              {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
-                openedLesson.subLesson - 1
-              ].videoLink && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.5rem",
-                  }}
-                >
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
-                      mb: "1rem",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Lecture Video {openedLesson.lesson}.
-                      {openedLesson.subLesson}
-                    </span>
-                    &nbsp;&nbsp;
-                    {
-                      courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
-                        openedLesson.subLesson - 1
-                      ].title
-                    }
-                  </Typography>
+          {openedLesson.subLesson ===
+            courseInfo?.lessons[openedLesson.lesson - 1].subLessons?.length +
+              1 && <Questions courseInfo={courseInfo} />}
+          {openedLesson.subLesson > 0 &&
+            openedLesson.subLesson <=
+              courseInfo?.lessons[openedLesson.lesson - 1].subLessons
+                ?.length && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  gap: "2rem",
+                }}
+              >
+                {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
+                  openedLesson.subLesson - 1
+                ].videoLink && (
                   <Box
                     sx={{
-                      width: "100%",
-                      // maxHeight: "500px",
-                      borderRadius: "0.05rem",
-                      border: `1px solid ${theme.palette.grey.grey200}`,
-                      padding: "0",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.5rem",
                     }}
                   >
-                    <AdvancedVideo
-                      className="lecture-video"
-                      cldVid={cloudinaryCld.video(
-                        courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
-                          openedLesson.subLesson - 1
-                        ].videoLink
-                      )}
-                      plugins={[lazyload()]}
-                      style={{
-                        width: "100%",
-                        aspectRatio: "16 / 9",
-                        padding: "0",
-                        margin: "0",
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
+                        mb: "1rem",
                       }}
-                      //add title and caption
-                      title={
+                    >
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Lecture Video {openedLesson.lesson}.
+                        {openedLesson.subLesson}
+                      </span>
+                      &nbsp;&nbsp;
+                      {
                         courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
                           openedLesson.subLesson - 1
                         ].title
                       }
-                      alt="Intro video"
-                      controls
-                    />
-                  </Box>
-                </Box>
-              )}
-
-              {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
-                openedLesson.subLesson - 1
-              ].lectureNote && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.5rem",
-                  }}
-                >
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
-                      mb: "1rem",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontWeight: "bold",
+                    </Typography>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        // maxHeight: "500px",
+                        borderRadius: "0.05rem",
+                        border: `1px solid ${theme.palette.grey.grey200}`,
+                        padding: "0",
                       }}
                     >
-                      Lecture Note {openedLesson.lesson}.
-                      {openedLesson.subLesson}
-                    </span>
-                    &nbsp;&nbsp;
-                    {
-                      courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
-                        openedLesson.subLesson - 1
-                      ].title
-                    }
-                  </Typography>
+                      <AdvancedVideo
+                        className="lecture-video"
+                        cldVid={cloudinaryCld.video(
+                          courseInfo?.lessons[openedLesson.lesson - 1]
+                            .subLessons[openedLesson.subLesson - 1].videoLink
+                        )}
+                        plugins={[lazyload()]}
+                        style={{
+                          width: "100%",
+                          aspectRatio: "16 / 9",
+                          padding: "0",
+                          margin: "0",
+                        }}
+                        //add title and caption
+                        title={
+                          courseInfo?.lessons[openedLesson.lesson - 1]
+                            .subLessons[openedLesson.subLesson - 1].title
+                        }
+                        alt="Intro video"
+                        controls
+                      />
+                    </Box>
+                  </Box>
+                )}
+
+                {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
+                  openedLesson.subLesson - 1
+                ].lectureNote && (
                   <Box
                     sx={{
-                      backgroundColor: theme.palette.background.imagesBg,
-                      padding: isNonMobileScreens ? "2rem" : "1rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.5rem",
                     }}
                   >
                     <Typography
+                      variant="h4"
                       sx={{
-                        fontSize: "0.9rem",
-                        // perfect letterspacing & lineheight combination for verdana font
-                        letterSpacing: "0.005rem",
-                        lineHeight: "2rem",
-
-                        color: theme.palette.grey.grey1000,
-                        fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
+                        fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
+                        mb: "1rem",
                       }}
                     >
-                      {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
-                        openedLesson.subLesson - 1
-                      ].lectureNote
-                        ?.split("\n")
-                        .map((line, index) => (
-                          <React.Fragment key={index}>
-                            {line}
-                            <br />
-                          </React.Fragment>
-                        ))}
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Lecture Note {openedLesson.lesson}.
+                        {openedLesson.subLesson}
+                      </span>
+                      &nbsp;&nbsp;
+                      {
+                        courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
+                          openedLesson.subLesson - 1
+                        ].title
+                      }
                     </Typography>
+                    <Box
+                      sx={{
+                        backgroundColor: theme.palette.background.imagesBg,
+                        padding: isNonMobileScreens ? "2rem" : "1rem",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "0.9rem",
+                          // perfect letterspacing & lineheight combination for verdana font
+                          letterSpacing: "0.005rem",
+                          lineHeight: "2rem",
+
+                          color: theme.palette.grey.grey1000,
+                          fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
+                        }}
+                      >
+                        {courseInfo?.lessons[
+                          openedLesson.lesson - 1
+                        ].subLessons[openedLesson.subLesson - 1].lectureNote
+                          ?.split("\n")
+                          .map((line, index) => (
+                            <React.Fragment key={index}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              )}
-            </Box>
-          )}
+                )}
+              </Box>
+            )}
         </Box>
       )}
     </>

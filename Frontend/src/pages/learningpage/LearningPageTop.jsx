@@ -84,8 +84,8 @@ const LearningPageTop = ({ courseInfo }) => {
           padding: isNonMobileScreens
             ? "0 5rem"
             : isMobileScreens
-            ? "0 1rem"
-            : "0 2rem",
+              ? "0 1rem"
+              : "0 2rem",
           width: "100%",
           maxWidth: "2000px",
           mx: "auto",
@@ -98,18 +98,19 @@ const LearningPageTop = ({ courseInfo }) => {
                 sx={{
                   color: theme.palette.grey.grey400,
                   fontSize: isNonMobileScreens ? "2rem" : "1.5rem",
-                  
                 }}
               />
             </IconButton>
-            <Box sx={{
+            <Box
+              sx={{
                 display: "flex",
                 justifyContent: "center",
                 gap: "1rem",
                 alignItems: "center",
                 justifySelf: isNonMobileScreens ? "center" : "flex-start",
                 width: isNonMobileScreens ? "100%" : "85%",
-            }}>
+              }}
+            >
               {minWidth250 && (
                 <Typography
                   variant={isNonMobileScreens ? "h3600" : "h5600"}
@@ -117,8 +118,14 @@ const LearningPageTop = ({ courseInfo }) => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  Lesson {openedLesson?.lesson}
-                  {openedLesson?.subLesson ? "." + openedLesson.subLesson : ""}
+                  {openedLesson.subLesson ===
+                    courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons.length +
+                    1
+                    ? `Quiz ${openedLesson?.lesson}`
+                    : `Lesson ${openedLesson?.lesson}${openedLesson?.subLesson
+                      ? "." + openedLesson.subLesson
+                      : ""
+                    }`}
                 </Typography>
               )}
               {minWidth300 && (
@@ -130,11 +137,16 @@ const LearningPageTop = ({ courseInfo }) => {
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {openedLesson?.subLesson === 0
-                    ? courseInfo?.lessons && courseInfo?.lessons[openedLesson?.lesson - 1]?.title
-                    : courseInfo?.lessons && courseInfo?.lessons[openedLesson?.lesson - 1]?.subLessons[
-                        openedLesson?.subLesson - 1
-                      ]?.title}
+                  {openedLesson?.subLesson === courseInfo?.lessons[
+                    openedLesson?.lesson - 1]?.subLessons.length + 1 ?
+                    `Lesson ${openedLesson?.lesson} Questions` :
+                  openedLesson?.subLesson === 0
+                    ? courseInfo?.lessons &&
+                    courseInfo?.lessons[openedLesson?.lesson - 1]?.title
+                    : courseInfo?.lessons &&
+                    courseInfo?.lessons[openedLesson?.lesson - 1]?.subLessons[
+                      openedLesson?.subLesson - 1
+                    ]?.title}
                 </Typography>
               )}
             </Box>
