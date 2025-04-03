@@ -207,6 +207,19 @@ const getCourseLessons = async (req, res) => {
                 lessons: course._doc?.lessons,
             };
 
+            courseInfo.lessons = courseInfo.lessons?.map((lesson) => {
+                if (lesson.questions) {
+                    lesson.questions = lesson.questions.map((q) => {
+                        return {
+                            options: q.options,
+                            question: q.question,
+                        };
+                    });
+                    return lesson;
+                } else return lesson;
+            });
+            //console.log(courseInfo);
+
             res.status(200).json({
                 success: true,
                 courseInfo: courseInfo,

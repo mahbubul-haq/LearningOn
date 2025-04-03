@@ -118,14 +118,14 @@ const LearningPageTop = ({ courseInfo }) => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {openedLesson.subLesson ===
+                  {courseInfo && courseInfo.lessons?.length > 0 && (openedLesson.subLesson ===
                     courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons.length +
                     1
                     ? `Quiz ${openedLesson?.lesson}`
                     : `Lesson ${openedLesson?.lesson}${openedLesson?.subLesson
                       ? "." + openedLesson.subLesson
                       : ""
-                    }`}
+                    }`)}
                 </Typography>
               )}
               {minWidth300 && (
@@ -137,7 +137,7 @@ const LearningPageTop = ({ courseInfo }) => {
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {openedLesson?.subLesson === courseInfo?.lessons[
+                  {courseInfo?.lessons?.length > 0 && (openedLesson?.subLesson === courseInfo?.lessons[
                     openedLesson?.lesson - 1]?.subLessons.length + 1 ?
                     `Lesson ${openedLesson?.lesson} Questions` :
                   openedLesson?.subLesson === 0
@@ -146,7 +146,7 @@ const LearningPageTop = ({ courseInfo }) => {
                     : courseInfo?.lessons &&
                     courseInfo?.lessons[openedLesson?.lesson - 1]?.subLessons[
                       openedLesson?.subLesson - 1
-                    ]?.title}
+                    ]?.title)}
                 </Typography>
               )}
             </Box>

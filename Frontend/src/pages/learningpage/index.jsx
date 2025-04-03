@@ -11,8 +11,9 @@ import { StyledButton } from "../../components/StyledButton";
 import { GlobalContext } from "../../state/GlobalContext";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
 import {
-    fetchLessons,
-    setCourseId,
+  fetchLessons,
+  fetchProgress,
+  setCourseId
 } from "../../state/reduxStore/learningPageSlice";
 import { LearningLeftPanel } from "./LearningLeftPanel";
 import LearningPageTop from "./LearningPageTop";
@@ -28,7 +29,7 @@ const LearningPage = () => {
     useContext(LearningCourseContext);
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.auth);
-  const { courseInfo } = useSelector((state) => state.course);
+  const { courseInfo, progressData } = useSelector((state) => state.course);
   const dispatch = useDispatch();
 
   //const state = useSelector(state => state);
@@ -52,6 +53,7 @@ const LearningPage = () => {
     if (courseId) {
       dispatch(setCourseId({ courseId: courseId }));
       dispatch(fetchLessons({ courseId: courseId, token: token }));
+      dispatch(fetchProgress({courseId: courseId, token: token}));
     }
   }, [courseId]);
 
@@ -157,7 +159,7 @@ const LearningPage = () => {
         sx={{
           // marginTop: isNonMobileScreens ? "5rem" : "4rem",
           height: "100%",
-          overflowY: "auto",
+          overflowY: "scroll",
           width: "100%",
           scrollBehavior: "smooth",
         }}
@@ -226,7 +228,7 @@ const LearningPage = () => {
               py: isNonMobileScreens ? "4rem" : "2rem",
             }}
           >
-            <LearningRightPanel courseInfo={courseInfo} />
+            <LearningRightPanel courseInfo={courseInfo} progressData={progressData} />
             <Box
               sx={{
                 mt: "3rem",

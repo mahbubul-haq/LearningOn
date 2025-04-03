@@ -8,7 +8,7 @@ import { cloudinaryCld } from "../../configs/cloudinary.config";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
 import Questions from "./Questions";
 
-const LearningRightPanel = ({ courseInfo }) => {
+const LearningRightPanel = ({ courseInfo, progressData }) => {
   const { openedLesson } = useContext(LearningCourseContext);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const theme = useTheme();
@@ -154,7 +154,7 @@ const LearningRightPanel = ({ courseInfo }) => {
           )}
           {openedLesson.subLesson ===
             courseInfo?.lessons[openedLesson.lesson - 1].subLessons?.length +
-              1 && <Questions courseInfo={courseInfo} />}
+              1 && <Questions courseInfo={courseInfo} progressData={progressData} />}
           {openedLesson.subLesson > 0 &&
             openedLesson.subLesson <=
               courseInfo?.lessons[openedLesson.lesson - 1].subLessons

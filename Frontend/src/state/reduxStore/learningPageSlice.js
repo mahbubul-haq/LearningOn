@@ -3,28 +3,59 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   courseInfo: {},
   courseId: null,
+  progressData: null,
 };
+
+export const fetchProgress = createAsyncThunk(
+  "/learning",
+  async ({ courseId, token }) => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/learning/${courseId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+        }
+      );
+
+      const data = await res.json();
+      //console.log("progressData, ", data);
+      if (data.success) {
+        return data.courseProgress;
+      }
+    } catch (err) {
+      //
+    }
+  }
+);
 
 export const fetchLessons = createAsyncThunk(
   "/course/fetchLessons",
   async ({ courseId, token }) => {
-    console.log("In fetchLessons", courseId, token);
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/course/getlessons/${courseId}`,
-      {
-        method: "GET",
+   // console.log("In fetchLessons", courseId, token);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/course/getlessons/${courseId}`,
+        {
+          method: "GET",
 
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
-      }
-    );
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+        }
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    console.log("lessons", data);
-    return data.courseInfo;
+     // console.log("lessons", data);
+      return data.courseInfo;
+    } catch (err) {
+      //
+    }
   }
 );
 
@@ -46,9 +77,17 @@ const learningPageSlice = createSlice({
         state.courseInfo = action.payload;
       })
       .addCase(fetchLessons.rejected, () => {});
+
+      builder.addCase(fetchProgress.pending, () => {
+
+      }).addCase(fetchProgress.fulfilled, (state, action) => {
+        state.progressData = action.payload;
+      }).addCase(fetchProgress.rejected, () => {
+
+      })
   },
 });
 
-export const {setCourseId} = learningPageSlice.actions;
+export const { setCourseId } = learningPageSlice.actions;
 
 export default learningPageSlice.reducer;

@@ -152,17 +152,22 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                           fontSize: "0.9rem",
                         }}
                       >
-                        {lesson.title}
+                        {lesson?.title}
                       </Typography>
                     </Box>
                   </FlexBetween>
                   <Box
                     sx={{
                       p: "1rem 1rem 1rem 0",
-                      pr: "2rem",
+                      
+                      
                       cursor: "pointer",
                       height: "100%",
                       // border: "2px solid red"
+                      // width: "2rem",
+                      // display: "flex",
+                      // alignItems: "center",
+                      // justifyContent: "center"
                     }}
                     onClick={(e) => {
                       if (expandedLessons.includes(index + 1)) {
