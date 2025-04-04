@@ -154,7 +154,7 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
           )}
           {openedLesson.subLesson ===
             courseInfo?.lessons[openedLesson.lesson - 1].subLessons?.length +
-              1 && <Questions courseInfo={courseInfo} progressData={progressData} />}
+              1 && <Questions  courseInfo={courseInfo} progressData={progressData} />}
           {openedLesson.subLesson > 0 &&
             openedLesson.subLesson <=
               courseInfo?.lessons[openedLesson.lesson - 1].subLessons

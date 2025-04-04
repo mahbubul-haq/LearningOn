@@ -117,6 +117,7 @@ export const themeSettings = (mode) => {
                         gradient2: "#BCECC5",
                         top: "#E5F3E7",
                         bottom: "#B4EBC0",
+                        questionHover: "#CCE5B5",
                     },
                     nav: {
                         boxShadow: "#E5E5E5",
@@ -140,6 +141,7 @@ export const themeSettings = (mode) => {
                         grey10: "#F6F6F6",
                         grey50: "#F0F0F0",
                         grey100: "#E0E0E0",
+                        grey150: "#DEDEDE",
                         grey200: "#C2C2C2",
                         grey300: "#A3A3A3",
                         grey400: "#858585",
