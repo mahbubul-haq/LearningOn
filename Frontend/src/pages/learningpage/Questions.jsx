@@ -1,13 +1,16 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import React, { useContext, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { StyledButton } from "../../components/StyledButton";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
+import { submitQuiz } from "../../state/reduxStore/learningPageSlice";
 
 const Questions = ({ courseInfo, progressData }) => {
   const { openedLesson } = useContext(LearningCourseContext);
   const [answer, setAnswer] = React.useState({});
   const theme = useTheme();
-
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
   useEffect(() => {
     console.log("questions", courseInfo);
     console.log("progressData", progressData);
@@ -17,7 +20,7 @@ const Questions = ({ courseInfo, progressData }) => {
   }, [answer]);
 
   const attemptLeft = (lessonNo, questionNo) => {
-    let q = "Q" + lessonNo + "." + questionNo;
+    let q = "Q" + lessonNo + "_" + questionNo;
     let remAttempt = 2;
     if (progressData.completed.includes(q)) {
       remAttempt = 0;
@@ -70,7 +73,12 @@ const Questions = ({ courseInfo, progressData }) => {
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "1rem",
-                                background: answer[`Q${openedLesson.lesson}.${idx1 + 1}`] == `${idx2 + 1}` ? theme.palette.background.questionSelected:  theme.palette.grey.grey150,
+                                background:
+                                  answer[
+                                    `Q${openedLesson.lesson}_${idx1 + 1}`
+                                  ] == `${idx2 + 1}`
+                                    ? theme.palette.background.questionSelected
+                                    : theme.palette.grey.grey150,
                                 padding: "0.6rem 0.6rem",
                                 borderRadius: "0.1rem",
                                 cursor:
@@ -78,13 +86,16 @@ const Questions = ({ courseInfo, progressData }) => {
                                     ? "pointer"
                                     : "auto",
                                 "&:hover": {
-                                  outline: attemptLeft(openedLesson.lesson, idx1 + 1) > 0 ? `2px solid ${theme.palette.primary.main}` : "none",
+                                  outline:
+                                    attemptLeft(openedLesson.lesson, idx1 + 1) >
+                                    0
+                                      ? `2px solid ${theme.palette.primary.main}`
+                                      : "none",
                                   // background:
                                   //   attemptLeft(openedLesson.lesson, idx1 + 1) >
                                   //   0
                                   //     ? theme.palette.background.questionHover
                                   //     : theme.palette.grey.grey150,
-                                  
                                 },
                               }}
                               onClick={() => {
@@ -93,9 +104,10 @@ const Questions = ({ courseInfo, progressData }) => {
                                 ) {
                                   setAnswer({
                                     ...answer,
-                                    [`Q${openedLesson.lesson}.${idx1 + 1}`]: `${idx2 + 1}`
+                                    [`Q${openedLesson.lesson}_${idx1 + 1}`]: `${
+                                      idx2 + 1
+                                    }`,
                                   });
-
                                 }
                               }}
                             >
@@ -127,39 +139,52 @@ const Questions = ({ courseInfo, progressData }) => {
                           );
                         })}
                       </Box>
-                      <Box sx={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "flex-end",
-                      }}>
-                      <Typography
+                      <Box
                         sx={{
-                          fontSize: "0.8rem",
-                          color: theme.palette.grey.grey300,
-               
-                          
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "flex-end",
                         }}
                       >
-                        Attempt left:{" "}
-                        {attemptLeft(openedLesson.lesson, idx1 + 1)}
-                      </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "0.8rem",
+                            color: theme.palette.grey.grey300,
+                          }}
+                        >
+                          Attempt left:{" "}
+                          {attemptLeft(openedLesson.lesson, idx1 + 1)}
+                        </Typography>
                       </Box>
                     </Box>
                   );
                 })}
-                <Box sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}>
-
-                <StyledButton sx={{
-                  "&&": {
-                    borderRadius: "1000px",
-                  }
-                }}>
-                  Submit
-                </StyledButton>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <StyledButton
+                    sx={{
+                      "&&": {
+                        borderRadius: "1000px",
+                      },
+                    }}
+                    onClick={() => {
+                      dispatch(
+                        submitQuiz({
+                          courseId: courseInfo._id,
+                          token: token,
+                          lessonNo: openedLesson.lesson,
+                          answer,
+                        })
+                      );
+                    }}
+                  >
+                    Submit
+                  </StyledButton>
                 </Box>
               </Box>
             </React.Fragment>

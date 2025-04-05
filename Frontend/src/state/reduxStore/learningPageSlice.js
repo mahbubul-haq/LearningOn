@@ -6,6 +6,34 @@ const initialState = {
   progressData: null,
 };
 
+export const submitQuiz = createAsyncThunk(
+  "/learning/submitQuiz",
+  async ({ courseId, token, lessonNo, answer }) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/learning/${courseId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+          body: JSON.stringify({
+            lesson: lessonNo,
+            answer,
+          }),
+        }
+      );
+      const data = await res.json();
+      if (data.success) {
+        return data.progressData;
+      }
+    }
+    catch (err) {
+      //
+    }
+  }
+);
+
 export const fetchProgress = createAsyncThunk(
   "/learning",
   async ({ courseId, token }) => {
@@ -35,7 +63,7 @@ export const fetchProgress = createAsyncThunk(
 export const fetchLessons = createAsyncThunk(
   "/course/fetchLessons",
   async ({ courseId, token }) => {
-   // console.log("In fetchLessons", courseId, token);
+    // console.log("In fetchLessons", courseId, token);
     try {
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/course/getlessons/${courseId}`,
@@ -51,7 +79,7 @@ export const fetchLessons = createAsyncThunk(
 
       const data = await res.json();
 
-     // console.log("lessons", data);
+      // console.log("lessons", data);
       return data.courseInfo;
     } catch (err) {
       //
@@ -76,15 +104,24 @@ const learningPageSlice = createSlice({
         //console.log("extra fulfilled");
         state.courseInfo = action.payload;
       })
-      .addCase(fetchLessons.rejected, () => {});
+      .addCase(fetchLessons.rejected, () => { });
 
-      builder.addCase(fetchProgress.pending, () => {
+    builder.addCase(fetchProgress.pending, () => {
 
-      }).addCase(fetchProgress.fulfilled, (state, action) => {
-        state.progressData = action.payload;
-      }).addCase(fetchProgress.rejected, () => {
+    }).addCase(fetchProgress.fulfilled, (state, action) => {
+      state.progressData = action.payload;
+    }).addCase(fetchProgress.rejected, () => {
 
-      })
+    });
+
+    builder.addCase(submitQuiz.pending, () => {
+
+    }).addCase(submitQuiz.fulfilled, (state, action) => {
+      state.progressData = action.payload;
+    }).addCase(submitQuiz.rejected, () => {
+
+    });
+   
   },
 });
 
