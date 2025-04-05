@@ -12,7 +12,7 @@ import { useContext } from "react";
 import { StyledCheckbox } from "../../components/StyledButton";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
 
-export const LearningLeftPanel = ({ courseInfo }) => {
+export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
   const {
     openedLesson,
     setOpenedLesson,
@@ -100,6 +100,7 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                         subLesson: 0,
                       });
                       setOpenDrawer(false);
+                      scrollTop();
                     }}
                   >
                     <StyledCheckbox
@@ -234,6 +235,7 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                           subLesson: subIndex + 1,
                         });
                         setOpenDrawer(false);
+                        scrollTop();
                       }}
                     >
                       <StyledCheckbox
@@ -318,6 +320,7 @@ export const LearningLeftPanel = ({ courseInfo }) => {
                           subLesson: lesson.subLessons.length + 1,
                         });
                         setOpenDrawer(false);
+                        scrollTop();
                       }}
                     >
                       <StyledCheckbox

@@ -5,12 +5,16 @@ import { LearningCourseContext } from "../../state/LearningCourseContex";
 
 const Questions = ({ courseInfo, progressData }) => {
   const { openedLesson } = useContext(LearningCourseContext);
+  const [answer, setAnswer] = React.useState({});
   const theme = useTheme();
 
   useEffect(() => {
     console.log("questions", courseInfo);
     console.log("progressData", progressData);
   });
+  useEffect(() => {
+    console.log("answer", answer);
+  }, [answer]);
 
   const attemptLeft = (lessonNo, questionNo) => {
     let q = "Q" + lessonNo + "." + questionNo;
@@ -66,7 +70,7 @@ const Questions = ({ courseInfo, progressData }) => {
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "1rem",
-                                background: theme.palette.grey.grey150,
+                                background: answer[`Q${openedLesson.lesson}.${idx1 + 1}`] == `${idx2 + 1}` ? theme.palette.background.questionSelected:  theme.palette.grey.grey150,
                                 padding: "0.6rem 0.6rem",
                                 borderRadius: "0.1rem",
                                 cursor:
@@ -74,12 +78,25 @@ const Questions = ({ courseInfo, progressData }) => {
                                     ? "pointer"
                                     : "auto",
                                 "&:hover": {
-                                  background:
-                                    attemptLeft(openedLesson.lesson, idx1 + 1) >
-                                    0
-                                      ? theme.palette.background.questionHover
-                                      : theme.palette.grey.grey150,
+                                  outline: attemptLeft(openedLesson.lesson, idx1 + 1) > 0 ? `2px solid ${theme.palette.primary.main}` : "none",
+                                  // background:
+                                  //   attemptLeft(openedLesson.lesson, idx1 + 1) >
+                                  //   0
+                                  //     ? theme.palette.background.questionHover
+                                  //     : theme.palette.grey.grey150,
+                                  
                                 },
+                              }}
+                              onClick={() => {
+                                if (
+                                  attemptLeft(openedLesson.lesson, idx1 + 1) > 0
+                                ) {
+                                  setAnswer({
+                                    ...answer,
+                                    [`Q${openedLesson.lesson}.${idx1 + 1}`]: `${idx2 + 1}`
+                                  });
+
+                                }
                               }}
                             >
                               <Box
@@ -123,7 +140,7 @@ const Questions = ({ courseInfo, progressData }) => {
                           
                         }}
                       >
-                        Attempt Left:{" "}
+                        Attempt left:{" "}
                         {attemptLeft(openedLesson.lesson, idx1 + 1)}
                       </Typography>
                       </Box>
@@ -143,8 +160,7 @@ const Questions = ({ courseInfo, progressData }) => {
                 }}>
                   Submit
                 </StyledButton>
-                </
-                Box>
+                </Box>
               </Box>
             </React.Fragment>
           );

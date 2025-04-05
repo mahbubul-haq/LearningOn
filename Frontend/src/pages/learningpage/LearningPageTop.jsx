@@ -11,7 +11,7 @@ import FlexBetween from "../../components/FlexBetween";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
 import { LearningLeftPanel } from "./LearningLeftPanel";
 
-const LearningPageTop = ({ courseInfo }) => {
+const LearningPageTop = ({ courseInfo, scrollTop}) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -29,7 +29,7 @@ const LearningPageTop = ({ courseInfo }) => {
         backgroundColor: theme.palette.background.bottom,
         backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
         // background: "transparent",
-        height: isNonMobileScreens ? "5rem" : "4rem",
+        height: "100%",
         color: theme.palette.text.primary,
         display: "flex",
         justifyContent: isNonMobileScreens ? "center" : "space-between",
@@ -76,7 +76,7 @@ const LearningPageTop = ({ courseInfo }) => {
             padding: "0 1rem 1rem 1rem",
           }}
         >
-          <LearningLeftPanel courseInfo={courseInfo} />
+          <LearningLeftPanel courseInfo={courseInfo} scrollTop={scrollTop} />
         </Box>
       </Drawer>
       <FlexBetween

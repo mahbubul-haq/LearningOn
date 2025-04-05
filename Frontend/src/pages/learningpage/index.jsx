@@ -1,23 +1,20 @@
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { StyledButton } from "../../components/StyledButton";
 import { GlobalContext } from "../../state/GlobalContext";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
 import {
   fetchLessons,
   fetchProgress,
-  setCourseId
+  setCourseId,
 } from "../../state/reduxStore/learningPageSlice";
 import { LearningLeftPanel } from "./LearningLeftPanel";
 import LearningPageTop from "./LearningPageTop";
 import LearningRightPanel from "./LearningRightPanel";
+import NextPrevButtons from "./NextPrevButtons";
 
 const LearningPage = () => {
   const { courseId } = useParams();
@@ -53,99 +50,13 @@ const LearningPage = () => {
     if (courseId) {
       dispatch(setCourseId({ courseId: courseId }));
       dispatch(fetchLessons({ courseId: courseId, token: token }));
-      dispatch(fetchProgress({courseId: courseId, token: token}));
+      dispatch(fetchProgress({ courseId: courseId, token: token }));
     }
   }, [courseId]);
 
   useEffect(() => {
     console.log("courseId + info", courseInfo);
   }, [courseInfo]);
-
-  const handleNext = () => {
-    if (openedLesson.subLesson === 0) {
-      setOpenedLesson({
-        lesson: openedLesson.lesson,
-        subLesson: openedLesson.subLesson + 1,
-      });
-      if (!expandedLessons.includes(openedLesson.lesson)) {
-        setExpandedLessons([...expandedLessons, openedLesson.lesson]);
-      }
-    } else {
-      if (
-        openedLesson.subLesson ===
-        courseInfo.lessons[openedLesson.lesson - 1].subLessons.length
-      ) {
-        if (courseInfo.lessons[openedLesson.lesson - 1].questions?.length > 0) {
-          setOpenedLesson({
-            lesson: openedLesson.lesson,
-            subLesson: openedLesson.subLesson + 1,
-          });
-        } else {
-          setOpenedLesson({
-            lesson: openedLesson.lesson + 1,
-            subLesson: 0,
-          });
-        }
-      } else if (
-        openedLesson.subLesson ===
-        courseInfo.lessons[openedLesson.lesson - 1].subLessons.length + 1
-      ) {
-        setOpenedLesson({
-          lesson: openedLesson.lesson + 1,
-          subLesson: 0,
-        });
-      } else {
-        setOpenedLesson({
-          lesson: openedLesson.lesson,
-          subLesson: openedLesson.subLesson + 1,
-        });
-
-        if (!expandedLessons.includes(openedLesson.lesson)) {
-          setExpandedLessons([...expandedLessons, openedLesson.lesson]);
-        }
-      }
-    }
-
-    scrollTop();
-  };
-
-  const lastSubLesson = () => {
-    if (openedLesson.lesson === courseInfo.lessons?.length) {
-      if (courseInfo.lessons[openedLesson.lesson - 1].questions?.length > 0) {
-        return (
-          openedLesson.subLesson ===
-          courseInfo.lessons[openedLesson.lesson - 1].subLessons.length + 1
-        );
-      }
-      return openedLesson.subLesson === courseInfo.lessons[openedLesson.lesson - 1].subLessons.length;
-    }
-    return false;
-  }
-
-  const handlePrev = () => {
-    if (openedLesson.subLesson === 0) {
-      if (openedLesson.lesson > 1) {
-        setOpenedLesson({
-          lesson: openedLesson.lesson - 1,
-          subLesson:
-            courseInfo.lessons[openedLesson.lesson - 2].questions?.length > 0
-              ? courseInfo.lessons[openedLesson.lesson - 2].subLessons.length +
-                1
-              : courseInfo.lessons[openedLesson.lesson - 2].subLessons.length,
-        });
-
-        if (!expandedLessons.includes(openedLesson.lesson - 1)) {
-          setExpandedLessons([...expandedLessons, openedLesson.lesson - 1]);
-        }
-      }
-    } else {
-      setOpenedLesson({
-        lesson: openedLesson.lesson,
-        subLesson: openedLesson.subLesson - 1,
-      });
-    }
-    scrollTop();
-  };
 
   const scrollTop = () => {
     document.querySelector(".learning-page-main").scrollTop = 0;
@@ -179,9 +90,11 @@ const LearningPage = () => {
             position: "sticky",
             top: "0",
             zIndex: "1",
+            height: isMobileScreens ? "4rem" : "10vh",
+            //border: "2px solid red",
           }}
         >
-          <LearningPageTop courseInfo={courseInfo} />
+          <LearningPageTop courseInfo={courseInfo} scrollTop={scrollTop} />
         </Box>
         <Box
           sx={{
@@ -196,18 +109,28 @@ const LearningPage = () => {
             width: "100%",
             maxWidth: "2000px",
             mx: "auto",
+            position: "sticky",
+            top: "10vh",
           }}
         >
           {isNonMobileScreens && (
             <Box
               sx={{
-                width: "30%",
-
+                width: "25%",
+                maxWidth: "400px",
+                position: "fixed",
+                top: "10vh",
+                height: "90vh",
+                // border: "1px solid red",
                 py: "4rem",
                 borderRight: `1px dashed ${theme.palette.customDivider.main}`,
+                overflowY: "auto",
               }}
             >
-              <LearningLeftPanel courseInfo={courseInfo} />
+              <LearningLeftPanel
+                courseInfo={courseInfo}
+                scrollTop={scrollTop}
+              />
             </Box>
           )}
 
@@ -223,87 +146,34 @@ const LearningPage = () => {
 
           <Box
             sx={{
-              width: isNonMobileScreens ? "65%" : "100%",
+              //width: isNonMobileScreens ? "65%" : "100%",
               // border: "1px solid red",
-              py: isNonMobileScreens ? "4rem" : "2rem",
+              width: isNonMobileScreens ? `calc(75% - 6.5rem)` : "100%",
+              py: isNonMobileScreens ? "1.9rem" : "2rem",
+              position: "relative",
+              left: isNonMobileScreens ? `calc(25% + 6.5rem)` : "auto",
             }}
           >
-            <LearningRightPanel courseInfo={courseInfo} progressData={progressData} />
-            <Box
-              sx={{
-                mt: "3rem",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              {openedLesson.lesson == 1 && openedLesson.subLesson == 0 ? (
-                <Box></Box>
-              ) : (
-                <StyledButton
-                  sx={{
-                    textTransform: "capitalize",
-                    fontWeight: "600",
-
-                    cursor: "pointer",
-                    "&&": {
-                      padding: "0.4rem 0.8rem",
-                      fontWeight: "600",
-                      background: "transparent",
-                      color: (theme) => theme.palette.primary.dark,
-                      "&:hover": {
-                        color: (theme) => theme.palette.primary.darker,
-                        background: (theme) => theme.palette.background.alt,
-                      },
-                    },
-                  }}
-                  onClick={handlePrev}
-                >
-                  <KeyboardDoubleArrowLeftIcon />
-                  <Typography
-                    sx={{
-                      fontWeight: "600",
-                      pl: "0.5rem",
-                    }}
-                  >
-                    Prev
-                  </Typography>
-                </StyledButton>
-              )}
-              { lastSubLesson() ? (
-                <Box></Box>
-              ) : (
-                <StyledButton
-                  sx={{
-                    textTransform: "capitalize",
-                    fontWeight: "600",
-
-                    cursor: "pointer",
-                    "&&": {
-                      padding: "0.4rem 0.8rem",
-                      fontWeight: "600",
-
-                      background: "transparent",
-                      color: (theme) => theme.palette.primary.dark,
-                      "&:hover": {
-                        color: (theme) => theme.palette.primary.darker,
-                        background: (theme) => theme.palette.background.alt,
-                      },
-                    },
-                  }}
-                  onClick={handleNext}
-                >
-                  <Typography
-                    sx={{
-                      fontWeight: "600",
-                      pr: "0.5rem",
-                    }}
-                  >
-                    Next
-                  </Typography>
-                  <KeyboardDoubleArrowRightIcon />
-                </StyledButton>
-              )}
-            </Box>
+            <NextPrevButtons
+              openedLesson={openedLesson}
+              setOpenedLesson={setOpenedLesson}
+              scrollTop={scrollTop}
+              courseInfo={courseInfo}
+              expandedLessons={expandedLessons}
+              setExpandedLessons={setExpandedLessons}
+            />
+            <LearningRightPanel
+              courseInfo={courseInfo}
+              progressData={progressData}
+            />
+            <NextPrevButtons
+              openedLesson={openedLesson}
+              setOpenedLesson={setOpenedLesson}
+              scrollTop={scrollTop}
+              courseInfo={courseInfo}
+              expandedLessons={expandedLessons}
+              setExpandedLessons={setExpandedLessons}
+            />
           </Box>
         </Box>
       </Box>

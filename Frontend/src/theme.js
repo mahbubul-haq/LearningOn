@@ -118,6 +118,7 @@ export const themeSettings = (mode) => {
                         top: "#E5F3E7",
                         bottom: "#B4EBC0",
                         questionHover: "#CCE5B5",
+                        questionSelected: "#C1ED9A",
                     },
                     nav: {
                         boxShadow: "#E5E5E5",
