@@ -119,6 +119,7 @@ export const themeSettings = (mode) => {
                         bottom: "#B4EBC0",
                         questionHover: "#CCE5B5",
                         questionSelected: "#C1ED9A",
+                        questionCorrect: "#A7D87C",
                     },
                     nav: {
                         boxShadow: "#E5E5E5",
@@ -129,7 +130,8 @@ export const themeSettings = (mode) => {
                         main1: "#F31C1C",
                         secondary: "#EEA4B6",
                         light: "#FFB5B5",
-                        light1: "#FFD7D7"
+                        light1: "#FFD7D7",
+                        questionError: "#F0D1CE",
                     },
                     warning: {
                         main: "#ff9966",

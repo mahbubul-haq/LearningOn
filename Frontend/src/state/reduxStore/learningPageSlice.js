@@ -4,12 +4,21 @@ const initialState = {
   courseInfo: {},
   courseId: null,
   progressData: null,
+  answer: {},
 };
 
 export const submitQuiz = createAsyncThunk(
   "/learning/submitQuiz",
-  async ({ courseId, token, lessonNo, answer }) => {
+  async ({ courseId, token, lessonNo, answer }, {dispatch}) => {
     try {
+
+      let tempAnswer = {};
+      Object.keys(answer).forEach(key => {
+        let lessonNumber = parseInt(key.split("_")[0].substring(1));
+        if (lessonNumber == lessonNo) {
+          tempAnswer[key] = answer[key];
+        }
+      })
       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/learning/${courseId}`,
         {
           method: "PUT",
@@ -19,12 +28,17 @@ export const submitQuiz = createAsyncThunk(
           },
           body: JSON.stringify({
             lesson: lessonNo,
-            answer,
+            answer: tempAnswer
           }),
         }
       );
       const data = await res.json();
       if (data.success) {
+        let newObj = {...answer};
+        Object.keys(tempAnswer).forEach(key => {
+          delete newObj[key];
+        })
+        dispatch(setAnswer(newObj));
         return data.progressData;
       }
     }
@@ -94,6 +108,11 @@ const learningPageSlice = createSlice({
     setCourseId: (state, action) => {
       state.courseId = action.payload.courseId;
     },
+    setAnswer: (state, action) => {
+      state.answer = {
+        ...action.payload
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -125,6 +144,6 @@ const learningPageSlice = createSlice({
   },
 });
 
-export const { setCourseId } = learningPageSlice.actions;
+export const { setCourseId, setAnswer } = learningPageSlice.actions;
 
 export default learningPageSlice.reducer;

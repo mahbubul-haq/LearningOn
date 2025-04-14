@@ -76,6 +76,13 @@ const submitQuiz = async (req, res) => {
         }
 
         Object.keys(answer).forEach((key) => {
+            let lossonFromKey = parseInt(key.split("_")[0].substring(1));
+            if (lesson != lossonFromKey) {
+                return;
+            }
+            if (!answer[key]) {
+                return;
+            }
             let qidx = parseInt(key.split("_")[1]) - 1;
             let q = questions[qidx];
             let correctAnswer = q.answer;
@@ -103,7 +110,8 @@ const submitQuiz = async (req, res) => {
                         ...progressData.progressData,
                         [key]: {
                             isCorrect: false,
-                            correctAnswer: answer[key],
+                            correctAnswer: correctAnswer,
+                            yourAnswer: answer[key],
                         },
 
                     }

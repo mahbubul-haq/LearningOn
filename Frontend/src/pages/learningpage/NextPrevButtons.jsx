@@ -61,7 +61,7 @@ const NextPrevButtons = ({
   };
 
   const lastSubLesson = () => {
-    if (openedLesson.lesson === courseInfo.lessons?.length) {
+    if (openedLesson.lesson === courseInfo?.lessons?.length) {
       if (courseInfo.lessons[openedLesson.lesson - 1].questions?.length > 0) {
         return (
           openedLesson.subLesson ===
