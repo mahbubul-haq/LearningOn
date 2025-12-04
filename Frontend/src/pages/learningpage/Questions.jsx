@@ -89,6 +89,18 @@ const Questions = ({ courseInfo, progressData }) => {
     return [completed, totalCorrect, attempting];
   }
 
+  const noAnswer = (lessonNo) => {
+    let isNoAnswer = true;
+    Object.keys(answer).forEach((key) => {
+      let lessonNumber = parseInt(key.split("_")[0].substring(1));
+      if (lessonNumber == lessonNo) {
+        isNoAnswer = false;
+        return;
+      }
+    });
+    return isNoAnswer;
+  }
+
   return (
     <>
       {courseInfo.lessons?.map((lesson, idx) => {
@@ -207,7 +219,7 @@ const Questions = ({ courseInfo, progressData }) => {
                 >
                   
                   <StyledButton
-                    disabled={Object.keys(answer).length == 0}
+                    disabled={noAnswer(openedLesson.lesson)}
                     sx={{
                       "&&": {
                         borderRadius: "1000px",
@@ -215,7 +227,7 @@ const Questions = ({ courseInfo, progressData }) => {
                       },
                     }}
                     onClick={() => {
-                      if (Object.keys(answer).length == 0) return;
+                      if (noAnswer(openedLesson.lesson)) return;
                       dispatch(
                         submitQuiz({
                           courseId: courseInfo._id,

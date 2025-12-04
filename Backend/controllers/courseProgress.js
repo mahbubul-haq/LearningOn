@@ -99,6 +99,9 @@ const submitQuiz = async (req, res) => {
                     },
 
                 }
+                if (progressData.ongoing.includes(key)) {
+                    progressData.ongoing = progressData.ongoing.filter(val => val != key);
+                }
             }
             else {
                 //console.log(progressData.ongoing, progressData.ongoing.includes(key), key);
