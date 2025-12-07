@@ -42,9 +42,9 @@ const VideoUploadDropzone = ({
                     setSnackbarMessage("File size must be less than 1MB");
                     setSnackbarSeverity("error");
                 }
-                else if (!isImage && acceptedFiles[0].size > 5000000) {
+                else if (!isImage && acceptedFiles[0].size > 500000000) {
                     setOpenSnackbar(true);
-                    setSnackbarMessage("File size must be less than 5MB");
+                    setSnackbarMessage("File size must be less than 500MB");
                     setSnackbarSeverity("error");
                 }
                 else {

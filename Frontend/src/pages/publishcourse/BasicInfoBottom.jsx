@@ -10,6 +10,8 @@ import AddIcon from "@mui/icons-material/Add";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useContext, useState } from "react";
+import { CreateCourseContext } from "../../state/CreateCourse";
 
 const BasicInfoBottom = ({
     courseState,
@@ -20,6 +22,8 @@ const BasicInfoBottom = ({
     skillName,
 }) => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
+    const {courseStateRef} = useContext(CreateCourseContext);
+    const [studentRequirements, setStudentRequirements] = useState(courseState.studentRequirements);
 
     return (
         <>
@@ -60,12 +64,15 @@ const BasicInfoBottom = ({
                         }}
                         // change font size of input
                         onChange={(event) => {
+                            setStudentRequirements(event.target.value);
+                            courseStateRef.current.studentRequirements = event.target.value;
+                        }}
+                        value={studentRequirements}
+                        onBlur={(event) => {
                             setCourseState({
-                                ...courseState,
-                                studentRequirements: event.target.value,
+                                ...courseStateRef.current
                             });
                         }}
-                        value={courseState.studentRequirements}
                         sx={{
                             p: 0,
                             "& .MuiInputBase-input": {

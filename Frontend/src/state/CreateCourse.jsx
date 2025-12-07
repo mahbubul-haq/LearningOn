@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { createContext } from "react";
+import React, { createContext, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 // import state from ".";
 import axios from "axios";
@@ -38,6 +38,13 @@ export const CreateCourseState = (props) => {
     courseInstructors: [],
     lessons: [],
   });
+
+  const courseStateRef = useRef(courseState);
+
+  useEffect(() => {
+    courseStateRef.current = courseState;
+  }, [courseState]);
+
   const [introVideoUrl, setIntroVideoUrl] = React.useState("");
   const [courseThumbnailInput, setCourseThumbnailInput] = React.useState("");
   const [introVideoInput, setIntroVideoInput] = React.useState("");
@@ -228,7 +235,7 @@ export const CreateCourseState = (props) => {
             "auth-token": token,
           },
           body: JSON.stringify({
-            ...courseState,
+            ...courseStateRef.current
           }),
         }
       );
@@ -247,10 +254,12 @@ export const CreateCourseState = (props) => {
             ...initialCourseState,
           });
         } else {
-          setCourseState({
-            ...data.courseInfo,
-            courseStatus: status,
-          });
+          courseStateRef.current.courseStatus = status;
+          setCourseState({...courseStateRef.current });
+        //   setCourseState({
+        //   ...data.courseInfo,
+        //   courseStatus: status,
+        // });
         }
         //setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
       } else {
@@ -395,6 +404,7 @@ export const CreateCourseState = (props) => {
         deleteCourse,
         mobileDrawerOpen,
         setMobileDrawerOpen,
+        courseStateRef,
       }}
     >
       {props.children}

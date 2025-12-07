@@ -5,7 +5,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import StyledTextField1 from "../../components/StyledTextField1";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
+import {useState, useContext} from "react";
+import { CreateCourseContext } from "../../state/CreateCourse";
 
 const MoreInfoTop = ({
     courseState,
@@ -16,6 +17,8 @@ const MoreInfoTop = ({
     
 }) => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
+    const {courseStateRef} = useContext(CreateCourseContext);
+    const [coursePrice, setCoursePrice] = useState(courseState.coursePrice);
 
   return (
     <>
@@ -135,20 +138,25 @@ const MoreInfoTop = ({
                         //   }}
                         // change font size of input
                         onChange={(event) => {
+                            setCoursePrice(event.target.value && event.target.value > 0 && !(event.target.value == "0") ? event.target.value.toString() : "");
+                            courseStateRef.current.coursePrice = event.target.value && event.target.value > 0 && !(event.target.value == "0") ? event.target.value.toString() : "";
+                        }}
+                        onBlur={(event) => {
                             setCourseState({
-                                ...courseState,
-                                coursePrice:
-                                    event.target.value && event.target.value > 0 && !(event.target.value == "0") ? event.target.value.toString() : "",
+                                ...courseStateRef.current
                             });
 
-                            if (event.target.value && event.target.value > 0) {
+                            if (event.target.value === "" || event.target.value <= 0 || event.target.value == "0") {
                                 setErrors({
                                     ...errors,
                                     coursePrice: "",
                                 });
                             }
                         }}
-                        value={courseState.coursePrice ? courseState.coursePrice.toString() : ""}
+
+                        value={
+                            coursePrice ? coursePrice.toString() : ""
+                        }
                         sx={{
                             p: 0,
                             "& .MuiInputBase-input": {

@@ -16,6 +16,8 @@ import StyledTextField1 from "../../components/StyledTextField1";
 import AddQuestions from "./AddQuestions";
 import CourseContentSublesson from "./CourseContentSublesson";
 import QuestionForm from "./QuestionForm";
+import {useContext, useState} from "react";
+import { CreateCourseContext } from "../../state/CreateCourse";
 
 const CourseContentCourseAccordion = ({
   lesson,
@@ -33,6 +35,9 @@ const CourseContentCourseAccordion = ({
 }) => {
   const theme = useTheme();
   const isMobileScreens = useMediaQuery("(max-width:600px)");
+  const {courseStateRef} = useContext(CreateCourseContext);
+  const [lessonTitle, setLessonTitle] = useState(lesson.title);
+  const [lessonDescription, setLessonDescription] = useState(lesson.description);
 
   return (
     <Accordion
@@ -79,7 +84,7 @@ const CourseContentCourseAccordion = ({
             Lesson {index + 1}
           </span>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          {lesson.title}
+          {lessonTitle}
         </Typography>
         <StyledButton
           variant="outlined"
@@ -137,8 +142,16 @@ const CourseContentCourseAccordion = ({
             maxLength: 100,
           }}
           // change font size of input
-          onChange={(event) => handleInput(event, index)}
-          value={lesson.title}
+          onChange={(event) => {
+            setLessonTitle(event.target.value);
+            courseStateRef.current.lessons[index].title = event.target.value;
+          }}
+          value={lessonTitle}
+          onBlur={(event) => {
+            setCourseState({
+              ...courseStateRef.current
+            });
+          }}
           sx={{
             p: 0,
             "& .MuiInputBase-input": {
@@ -173,8 +186,16 @@ const CourseContentCourseAccordion = ({
             maxLength: 2000,
           }}
           // change font size of input
-          onChange={(event) => handleInput(event, index)}
-          value={lesson.description}
+          onChange={(event) => {
+            setLessonDescription(event.target.value);
+            courseStateRef.current.lessons[index].description = event.target.value;
+          }}
+          value ={lessonDescription}
+          onBlur={(event) => {
+            setCourseState({
+              ...courseStateRef.current
+            });
+          }}
           sx={{
             fontSize: "0.9rem",
             letterSpacing: "0.01rem",

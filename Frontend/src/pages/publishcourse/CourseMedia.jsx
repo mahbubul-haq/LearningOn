@@ -1,14 +1,24 @@
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import Typography from "@mui/material/Typography";
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import VideoUpload from "../../components/videoUpload/VideoUpload";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import RightPanelBottom from "./RightPanelBottom";
 
 const CourseMedia = () => {
-  const { courseState, setCourseState, updateCallback } =
+  const { courseState, setCourseState, updateCallback, courseStateRef } =
     useContext(CreateCourseContext);
+
+    const setIntroVideo = (fileName) => {
+      courseStateRef.current.introVideo = fileName;
+      setCourseState({ ...courseStateRef.current });
+    };
+
+    const setCourseThumbnail = (fileName) => {
+      courseStateRef.current.courseThumbnail = fileName;
+      setCourseState({ ...courseStateRef.current });
+    };
 
   useEffect(() => {
     let element = document.querySelector(".right-panel-course-media");
@@ -57,12 +67,7 @@ const CourseMedia = () => {
 
           <VideoUpload
             updateCallBack={updateCallback}
-            setFileName={(fileName) => {
-              setCourseState((prevState) => ({
-                ...prevState,
-                courseThumbnail: fileName,
-              }));
-            }}
+            setFileName={setCourseThumbnail}
             fileName={courseState.courseThumbnail}
             isImage={true}
             uploadText="Upload Thumbnail Image"
@@ -94,12 +99,7 @@ const CourseMedia = () => {
 
           <VideoUpload
             updateCallBack={updateCallback}
-            setFileName={(fileName) => {
-              setCourseState((prevState) => ({
-                ...prevState,
-                introVideo: fileName,
-              }));
-            }}
+            setFileName={setIntroVideo}
             fileName={courseState.introVideo}
             isImage={false}
             uploadText="Upload Intro Video"

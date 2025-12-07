@@ -4,9 +4,14 @@ import InputLabel from "@mui/material/InputLabel";
 import Autocomplete from "@mui/material/Autocomplete";
 import StyledTextField1 from "../../components/StyledTextField1";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useContext, useState } from "react";
+import { CreateCourseContext } from "../../state/CreateCourse";
 
 const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
+    const [courseTitle, setCourseTitle] = useState(courseState.courseTitle);
+    const [courseDescription, setCourseDescription] = useState(courseState.courseDescription);
+    const {courseStateRef} = useContext(CreateCourseContext);
     return (
         <>
             <Box>
@@ -119,12 +124,15 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                         }}
                         // change font size of input
                         onChange={(event) => {
+                            setCourseTitle(event.target.value);
+                            courseStateRef.current.courseTitle = event.target.value;
+                        }}
+                        value={courseTitle}
+                        onBlur={(event) => {
                             setCourseState({
-                                ...courseState,
-                                courseTitle: event.target.value,
+                                ...courseStateRef.current
                             });
                         }}
-                        value={courseState.courseTitle}
                         sx={{
                             p: 0,
                             "& .MuiInputBase-input": {
@@ -208,12 +216,15 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                         }}
                         // change font size of input
                         onChange={(event) => {
+                            setCourseDescription(event.target.value);
+                            courseStateRef.current.courseDescription = event.target.value;
+                        }}
+                        value={courseDescription}
+                        onBlur={(event) => {
                             setCourseState({
-                                ...courseState,
-                                courseDescription: event.target.value,
+                                ...courseStateRef.current
                             });
                         }}
-                        value={courseState.courseDescription}
                         sx={{
                             p: 0,
                             "& .MuiInputBase-input": {
