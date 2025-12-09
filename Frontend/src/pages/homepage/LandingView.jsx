@@ -79,11 +79,10 @@ const LandingView = () => {
                                     : "center",
                                 fontSize: isNonMobileScreens
                                     ? "1.7rem"
-                                    : "1.3rem",
+                                    : "1.2rem",
                             }}
                         >
-                            Learning made easy with courses, blogs & personal
-                            tutors
+                            Build skills with simple, flexible online courses designed for everyone.
                         </Typography>
                         {isNonMobileScreens && (
                             <Box
@@ -131,7 +130,7 @@ const LandingView = () => {
                                         {"Publish a Course"}
                                     </Typography>
                                 </StyledButton>
-                                {isNonMobileScreens && (
+                                {/* {isNonMobileScreens && (
                                     <FlexBetween
                                         sx={{
                                             gap: "1.5rem",
@@ -147,7 +146,7 @@ const LandingView = () => {
                                             },
                                         }}
                                     >
-                                        <StyledButton disabled
+                                        {/* <StyledButton disabled
                                             onClick={() => {
                                                 navigate("/signup", {
                                                     state: { isLogin: false },
@@ -177,8 +176,8 @@ const LandingView = () => {
                                             <Typography variant="h4">
                                                 Start Tutoring
                                             </Typography>
-                                        </StyledButton>
-                                        {isNonMobileScreens && (
+                                        </StyledButton> */}
+                                        {/* {isNonMobileScreens && (
                                             <StyledButton disabled
                                                 onClick={() => {
                                                     navigate("/signup", {
@@ -216,9 +215,9 @@ const LandingView = () => {
                                                     Browse Blogs
                                                 </Typography>
                                             </StyledButton>
-                                        )}
+                                        )} 
                                     </FlexBetween>
-                                )}
+                                )} */}
                             </Box>
                         )}
                     </Box>

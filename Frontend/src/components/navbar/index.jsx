@@ -225,7 +225,7 @@ const Navbar = () => {
                     />
                   </StyledBox1>
 
-                  <StyledBox1
+                  {/* <StyledBox1
                     sx={{
                       "&&": {
                         cursor: "auto",
@@ -254,7 +254,7 @@ const Navbar = () => {
                         fontSize: "1.5rem",
                       }}
                     />
-                  </StyledBox1>
+                  </StyledBox1> */}
                 </FlexBetween>
               )}
             </FlexBetween>

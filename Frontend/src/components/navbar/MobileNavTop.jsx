@@ -215,13 +215,13 @@ const MobileNavTop = ({
                             </Typography>
                         </MobileNavItem>
                     </Box>
-                    <Divider
+                    {/* <Divider
                         sx={{
                             color: theme.palette.customDivider.main,
                             my: "1rem",
                         }}
                         light
-                    />
+                    /> */}
                 </>
             )}
         </>

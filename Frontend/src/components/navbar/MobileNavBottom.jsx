@@ -48,7 +48,7 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
               Courses
             </Typography>
           </MobileNavItem>
-          <MobileNavItem
+          {/* <MobileNavItem
             sx={{
               opacity: 0.3,
             }}
@@ -93,7 +93,7 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
             >
               Tutors
             </Typography>
-          </MobileNavItem>
+          </MobileNavItem> */}
         </Box>
         <Divider
           sx={{

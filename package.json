@@ -1,0 +1,25 @@
+{
+  "name": "learningon",
+  "version": "1.0.0",
+  "description": "Online Learning Platform with Courses, Blogs &amp; Tutors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "both": "concurrently -n BACKEND,FRONTEND -c blue,green \"npm --prefix Backend run dev\" \"npm --prefix Frontend run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahbubul-haq/LearningOn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mahbubul-haq/LearningOn/issues"
+  },
+  "homepage": "https://github.com/mahbubul-haq/LearningOn#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
