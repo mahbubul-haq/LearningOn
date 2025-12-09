@@ -4,7 +4,7 @@ import { StyledBox1 } from "../StyledButton.jsx";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useTheme from "@mui/material/styles/useTheme";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext.jsx";
@@ -24,12 +24,13 @@ const Navbar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openNotificationDrawer, setOpenNotificationDrawer] = useState(false);
   const theme = useTheme();
+  const coursesHoverRef = useRef(null);
 
   const { openedItem } = useContext(GlobalContext);
   const { notifications, getNotifications, updateNotifications } =
     useContext(NotificationContext);
 
-  const { setShowCourseExplorer, setCloseBtnClicked } = useContext(
+  const { setShowCourseExplorer, setCloseBtnClicked, openCourseExplorer, closeCourseExplorer } = useContext(
     CourseExplorerContext
   );
 
@@ -157,7 +158,7 @@ const Navbar = () => {
                     cursor: "pointer",
                     color: "inherit",
                     "&:hover": {
-                        color: "inherit",
+                      color: "inherit",
                     }
                   }}
                   onClick={(e) => {
@@ -188,11 +189,9 @@ const Navbar = () => {
                 >
                   <StyledBox1
                     className="nav-course"
-                    onMouseOver={() => {
-                      setCloseBtnClicked(false);
-                      setShowCourseExplorer(true);
-                    }}
-                    onMouseOut={() => setShowCourseExplorer(false)}
+                    onMouseOver={openCourseExplorer}
+                    onMouseOut={closeCourseExplorer}
+                    
                     sx={{
                       // height: "100%",
                       // border: "2px solid red",

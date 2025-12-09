@@ -10,6 +10,7 @@ import { StyledButton } from "../../components/StyledButton.jsx";
 
 const LandingView = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const maxWidth1300 = useMediaQuery("(max-width: 1300px)");
     const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const theme = useTheme();
@@ -55,7 +56,7 @@ const LandingView = () => {
                                 ? "flex-start"
                                 : "center",
                             gap: isNonMobileScreens ? "2rem" : "1rem",
-                            width: isNonMobileScreens ? "40%" : "100%",
+                            width: isNonMobileScreens ? maxWidth1300 ? "50%" : "40%" : "100%",
                             pb: "3rem",
                         }}
                     >
@@ -84,22 +85,17 @@ const LandingView = () => {
                         >
                             Build skills with simple, flexible online courses designed for everyone.
                         </Typography>
+
                         {isNonMobileScreens && (
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: isNonMobileScreens
-                                        ? "flex-start"
-                                        : "center",
-                                    gap: "1.5rem",
-                                    mt: isNonMobileScreens
-                                        ? user
-                                            ? "2rem"
-                                            : "0"
-                                        : "0",
-                                }}
-                            >
+                            <FlexBetween sx={{
+                                "&&": {
+                                    width: "fit-content",
+                                    mt: "1rem",
+                                    //flex warp
+                                    flexWrap: "wrap",
+                                    gap: '1.5rem',
+                                }
+                            }}>
                                 <StyledButton
                                     component="a"
                                     href={`${import.meta.env.VITE_CLIENT_URL}/publishcourse`}
@@ -120,7 +116,7 @@ const LandingView = () => {
                                         },
                                         "&&": {
                                             padding: isNonMobileScreens
-                                                ? "0.5rem 2rem"
+                                                ? "0.5rem 1.5rem"
                                                 : "0.4rem 1.5rem",
                                             borderRadius: "2rem",
                                         },
@@ -130,6 +126,56 @@ const LandingView = () => {
                                         {"Publish a Course"}
                                     </Typography>
                                 </StyledButton>
+                                {showDashboard() && isNonMobileScreens && (
+                                    <Button
+                                        component="a"
+                                        href={`${import.meta.env.VITE_CLIENT_URL}/dashboard`}
+                                        sx={{
+                                            borderRadius: "1000px",
+                                            border: "1px solid " + theme.palette.primary.darker,
+                                            padding: "0.5rem 1rem",
+                                            color: (theme) => theme.palette.primary.darker,
+
+                                            "&:hover": {
+                                                backgroundColor: (theme) =>
+                                                    theme.palette.primary.light3,
+                                                color: "inherit",
+                                            },
+                                        }}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            navigate("/dashboard");
+                                        }}
+                                    >
+                                        {/* <DashboardIcon
+                                            sx={{
+                                                mr: "0.5rem",
+                                            }}
+                                        /> */}
+                                        <Typography sx={{}} variant="h6">
+                                            My Dashboard
+                                        </Typography>
+                                    </Button>
+                                )}
+                            </FlexBetween>
+                        )}
+                        {isNonMobileScreens && (
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: isNonMobileScreens
+                                        ? "flex-start"
+                                        : "center",
+                                    gap: "1.5rem",
+                                    mt: isNonMobileScreens
+                                        ? user
+                                            ? "2rem"
+                                            : "0"
+                                        : "0",
+                                }}
+                            >
+
                                 {/* {isNonMobileScreens && (
                                     <FlexBetween
                                         sx={{
@@ -177,7 +223,7 @@ const LandingView = () => {
                                                 Start Tutoring
                                             </Typography>
                                         </StyledButton> */}
-                                        {/* {isNonMobileScreens && (
+                                {/* {isNonMobileScreens && (
                                             <StyledButton disabled
                                                 onClick={() => {
                                                     navigate("/signup", {
@@ -243,37 +289,8 @@ const LandingView = () => {
                         />
                     </Box>
                 </FlexBetween>
-                {showDashboard() && isNonMobileScreens && (
-                    <Button
-                        component="a"
-                        href={`${import.meta.env.VITE_CLIENT_URL}/dashboard`}
-                        sx={{
-                            borderRadius: "0.25rem",
-                            border: "1px solid " + theme.palette.primary.darker,
-                            padding: "0.5rem 1rem",
-                            color: (theme) => theme.palette.primary.darker,
 
-                            "&:hover": {
-                                backgroundColor: (theme) =>
-                                    theme.palette.primary.light3,
-                                color: "inherit",
-                            },
-                        }}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            navigate("/dashboard");
-                        }}
-                    >
-                        <DashboardIcon
-                            sx={{
-                                mr: "0.5rem",
-                            }}
-                        />
-                        <Typography sx={{}} variant="h6">
-                            Open Dashboard
-                        </Typography>
-                    </Button>
-                )}
+
             </Box>
         </Box>
     );

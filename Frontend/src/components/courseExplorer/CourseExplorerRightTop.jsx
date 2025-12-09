@@ -12,8 +12,7 @@ import StyledTextField2 from "../StyledTextField2";
 
 const CourseExplorerRightTop = ({ coursePage }) => {
   const {
-    setShowCourseExplorer,
-    setCloseBtnClicked,
+    closeCourseExplorer,
     selectedCategory,
     selectedSubCategory,
     setSelectedCategory,
@@ -78,10 +77,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
           </Breadcrumbs>
 
           <Typography
-            onClick={() => {
-              setShowCourseExplorer(false);
-              setCloseBtnClicked(true);
-            }}
+            onClick={closeCourseExplorer}
             variant="grey"
             sx={{
               cursor: "pointer",

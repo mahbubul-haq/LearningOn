@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 export const CourseExplorerContext = createContext();
@@ -17,6 +17,7 @@ export const CourseExplorerState = (props) => {
   const [loading, setLoading] = useState(false);
   const [categoryChanged, setCategoryChanged] = useState(false);
   const [coursePageOpened, setCoursePageOpened] = useState(false);
+  const courseExplorerRef = useRef(null);
 
   const coursePerPage = 12;
 
@@ -25,6 +26,22 @@ export const CourseExplorerState = (props) => {
   const disableScroll1 = useCallback((e) => {
     e.stopPropagation();
   }, []);
+
+  const openCourseExplorer =  () => {
+    clearTimeout(courseExplorerRef.current);
+    courseExplorerRef.current = setTimeout(() => {
+      setShowCourseExplorer(true);
+      setCloseBtnClicked(false);
+    }, 200);
+  };
+
+  const closeCourseExplorer = () => {
+    clearTimeout(courseExplorerRef.current);
+    courseExplorerRef.current = setTimeout(() => {
+      setShowCourseExplorer(false);
+      setCloseBtnClicked(true);
+    }, 200);
+  };
 
   useEffect(() => {
     let navCourse = document.querySelector(".nav-course");
@@ -228,6 +245,8 @@ export const CourseExplorerState = (props) => {
         coursePerPage,
         coursePageOpened,
         setCoursePageOpened,
+        openCourseExplorer,
+        closeCourseExplorer,
       }}
     >
       {props.children}

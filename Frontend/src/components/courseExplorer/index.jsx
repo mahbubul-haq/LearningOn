@@ -8,7 +8,7 @@ import { GlobalContext } from "../../state/GlobalContext";
 import CourseExplorerRightTop from "./CourseExplorerRightTop";
 import CourseExplorerRIghtBottom from "./CourseExplorerRIghtBottom";
 const CourseExplorer = () => {
-  const { setShowCourseExplorer } = useContext(CourseExplorerContext);
+  const {openCourseExplorer, closeCourseExplorer } = useContext(CourseExplorerContext);
   const { getCategories, listOfCategories, categories } =
     useContext(GlobalContext);
   const theme = useTheme();
@@ -19,12 +19,13 @@ const CourseExplorer = () => {
     }
     console.log("inside explorer", listOfCategories, categories);
   }, [categories]);
+      
 
   return (
     <Box
       className="course-explorer"
-      onMouseOver={() => setShowCourseExplorer(true)}
-      onMouseOut={() => setShowCourseExplorer(false)}
+      onMouseOver={openCourseExplorer}
+      onMouseOut={closeCourseExplorer}
       sx={{
         position: "absolute",
 
