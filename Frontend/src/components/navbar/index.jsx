@@ -30,7 +30,7 @@ const Navbar = () => {
   const { notifications, getNotifications, updateNotifications } =
     useContext(NotificationContext);
 
-  const { setShowCourseExplorer, setCloseBtnClicked, openCourseExplorer, closeCourseExplorer } = useContext(
+  const { setCloseBtnClicked, openCourseExplorer, closeCourseExplorer } = useContext(
     CourseExplorerContext
   );
 
@@ -189,8 +189,8 @@ const Navbar = () => {
                 >
                   <StyledBox1
                     className="nav-course"
-                    onMouseOver={openCourseExplorer}
-                    onMouseOut={closeCourseExplorer}
+                    onMouseOver={() => openCourseExplorer(true)}
+                    onMouseOut={() => closeCourseExplorer(false)}
                     
                     sx={{
                       // height: "100%",

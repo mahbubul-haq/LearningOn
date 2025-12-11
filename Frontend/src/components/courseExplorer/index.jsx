@@ -24,15 +24,15 @@ const CourseExplorer = () => {
   return (
     <Box
       className="course-explorer"
-      onMouseOver={openCourseExplorer}
-      onMouseOut={closeCourseExplorer}
+      onMouseOver={() => openCourseExplorer(false)}
+      onMouseOut={() => closeCourseExplorer(false)}
       sx={{
         position: "absolute",
 
         // height: "calc(100vh - 5rem)",
         height: 0,
         maxHeight: "1000px",
-        width: "100%",
+        width: `calc(100% - 0rem)`,
         top: "5rem",
         left: "50%",
         transform: "translateX(-50%)",
@@ -71,6 +71,7 @@ const CourseExplorer = () => {
           padding: "0",
           position: "relative",
           scrollBehavior: "smooth",
+          scrollbarColor: "#8b8b8b #fcfcfc",
         }}
       >
         <CourseExplorerRightTop />

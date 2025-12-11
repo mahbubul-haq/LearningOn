@@ -27,19 +27,22 @@ export const CourseExplorerState = (props) => {
     e.stopPropagation();
   }, []);
 
-  const openCourseExplorer =  () => {
+  const openCourseExplorer = (btnClose) => {
     clearTimeout(courseExplorerRef.current);
+    if (btnClose) setCloseBtnClicked(false);
     courseExplorerRef.current = setTimeout(() => {
       setShowCourseExplorer(true);
-      setCloseBtnClicked(false);
+
     }, 200);
   };
 
-  const closeCourseExplorer = () => {
+  const closeCourseExplorer = (btnClick) => {
     clearTimeout(courseExplorerRef.current);
+    if (btnClick) {
+      setCloseBtnClicked(true);
+    }
     courseExplorerRef.current = setTimeout(() => {
       setShowCourseExplorer(false);
-      setCloseBtnClicked(true);
     }, 200);
   };
 
@@ -52,8 +55,13 @@ export const CourseExplorerState = (props) => {
 
     let timeoutId, timeoutId1, timeoutId2;
     if (showCourseExplorer && !closeBtnClicked) {
+      console.log("opening course explorer");
       if (navCourse) navCourse.style.height = "100%";
-      if (appContainer) appContainer.style.overflow = "hidden";
+      // if (appContainer) appContainer.style.overflow = "hidden";
+      if (appContainer) {
+        appContainer.style.scrollbarColor = "transparent #fcfcfc";
+        
+      }
       if (explorerLeft) {
         timeoutId1 = setTimeout(() => {
           explorerLeft.style.overflow = "auto";
@@ -80,19 +88,28 @@ export const CourseExplorerState = (props) => {
         courseExplorer.removeEventListener("wheel", disableScroll1);
         courseExplorer.removeEventListener("touchmove", disableScroll1);
       }
+      // if (appContainer) {
+      //   timeoutId = setTimeout(() => {
+      //     appContainer.style.overflow = "auto";
+      //   }, 400);
+      // }
       if (appContainer) {
+        if (timeoutId) clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
-          appContainer.style.overflow = "auto";
-        }, 400);
+        appContainer.style.scrollbarColor = "#8b8b8b #fcfcfc";
+        }, 200);
       }
     }
 
+    console.log("show course explorer", showCourseExplorer, closeBtnClicked);
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       if (timeoutId1) clearTimeout(timeoutId1);
       if (timeoutId2) clearTimeout(timeoutId2);
     };
-  }, [showCourseExplorer]);
+
+
+  }, [showCourseExplorer, closeBtnClicked]);
 
   useEffect(() => {
     let courseExplorerRightBottom = document.querySelectorAll(
@@ -154,8 +171,8 @@ export const CourseExplorerState = (props) => {
 
       if (
         explorerRightContainer.scrollTop +
-          explorerRightContainer.clientHeight +
-          5 >=
+        explorerRightContainer.clientHeight +
+        5 >=
         explorerRightContainer.scrollHeight
       ) {
         if (!loading && filteredCourses.length < totalDocuments) {
@@ -193,8 +210,7 @@ export const CourseExplorerState = (props) => {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/getfiltered?page=${
-          changed ? 1 : pageNumber
+        `${import.meta.env.VITE_SERVER_URL}/course/getfiltered?page=${changed ? 1 : pageNumber
         }&coursePerPage=${coursePerPage}&category=${encodedCategory}`,
         {
           method: "GET",

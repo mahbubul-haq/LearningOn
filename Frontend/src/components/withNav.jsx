@@ -22,7 +22,7 @@ const WithNav = ({ component, showNav }) => {
     <Box
       className="app-container"
       sx={{
-        height: "100%",
+        height: "100%", 
         overflow: "auto",
         scrollBehavior: "smooth",
       }}

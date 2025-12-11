@@ -77,7 +77,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
           </Breadcrumbs>
 
           <Typography
-            onClick={closeCourseExplorer}
+            onClick={() => closeCourseExplorer(true)}
             variant="grey"
             sx={{
               cursor: "pointer",
