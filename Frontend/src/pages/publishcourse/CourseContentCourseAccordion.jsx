@@ -135,7 +135,8 @@ const CourseContentCourseAccordion = ({
         <StyledTextField1
           placeholder="Title of the lesson"
           multiline
-          rows={1}
+          minRows={1}
+          maxRows={Infinity}
           id="title"
           name="title"
           inputProps={{
@@ -178,8 +179,9 @@ const CourseContentCourseAccordion = ({
 
         <StyledTextField1
           placeholder="Description of the lesson"
+          minRows={5}
+          maxRows={Infinity}
           multiline
-          rows={5}
           id="description"
           name="description"
           inputProps={{

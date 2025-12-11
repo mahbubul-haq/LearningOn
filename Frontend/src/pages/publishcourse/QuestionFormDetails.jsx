@@ -1,6 +1,8 @@
 import { Autocomplete, Box, Typography, useMediaQuery } from "@mui/material";
 import React, { useEffect } from "react";
 import StyledTextField1 from "../../components/StyledTextField1";
+import {useContext,  useRef} from "react";
+import { CreateCourseContext } from "../../state/CreateCourse";
 
 const QuestionFormDetails = ({
   question,
@@ -10,6 +12,8 @@ const QuestionFormDetails = ({
   lessonIdx,
 }) => {
   const isMobileScreens = useMediaQuery("(max-width:600px)");
+  const { courseStateRef } = useContext(CreateCourseContext);
+  const [options, setOptions] = React.useState(question?.options || ["", "", "", ""]);
   useEffect(() => {
     console.log("question", question);
   });
@@ -78,8 +82,17 @@ const QuestionFormDetails = ({
 
             <StyledTextField1
               placeholder={"Option " + (index + 1)}
-              value={option}
-              onChange={(e) => changeOption(e, index)}
+              multiline
+              minRows={1}
+              maxRows={Infinity}
+              value={options[index]}
+              onChange={(e) => {
+                let newOptions = [...options];
+                newOptions[index] = e.target.value;
+                setOptions(newOptions);
+                courseStateRef.current.lessons[lessonIdx].questions[questionNo].options = newOptions;
+              }}
+              onBlur={(e) => changeOption(e, index)}
               sx={{
                 width: "100%",
 

@@ -14,6 +14,8 @@ import { PiWarningFill } from "react-icons/pi";
 import { StyledButton } from "../../components/StyledButton";
 import StyledTextField1 from "../../components/StyledTextField1";
 import QuestionFormDetails from "./QuestionFormDetails";
+import { useContext, useRef } from "react";
+import { CreateCourseContext } from "../../state/CreateCourse";
 
 const QuestionForm = ({
   question,
@@ -25,6 +27,8 @@ const QuestionForm = ({
   const theme = useTheme();
   const isMobileScreens = useMediaQuery("(max-width:600px)");
   const [isExpanded, setIsExpanded] = useState(true);
+  const [currQuestion, setCurrQuestion] = useState(question?.question || "");
+  const { courseStateRef } = useContext(CreateCourseContext);
 
   const setQuestion = (event) => {
     setCourseState((prevState) => ({
@@ -163,6 +167,7 @@ const QuestionForm = ({
             ) : (
               <PiWarningFill
                 title="The question is incomplete"
+
                 style={{
                   color: theme.palette.warning.main,
                   fontSize: "1.5rem",
@@ -227,14 +232,19 @@ const QuestionForm = ({
             <StyledTextField1
               placeholder="Write question here"
               multiline
-              maxRows={isMobileScreens ? 4 : 2}
+              minRows={1}
+              maxRows={Infinity}
               id="question"
               inputProps={{
                 maxLength: 500,
               }}
               // change font size of input
-              onChange={setQuestion}
-              value={question.question}
+              onChange={(e) => {
+                setCurrQuestion(e.target.value);
+                courseStateRef.current.lessons[lessonIdx].questions[questionNo].question = e.target.value;
+              }}
+              value={currQuestion}
+              onBlur={setQuestion}
               sx={{
                 p: 0,
                 "& .MuiInputBase-input": {

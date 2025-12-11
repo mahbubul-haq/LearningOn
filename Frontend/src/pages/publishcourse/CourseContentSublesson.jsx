@@ -125,7 +125,8 @@ const CourseContentSublesson = ({
             <StyledTextField1
               placeholder="Title of the lesson"
               multiline
-              rows={1}
+              minRows={1}
+              maxRows={Infinity}
               id="sublesson-title"
               name="title"
               inputProps={{
@@ -214,7 +215,8 @@ const CourseContentSublesson = ({
             <StyledTextField1
               placeholder="Add lecture note"
               multiline
-              rows={20}
+              minRows={20}
+              maxRows={Infinity}
               id="sublesson-note"
               name="lectureNote"
               inputProps={{

@@ -59,7 +59,7 @@ export const CourseExplorerState = (props) => {
       if (navCourse) navCourse.style.height = "100%";
       // if (appContainer) appContainer.style.overflow = "hidden";
       if (appContainer) {
-        appContainer.style.scrollbarColor = "transparent #fff";
+        appContainer.style.scrollbarColor = "transparent #fcfcfc";
 
       }
       if (explorerLeft) {

@@ -57,7 +57,8 @@ const BasicInfoBottom = ({
                     <StyledTextField1
                         placeholder="Shortly describe what are the requirements for students to take this course, e.g. programming language, software, etc."
                         multiline
-                        rows={isMobileScreens ? 4 : 2}
+                        minRows={2}
+                        maxRows={Infinity}
                         id="student-requirements"
                         inputProps={{
                             maxLength: 200,

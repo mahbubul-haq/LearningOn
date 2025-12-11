@@ -117,7 +117,8 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                     <StyledTextField1
                         placeholder="Give a nice title for your course"
                         multiline
-                        maxRows={isMobileScreens ? 4 : 2}
+                        minRows={1}
+                        maxRows={Infinity}
                         id="title"
                         inputProps={{
                             maxLength: 100,
@@ -209,7 +210,8 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                     <StyledTextField1
                         placeholder="Write description here..."
                         multiline
-                        rows={20}
+                        minRows={15}
+                        maxRows={Infinity}
                         id="description"
                         inputProps={{
                             maxLength: 2500,
