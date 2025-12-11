@@ -27,6 +27,7 @@ const CourseExplorerLeft = () => {
         display: "flex",
         flexDirection: "column",
         py: "2rem",
+        scrollbarColor: "#8b8b8b #fcfcfc",
       }}
     >
       {categories?.length > 0 &&

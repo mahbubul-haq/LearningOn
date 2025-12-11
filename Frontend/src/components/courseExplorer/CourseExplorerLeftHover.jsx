@@ -21,14 +21,23 @@ const CourseExplorerLeftHover = () => {
 
   useEffect(() => {
     let leftHover = document.querySelector(".explorer-left-hover");
-
+    let timeoutId;
     if (!leftHover) return;
     if (showLeftHover && !closeLeftHover) {
-      setTimeout(() => {
-        leftHover.style.overflowY = "auto";
-      }, 300);
+      leftHover.style.overflowY = "hidden";
       leftHover.style.width = "300px";
+       timeoutId = setTimeout(() => {
+        leftHover.style.overflowY = "auto";
+      }, 1000);
+      
     } else {
+      if (timeoutId) clearTimeout(timeoutId);
+      leftHover.style.overflowY = "hidden";
+      leftHover.style.width = 0;
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
       leftHover.style.overflowY = "hidden";
       leftHover.style.width = 0;
     }
@@ -50,6 +59,7 @@ const CourseExplorerLeftHover = () => {
         transition: "width 0.3s ease-out",
         width: 0,
         zIndex: "5000000",
+        scrollbarColor: "#8b8b8b #fcfcfc",
       }}
       onMouseOver={() => setShowLeftHover(true)}
       onMouseOut={() => setShowLeftHover(false)}

@@ -59,18 +59,18 @@ export const CourseExplorerState = (props) => {
       if (navCourse) navCourse.style.height = "100%";
       // if (appContainer) appContainer.style.overflow = "hidden";
       if (appContainer) {
-        appContainer.style.scrollbarColor = "transparent #fcfcfc";
-        
+        appContainer.style.scrollbarColor = "transparent #fff";
+
       }
       if (explorerLeft) {
         timeoutId1 = setTimeout(() => {
           explorerLeft.style.overflow = "auto";
-        }, 300);
+        }, 500);
       }
       if (explorerLeftHover) {
-        timeoutId2 = setTimeout(() => {
-          explorerLeftHover.style.overflowY = "auto";
-        }, 300);
+        // timeoutId2 = setTimeout(() => {
+        //   explorerLeftHover.style.overflowY = "auto";
+        // }, 500);
       }
       if (courseExplorer) {
         courseExplorer.style.height = "calc(100vh - 5rem)";
@@ -80,8 +80,14 @@ export const CourseExplorerState = (props) => {
       }
     } else {
       if (navCourse) navCourse.style.height = "auto";
-      if (explorerLeft) explorerLeft.style.overflow = "hidden";
-      if (explorerLeftHover) explorerLeftHover.style.overflowY = "hidden";
+      if (explorerLeft) {
+        if (timeoutId1) clearTimeout(timeoutId1);
+        explorerLeft.style.overflow = "hidden";
+      }
+      if (explorerLeftHover) {
+        if (timeoutId2) clearTimeout(timeoutId2);
+        // explorerLeftHover.style.overflowY = "hidden";
+      } 
       if (courseExplorer) {
         courseExplorer.style.height = 0;
         courseExplorer.removeEventListener("scroll", disableScroll1);
@@ -96,7 +102,7 @@ export const CourseExplorerState = (props) => {
       if (appContainer) {
         if (timeoutId) clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
-        appContainer.style.scrollbarColor = "#8b8b8b #fcfcfc";
+          appContainer.style.scrollbarColor = "#8b8b8b #fcfcfc";
         }, 200);
       }
     }
