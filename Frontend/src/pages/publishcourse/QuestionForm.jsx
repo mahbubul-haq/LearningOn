@@ -30,6 +30,10 @@ const QuestionForm = ({
   const [currQuestion, setCurrQuestion] = useState(question?.question || "");
   const { courseStateRef } = useContext(CreateCourseContext);
 
+  useState(() => {
+    if (!currQuestion) setCurrQuestion(question?.question || "");
+  }, [question]);
+
   const setQuestion = (event) => {
     setCourseState((prevState) => ({
       ...prevState,

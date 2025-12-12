@@ -28,6 +28,10 @@ const CourseContentSublesson = ({
     const [subLessonTitle, setSubLessonTitle] = useState(lesson?.subLessons.map((subLesson) => subLesson.title));
     const [subLessonLectureNote, setSubLessonLectureNote] = useState(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
 
+    useState(() => {
+      setSubLessonTitle(lesson?.subLessons.map((subLesson) => subLesson.title));
+      setSubLessonLectureNote(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
+    }, [lesson]);
 
   return (
     <>

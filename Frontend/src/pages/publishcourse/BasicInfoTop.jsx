@@ -12,6 +12,13 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
     const [courseTitle, setCourseTitle] = useState(courseState.courseTitle);
     const [courseDescription, setCourseDescription] = useState(courseState.courseDescription);
     const {courseStateRef} = useContext(CreateCourseContext);
+
+    useState(() => {
+        if (!courseTitle || !courseDescription) {
+            setCourseTitle(courseState.courseTitle);
+            setCourseDescription(courseState.courseDescription);
+        }
+    }, [courseState]);
     return (
         <>
             <Box>

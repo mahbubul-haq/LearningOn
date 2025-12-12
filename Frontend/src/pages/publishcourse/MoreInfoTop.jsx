@@ -20,6 +20,10 @@ const MoreInfoTop = ({
     const {courseStateRef} = useContext(CreateCourseContext);
     const [coursePrice, setCoursePrice] = useState(courseState.coursePrice);
 
+    useState(() => {
+        if (!coursePrice) setCoursePrice(courseState.coursePrice);
+    }, [courseState]);
+
   return (
     <>
         <Box>

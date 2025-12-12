@@ -25,6 +25,13 @@ const BasicInfoBottom = ({
     const {courseStateRef} = useContext(CreateCourseContext);
     const [studentRequirements, setStudentRequirements] = useState(courseState.studentRequirements);
 
+
+    useState(() => {
+        if (!studentRequirements) {
+            setStudentRequirements(courseState.studentRequirements);
+        }
+    }, [courseState]);
+
     return (
         <>
             <Box

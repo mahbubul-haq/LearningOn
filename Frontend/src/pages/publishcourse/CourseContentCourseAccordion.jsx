@@ -39,6 +39,11 @@ const CourseContentCourseAccordion = ({
   const [lessonTitle, setLessonTitle] = useState(lesson.title);
   const [lessonDescription, setLessonDescription] = useState(lesson.description);
 
+  useState(() => {
+    setLessonTitle(lesson.title);
+    setLessonDescription(lesson.description);
+  }, [lesson]);
+
   return (
     <Accordion
       sx={{
