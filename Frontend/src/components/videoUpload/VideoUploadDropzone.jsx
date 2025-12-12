@@ -13,6 +13,9 @@ const VideoUploadDropzone = ({
     uploadText,
     setSnackbarMessage,
     setSnackbarSeverity,
+    uploadStatus,
+    setUploadStatus,
+    uploadStatusRef,
 }) => {
     return (
         <Dropzone
@@ -49,7 +52,8 @@ const VideoUploadDropzone = ({
                 }
                 else {
                     setPreview(URL.createObjectURL(acceptedFiles[0]));
-
+                    uploadStatusRef.current = "uploading";
+                    setUploadStatus("uploading");
                     uploadVideo(acceptedFiles[0]);
                 }
             }}

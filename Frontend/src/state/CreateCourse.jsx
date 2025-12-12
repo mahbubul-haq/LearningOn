@@ -43,6 +43,7 @@ export const CreateCourseState = (props) => {
 
   useEffect(() => {
     courseStateRef.current = courseState;
+
   }, [courseState]);
 
   const [introVideoUrl, setIntroVideoUrl] = React.useState("");
@@ -51,13 +52,13 @@ export const CreateCourseState = (props) => {
   const [inputSection, setInputSection] = React.useState("basic info");
   const [uploadProgress, setUploadProgress] = React.useState(-1);
   const [inputLessons, setInputLessons] = React.useState([]);
-  const [uploadStatus, setUploadStatus] = React.useState("");
+  const [uploadStatus, setUploadStatus] = React.useState("");/// trigggers update course, shows Dialog while publishing: "", "publishing", "unpublished", "failed" -> after admin approve --> "published" 
   const [errors, setErrors] = React.useState({});
-  const [updating, setUpdating] = React.useState("");
+  const [updating, setUpdating] = React.useState("");/// snackbar/trigger update: "", updating, updated, failed
   const [editMode, setEditMode] = React.useState("");
   const [courseId, setCourseId] = React.useState("");
-  const [newDraft, setNewDraft] = React.useState(false);
-  const [deleteCourseStatus, setDeleteCourseStatus] = React.useState("");
+  const [newDraft, setNewDraft] = React.useState(false);/// discarded due to redirecting to home/dashboard
+  const [deleteCourseStatus, setDeleteCourseStatus] = React.useState("");// trigger delete course, shows dialog: "", "deleting", "deleted", "failed"
   const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
   // useEffect(() => {
   //     console.log(isCourseValid());
@@ -148,7 +149,7 @@ export const CreateCourseState = (props) => {
         }
       );
       const data = await response.json();
-      console.log("deleted", data);
+      // console.log("deleted", data);
       if (data.success) {
         setDeleteCourseStatus("deleted");
       } else {
@@ -192,7 +193,7 @@ export const CreateCourseState = (props) => {
 
     const data = await response.json();
 
-    console.log(data);
+    // console.log(data);
 
     if (data.success) {
       setCourseState(data.courseInfo);
@@ -216,17 +217,18 @@ export const CreateCourseState = (props) => {
     //console.log(data);
 
     if (data.success) {
+      console.log("getCoursePlainById", data.courseInfo);
+      courseStateRef.current = data.courseInfo;
       setCourseState(data.courseInfo);
     }
   };
 
   const updateCourse = async (status) => {
     //console.log(courseState);
-    console.log("update course called", status, courseState);
+    // console.log("update course called", status, courseState);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/update/${
-          courseState._id
+        `${import.meta.env.VITE_SERVER_URL}/course/update/${courseState._id
         }/${status}`,
         {
           method: "PUT",
@@ -241,7 +243,7 @@ export const CreateCourseState = (props) => {
       );
 
       const data = await response.json();
-      console.log("done", data);
+      // console.log("done", data);
       if (data.success) {
         ///setCourseState(data.courseInfo);
         if (status === "unpublished" && uploadStatus == "publishing")
@@ -249,18 +251,14 @@ export const CreateCourseState = (props) => {
         if (status === "draft" && updating == "updating")
           setUpdating("updated");
         setErrors({});
-        if (status === "unpublished") {
-          setCourseState({
-            ...initialCourseState,
-          });
-        } else {
-          courseStateRef.current.courseStatus = status;
-          setCourseState({...courseStateRef.current });
+
+        courseStateRef.current.courseStatus = status;
+        setCourseState({ ...courseStateRef.current });
         //   setCourseState({
         //   ...data.courseInfo,
         //   courseStatus: status,
         // });
-        }
+
         //setIntroVideoUrl(`https://youtu.be/${data.courseInfo.introVideo}`);
       } else {
         if (status === "unpublished" && uploadStatus == "publishing")
@@ -305,7 +303,7 @@ export const CreateCourseState = (props) => {
         }
       );
 
-      console.log(res.data);
+      // console.log(res.data);
 
       if (res.data.success) {
         setUploadProgress(100);
@@ -327,8 +325,7 @@ export const CreateCourseState = (props) => {
         }
 
         await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/course/update/${
-            courseState._id
+          `${import.meta.env.VITE_SERVER_URL}/course/update/${courseState._id
           }/draft`,
           {
             method: "PUT",

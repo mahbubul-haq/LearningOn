@@ -9,6 +9,9 @@ const VideoUploadedFile = ({
     deleteVideo,
     deleting,
     setDeleting,
+    uploadStatus,
+    setUploadStatus,
+    uploadStatusRef,
 }) => {
     return (
         <Box
@@ -99,7 +102,10 @@ const VideoUploadedFile = ({
                         },
                     }}
                     onClick={() => {
+                        uploadStatusRef.current = "deleting";
+                        setUploadStatus("deleting");
                         deleteVideo(fileName);
+
                         setDeleting(true);
                     }}
                 >

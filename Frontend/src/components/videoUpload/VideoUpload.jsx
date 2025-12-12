@@ -25,6 +25,12 @@ const VideoUpload = ({
   const token = useSelector((state) => state.auth.token);
   const initialRender = useRef(true);
   const [deleting, setDeleting] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(["", "uploading", "deleting", "success", "failed"][0]);// prevents triggering fileupload snackbar on page load
+  const uploadStatusRef = useRef(uploadStatus);
+
+  useEffect(() => {
+    uploadStatusRef.current = uploadStatus;
+  }, [uploadStatus]);
 
   useEffect(() => {
     if (!updateCallBack) return;
@@ -35,25 +41,31 @@ const VideoUpload = ({
 
     async function updateResource() {
       console.log("updating resource from video upload", fileName);
-      const res = await updateCallBack();
+      let res;
+      
+      if (uploadStatusRef.current !== "") res = await updateCallBack();
 
       if (!res.success) return;
 
       setWaitingFile(fileName);
 
-      if (fileName.length > 0) {
+      if (fileName.length > 0 && uploadStatusRef.current !== "") {
         setPreview(null);
         setUploadProgress(100);
         setOpenSnackbar(true);
         setSnackbarMessage("File uploaded successfully!");
         setSnackbarSeverity("success");
-      } else {
+        uploadStatusRef.current = "";
+        setUploadStatus("");
+      } else if (uploadStatusRef.current !== "") {
         setUploadProgress(0);
         setPreview(null);
         setDeleting(false);
         setOpenSnackbar(true);
         setSnackbarMessage("File Deleted!");
         setSnackbarSeverity("error");
+        uploadStatusRef.current = "";
+        setUploadStatus("");
       }
     }
     updateResource();
@@ -192,6 +204,9 @@ const VideoUpload = ({
           maxHeight={maxHeight}
           deleting={deleting}
           setDeleting={setDeleting}
+          uploadStatus={uploadStatus}
+          setUploadStatus={setUploadStatus}
+          uploadStatusRef={uploadStatusRef}
         />
       ) : preview ? (
         <VideoUploadProgress uploadProgress={uploadProgress} />
@@ -204,6 +219,9 @@ const VideoUpload = ({
           uploadText={uploadText}
           setSnackbarMessage={setSnackbarMessage}
           setSnackbarSeverity={setSnackbarSeverity}
+          uploadStatus={uploadStatus}
+          setUploadStatus={setUploadStatus}
+          uploadStatusRef={uploadStatusRef}
         />
       )}
     </>
