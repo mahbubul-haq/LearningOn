@@ -9,7 +9,7 @@ import CourseWidget from "../../widgets/CourseWidget";
 
 const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const { loading } = useContext(HomePageContext);
+  const { loading, courseFetchError, waitingForSelectedCoursesRef, waitingForSelectedCourses } = useContext(HomePageContext);
 
   useEffect(() => {
     let coursesContainer = document.querySelector(".courses-container");
@@ -117,7 +117,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
           width: "100%",
           height: "100%",
           scrollBehavior: "smooth",
-          opacity: loading ? 0.3 : 1,
+          opacity: loading || waitingForSelectedCourses ? 0.3 : 1,
         }}
       >
         {selectedCourses.map((course) => {
@@ -150,7 +150,21 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
             </Box>
           );
         })}
-        {selectedCourses.length === 0 && (
+        {selectedCourses.length === 0 && (loading || waitingForSelectedCoursesRef.current) && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              width: "100%",
+              //border: "1px solid rgba(0, 0, 0, 0.23)",
+            }}
+          >
+            <Typography variant="h4grey">Loading courses...</Typography>
+          </Box>
+        )}
+        {selectedCourses.length === 0 &&  !loading && !waitingForSelectedCoursesRef.current && !courseFetchError && (
           <Box
             sx={{
               display: "flex",
@@ -192,6 +206,22 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                         )} */}
           </Box>
         )}
+        {courseFetchError && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              width: "100%",
+              //border: "1px solid rgba(0, 0, 0, 0.23)",
+            }}
+          >
+            <Typography variant="h4grey">
+              Unable to fetch courses. Please refresh the page.
+            </Typography>
+          </Box>
+        )}  
       </Box>
     </Box>
   );

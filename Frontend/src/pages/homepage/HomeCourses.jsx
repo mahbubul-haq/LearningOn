@@ -22,6 +22,11 @@ const HomeCourses = () => {
     setSelectedCourses,
     filteredCourses,
     setFilteredCourses,
+    initialRender,
+    loading,
+    waitingForSelectedCoursesRef,
+    waitingForSelectedCourses,
+    setWaitingForSelectedCourses,
   } = useContext(HomePageContext);
 
   const user = useSelector((state) => state.auth.user);
@@ -50,14 +55,7 @@ const HomeCourses = () => {
   //   }
   // }, [listOfCategories]);
 
-  useEffect(() => {
-    setLoading(true);
-    getCourses();
-    if (!listOfCategories || listOfCategories.length === 0) {
-      ///console.log("calling for categories from home");
-      getCategories();
-    }
-  }, []);
+
 
   useEffect(() => {
     ///console.log("chaning course type");
@@ -94,7 +92,7 @@ const HomeCourses = () => {
   useEffect(() => {
     //console.log(selectedItem, courses);
     if (selectedItem == "All" || courseType === "Popular Courses")
-      setSelectedCourses(filteredCourses);
+      setSelectedCourses([...filteredCourses]);
     else if (selectedItem) {
       const curfilteredCourses = filteredCourses.filter((course) => {
         return course?.category === selectedItem;
@@ -116,26 +114,35 @@ const HomeCourses = () => {
   useEffect(() => {
     setSelectedItem("All");
     changeCourseType();
-    if (courseType === "Popular Courses") {
+    if (courseType === "Popular Courses" && !initialRender) {
       setLoading(true);
       getCourses("all");
     }
   }, [courseType]);
 
   useEffect(() => {
-    if (courseType == "Popular Courses") {
+    if (courseType == "Popular Courses" && !initialRender) {
       setLoading(true);
       getCourses(selectedItem == "All" ? "all" : selectedItem);
     }
   }, [selectedItem]);
+
+  useEffect(() => {
+    setLoading(true);
+    getCourses();
+    if (!listOfCategories || listOfCategories.length === 0) {
+      ///console.log("calling for categories from home");
+      getCategories();
+    }
+  }, []);
 
   const handleScroll = (direction, scrollValue) => {
     const container = document.querySelector(".courses-container");
     const scrollStep = scrollValue
       ? scrollValue
       : isNonMobileScreens
-      ? 400
-      : 200;
+        ? 400
+        : 200;
 
     //console.log(container.scrollLeft);
 
@@ -169,6 +176,9 @@ const HomeCourses = () => {
   };
 
   useEffect(() => {
+    if (waitingForSelectedCoursesRef.current) {
+      setWaitingForSelectedCourses(false);
+    }
     const container = document.querySelector(".courses-container");
     if (container) {
       if (!(selectedCourses?.length > 0) || container.scrollLeft === 0) {
@@ -180,7 +190,7 @@ const HomeCourses = () => {
       if (
         !(selectedCourses?.length > 0) ||
         container.scrollLeft + 1 >=
-          container.scrollWidth - container.clientWidth
+        container.scrollWidth - container.clientWidth
       ) {
         document.querySelector(".right-arrow").style.display = "none";
       } else {
