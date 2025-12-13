@@ -9,7 +9,7 @@ import StyledTextField1 from "../../components/StyledTextField1";
 import VideoUpload from "../../components/videoUpload/VideoUpload";
 import InputLabel from "@mui/material/InputLabel";
 import { CreateCourseContext } from "../../state/CreateCourse";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
 
 const CourseContentSublesson = ({
@@ -28,7 +28,7 @@ const CourseContentSublesson = ({
     const [subLessonTitle, setSubLessonTitle] = useState(lesson?.subLessons.map((subLesson) => subLesson.title));
     const [subLessonLectureNote, setSubLessonLectureNote] = useState(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
 
-    useState(() => {
+    useEffect(() => {
       setSubLessonTitle(lesson?.subLessons.map((subLesson) => subLesson.title));
       setSubLessonLectureNote(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
     }, [lesson]);

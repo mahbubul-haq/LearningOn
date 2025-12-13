@@ -5,7 +5,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import StyledTextField1 from "../../components/StyledTextField1";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import {useState, useContext} from "react";
+import {useState, useContext, useEffect} from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 
 const MoreInfoTop = ({
@@ -20,7 +20,7 @@ const MoreInfoTop = ({
     const {courseStateRef} = useContext(CreateCourseContext);
     const [coursePrice, setCoursePrice] = useState(courseState.coursePrice);
 
-    useState(() => {
+    useEffect(() => { 
         if (!coursePrice) setCoursePrice(courseState.coursePrice);
     }, [courseState]);
 

@@ -4,7 +4,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Autocomplete from "@mui/material/Autocomplete";
 import StyledTextField1 from "../../components/StyledTextField1";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 
 const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
@@ -13,10 +13,11 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
     const [courseDescription, setCourseDescription] = useState(courseState.courseDescription);
     const {courseStateRef} = useContext(CreateCourseContext);
 
-    useState(() => {
+    useEffect(() => {
         if (!courseTitle || !courseDescription) {
             setCourseTitle(courseState.courseTitle);
             setCourseDescription(courseState.courseDescription);
+           // console.log(courseState.courseTitle, courseState.courseDescription);
         }
     }, [courseState]);
     return (

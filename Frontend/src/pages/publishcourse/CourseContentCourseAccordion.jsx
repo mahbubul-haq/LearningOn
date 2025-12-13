@@ -16,7 +16,7 @@ import StyledTextField1 from "../../components/StyledTextField1";
 import AddQuestions from "./AddQuestions";
 import CourseContentSublesson from "./CourseContentSublesson";
 import QuestionForm from "./QuestionForm";
-import {useContext, useState} from "react";
+import {useContext, useState, useEffect} from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 
 const CourseContentCourseAccordion = ({
@@ -39,7 +39,7 @@ const CourseContentCourseAccordion = ({
   const [lessonTitle, setLessonTitle] = useState(lesson.title);
   const [lessonDescription, setLessonDescription] = useState(lesson.description);
 
-  useState(() => {
+  useEffect(() => {
     setLessonTitle(lesson.title);
     setLessonDescription(lesson.description);
   }, [lesson]);

@@ -82,7 +82,7 @@ export const GlobalState = (props) => {
 
     const sortedCategories = flattenCategories(data.categories).sort();
     const categoriesWithLabel = sortedCategories.map((category, index) => {
-      return { label: category[0], id: index + 1, category: category[1] };
+      return { label: category[0], id: index + 1, category: category[1] };// label:  subcategory or category name, category: parent category name
     });
     setCategoriesWithLabel(categoriesWithLabel);
 

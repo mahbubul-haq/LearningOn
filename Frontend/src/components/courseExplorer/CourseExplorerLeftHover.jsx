@@ -16,6 +16,9 @@ const CourseExplorerLeftHover = () => {
     categoryIndex,
     setSelectedCategory,
     setSelectedSubCategory,
+    selectedSubCategory,
+    categoryChangedRef,
+    setCategoryChanged,
   } = useContext(CourseExplorerContext);
   const { categories } = useContext(GlobalContext);
 
@@ -69,6 +72,10 @@ const CourseExplorerLeftHover = () => {
           <FlexBetween
             key={index}
             onClick={() => {
+              if (selectedSubCategory != subcategory) {
+                categoryChangedRef.current = true;
+                setCategoryChanged(true);
+              }
               setSelectedCategory(categories[categoryIndex].name);
               setSelectedSubCategory(subcategory);
               setCloseLeftHover(true);

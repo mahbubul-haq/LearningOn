@@ -19,6 +19,8 @@ const CourseExplorerRightTop = ({ coursePage }) => {
     setSelectedSubCategory,
     filteredCourses,
     totalDocuments,
+    categoryChangedRef,
+    setCategoryChanged,
   } = useContext(CourseExplorerContext);
   const { categoriesWithLabel } = useContext(GlobalContext);
   const theme = useTheme();
@@ -134,16 +136,28 @@ const CourseExplorerRightTop = ({ coursePage }) => {
         <Autocomplete
           disablePortal
           value={selectedSubCategory || selectedCategory}
-          onChange={(e, newValue) => {
+          onChange={(e, newValue) => {        
             if (newValue) {
               if (newValue.label === newValue.category) {
+                if (newValue.label != selectedCategory) {
+                  categoryChangedRef.current = true;
+                  setCategoryChanged(true);
+                }
                 setSelectedCategory(newValue.category);
                 setSelectedSubCategory("");
               } else {
+                if (newValue.label != selectedSubCategory) {
+                  categoryChangedRef.current = true;
+                  setCategoryChanged(true);
+                }
                 setSelectedCategory(newValue.category);
                 setSelectedSubCategory(newValue.label);
               }
             } else {
+              if (selectedCategory || selectedSubCategory) {
+                categoryChangedRef.current = true;
+                setCategoryChanged(true);
+              }
               setSelectedCategory("");
               setSelectedSubCategory("");
             }

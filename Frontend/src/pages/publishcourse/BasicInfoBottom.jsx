@@ -10,7 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 
 const BasicInfoBottom = ({
@@ -26,7 +26,7 @@ const BasicInfoBottom = ({
     const [studentRequirements, setStudentRequirements] = useState(courseState.studentRequirements);
 
 
-    useState(() => {
+    useEffect(() => {
         if (!studentRequirements) {
             setStudentRequirements(courseState.studentRequirements);
         }

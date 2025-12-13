@@ -7,6 +7,7 @@ import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 import CourseWidget from "../../widgets/CourseWidget";
 import CourseWidgetSkeleton from "../CourseWidgetSkeleton";
 import { StyledButton } from "../StyledButton";
+import NoCourseFound from "./NoCourseFound";
 
 const CourseExplorerRIghtBottom = () => {
   const {
@@ -55,27 +56,7 @@ const CourseExplorerRIghtBottom = () => {
         </Box>
       ))}
 
-      {filteredCourses?.length == 0 && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "2rem",
-          }}
-        >
-          <Typography variant="h4grey">No courses found</Typography>
-          <img
-            style={{
-              width: isNonMobileScreens ? "350px" : "250px",
-              height: "auto",
-              objectFit: "cover",
-            }}
-            src="/images/not_found_1.svg"
-            alt="not found"
-          />
-        </Box>
-      )}
+      {filteredCourses?.length == 0 && <NoCourseFound />}
 
       {loading && (
         <>

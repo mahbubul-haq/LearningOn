@@ -15,6 +15,10 @@ const CourseExplorerLeft = () => {
     setCategoryIndex,
     setSelectedCategory,
     setSelectedSubCategory,
+    setCategoryChanged,
+    categoryChangedRef,
+    selectedCategory,
+    selectedSubCategory,
   } = useContext(CourseExplorerContext);
   const { categories } = useContext(GlobalContext);
   return (
@@ -35,6 +39,10 @@ const CourseExplorerLeft = () => {
           <FlexBetween
             key={index}
             onClick={() => {
+              if (selectedSubCategory || selectedCategory != category.name) {
+                categoryChangedRef.current = true;
+                setCategoryChanged(true);
+              }
               setSelectedSubCategory("");
               setSelectedCategory(category.name);
             }}

@@ -218,8 +218,8 @@ export const CreateCourseState = (props) => {
 
     if (data.success) {
       console.log("getCoursePlainById", data.courseInfo);
-      courseStateRef.current = data.courseInfo;
-      setCourseState(data.courseInfo);
+      //courseStateRef.current = data.courseInfo;
+      setCourseState({ ...data.courseInfo });
     }
   };
 

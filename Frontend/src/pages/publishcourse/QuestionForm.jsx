@@ -14,7 +14,7 @@ import { PiWarningFill } from "react-icons/pi";
 import { StyledButton } from "../../components/StyledButton";
 import StyledTextField1 from "../../components/StyledTextField1";
 import QuestionFormDetails from "./QuestionFormDetails";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 
 const QuestionForm = ({
@@ -30,7 +30,7 @@ const QuestionForm = ({
   const [currQuestion, setCurrQuestion] = useState(question?.question || "");
   const { courseStateRef } = useContext(CreateCourseContext);
 
-  useState(() => {
+  useEffect(() => {
     if (!currQuestion) setCurrQuestion(question?.question || "");
   }, [question]);
 

@@ -18,8 +18,10 @@ export const CourseExplorerState = (props) => {
   const [categoryChanged, setCategoryChanged] = useState(false);
   const [coursePageOpened, setCoursePageOpened] = useState(false);
   const courseExplorerRef = useRef(null);
-
+  const categoryChangedRef = useRef(false);
+  const [courseLoadingError, setCourseLoadingError] = useState(false);
   const coursePerPage = 12;
+
 
   const { token } = useSelector((state) => state.auth);
 
@@ -118,11 +120,12 @@ export const CourseExplorerState = (props) => {
   }, [showCourseExplorer, closeBtnClicked]);
 
   useEffect(() => {
+    categoryChangedRef.current = categoryChanged;
     let courseExplorerRightBottom = document.querySelectorAll(
       ".course-explorer-right-bottom"
     );
 
-    if (categoryChanged) {
+    if (categoryChangedRef.current) {
       if (courseExplorerRightBottom) {
         courseExplorerRightBottom.forEach((element) => {
           element.style.opacity = 0.5;
@@ -146,6 +149,7 @@ export const CourseExplorerState = (props) => {
   useEffect(() => {
     //console.log("Calling for filtered courss");
     setPageNumber(1);
+    
     getFilteredCourses(true);
   }, [selectedCategory, selectedSubCategory]);
 
@@ -155,6 +159,8 @@ export const CourseExplorerState = (props) => {
       getFilteredCourses(false);
     }
   }, [pageNumber]);
+
+
 
   useEffect(() => {
     setLoading(false);
@@ -207,12 +213,21 @@ export const CourseExplorerState = (props) => {
     };
   });
 
+  /**
+   * Fetches filtered courses based on the selected category/subcategory/pagenumber
+   *
+   * @param {boolean} changed - true ->  category changed -> new fetch, false: pagination
+   */  
+
   const getFilteredCourses = async (changed) => {
-    const encodedCategory = encodeURIComponent(
+    const encodedCategory = encodeURIComponent(// to handle spaces in query parameters
       selectedSubCategory ? selectedSubCategory : selectedCategory
     );
 
-    if (changed) setCategoryChanged(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, 10000); // 10 seconds timeout
 
     try {
       const res = await fetch(
@@ -224,21 +239,40 @@ export const CourseExplorerState = (props) => {
             "Content-Type": "application/json",
             "auth-token": token,
           },
+          signal: controller.signal,
         }
       );
 
+      clearTimeout(timeoutId);
+
       let data = await res.json();
       if (data.success) {
+        console.log("explorer courses success");
         if (changed) setFilteredCourses(data.courses);
         else setFilteredCourses([...filteredCourses, ...data.courses]);
         setTotalDocuments(data.totalDocuments);
       }
+      else {
+        console.log("explorer courses error");
+        setCourseLoadingError(true);
+        setFilteredCourses([]);
+        setTotalDocuments(0);
+      }
 
+      categoryChangedRef.current = false;
       setCategoryChanged(false);
       //setLoading(false);
     } catch (err) {
+      setCourseLoadingError(true);
+      setFilteredCourses([]);
+      setTotalDocuments(0);
+      if (err.name === "AbortError") {
+        //timout
+      }
+      console.log("explorer courses fetch error");
       ///
       //setLoading(false);
+      categoryChangedRef.current = false;
       setCategoryChanged(false);
     }
   };
@@ -269,6 +303,12 @@ export const CourseExplorerState = (props) => {
         setCoursePageOpened,
         openCourseExplorer,
         closeCourseExplorer,
+        getFilteredCourses,
+        categoryChanged,
+        categoryChangedRef,
+        setCategoryChanged,
+        courseLoadingError,
+        setCourseLoadingError,
       }}
     >
       {props.children}
