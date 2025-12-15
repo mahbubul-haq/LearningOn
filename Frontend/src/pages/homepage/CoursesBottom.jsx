@@ -4,15 +4,29 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
+import { useContext } from "react";
+import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 
 const CoursesBottom = ({
   categoriesWithCourse,
   selectedItem,
   setSelectedItem,
   selectedCourses,
+  selectedItemRef,
+  courseType,
+  waitingForSelectedCoursesRef,
+  loading,
 }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const navigate = useNavigate();
+  const { changeCategory } = useContext(CourseExplorerContext);
+
+  const isDisabled = () => {
+    return (
+      courseType != "Popular Courses" ||
+      selectedCourses?.length < 8
+    );
+  }
 
   return (
     <>
@@ -73,13 +87,26 @@ const CoursesBottom = ({
           mt: isNonMobileScreens ? "2rem" : "2rem",
           textAlign: "center",
           color: "inherit",
+          position: "absolute",
+          bottom: "2rem",
+          // border: "1px solid green",
+          left: "0",
+        
         }}
       >
         <FlexBetween
           component="a"
-          href={`${import.meta.env.VITE_CLIENT_URL}/courses`}
+          //href={`${import.meta.env.VITE_CLIENT_URL}/courses`}
+          href={isDisabled() ? "" : `${import.meta.env.VITE_CLIENT_URL}/courses`}
           onClick={(e) => {
             e.preventDefault();
+            if (isDisabled()) return;
+            if (courseType === "Popular Courses") {
+              changeCategory(selectedItem == "All" ? "" : selectedItem);
+            }else {
+              changeCategory("");
+            }
+
             navigate("/courses");
           }}
           sx={{
@@ -88,10 +115,11 @@ const CoursesBottom = ({
             "&&": {
               gap: "0.5rem",
             },
-            cursor: "pointer",
+            cursor: isDisabled() ? "default" : "pointer",
+            opacity: isDisabled() ? 0.5 : 1,
             color: (theme) => theme.palette.grey.grey500,
             "&:hover": {
-              color: (theme) => theme.palette.grey.grey700,
+              color: isDisabled() ? (theme) => theme.palette.grey.grey500 : (theme) => theme.palette.grey.grey700,
             },
           }}
         >

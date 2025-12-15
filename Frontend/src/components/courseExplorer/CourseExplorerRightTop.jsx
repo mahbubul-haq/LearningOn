@@ -135,9 +135,10 @@ const CourseExplorerRightTop = ({ coursePage }) => {
         </FlexBetween>
         <Autocomplete
           disablePortal
-          value={selectedSubCategory || selectedCategory}
-          onChange={(e, newValue) => {        
-            if (newValue) {
+          value={selectedSubCategory || selectedCategory || "All"}
+          onChange={(e, newValue) => {      
+
+            if (newValue && newValue.label !== "All") {
               if (newValue.label === newValue.category) {
                 if (newValue.label != selectedCategory) {
                   categoryChangedRef.current = true;
@@ -163,7 +164,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
             }
           }}
           id="combo-box-demo"
-          options={categoriesWithLabel}
+          options={[{label: "All", category: "All", id: Infinity}, ...categoriesWithLabel]}
           sx={{
             minWidth: "250px",
             maxWidth: "300px",

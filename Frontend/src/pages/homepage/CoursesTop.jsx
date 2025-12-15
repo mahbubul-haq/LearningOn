@@ -7,7 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import FlexBetween from "../../components/FlexBetween";
 
-const CoursesTop = ({ courseType, setCourseType, handleChange }) => {
+const CoursesTop = ({ courseType, setCourseType, handleChange, setChangingCourseType, changingCourseTypeRef }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const user = useSelector((state) => state.auth.user);
@@ -121,6 +121,8 @@ const CoursesTop = ({ courseType, setCourseType, handleChange }) => {
               }}
               onChange={(e) => {
                 console.log(e.target.value);
+                changingCourseTypeRef.current = true;
+                setChangingCourseType(true);
                 setCourseType(e.target.value);
               }}
             >

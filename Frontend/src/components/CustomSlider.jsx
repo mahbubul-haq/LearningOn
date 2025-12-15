@@ -11,7 +11,7 @@ import {
 
 import { useTheme } from "@mui/material/styles";
 
-const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
+const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef }) => {
   const theme = useTheme();
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
 
@@ -58,7 +58,10 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
     handleNext("", 0);
 
     if (items?.length > 0) {
-      if (setSelectedItem) setSelectedItem(items[0]);
+      if (setSelectedItem) {
+        selectedItemRef.current = items[0];
+        setSelectedItem(items[0]);
+      }
     }
   }, []);
 
@@ -302,6 +305,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem }) => {
             }}
             onClick={() => {
               if (setSelectedItem) {
+                selectedItemRef.current = item;
                 setSelectedItem(item);
               }
             }}

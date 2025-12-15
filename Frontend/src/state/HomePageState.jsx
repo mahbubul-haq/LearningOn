@@ -15,6 +15,16 @@ export const HomePageState = (props) => {
     const [initialRender, setInitialRender] = React.useState(true);
     const waitingForSelectedCoursesRef = useRef(false);
     const [waitingForSelectedCourses, setWaitingForSelectedCourses] = React.useState(false);
+    const [loadingTracker, setLoadingTracker] = React.useState({
+        myCoursesLoading: false,
+        learningCoursesLoading: false,
+        popularCoursesLoading: false,
+        myCourses: [],
+        learningCourses: [],
+        popularCourses: [],
+    });
+
+    
 
     useEffect(() => {
         waitingForSelectedCoursesRef.current = waitingForSelectedCourses;

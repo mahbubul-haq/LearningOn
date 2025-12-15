@@ -22,14 +22,22 @@ const WithNav = ({ component, showNav }) => {
     <Box
       className="app-container"
       sx={{
-        height: "100%", 
+        height: "100%",
         overflow: "auto",
         scrollBehavior: "smooth",
       }}
     >
       <CourseExplorer />
       {showNav && <Navbar />}
-      {component}
+      <Box
+        className="with-nav-component-container"
+        sx={{
+          width: "100%",
+          transition: "opacity 0.3s ease-in-out",
+        }}>
+
+        {component}
+      </Box>
     </Box>
   );
 };

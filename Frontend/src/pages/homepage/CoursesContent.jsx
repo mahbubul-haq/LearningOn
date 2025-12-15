@@ -7,14 +7,20 @@ import { CourseNextPrevButton } from "../../components/StyledBox";
 import { HomePageContext } from "../../state/HomePageState";
 import CourseWidget from "../../widgets/CourseWidget";
 
-const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
+const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseType, changingCourseType, changingCourseTypeRef }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const { loading, courseFetchError, waitingForSelectedCoursesRef, waitingForSelectedCourses } = useContext(HomePageContext);
+
+
+  useEffect(() => {
+    console.log("Re rendering, loading:", loading, "waitingForSelectedCourses:", waitingForSelectedCourses, "waitingForSelectedCoursesRef:", waitingForSelectedCoursesRef.current);
+  });
 
   useEffect(() => {
     let coursesContainer = document.querySelector(".courses-container");
 
     if (!coursesContainer) return;
+
 
     let initialX,
       finalX,
@@ -34,9 +40,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
       let swipeDistance = finalX - initialX;
       endTime = Date.now();
       let time = endTime - startTime;
-      if (swipeDistance > 0) {
+      if (swipeDistance > 0.001) {
         handleScroll("left", (swipeDistance * 1000) / time);
-      } else {
+      } else if (Math.abs(swipeDistance) > 0.001) {
         handleScroll("right", (-swipeDistance * 1000) / time);
       }
     };
@@ -47,9 +53,11 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
 
       let distance = curTouchX - prevTouchX;
 
-      if (distance > 0) {
+      if (distance > 0.001) {
         handleScroll("left", distance);
-      } else handleScroll("right", -distance);
+      } else if (distance < -0.001) {
+        handleScroll("right", -distance);
+      }
       prevTouchX = curTouchX;
     };
 
@@ -117,12 +125,12 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
           width: "100%",
           height: "100%",
           scrollBehavior: "smooth",
-          opacity: loading || waitingForSelectedCourses ? 0.3 : 1,
+          opacity: loading || waitingForSelectedCourses || changingCourseTypeRef.current ? 0.3 : 1,
         }}
       >
         {selectedCourses.map((course) => {
           if (course.courseStatus != "published") return null;
-          
+
           return (
             <Box
               key={course?._id}
@@ -139,10 +147,10 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                 sx={{
                   height: "100%",
                   display: "flex",
-                //   transition: "transform 0.2s ease-out",
-                //   "&:hover": {
-                //     transform: "scale(1.02)",
-                //   },
+                  //   transition: "transform 0.2s ease-out",
+                  //   "&:hover": {
+                  //     transform: "scale(1.02)",
+                  //   },
                 }}
               >
                 <CourseWidget courseInfo={course} />
@@ -150,7 +158,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
             </Box>
           );
         })}
-        {selectedCourses.length === 0 && (loading || waitingForSelectedCoursesRef.current) && (
+        {selectedCourses.length === 0 && (loading || waitingForSelectedCoursesRef.current || changingCourseTypeRef.current) && (
           <Box
             sx={{
               display: "flex",
@@ -164,8 +172,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
             <Typography variant="h4grey">Loading courses...</Typography>
           </Box>
         )}
-        {selectedCourses.length === 0 &&  !loading && !waitingForSelectedCoursesRef.current && !courseFetchError && (
+        {selectedCourses.length === 0 && !loading && !waitingForSelectedCoursesRef.current && !courseFetchError && !changingCourseType && (
           <Box
+            disabled={waitingForSelectedCourses && changingCourseType} //dummy to trigger re-render
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -189,7 +198,10 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
                 // border: "1px solid rgba(0, 0, 0, 0.23)",
               }}
             >
-              <Typography variant="h4grey">No courses found</Typography>
+              <Typography variant="h4grey">{
+                courseType == "Popular Courses" ? "No courses found" : courseType == "My Courses" ? 
+                "No published courses yet" : "You don't have any active courses right now"}
+              </Typography>
               <img
                 src="/images/not_found_1.svg"
                 style={{
@@ -221,7 +233,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses }) => {
               Unable to fetch courses. Please refresh the page.
             </Typography>
           </Box>
-        )}  
+        )}
       </Box>
     </Box>
   );

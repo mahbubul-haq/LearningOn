@@ -1,6 +1,6 @@
-import { createContext, useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useSelector } from "react-redux";
-
+import { GlobalContext } from "./GlobalContext";
 export const CourseExplorerContext = createContext();
 
 export const CourseExplorerState = (props) => {
@@ -21,6 +21,48 @@ export const CourseExplorerState = (props) => {
   const categoryChangedRef = useRef(false);
   const [courseLoadingError, setCourseLoadingError] = useState(false);
   const coursePerPage = 12;
+
+  const { categories } = useContext(GlobalContext);
+
+
+  /**
+   * 
+   * @param {string} category - it can be a category or a subcategory
+   */
+  const changeCategory = (category) => {
+    if (category == "" && selectedCategory != "") {
+      categoryChangedRef.current = true;
+      setCategoryChanged(true);
+      setSelectedCategory("");
+      setSelectedSubCategory("");
+      return;
+    }
+
+    if (categories) {
+      let isCategory = categories.find((cat) => cat.name == category);
+      if (isCategory) {
+        categoryChangedRef.current = true;
+        setCategoryChanged(true);
+        setSelectedCategory(category);
+        setSelectedSubCategory("");
+      } else {
+
+        for (let cat of categories) {
+          let isSubCategory = cat.subcategories.find((subcat) => subcat == category);
+
+          if (isSubCategory) {
+            //console.log("found subcategory", category);
+            categoryChangedRef.current = true;
+            setCategoryChanged(true);
+            setSelectedCategory(cat.name);
+            setSelectedSubCategory(category);
+            break;
+          }
+        }
+
+      }
+    }
+  }
 
 
   const { token } = useSelector((state) => state.auth);
@@ -54,8 +96,9 @@ export const CourseExplorerState = (props) => {
     let appContainer = document.querySelector(".app-container");
     let explorerLeft = document.querySelector(".explorer-left");
     let explorerLeftHover = document.querySelector(".explorer-left-hover");
+    let withNavComponentContainer = document.querySelector(".with-nav-component-container");
 
-    let timeoutId, timeoutId1, timeoutId2;
+    let timeoutId, timeoutId1, timeoutId2, timeoutIdWNCC;
     if (showCourseExplorer && !closeBtnClicked) {
       console.log("opening course explorer");
       if (navCourse) navCourse.style.height = "100%";
@@ -75,7 +118,14 @@ export const CourseExplorerState = (props) => {
         // }, 500);
       }
       if (courseExplorer) {
-        courseExplorer.style.height = "calc(100vh - 5rem)";
+        if (withNavComponentContainer) {
+          if (timeoutIdWNCC) clearTimeout(timeoutIdWNCC);
+          timeoutIdWNCC = setTimeout(() => {
+            withNavComponentContainer.style.opacity = 0.5;
+          }, 300);
+        }
+
+        courseExplorer.style.height = "calc(100vh - 7rem)";
         courseExplorer.addEventListener("scroll", disableScroll1);
         courseExplorer.addEventListener("wheel", disableScroll1);
         courseExplorer.addEventListener("touchmove", disableScroll1);
@@ -89,8 +139,12 @@ export const CourseExplorerState = (props) => {
       if (explorerLeftHover) {
         if (timeoutId2) clearTimeout(timeoutId2);
         // explorerLeftHover.style.overflowY = "hidden";
-      } 
+      }
       if (courseExplorer) {
+        if (withNavComponentContainer) {
+          if (timeoutIdWNCC) clearTimeout(timeoutIdWNCC);
+          withNavComponentContainer.style.opacity = 1;
+        }
         courseExplorer.style.height = 0;
         courseExplorer.removeEventListener("scroll", disableScroll1);
         courseExplorer.removeEventListener("wheel", disableScroll1);
@@ -149,7 +203,7 @@ export const CourseExplorerState = (props) => {
   useEffect(() => {
     //console.log("Calling for filtered courss");
     setPageNumber(1);
-    
+
     getFilteredCourses(true);
   }, [selectedCategory, selectedSubCategory]);
 
@@ -217,7 +271,7 @@ export const CourseExplorerState = (props) => {
    * Fetches filtered courses based on the selected category/subcategory/pagenumber
    *
    * @param {boolean} changed - true ->  category changed -> new fetch, false: pagination
-   */  
+   */
 
   const getFilteredCourses = async (changed) => {
     const encodedCategory = encodeURIComponent(// to handle spaces in query parameters
@@ -309,6 +363,7 @@ export const CourseExplorerState = (props) => {
         setCategoryChanged,
         courseLoadingError,
         setCourseLoadingError,
+        changeCategory
       }}
     >
       {props.children}

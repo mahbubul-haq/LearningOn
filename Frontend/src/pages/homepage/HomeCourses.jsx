@@ -14,6 +14,11 @@ const HomeCourses = () => {
   const { listOfCategories, getCategories } = useContext(GlobalContext);
   const [categoriesWithCourse, setCategoriesWithCourse] = React.useState([]);
   const [selectedItem, setSelectedItem] = React.useState("All");
+  const selectedItemRef = React.useRef(selectedItem);
+  const [changingCourseType, setChangingCourseType] = React.useState(false);
+  const changingCourseTypeRef = React.useRef(changingCourseType);
+
+
   const {
     courses,
     getCourses,
@@ -32,8 +37,13 @@ const HomeCourses = () => {
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    console.log(user);
-    console.log(selectedCourses);
+    console.log("Waiting for selected courses Changed", waitingForSelectedCourses);
+  }, [waitingForSelectedCourses]);
+
+  useEffect(() => {
+    console.log(courseType, selectedItem);
+    console.log("Selected Courses Changed", selectedCourses);
+  
   }, [selectedCourses]);
 
   useEffect(() => {
@@ -56,7 +66,9 @@ const HomeCourses = () => {
   // }, [listOfCategories]);
 
 
-
+  useEffect(() => {
+    selectedItemRef.current = selectedItem;
+  }, [selectedItem]);
   useEffect(() => {
     ///console.log("chaning course type");
     changeCourseType();
@@ -75,7 +87,7 @@ const HomeCourses = () => {
     //console.log(filteredCourses, listOfCategories);
     //setSelectedItem("All");
 
-    if (courseType == "Popular Courses" && selectedItem != "All") return;
+    if (courseType == "Popular Courses" && selectedItemRef.current != "All") return;
 
     if (filteredCourses.length > 0 && listOfCategories.length > 0) {
       const categoriesWithCourse = listOfCategories.filter((category) => {
@@ -91,11 +103,11 @@ const HomeCourses = () => {
 
   useEffect(() => {
     //console.log(selectedItem, courses);
-    if (selectedItem == "All" || courseType === "Popular Courses")
+    if (selectedItemRef.current == "All" || courseType === "Popular Courses")
       setSelectedCourses([...filteredCourses]);
-    else if (selectedItem) {
+    else if (selectedItemRef.current) {
       const curfilteredCourses = filteredCourses.filter((course) => {
-        return course?.category === selectedItem;
+        return course?.category === selectedItemRef.current;
       });
       setSelectedCourses(curfilteredCourses);
     }
@@ -103,38 +115,44 @@ const HomeCourses = () => {
 
   const changeCourseType = () => {
     if (courseType === "My Courses") {
-      setFilteredCourses(user?.courses);
+      setFilteredCourses(user?.courses?.filter((course) => course.courseStatus=="published"));
     } else if (courseType === "I am Learning") {
-      setFilteredCourses(user?.learning?.map((course) => course.course));
+      setFilteredCourses(user?.learning?.filter((course) => course.course.courseStatus == "published").map((course) => course.course));
     } else if (courseType === "Popular Courses") {
       setFilteredCourses(courses);
     }
   };
 
   useEffect(() => {
+    if (courseType !== "Popular Courses") {
+      setLoading(false);
+      waitingForSelectedCoursesRef.current = false;
+      setWaitingForSelectedCourses(false);
+    }
+    selectedItemRef.current = "All";
     setSelectedItem("All");
     changeCourseType();
-    if (courseType === "Popular Courses" && !initialRender) {
-      setLoading(true);
-      getCourses("all");
-    }
   }, [courseType]);
 
-  useEffect(() => {
-    if (courseType == "Popular Courses" && !initialRender) {
-      setLoading(true);
-      getCourses(selectedItem == "All" ? "all" : selectedItem);
-    }
-  }, [selectedItem]);
+  // useEffect(() => {
+  //   if (courseType == "Popular Courses" && !initialRender) {
+  //     setLoading(true);
+  //     console.log("calling getCourses, [selectedItem]");
+  //     getCourses(selectedItem == "All" ? "all" : selectedItem);
+  //   }
+  // }, [selectedItem]);
 
   useEffect(() => {
-    setLoading(true);
-    getCourses();
+    console.log("calling getCourses, []");
+    if (courseType === "Popular Courses") {
+      setLoading(true);
+      getCourses(selectedItemRef.current == "All" ? "all" : selectedItemRef.current);
+    }
     if (!listOfCategories || listOfCategories.length === 0) {
       ///console.log("calling for categories from home");
       getCategories();
     }
-  }, []);
+  }, [selectedItem, courseType]);
 
   const handleScroll = (direction, scrollValue) => {
     const container = document.querySelector(".courses-container");
@@ -176,9 +194,17 @@ const HomeCourses = () => {
   };
 
   useEffect(() => {
-    if (waitingForSelectedCoursesRef.current) {
-      setWaitingForSelectedCourses(false);
-    }
+
+    setTimeout(() => {
+    changingCourseTypeRef.current = false;
+    setChangingCourseType(false);
+    }, 500);
+
+    console.log("Selected courses changed in HomeCourses:", selectedCourses);
+    console.log("Loading:", loading, "Waiting:", waitingForSelectedCourses);
+    waitingForSelectedCoursesRef.current = false;
+    setWaitingForSelectedCourses(false);
+
     const container = document.querySelector(".courses-container");
     if (container) {
       if (!(selectedCourses?.length > 0) || container.scrollLeft === 0) {
@@ -200,6 +226,8 @@ const HomeCourses = () => {
   }, [selectedCourses]);
 
   const handleChange = (event, newValue) => {
+    changingCourseTypeRef.current = true;
+    setChangingCourseType(true);
     setCourseType(newValue);
   };
 
@@ -222,14 +250,18 @@ const HomeCourses = () => {
           courseType={courseType}
           setCourseType={setCourseType}
           handleChange={handleChange}
+          setChangingCourseType={setChangingCourseType}
+          changingCourseTypeRef={changingCourseTypeRef}
         />
         <Box
           sx={{
-            p: isNonMobileScreens ? "2rem" : "0",
+            p: isNonMobileScreens ? "2rem 2rem 0rem 2rem " : "0",
             backgroundColor: isNonMobileScreens ? "white" : "transparent",
             borderRadius: "0.25rem",
             width: "100%",
             height: isNonMobileScreens ? "580px" : "520px",
+            // border: "1px solid #ec0000ff",
+            position: "relative",
           }}
         >
           <Box
@@ -239,8 +271,9 @@ const HomeCourses = () => {
           >
             <CustomSlider
               items={categoriesWithCourse}
-              selectedItem={selectedItem}
+              selectedItem={selectedItemRef.current}
               setSelectedItem={setSelectedItem}
+              selectedItemRef={selectedItemRef}
             />
           </Box>
 
@@ -249,21 +282,30 @@ const HomeCourses = () => {
               position: "relative",
 
               width: "100%",
+              // border: "1px solid red"
             }}
           >
             <CoursesContent
               handleScroll={handleScroll}
-              selectedItem={selectedItem}
+              selectedItem={selectedItemRef.current}
               selectedCourses={selectedCourses}
+              courseType={courseType}
+              changingCourseType={changingCourseType}
+              changingCourseTypeRef={changingCourseTypeRef}
             />
 
-            <CoursesBottom
-              categoriesWithCourse={categoriesWithCourse}
-              selectedItem={selectedItem}
-              setSelectedItem={setSelectedItem}
-              selectedCourses={selectedCourses}
-            />
+
           </Box>
+          <CoursesBottom
+            categoriesWithCourse={categoriesWithCourse}
+            selectedItem={selectedItemRef.current}
+            setSelectedItem={setSelectedItem}
+            selectedCourses={selectedCourses}
+            selectedItemRef={selectedItemRef}
+            courseType={courseType}
+            waitingForSelectedCoursesRef={waitingForSelectedCoursesRef}
+            loading={loading}
+          />
         </Box>
       </Box>
     </Box>

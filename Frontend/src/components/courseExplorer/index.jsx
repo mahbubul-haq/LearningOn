@@ -32,7 +32,7 @@ const CourseExplorer = () => {
         // height: "calc(100vh - 5rem)",
         height: 0,
         maxHeight: "1000px",
-        width: `calc(100% - 0rem)`,
+        width: `calc(100% - 8rem)`,
         top: "5rem",
         left: "50%",
         transform: "translateX(-50%)",
@@ -47,6 +47,7 @@ const CourseExplorer = () => {
         transition: "height 0.3s ease-out",
         maxWidth: "2000px",
         mx: "auto",
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
       }}
     >
       <Box
