@@ -8,13 +8,20 @@ import { GlobalContext } from '../../state/GlobalContext'
 const Courses = () => {
 
     const {setOpenedItem} = useContext(GlobalContext);
-    const {setCoursePageOpened} = useContext(CourseExplorerContext);
+    const {setCoursePageOpened, filteredCourses, getFilteredCourses, categoryChangedRef, setCategoryChanged} = useContext(CourseExplorerContext);
 
 
     useEffect(() => {
         setOpenedItem("courses");
 
         setCoursePageOpened(true);
+
+        if (!filteredCourses || filteredCourses.length == 0) {
+            categoryChangedRef.current = true;
+            setCategoryChanged(true);
+            getFilteredCourses(true);
+          }
+
 
         return () => {
           setCoursePageOpened(false);

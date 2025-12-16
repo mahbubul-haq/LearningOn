@@ -8,7 +8,7 @@ import { GlobalContext } from "../../state/GlobalContext";
 import CourseExplorerRightTop from "./CourseExplorerRightTop";
 import CourseExplorerRIghtBottom from "./CourseExplorerRIghtBottom";
 const CourseExplorer = () => {
-  const {openCourseExplorer, closeCourseExplorer } = useContext(CourseExplorerContext);
+  const {openCourseExplorer, closeCourseExplorer, filteredCourses, categoryChangedRef, setCategoryChanged,  getFilteredCourses} = useContext(CourseExplorerContext);
   const { getCategories, listOfCategories, categories } =
     useContext(GlobalContext);
   const theme = useTheme();
@@ -19,6 +19,14 @@ const CourseExplorer = () => {
     }
     console.log("inside explorer", listOfCategories, categories);
   }, [categories]);
+
+  useEffect(() => {
+    if (!filteredCourses || filteredCourses.length == 0) {
+      categoryChangedRef.current = true;
+      setCategoryChanged(true);
+      getFilteredCourses(true);
+    }
+  }, []);
       
 
   return (

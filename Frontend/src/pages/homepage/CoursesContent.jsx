@@ -41,9 +41,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
       endTime = Date.now();
       let time = endTime - startTime;
       if (swipeDistance > 0.001) {
-        handleScroll("left", (swipeDistance * 1000) / time);
+        handleScroll("left", (swipeDistance * 500) / time);
       } else if (Math.abs(swipeDistance) > 0.001) {
-        handleScroll("right", (-swipeDistance * 1000) / time);
+        handleScroll("right", (-swipeDistance * 500) / time);
       }
     };
 
@@ -53,9 +53,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
 
       let distance = curTouchX - prevTouchX;
 
-      if (distance > 0.001) {
-        handleScroll("left", distance);
-      } else if (distance < -0.001) {
+      if (distance > 0) {
+        handleScroll("left", distance );
+      } else if (distance < 0) {
         handleScroll("right", -distance);
       }
       prevTouchX = curTouchX;
