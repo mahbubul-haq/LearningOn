@@ -1,11 +1,14 @@
 import Box from "@mui/material/Box";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import CourseExplorer from "./courseExplorer";
 import Navbar from "./navbar";
+import ToTopButton from "./ToTopButton";
+import { GlobalContext } from "../state/GlobalContext";
 
 const WithNav = ({ component, showNav }) => {
   const [basePath, setBasePath] = useState("/");
+  const {openedItem} = useContext(GlobalContext);
 
   const location = useLocation();
 
@@ -38,6 +41,7 @@ const WithNav = ({ component, showNav }) => {
 
         {component}
       </Box>
+      {openedItem == "courses" && <ToTopButton />}
     </Box>
   );
 };

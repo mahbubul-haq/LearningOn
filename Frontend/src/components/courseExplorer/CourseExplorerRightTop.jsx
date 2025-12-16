@@ -24,14 +24,15 @@ const CourseExplorerRightTop = ({ coursePage }) => {
   } = useContext(CourseExplorerContext);
   const { categoriesWithLabel } = useContext(GlobalContext);
   const theme = useTheme();
-  const minWidth300 = useMediaQuery("(min-width: 1300px)");
+  const minWidth1300 = useMediaQuery("(min-width: 1300px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
+  const maxWidth700 = useMediaQuery("(max-width: 700px)");
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   return (
     <Box
       sx={{
         position: "sticky",
-        top: coursePage ? 0 : "-3.5rem",
+        top: coursePage ? (isNonMobileScreens ? `calc(5rem + 1px)` : "0rem") : "-3.5rem",
         padding: isNonMobileScreens ? "1rem 64px 0 64px" : "1rem 24px 0rem 24px",
 
         display: "flex",
@@ -93,17 +94,21 @@ const CourseExplorerRightTop = ({ coursePage }) => {
       <FlexBetween
         sx={{
           width: "100%",
+          // border: "2px solid green",
           "&&": {
             alignItems: "center",
-            flexDirection: isMobileScreens ? "column" : "row"
+            // flexDirection: isMobileScreens ? "column" : "row"
+            flexDirection: "row",
+            
           },
         }}
       >
         <FlexBetween
           sx={{
-            mb: isMobileScreens ? "0rem" : "1rem",
+            mb: maxWidth700 ? "0rem" : "1rem",
             height: "100%",
             // flexWrap: "wrap",
+            // border: "2px solid red",
 
             "&&": {
               gap: "1rem",
@@ -111,8 +116,9 @@ const CourseExplorerRightTop = ({ coursePage }) => {
             },
           }}
         >
+          {!maxWidth700 && (
           <Typography
-            variant={minWidth300 ? "h2" : "h4"}
+            variant={minWidth1300 ? "h2" : "h4"}
             sx={{
               maxWidth: "25ch",
               whiteSpace: "nowrap",
@@ -122,10 +128,11 @@ const CourseExplorerRightTop = ({ coursePage }) => {
           >
             {selectedSubCategory || selectedCategory || "Courses"}
           </Typography>
+          )}
           <Typography
             variant="h4grey"
             sx={{
-              mb: minWidth300 ? "-0.25rem" : "0rem",
+              mb: maxWidth700? "1rem" : (minWidth1300 ? "-0.25rem" : "0rem"),
               height: "100%",
               width: "fit-content",
             }}
