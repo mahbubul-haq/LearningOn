@@ -91,7 +91,7 @@ const CoursesBottom = ({
           bottom: "2rem",
           // border: "1px solid green",
           left: "0",
-        
+
         }}
       >
         <FlexBetween
@@ -103,7 +103,7 @@ const CoursesBottom = ({
             if (isDisabled()) return;
             if (courseType === "Popular Courses") {
               changeCategory(selectedItem == "All" ? "" : selectedItem);
-            }else {
+            } else {
               changeCategory("");
             }
 

@@ -20,6 +20,7 @@ export const CourseExplorerState = (props) => {
   const courseExplorerRef = useRef(null);
   const categoryChangedRef = useRef(false);
   const [courseLoadingError, setCourseLoadingError] = useState(false);
+  const [initialRender, setInitialRender] = useState(true);
   const coursePerPage = 12;
 
   const { categories } = useContext(GlobalContext);
@@ -217,8 +218,12 @@ export const CourseExplorerState = (props) => {
 
 
   useEffect(() => {
-    setLoading(false);
+    
+
     console.log(filteredCourses);
+    console.log("setting loading false");
+
+    setLoading(false)
   }, [filteredCourses]);
 
   useEffect(() => {
@@ -302,32 +307,40 @@ export const CourseExplorerState = (props) => {
       let data = await res.json();
       if (data.success) {
         console.log("explorer courses success");
-        if (changed) setFilteredCourses(data.courses);
-        else setFilteredCourses([...filteredCourses, ...data.courses]);
-        setTotalDocuments(data.totalDocuments);
+        if (changed) {
+          setFilteredCourses(data.courses);
+        } else {
+          // use functional update to avoid stale closure
+          setFilteredCourses((prev) => [...prev, ...data.courses]);
+        }
+        if (data.totalDocuments != totalDocuments) setTotalDocuments(data.totalDocuments);
+        // we've finished fetching and updated courses — clear loading immediately
+        setLoading(false);
       }
       else {
         console.log("explorer courses error");
         setCourseLoadingError(true);
-        setFilteredCourses([]);
         setTotalDocuments(0);
+        setFilteredCourses([]);
+        setLoading(false);
       }
 
       categoryChangedRef.current = false;
       setCategoryChanged(false);
+      setInitialRender(false);
       //setLoading(false);
     } catch (err) {
       setCourseLoadingError(true);
-      setFilteredCourses([]);
       setTotalDocuments(0);
+      setFilteredCourses([]);
+      setLoading(false);
       if (err.name === "AbortError") {
-        //timout
+        // timeout
       }
       console.log("explorer courses fetch error");
-      ///
-      //setLoading(false);
       categoryChangedRef.current = false;
       setCategoryChanged(false);
+      setInitialRender(false);
     }
   };
 
@@ -363,7 +376,8 @@ export const CourseExplorerState = (props) => {
         setCategoryChanged,
         courseLoadingError,
         setCourseLoadingError,
-        changeCategory
+        changeCategory,
+        initialRender,
       }}
     >
       {props.children}

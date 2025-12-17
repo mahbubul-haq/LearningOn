@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 import CourseWidget from "../../widgets/CourseWidget";
 import CourseWidgetSkeleton from "../CourseWidgetSkeleton";
@@ -20,6 +20,24 @@ const CourseExplorerRIghtBottom = () => {
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const theme = useTheme();
+  const [showLoadMore, setShowLoadMore] = useState(true);
+  
+  useEffect(() => {
+    console.log("loading," , loading);
+    console.log("filteredCourses,", filteredCourses);
+  })
+
+  useEffect(() => {
+    let t;
+    if (loading) {
+      setShowLoadMore(false);
+    } else {
+      t = setTimeout(() => setShowLoadMore(true), 500);
+    }
+    return () => {
+      if (t) clearTimeout(t);
+    };
+  }, [loading]);
 
   return (
     <Box
@@ -58,10 +76,10 @@ const CourseExplorerRIghtBottom = () => {
 
       {filteredCourses?.length == 0 && <NoCourseFound />}
 
-      {loading && (
+      {loading && filteredCourses?.length !== totalDocuments && (
         <>
           {new Array(
-            Math.min(coursePerPage, totalDocuments - filteredCourses.length)
+            Math.min(coursePerPage, Math.max(5, totalDocuments - filteredCourses.length))
           )
             .fill(0)
             .map((_, index) => (
@@ -71,9 +89,9 @@ const CourseExplorerRIghtBottom = () => {
             ))}
         </>
       )}
-      {filteredCourses?.length !== totalDocuments && !loading && (
+      {filteredCourses?.length !== totalDocuments && !loading && showLoadMore && (
         <Box
-          onClick={() => setLoading(true)}
+          // onClick={() => setLoading(true)}
           sx={{
             border: `1px solid ${theme.palette.grey.grey200}`,
             height: "100%",

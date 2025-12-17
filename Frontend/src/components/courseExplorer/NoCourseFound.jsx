@@ -8,21 +8,20 @@ const NoCourseFound = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const {
         getFilteredCourses,
-        selectedCategory,
-        selectedSubCategory,
         categoryChanged,
         categoryChangedRef,
         setCategoryChanged,
         courseLoadingError,
-        setCourseLoadingError,
+        initialRender,
     } = useContext(CourseExplorerContext);
     return (
         <Box>
-            {categoryChangedRef.current ? (
-                <Box>
+            {categoryChangedRef.current || initialRender ? (
+                <Box disabled={categoryChanged}> {/* to  ensure re-render */}
+                
                     <Typography variant="h4grey">Loading courses...</Typography>
                 </Box>
-            ) : !courseLoadingError ? (<Box
+            ) : !courseLoadingError  ? (<Box
                 sx={{
                     display: "flex",
                     flexDirection: "column",

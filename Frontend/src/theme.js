@@ -92,6 +92,7 @@ export const themeSettings = (mode) => {
                         light: "#97FCA7",
                         light2: "#63FC7C",
                         light3: "#C7FFD3",
+                        cardBackground: "#8899e6ff"
                     },
                     text: {
                         primary: colorTokens.text.primary,
