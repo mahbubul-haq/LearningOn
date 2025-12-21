@@ -6,7 +6,7 @@ export const getEnrollmentStatus = (purchased, user, courseInfo) => {
             },
             false
         );
-        let isCourseOwner = courseInfo?.owner?._id == user._id;
+        let isCourseOwner = courseInfo?.owner == user._id;
 
         if (isCourseInstructor || isCourseOwner) {
             return "View Lessons";
@@ -30,7 +30,7 @@ export const getEnrollmentText = (purchased, user, courseInfo) => {
             },
             false
         );
-        let isCourseOwner = courseInfo?.owner?._id == user._id;
+        let isCourseOwner = courseInfo?.owner == user._id;
         if (isCourseInstructor || isCourseOwner) {
             return `${numberOfStudents} learners enrolled`;
         } else if (purchased) {
@@ -60,7 +60,7 @@ export const isPurchased = (user, courseInfo) => {
         return true;
     }
 
-    if (courseInfo?.owner?._id == user._id) {
+    if (courseInfo?.owner == user._id) {
         return true;
     }
 

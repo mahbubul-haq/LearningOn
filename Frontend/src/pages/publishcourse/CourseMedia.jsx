@@ -9,16 +9,16 @@ import RightPanelBottom from "./RightPanelBottom";
 const CourseMedia = () => {
   const { courseState, setCourseState, updateCallback, courseStateRef } =
     useContext(CreateCourseContext);
+  //useCallback following funciton
+  const setIntroVideo = useCallback((fileName) => {
+    courseStateRef.current.introVideo = fileName;
+    setCourseState({ ...courseStateRef.current });
+  }, []);
 
-    const setIntroVideo = (fileName) => {
-      courseStateRef.current.introVideo = fileName;
-      setCourseState({ ...courseStateRef.current });
-    };
-
-    const setCourseThumbnail = (fileName) => {
-      courseStateRef.current.courseThumbnail = fileName;
-      setCourseState({ ...courseStateRef.current });
-    };
+  const setCourseThumbnail = useCallback((fileName) => {
+    courseStateRef.current.courseThumbnail = fileName;
+    setCourseState({ ...courseStateRef.current });
+  }, []);
 
   useEffect(() => {
     let element = document.querySelector(".right-panel-course-media");

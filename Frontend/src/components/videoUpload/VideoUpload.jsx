@@ -2,7 +2,7 @@ import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import VideoUploadDropzone from "./VideoUploadDropzone";
 import VideoUploadedFile from "./VideoUploadedFile";
@@ -42,7 +42,7 @@ const VideoUpload = ({
     async function updateResource() {
       console.log("updating resource from video upload", fileName);
       let res;
-      
+
       if (uploadStatusRef.current !== "") res = await updateCallBack();
 
       if (!res.success) return;
@@ -148,7 +148,7 @@ const VideoUpload = ({
 
       //.log(res.data);
       if (res.data.success) {
-       // console.log("deleted", res.data);
+        // console.log("deleted", res.data);
         setFileName("");
       } else {
         setFileName(""); //
@@ -228,4 +228,4 @@ const VideoUpload = ({
   );
 };
 
-export default VideoUpload;
+export default React.memo(VideoUpload);

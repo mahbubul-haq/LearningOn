@@ -11,7 +11,7 @@ import FlexBetween from "../../components/FlexBetween";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
 import { LearningLeftPanel } from "./LearningLeftPanel";
 
-const LearningPageTop = ({ courseInfo, scrollTop}) => {
+const LearningPageTop = ({ courseInfo, scrollTop }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -25,18 +25,21 @@ const LearningPageTop = ({ courseInfo, scrollTop}) => {
   return (
     <Box
       sx={{
-        //padding: isNonMobileScreens ? "3rem 5rem 1.5rem 5rem" : "0rem",
-        backgroundColor: theme.palette.background.bottom,
-        backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
-        // background: "transparent",
-        height: "100%",
-        color: theme.palette.text.primary,
+
         display: "flex",
         justifyContent: isNonMobileScreens ? "center" : "space-between",
-        position: "sticky",
-        top: 0,
         alignItems: "center",
-        // gap: "2rem",
+        background: 'rgba(255, 255, 255, 0.5)', // High transparency
+        backdropFilter: 'blur(30px) saturate(180%)', // The frosted blur effect
+        WebkitBackdropFilter: 'blur(30px) saturate(180%)', // Support for Safari
+
+        borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.05), inset 0 0 10px rgba(255, 255, 255, 0.5)',
+        color: theme.palette.text.primary,
+        margin: '0 auto',
+        width: "100%",
+        height: "100%",
+
       }}
     >
       <Drawer
@@ -55,11 +58,9 @@ const LearningPageTop = ({ courseInfo, scrollTop}) => {
           sx={{
             padding: "0.5rem",
             pb: "0",
-            // paddingLeft: "2rem",
             display: "flex",
             justifyContent: "flex-end",
             width: "100%",
-            // border: "1px solid black",
             alignItems: "center",
           }}
         >
@@ -140,13 +141,13 @@ const LearningPageTop = ({ courseInfo, scrollTop}) => {
                   {courseInfo?.lessons?.length > 0 && (openedLesson?.subLesson === courseInfo?.lessons[
                     openedLesson?.lesson - 1]?.subLessons.length + 1 ?
                     `Lesson ${openedLesson?.lesson} Questions` :
-                  openedLesson?.subLesson === 0
-                    ? courseInfo?.lessons &&
-                    courseInfo?.lessons[openedLesson?.lesson - 1]?.title
-                    : courseInfo?.lessons &&
-                    courseInfo?.lessons[openedLesson?.lesson - 1]?.subLessons[
-                      openedLesson?.subLesson - 1
-                    ]?.title)}
+                    openedLesson?.subLesson === 0
+                      ? courseInfo?.lessons &&
+                      courseInfo?.lessons[openedLesson?.lesson - 1]?.title
+                      : courseInfo?.lessons &&
+                      courseInfo?.lessons[openedLesson?.lesson - 1]?.subLessons[
+                        openedLesson?.subLesson - 1
+                      ]?.title)}
                 </Typography>
               )}
             </Box>

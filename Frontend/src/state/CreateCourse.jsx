@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { createContext, useRef, useEffect } from "react";
+import React, { createContext, useRef, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 // import state from ".";
 import axios from "axios";
@@ -159,8 +159,8 @@ export const CreateCourseState = (props) => {
       setDeleteCourseStatus("failed");
     }
   };
-
-  const updateCallback = async () => {
+  //add useCallback on below function
+  const updateCallback = useCallback(async () => {
     if (newDraft) {
       setTimeout(() => {
         setNewDraft(false);
@@ -175,7 +175,7 @@ export const CreateCourseState = (props) => {
       }
       return { success: true };
     }
-  };
+  }, [newDraft, editMode]);
 
   const getDraftCourse = async () => {
     if (isAnyError()) return;

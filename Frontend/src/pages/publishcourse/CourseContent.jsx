@@ -2,7 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse.jsx";
 import { GlobalContext } from "../../state/GlobalContext.jsx";
 import CourseContentCourseAccordion from "./CourseContentCourseAccordion.jsx";
@@ -88,7 +88,7 @@ const CourseContent = () => {
     }
   };
 
-  const handleInput = (event, index, subIndex) => {
+  const handleInput = useCallback((event, index, subIndex) => {
     if (subIndex === undefined) {
       setCourseState((prevState) => ({
         ...prevState,
@@ -130,7 +130,7 @@ const CourseContent = () => {
         ],
       }));
     }
-  };
+  }, []);
 
   useEffect(() => {
     //videlinks is a 1D array of videoLinks
@@ -228,32 +228,32 @@ const CourseContent = () => {
               lessons:
                 prevState.lessons.length == 0
                   ? [
-                      {
-                        title: "",
-                        description: "",
-                        subLessons: [
-                          {
-                            title: "",
-                            videoLink: "",
-                            lectureNote: "",
-                          },
-                        ],
-                      },
-                    ]
+                    {
+                      title: "",
+                      description: "",
+                      subLessons: [
+                        {
+                          title: "",
+                          videoLink: "",
+                          lectureNote: "",
+                        },
+                      ],
+                    },
+                  ]
                   : [
-                      ...prevState.lessons,
-                      {
-                        title: "",
-                        description: "",
-                        subLessons: [
-                          {
-                            title: "",
-                            videoLink: "",
-                            lectureNote: "",
-                          },
-                        ],
-                      },
-                    ],
+                    ...prevState.lessons,
+                    {
+                      title: "",
+                      description: "",
+                      subLessons: [
+                        {
+                          title: "",
+                          videoLink: "",
+                          lectureNote: "",
+                        },
+                      ],
+                    },
+                  ],
             }));
           }}
         >

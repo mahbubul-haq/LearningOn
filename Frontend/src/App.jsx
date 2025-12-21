@@ -28,6 +28,7 @@ import { HomePageState } from "./state/HomePageState";
 import { LearningCourseState } from "./state/LearningCourseContex";
 import { NotificationState } from "./state/NotificationContext";
 import { ProfilePageState } from "./state/ProfilePageContext";
+import QuizContainer from "./pages/learningpage/QuizContainer";
 
 function App() {
   const mode = useSelector((state) => state.auth.mode);
@@ -65,7 +66,8 @@ function App() {
                             <Route path="/dashboard/" element={<WithNav showNav={true} component={<Dashboard />} />} />
                             <Route path="/underway" element={<UnderwayAlert />} />
                             <Route path="/admin" element={<Admin />} />
-                            <Route path="/courses" element={<WithNav showNav={true} component={<Courses/>} />} />
+                            <Route path="/courses" element={<WithNav showNav={true} component={<Courses />} />} />
+                            <Route path="/quiz" element={<QuizContainer />} />
                           </Routes>
                         </BrowserRouter>
                       </ThemeProvider>

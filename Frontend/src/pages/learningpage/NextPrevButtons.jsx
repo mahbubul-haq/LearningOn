@@ -1,8 +1,9 @@
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import { StyledButton } from "../../components/StyledButton";
+import useTheme from "@mui/material/styles/useTheme";
 
 const NextPrevButtons = ({
   openedLesson,
@@ -11,7 +12,9 @@ const NextPrevButtons = ({
   expandedLessons,
   setExpandedLessons,
   scrollTop,
+  topButtons,
 }) => {
+  const theme = useTheme();
   const handleNext = () => {
     if (openedLesson.subLesson === 0) {
       setOpenedLesson({
@@ -84,7 +87,7 @@ const NextPrevButtons = ({
           subLesson:
             courseInfo.lessons[openedLesson.lesson - 2].questions?.length > 0
               ? courseInfo.lessons[openedLesson.lesson - 2].subLessons.length +
-                1
+              1
               : courseInfo.lessons[openedLesson.lesson - 2].subLessons.length,
         });
 
@@ -101,36 +104,52 @@ const NextPrevButtons = ({
     scrollTop();
   };
 
+  const subtleBtnStyle = {
+    textTransform: 'none',
+    fontWeight: 600,
+    color: 'rgba(10, 77, 44, 0.5)', // Faded green
+    fontSize: '0.85rem',
+    '&:hover': {
+      color: '#0a4d2c',
+      background: 'transparent'
+    }
+  };
+
+  // BOTTOM NEXT (The "Stunning" Jelly)
+  const nextBtnStyle = {
+    px: "1.7rem",
+    py: "0.5rem",
+    borderRadius: '1000px', // Matches card corner better than pill
+    background: 'linear-gradient(135deg, #5cb983ff 0%, #7bb15bff 100%)',
+    boxShadow: `0 4px 15px rgba(0, 200, 83, 0.4), 
+    0 8px 32px rgba(0, 0, 0, 0.1)`,
+    color: theme.palette.text.primary,
+    fontWeight: 700,
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    '&:hover': {
+      transform: 'translateY(-2px) scale(1.02)',
+      boxShadow: '0 12px 25px rgba(0, 200, 83, 0.5)',
+      background: 'linear-gradient(135deg, #4a9b6cff 0%, #7bb15bff 100%)',
+    }
+  };
+
   return (
     <Box
       sx={{
-        mb: "2rem",
-        mt: "2rem",
+        m: 0,
         display: "flex",
         justifyContent: "space-between",
       }}
     >
+
       {openedLesson.lesson == 1 && openedLesson.subLesson == 0 ? (
         <Box></Box>
       ) : (
-        <StyledButton
-          sx={{
-            textTransform: "capitalize",
-            fontWeight: "600",
-
-            cursor: "pointer",
-            "&&": {
-              padding: "0.4rem 0.8rem",
-              fontWeight: "600",
-              background: "transparent",
-              color: (theme) => theme.palette.primary.dark,
-              "&:hover": {
-                color: (theme) => theme.palette.primary.darker,
-                background: (theme) => theme.palette.background.alt,
-              },
-            },
-          }}
+        <Button
+          // sx={navButtonStyle}
           onClick={handlePrev}
+          sx={topButtons ? subtleBtnStyle : nextBtnStyle}
         >
           <KeyboardDoubleArrowLeftIcon />
           <Typography
@@ -141,30 +160,15 @@ const NextPrevButtons = ({
           >
             Prev
           </Typography>
-        </StyledButton>
+        </Button>
       )}
       {lastSubLesson() ? (
         <Box></Box>
       ) : (
-        <StyledButton
-          sx={{
-            textTransform: "capitalize",
-            fontWeight: "600",
-
-            cursor: "pointer",
-            "&&": {
-              padding: "0.4rem 0.8rem",
-              fontWeight: "600",
-
-              background: "transparent",
-              color: (theme) => theme.palette.primary.dark,
-              "&:hover": {
-                color: (theme) => theme.palette.primary.darker,
-                background: (theme) => theme.palette.background.alt,
-              },
-            },
-          }}
+        <Button
+          // sx={navButtonStyle}
           onClick={handleNext}
+          sx={topButtons ? subtleBtnStyle : nextBtnStyle}
         >
           <Typography
             sx={{
@@ -175,7 +179,7 @@ const NextPrevButtons = ({
             Next
           </Typography>
           <KeyboardDoubleArrowRightIcon />
-        </StyledButton>
+        </Button>
       )}
     </Box>
   );

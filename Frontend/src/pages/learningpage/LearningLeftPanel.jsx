@@ -34,7 +34,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
           // backgroundColor: inputSection === "basic info" ? backgroundColor : "",
           // cursor: "pointer",
         }}
-        // onClick={() => setInputSection("course content")}
+      // onClick={() => setInputSection("course content")}
       >
         <Typography
           sx={{
@@ -45,7 +45,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
             // cursor: "pointer",
             // padding: "0 0rem 0rem 2rem",
           }}
-          // onClick={() => setInputSection("course content")}
+        // onClick={() => setInputSection("course content")}
         >
           Lessons
         </Typography>
@@ -63,7 +63,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
           // padding: "0 0rem 0rem 2rem",
           // cursor: "pointer",
         }}
-        // onClick={() => setInputSection("course content")}
+      // onClick={() => setInputSection("course content")}
       >
         {courseInfo?.lessons?.length > 0 ? (
           <React.Fragment key={courseInfo.lessons?.length}>
@@ -71,10 +71,10 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
               <React.Fragment key={index}>
                 <FlexBetween
                   sx={{
-                    backgroundColor:
+                    background:
                       openedLesson.subLesson === 0 &&
-                      openedLesson.lesson === index + 1
-                        ? theme.palette.primary.main
+                        openedLesson.lesson === index + 1
+                        ? `linear-gradient(to right, #ffffff1a, #ffffffa4)`
                         : "transparent",
                     "&:hover": {
                       backgroundColor: theme.palette.primary.light,
@@ -160,8 +160,8 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                   <Box
                     sx={{
                       p: "1rem 1rem 1rem 0",
-                      
-                      
+
+
                       cursor: "pointer",
                       height: "100%",
                       // border: "2px solid red"
@@ -222,8 +222,8 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                         },
                         backgroundColor:
                           openedLesson.subLesson === subIndex + 1 &&
-                          openedLesson.lesson === index + 1
-                            ? theme.palette.primary.main
+                            openedLesson.lesson === index + 1
+                            ? "linear-gradient(to right, #FFC300, #FF5722)"
                             : "transparent",
                         "&:hover": {
                           backgroundColor: theme.palette.primary.light,
@@ -294,7 +294,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                     </FlexBetween>
                   ))}
                   {lesson.questions?.length > 0 && (
-                  <FlexBetween
+                    <FlexBetween
                       key={lesson.questions[0].question + index}
                       gap="0.8rem"
                       sx={{
@@ -307,8 +307,8 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                         },
                         backgroundColor:
                           openedLesson.subLesson === lesson.subLessons.length + 1 &&
-                          openedLesson.lesson === index + 1
-                            ? theme.palette.primary.main
+                            openedLesson.lesson === index + 1
+                            ? `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.primary.light})`
                             : "transparent",
                         "&:hover": {
                           backgroundColor: theme.palette.primary.light,
@@ -374,7 +374,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                             fontWeight: "600",
                           }}
                         >
-                         Lesson {index + 1} Questions
+                          Lesson {index + 1} Questions
                         </Typography>
                       </Box>
                     </FlexBetween>

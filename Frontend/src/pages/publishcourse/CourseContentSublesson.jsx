@@ -9,7 +9,7 @@ import StyledTextField1 from "../../components/StyledTextField1";
 import VideoUpload from "../../components/videoUpload/VideoUpload";
 import InputLabel from "@mui/material/InputLabel";
 import { CreateCourseContext } from "../../state/CreateCourse";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 
 
 const CourseContentSublesson = ({
@@ -23,15 +23,15 @@ const CourseContentSublesson = ({
   videoLinks,
 }) => {
   const theme = useTheme();
-  const {updateCallback, courseStateRef, setCourseState} =
+  const { updateCallback, courseStateRef, setCourseState } =
     useContext(CreateCourseContext);
-    const [subLessonTitle, setSubLessonTitle] = useState(lesson?.subLessons.map((subLesson) => subLesson.title));
-    const [subLessonLectureNote, setSubLessonLectureNote] = useState(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
+  const [subLessonTitle, setSubLessonTitle] = useState(lesson?.subLessons.map((subLesson) => subLesson.title));
+  const [subLessonLectureNote, setSubLessonLectureNote] = useState(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
 
-    useEffect(() => {
-      setSubLessonTitle(lesson?.subLessons.map((subLesson) => subLesson.title));
-      setSubLessonLectureNote(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
-    }, [lesson]);
+  useEffect(() => {
+    setSubLessonTitle(lesson?.subLessons.map((subLesson) => subLesson.title));
+    setSubLessonLectureNote(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
+  }, [lesson]);
 
   return (
     <>
@@ -138,19 +138,19 @@ const CourseContentSublesson = ({
               }}
               // change font size of input
               // onChange={(event) => handleInput(event, index, subIndex)}
-              onChange ={(event) => {
+              onChange={(event) => {
                 const newTitles = [...subLessonTitle];
                 newTitles[subIndex] = event.target.value;
                 setSubLessonTitle(newTitles);
                 courseStateRef.current.lessons[index].subLessons[subIndex].title = event.target.value;
               }}
-              onBlur ={(event) => {
+              onBlur={(event) => {
                 setCourseState({
-                  ...courseStateRef.current 
+                  ...courseStateRef.current
                 });
-              }}  
+              }}
               value={subLessonTitle[subIndex]}
-            
+
               sx={{
                 p: 0,
                 "& .MuiInputBase-input": {
@@ -180,7 +180,7 @@ const CourseContentSublesson = ({
               name="videoLink"
               updateCallBack={updateCallback}
               fileName={subLesson.videoLink}
-              setFileName={(fileName) => {
+              setFileName={useCallback((fileName) => {
                 const e = {
                   target: {
                     name: "videoLink",
@@ -191,15 +191,16 @@ const CourseContentSublesson = ({
                 handleInput(e, index, subIndex);
 
                 if (fileName) {
-                  setVideoLinks([...videoLinks, fileName]);
+                  setVideoLinks((prev) => [...prev, fileName]);
                 } else {
-                  setVideoLinks([
-                    ...videoLinks.filter(
-                      (link) => link !== subLesson.videoLink
-                    ),
-                  ]);
+                  setVideoLinks((prev) => [...prev.filter((link) => link !== subLesson.videoLink)]);
+                  // setVideoLinks([
+                  //   ...videoLinks.filter(
+                  //     (link) => link !== subLesson.videoLink
+                  //   ),
+                  // ]);
                 }
-              }}
+              }, [handleInput, subLesson.videoLink, index, subIndex])}
             />
 
             <InputLabel htmlFor="sublesson-note">
@@ -228,16 +229,16 @@ const CourseContentSublesson = ({
               }}
               // change font size of input
               // onChange={(event) => handleInput(event, index, subIndex)}
-              onChange ={(event) => {
+              onChange={(event) => {
                 const newLectureNotes = [...subLessonLectureNote];
                 newLectureNotes[subIndex] = event.target.value;
                 setSubLessonLectureNote(newLectureNotes);
                 courseStateRef.current.lessons[index].subLessons[subIndex].lectureNote = event.target.value;
               }}
-              value = {subLessonLectureNote[subIndex]}
-              onBlur ={(event) => {
+              value={subLessonLectureNote[subIndex]}
+              onBlur={(event) => {
                 setCourseState({
-                  ...courseStateRef.current 
+                  ...courseStateRef.current
                 });
               }}
               sx={{
