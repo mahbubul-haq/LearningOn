@@ -76,6 +76,8 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
                 flexDirection: "column",
                 justifyContent: "flex-start",
                 gap: "0.5rem",
+                padding: "1rem",
+                ...theme.palette.glassMorphismCard,
               }}
             >
               <Typography
@@ -99,8 +101,11 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
               </Typography>
               <Box
                 sx={{
-                  backgroundColor: theme.palette.background.imagesBg,
-                  padding: isNonMobileScreens ? "2rem" : "1rem",
+                  padding: isNonMobileScreens ? "1rem" : "1rem",
+                  ...theme.palette.glassMorphismCard,
+                  background: 'rgba(255, 255,255, 0.2)',
+                  border: "none",
+                  boxShadow: "none",
                 }}
               >
                 {courseInfo?.lessons[openedLesson.lesson - 1] &&
@@ -182,43 +187,38 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
                         gap: "0.5rem",
                       }}
                     >
-                      <Typography
-                        variant="h4"
-                        sx={{
-                          fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
-                          mb: "1rem",
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontWeight: "bold",
-                          }}
-                        >
-                          Lecture Video {openedLesson.lesson}.
-                          {openedLesson.subLesson}
-                        </span>
-                        &nbsp;&nbsp;
-                        {
-                          courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
-                            openedLesson.subLesson - 1
-                          ].title
-                        }
-                      </Typography>
+
                       <Box
                         sx={{
                           width: "100%",
                           // maxHeight: "500px",
-                          borderRadius: "0.05rem",
-                          background: 'rgba(255, 255, 255, 0.5)',
-                          backdropFilter: "blur(30px) saturate(150%)",
-                          WebkitBackdropFilter: "blur(30px) saturate(150%)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.1)",
                           padding: "0.7rem 0.7rem 0.4rem 0.7rem",
-                          borderRadius: "0.5rem",
+                          ...theme.palette.glassMorphismCard,
 
                         }}
                       >
+                        <Typography
+                          variant="h4"
+                          sx={{
+                            fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
+                            mb: "1rem",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Lecture Video {openedLesson.lesson}.
+                            {openedLesson.subLesson}
+                          </span>
+                          &nbsp;&nbsp;
+                          {
+                            courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
+                              openedLesson.subLesson - 1
+                            ].title
+                          }
+                        </Typography>
                         <AdvancedVideo
                           className="lecture-video"
                           cldVid={cloudinaryCld.video(
@@ -253,6 +253,9 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
                         display: "flex",
                         flexDirection: "column",
                         gap: "0.5rem",
+                        padding: "0.7rem",
+                        ...theme.palette.glassMorphismCard,
+                        background: 'rgba(255, 255,255, 0.2)',
                       }}
                     >
                       <Typography
@@ -279,8 +282,10 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
                       </Typography>
                       <Box
                         sx={{
-                          backgroundColor: theme.palette.background.imagesBg,
-                          padding: isNonMobileScreens ? "2rem" : "1rem",
+                          padding: isNonMobileScreens ? "1rem" : "1rem",
+                          ...theme.palette.glassMorphismCard,
+                          border: "none",
+                          boxShadow: "none",
                         }}
                       >
                         <Typography

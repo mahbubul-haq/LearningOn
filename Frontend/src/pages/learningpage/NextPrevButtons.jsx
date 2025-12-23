@@ -107,10 +107,11 @@ const NextPrevButtons = ({
   const subtleBtnStyle = {
     textTransform: 'none',
     fontWeight: 600,
-    color: 'rgba(10, 77, 44, 0.5)', // Faded green
+
+    color: "#1febfaff",
     fontSize: '0.85rem',
     '&:hover': {
-      color: '#0a4d2c',
+      color: '#c3fbffff',
       background: 'transparent'
     }
   };
@@ -120,17 +121,18 @@ const NextPrevButtons = ({
     px: "1.7rem",
     py: "0.5rem",
     borderRadius: '1000px', // Matches card corner better than pill
-    background: 'linear-gradient(135deg, #5cb983ff 0%, #7bb15bff 100%)',
-    boxShadow: `0 4px 15px rgba(0, 200, 83, 0.4), 
-    0 8px 32px rgba(0, 0, 0, 0.1)`,
+    background: 'linear-gradient(135deg, #90f5fcff 0%, #1febfaff 100%)',
+    boxShadow: `0 4px 15px #65eaf354, 0 8px 32px rgba(0, 0, 0, 0)`,
+
     color: theme.palette.text.primary,
     fontWeight: 700,
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    // border: '1px solid #02b68fff',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': {
       transform: 'translateY(-2px) scale(1.02)',
-      boxShadow: '0 12px 25px rgba(0, 200, 83, 0.5)',
-      background: 'linear-gradient(135deg, #4a9b6cff 0%, #7bb15bff 100%)',
+
+      background: 'linear-gradient(135deg, #b5f7fcff 0%, #96f6fdff 100%)',
+      boxShadow: `0 4px 15px #3ef2ff94, 0 8px 32px rgba(0, 0, 0, 0)`,
     }
   };
 
@@ -140,6 +142,7 @@ const NextPrevButtons = ({
         m: 0,
         display: "flex",
         justifyContent: "space-between",
+        mt: topButtons ? "0" : "1rem",
       }}
     >
 

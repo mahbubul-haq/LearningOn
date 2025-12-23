@@ -1,16 +1,25 @@
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
 import FlexBetween from "../../components/FlexBetween";
 
 // import Checkbox from "@mui/material/Checkbox";
 import { useTheme } from "@emotion/react";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { useContext } from "react";
 import { StyledCheckbox } from "../../components/StyledButton";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
+import "./LearningPage.css";
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import { CiPlay1 } from "react-icons/ci";
+import { FiPlay } from "react-icons/fi";
+import { PiPlayBold } from "react-icons/pi";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { BsCheckCircleFill } from "react-icons/bs";
+import { AiFillCheckCircle } from "react-icons/ai";
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckIcon from '@mui/icons-material/Check';
 
 export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
   const {
@@ -21,7 +30,10 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
     setOpenDrawer,
   } = useContext(LearningCourseContext);
 
+
+
   const theme = useTheme();
+  const leftPanelColor = "#43106dff"
 
   return (
     <Box sx={{}}>
@@ -40,7 +52,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
           sx={{
             fontWeight: "600",
             mb: "0.8rem",
-            pl: "0rem",
+            pl: "1rem",
             fontSize: "1.1rem",
             // cursor: "pointer",
             // padding: "0 0rem 0rem 2rem",
@@ -74,8 +86,10 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                     background:
                       openedLesson.subLesson === 0 &&
                         openedLesson.lesson === index + 1
-                        ? `linear-gradient(to right, #ffffff1a, #ffffffa4)`
+                        ? `linear-gradient(to right, #ffffff1a, #ffffff86)`
                         : "transparent",
+
+                    boxShadow: `inset 4px 0 0 0 ${leftPanelColor},0 4px 12px rgba(0,0,0,0.03)`,
                     "&:hover": {
                       backgroundColor: theme.palette.primary.light,
                     },
@@ -85,13 +99,14 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                   }}
                 >
                   <FlexBetween
-                    gap="0.8rem"
+
                     sx={{
                       "&&": {
                         justifyContent: "flex-start",
-                        alignItems: "flex-start",
+                        alignItems: "center",
                         cursor: "pointer",
-                        p: "1rem 0rem 1rem 1rem",
+                        p: "0.9rem 0rem 0.9rem 1rem",
+                        gap: "0.5rem"
                       },
                     }}
                     onClick={() => {
@@ -103,35 +118,48 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                       scrollTop();
                     }}
                   >
-                    <StyledCheckbox
-                      icon={
-                        <RadioButtonUncheckedIcon
-                          sx={{
-                            fontSize: "1.1rem",
-                          }}
-                        />
-                      }
-                      checkedIcon={
-                        <CheckCircleIcon
-                          sx={{
-                            fontSize: "1.1rem",
-                          }}
-                        />
-                      }
-                      checked={false}
-                      sx={{
-                        "&&": {
-                          // different color if checked vs unchecked
-                          color: theme.palette.grey.grey400,
-                        },
-                        // border: "1px solid #E0E0E0"
-                      }}
-                    />
+                    <Box sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "2rem",
+                      height: "2rem",
+                      borderRadius: "500px",
+                      backgroundColor: 1 == 1 ? leftPanelColor : "rgba(255, 255, 255, 0.1)",
+                      boxShadow: 1 == 1 ? `0 0 10px 0 #43106dff` : "",
+                    }}>
+                      {/* <CircularProgress variant="determinate" value={75} thickness={7} size={20} sx={{
+                        color: "#31a3e6ff",
+                      }} /> */}
+                      {/* <PlayCircleIcon sx={{
+                        color: "#5cb983ff",
+                        //background: "#5cb983ff",
+                        fontSize: "2rem",
+                        height: "2rem",
+                        width: "2rem",
+                        borderRadius: "500px",
+                        padding: "0",
+                        boxShadow: "0 0 10px 0 #5cb983ff",
+                      }} /> */}
+                      <PiPlayBold style={{
+                        color: "#1febfaff",
+                        // fontSize: "2rem",
+                        height: "1rem",
+                        width: "1rem",
+                        // background: "rgba(255, 255, 255, 0.9)",
+                        // borderRadius: "500px",
+                        // padding: "0",
+                        // boxShadow: "0 0 10px 0 #5cb983ff",
+                      }} />
+
+                    </Box>
+
+
                     <Box
                       sx={{
                         justifyContent: "flex-start",
                         alignItems: "flex-start",
-                        gap: "1rem",
+                        gap: "0.7rem",
                         display: "flex",
                         // border: "2px solid black"
                       }}
@@ -211,14 +239,14 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                   {lesson.subLessons?.map((subLesson, subIndex) => (
                     <FlexBetween
                       key={subLesson.title + subIndex}
-                      gap="0.8rem"
+
                       sx={{
                         "&&": {
                           justifyContent: "flex-start",
-                          alignItems: "flex-start",
+                          alignItems: "center",
                           cursor: "pointer",
-                          p: "1rem 1rem",
-                          paddingLeft: "2rem",
+                          p: "0.9rem 1rem",
+                          gap: "0.5rem"
                         },
                         backgroundColor:
                           openedLesson.subLesson === subIndex + 1 &&
@@ -238,36 +266,63 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                         scrollTop();
                       }}
                     >
-                      <StyledCheckbox
-                        icon={
+                      <Box sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "2rem",
+                        height: "2rem",
+                        borderRadius: "500px",
+                        backgroundColor: 1 == 2 || subIndex == 0 ? leftPanelColor : "rgba(255, 255, 255, 0.5)",
+                        boxShadow: 1 == 2 ? `0 0 10px 0 ${leftPanelColor}` : "",
+                        overflow: "hidden",
+                        alignSelf: "center",
+                        flexShrink: 0,
+                      }}>
+                        {/* <CircularProgress variant="determinate" value={75} thickness={7} size={20} sx={{
+                        color: "#31a3e6ff",
+                      }} /> */}
+                        {/* <PlayCircleIcon sx={{
+                        color: "#5cb983ff",
+                        //background: "#5cb983ff",
+                        fontSize: "2rem",
+                        height: "2rem",
+                        width: "2rem",
+                        borderRadius: "500px",
+                        padding: "0",
+                        boxShadow: "0 0 10px 0 #5cb983ff",
+                      }} /> */}
+                        {subIndex == 0 ?
+
+                          <CheckIcon
+
+                            style={{
+                              // background: "rgba(255,255,255, 0.9)",
+                              fontSize: "1rem",
+                              color: "#1febfaff",
+                              padding: 0,
+
+                            }}
+                          />
+
+                          :
                           <RadioButtonUncheckedIcon
-                            sx={{
-                              fontSize: "1.1rem",
+                            size={20}
+                            style={{
+                              // background: "rgba(255,255,255, 0.9)",
+                              color: "#707070ff",
+                              padding: 0,
                             }}
                           />
                         }
-                        checkedIcon={
-                          <CheckCircleIcon
-                            sx={{
-                              fontSize: "1.1rem",
-                            }}
-                          />
-                        }
-                        checked={false}
-                        sx={{
-                          "&&": {
-                            // different color if checked vs unchecked
-                            color: theme.palette.grey.grey400,
-                          },
-                          // border: "1px solid #E0E0E0"
-                        }}
-                      />
+                      </Box>
                       <Box
                         sx={{
                           justifyContent: "flex-start",
                           alignItems: "flex-start",
-                          gap: "1rem",
+                          gap: "0.7rem",
                           display: "flex",
+
                           // border: "2px solid black"
                         }}
                       >
@@ -275,6 +330,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                           variant="body1"
                           sx={{
                             color: (theme) => theme.palette.grey.grey600,
+                            color: theme.palette.text.primary,
                             fontSize: "0.9rem",
                             fontWeight: "600",
                           }}
@@ -285,6 +341,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                           variant="body1"
                           sx={{
                             color: (theme) => theme.palette.grey.grey600,
+                            color: theme.palette.text.primary,
                             fontSize: "0.9rem",
                           }}
                         >
@@ -296,14 +353,14 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                   {lesson.questions?.length > 0 && (
                     <FlexBetween
                       key={lesson.questions[0].question + index}
-                      gap="0.8rem"
+
                       sx={{
                         "&&": {
                           justifyContent: "flex-start",
-                          alignItems: "flex-start",
+                          alignItems: "center",
                           cursor: "pointer",
-                          p: "1rem 1rem",
-                          paddingLeft: "2rem",
+                          p: "0.9rem 1rem",
+                          gap: "0.5rem",
                         },
                         backgroundColor:
                           openedLesson.subLesson === lesson.subLessons.length + 1 &&
@@ -323,35 +380,27 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                         scrollTop();
                       }}
                     >
-                      <StyledCheckbox
-                        icon={
-                          <RadioButtonUncheckedIcon
-                            sx={{
-                              fontSize: "1.1rem",
-                            }}
-                          />
-                        }
-                        checkedIcon={
-                          <CheckCircleIcon
-                            sx={{
-                              fontSize: "1.1rem",
-                            }}
-                          />
-                        }
-                        checked={false}
-                        sx={{
-                          "&&": {
-                            // different color if checked vs unchecked
-                            color: theme.palette.grey.grey400,
-                          },
-                          // border: "1px solid #E0E0E0"
-                        }}
-                      />
+                      <Box sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "2rem",
+                        height: "2rem",
+                        borderRadius: "500px",
+                        backgroundColor: 1 == 0 ? "#02b68fff" : "rgba(255, 255, 255, 0.7)",
+                        boxShadow: 1 == 0 ? "0 0 10px 0 #02b68fff" : "",
+                      }}>
+                        <CircularProgress variant="determinate" value={75} thickness={5} size={16} sx={{
+                          color: "#35a0dfff",
+                        }} />
+
+
+                      </Box>
                       <Box
                         sx={{
                           justifyContent: "flex-start",
                           alignItems: "flex-start",
-                          gap: "1rem",
+                          gap: "0.7rem",
                           display: "flex",
                           // border: "2px solid black"
                         }}
@@ -395,6 +444,6 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
           </Typography>
         )}
       </Box>
-    </Box>
+    </Box >
   );
 };

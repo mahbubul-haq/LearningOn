@@ -16,6 +16,7 @@ import LearningPageTop from "./LearningPageTop";
 import LearningRightPanel from "./LearningRightPanel";
 import NextPrevButtons from "./NextPrevButtons";
 
+
 const LearningPage = () => {
   const { courseId } = useParams();
   const { setOpenedItem } = useContext(GlobalContext);
@@ -28,9 +29,6 @@ const LearningPage = () => {
   const { user, token } = useSelector((state) => state.auth);
   const { courseInfo, progressData } = useSelector((state) => state.course);
   const dispatch = useDispatch();
-
-  //const state = useSelector(state => state);
-  //console.log("learning page", user, token, state);
 
   useEffect(() => {
     setExpandedLessons([]);
@@ -74,9 +72,11 @@ const LearningPage = () => {
           overflowY: "scroll",
           width: "100%",
           scrollBehavior: "smooth",
-          bgcolor: '#f0f9f4', // Very light mint/white base
+          bgcolor: '#8b4157ff', // Very light mint/white base
+
           /* LAYER 1: SOFT ENVIRONMENTAL WASH (Fixed) */
-          backgroundImage: 'linear-gradient(180deg, #eefaf256 0%, #b9f7d838 100%)',
+          backgroundImage: `linear-gradient(180deg, ${theme.palette.glassMorphism.fixedBackgroundTop} 0%, ${theme.palette.glassMorphism.fixedBackgroundBottom} 100%)`,
+          backgroundColor: "#1a0b0bff",
           backgroundAttachment: 'fixed',
           position: "relative",
           zIndex: 0,
@@ -91,31 +91,13 @@ const LearningPage = () => {
           position: 'fixed',
           top: 0, left: 0, right: 0, bottom: 0,
           zIndex: 0,
-          backgroundImage: `
-      radial-gradient(circle at 0% 0%, rgba(121, 255, 159, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 100% 100%, rgba(121, 255, 159, 0.3) 0%, transparent 50%)
-    `,
+          backgroundImage: theme.palette.glassMorphism.fixedBackgroundImage
         }} />
-        <Box sx={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          zIndex: 0,
-          backgroundImage: `
-      radial-gradient(circle at 0% 100%, rgba(121, 255, 159, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 100% 0%, rgba(121, 255, 159, 0.3) 0%, transparent 50%)
-    `,
-        }} />
+
         {/* </Box> */}
         {/* Noise Texture */}
         <Box sx={{
-          position: 'fixed', // Stays over the screen while you scroll
-          top: 0, left: 0, width: '100%', height: '100%',
-          opacity: 0.03, // Very subtle
-          pointerEvents: 'none',
-          zIndex: 1,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          filter: 'contrast(150%) brightness(100%)',
-          pointerEvents: 'none',
+          ...theme.palette.glassMorphism.noise
         }} />
         <Box
           sx={{
@@ -134,19 +116,7 @@ const LearningPage = () => {
         {/* Gradient Background */}
         <Box sx={{
           width: "100%",
-          backgroundImage: `
-      radial-gradient(
-        ellipse 50vw 40vh at 50vw 40vh, 
-        rgba(134, 255, 168, 0.48) 0%, 
-        transparent 100%
-      ),
-
-      radial-gradient(
-        ellipse 50vw 80vh at 50vw 80vh, 
-        rgba(121, 255, 159, 0.48) 0%, 
-        transparent 100%
-      )
-    `,
+          backgroundImage: theme.palette.glassMorphism.scrollBackgroundImage,
           backgroundSize: '100% 160vh',
           backgroundRepeat: 'repeat-y',
           /* Use 'overlay' or 'multiply' for light backgrounds to prevent washing out */
@@ -187,18 +157,21 @@ const LearningPage = () => {
                   height: `calc(100vh - 9rem)`,
                   height: "auto",
                   py: "1rem",
-                  pb: "20rem",
+                  //pb: "20rem",
                   maxHeight: `calc(100vh - 9rem)`,
+                  minHeight: "60vh",
                   // border: "1px solid red",
 
                   mt: "2rem",
-                  background: "rgba(255, 255, 255, 0.5)",
+                  background: "rgba(255, 255, 255, 0.6)",
                   backdropFilter: "blur(20px) saturate(200%)",
                   WebkitBackdropFilter: "blur(20px) saturate(200%)",
                   // border: '1px solid rgba(255, 255,255, 0.4)',
                   borderRadius: "1rem",
-                  boxShadow: "0 10px 20px rgba(0, 0, 0, 0.05), inset 0 0 10px rgba(255, 255, 255, 0.5)",
+                  boxShadow: "0 10px 20px rgba(0, 0, 0, 0.05), inset 0 0 10px rgba(255, 255, 255, 0.75)",
                   overflowY: "auto",
+                  ...theme.palette.glassMorphismCard,
+                  border: "none",
                 }}
               >
                 <LearningLeftPanel
@@ -218,7 +191,7 @@ const LearningPage = () => {
                 left: isNonMobileScreens ? `calc(25% + 5rem)` : "auto",
                 display: "flex",
                 flexDirection: "column",
-                gap: "3rem",
+                gap: "2rem",
               }}
             >
               <NextPrevButtons
@@ -233,6 +206,7 @@ const LearningPage = () => {
               <LearningRightPanel
                 courseInfo={courseInfo}
                 progressData={progressData}
+
               />
               <NextPrevButtons
                 openedLesson={openedLesson}
@@ -246,7 +220,7 @@ const LearningPage = () => {
             </Box>
           </Box>
         </Box >
-      </Box>
+      </Box >
     </>
   );
 };

@@ -25,20 +25,15 @@ const LearningPageTop = ({ courseInfo, scrollTop }) => {
   return (
     <Box
       sx={{
-
         display: "flex",
         justifyContent: isNonMobileScreens ? "center" : "space-between",
         alignItems: "center",
-        background: 'rgba(255, 255, 255, 0.5)', // High transparency
-        backdropFilter: 'blur(30px) saturate(180%)', // The frosted blur effect
-        WebkitBackdropFilter: 'blur(30px) saturate(180%)', // Support for Safari
-
-        borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.05), inset 0 0 10px rgba(255, 255, 255, 0.5)',
-        color: theme.palette.text.primary,
         margin: '0 auto',
         width: "100%",
         height: "100%",
+        ...theme.palette.glassMorphismCard,
+        background: 'rgba(255, 255, 255, 0.35)', // High transparency
+        borderRadius: 0,
 
       }}
     >

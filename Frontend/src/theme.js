@@ -59,7 +59,7 @@ export const themeSettings = (mode) => {
                 ? {
                     primary: {
                         darker: "#0F661C",
-                        
+
                         dark: colorTokens.brand.secondaryDark,
                         main: colorTokens.brand.secondaryMain,
                         light: colorTokens.brand.secondaryMain,
@@ -85,13 +85,13 @@ export const themeSettings = (mode) => {
                 }
                 : {
                     primary: {
-                        darker: "#0F661C",
-                        dark: colorTokens.brand.secondaryDark,
-                        main: colorTokens.brand.secondaryMain,
-                        main1: "#4CCB60",
-                        light: "#97FCA7",
-                        light2: "#63FC7C",
-                        light3: "#C7FFD3",
+                        darker: "#0c8e97ff",
+                        dark: "#0db7c4ff",
+                        main: "#1febfaff",
+                        main1: "#1febfaff",
+                        light: "#4be8f3ff",
+                        light2: "#70f1faff",
+                        light3: "rgba(164, 249, 255, 1)",
                         cardBackground: "#8899e6ff"
                     },
                     text: {
@@ -156,6 +156,65 @@ export const themeSettings = (mode) => {
                         grey900: "#0A0A0A",
                         grey1000: "#000000",
                     },
+                    glassMorphism: {
+                        threeCornerColor: "#3e6e77ff",
+                        rightBottomColor: "#3e6e77ff",
+                        fixedBackgroundTop: "#3e6e77ff",
+                        fixedBackgroundBottom: "#3e6e77ff",
+                        backgroundGradient: "#3e6e77ff",
+                        fixedBackgroundImage: `
+      radial-gradient(circle at 100% 100%, #d1709056 0%, transparent 60%),
+      radial-gradient(circle at 100% 0%, #3e6e77ff 0%, transparent 50%),
+      radial-gradient(circle at 0% 0%, #3e6e77ff 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, #ff6d9e8f 0%, transparent 60%),
+    radial-gradient(at 0% 0%, rgba(0, 255, 157, 1) 0px, transparent 50%), /* Top-left Teal glow */
+     radial-gradient(at 100% 100%, rgba(255, 0, 149, 0.38) 0px, transparent 50%), /* Bottom-right Pink glow */
+    radial-gradient(at 50% 50%, rgba(5, 234, 250, 1) 0px, transparent 100%), /* Deep center depth */
+    radial-gradient(at 20% 50%, rgba(255, 255, 255, 0.95) 0px, transparent 100%) /* Deep center depth */
+    `,
+                        scrollBackgroundImage: `
+                              radial-gradient(
+                                ellipse 50vw 40vh at 50vw 40vh, 
+                                #3e6e77ff 0%, 
+                                transparent 100%
+                              ),
+                        
+                              radial-gradient(
+                                ellipse 50vw 80vh at 50vw 80vh, 
+                                #3e6e77ff 0%, 
+                                transparent 100%
+                              )
+                            `,
+                        noise: {
+                            position: 'fixed', // Stays over the screen while you scroll
+                            top: 0, left: 0, width: '100%', height: '100%',
+                            opacity: 0.03, // Very subtle
+                            pointerEvents: 'none',
+                            zIndex: 1,
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                            filter: 'contrast(150%) brightness(100%)',
+                            pointerEvents: 'none',
+                        }
+                    },
+                    glassMorphismCard: {
+                        background: "rgba(255, 255, 255, 0.03)", // Extremely low opacity
+                        backdropFilter: "blur(25px) saturate(160%)", // High saturation is the key
+                        WebkitBackdropFilter: "blur(25px) saturate(160%)", // High saturation is the key
+                        // The 'Light Leak' Border: Brighter at the top, invisible at the bottom
+                        borderTop: "1px solid rgba(255, 255, 255, 0.2)",
+                        borderLeft: "1px solid rgba(255, 255, 255, 0.1)",
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                        borderRight: "1px solid rgba(255, 255, 255, 0.05)",
+
+                        borderRadius: "20px",
+
+                        // Two shadows: One for the 'drop' and one 'inset' for the glass edge
+                        boxShadow: `
+                        0 20px 40px rgba(0, 0, 0, 0.06), 
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.05)
+                      `,
+                    },
+
                 }),
         },
         typography: {
@@ -186,7 +245,7 @@ export const themeSettings = (mode) => {
             h4: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
                 fontSize: 20,
-                
+
             },
             h4bold: {
                 fontFamily: ["Roboto", 'sans-serif'].join(","),
