@@ -94,6 +94,12 @@ export const themeSettings = (mode) => {
                         light3: "rgba(164, 249, 255, 1)",
                         cardBackground: "#8899e6ff"
                     },
+                    secondary: {
+                        main: "#43106dff",
+                        light: "#43106dff",
+                        dark: "#320953ff",
+
+                    },
                     text: {
                         primary: colorTokens.text.primary,
                         secondary: colorTokens.text.secondary,

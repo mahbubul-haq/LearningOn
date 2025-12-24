@@ -33,7 +33,8 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
 
 
   const theme = useTheme();
-  const leftPanelColor = "#43106dff"
+
+
 
   return (
     <Box sx={{}}>
@@ -89,9 +90,9 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                         ? `linear-gradient(to right, #ffffff1a, #ffffff86)`
                         : "transparent",
 
-                    boxShadow: `inset 4px 0 0 0 ${leftPanelColor},0 4px 12px rgba(0,0,0,0.03)`,
+                    boxShadow: openedLesson.subLesson === 0 && openedLesson.lesson === index + 1 ? `inset 4px 0 0 0 ${theme.palette.secondary.main},0 4px 12px rgba(0,0,0,0.03)` : "",
                     "&:hover": {
-                      backgroundColor: theme.palette.primary.light,
+                      background: `linear-gradient(to right, #ffffff1a, #ffffff3f)`,
                     },
                     "&&": {
                       gap: "0.5rem",
@@ -125,8 +126,8 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                       width: "2rem",
                       height: "2rem",
                       borderRadius: "500px",
-                      backgroundColor: 1 == 1 ? leftPanelColor : "rgba(255, 255, 255, 0.1)",
-                      boxShadow: 1 == 1 ? `0 0 10px 0 #43106dff` : "",
+                      backgroundColor: openedLesson.subLesson === 0 && openedLesson.lesson === index + 1 ? theme.palette.secondary.main : "rgba(255, 255, 255, 0.1)",
+                      boxShadow: openedLesson.subLesson === 0 && openedLesson.lesson === index + 1 ? `inset 4px 0 0 0 ${theme.palette.secondary.main},0 4px 12px rgba(0,0,0,0.03)` : "",
                     }}>
                       {/* <CircularProgress variant="determinate" value={75} thickness={7} size={20} sx={{
                         color: "#31a3e6ff",
@@ -141,17 +142,25 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                         padding: "0",
                         boxShadow: "0 0 10px 0 #5cb983ff",
                       }} /> */}
-                      <PiPlayBold style={{
-                        color: "#1febfaff",
-                        // fontSize: "2rem",
-                        height: "1rem",
-                        width: "1rem",
-                        // background: "rgba(255, 255, 255, 0.9)",
-                        // borderRadius: "500px",
-                        // padding: "0",
-                        // boxShadow: "0 0 10px 0 #5cb983ff",
-                      }} />
+                      {openedLesson.subLesson == 0 && openedLesson.lesson == index + 1 ?
+                        <PiPlayBold style={{
+                          color: "#1febfaff",
 
+                          height: "1rem",
+                          width: "1rem",
+
+                        }} />
+                        : <PiPlayBold style={{
+                          color: "#1febfaff",
+                          // fontSize: "2rem",
+                          height: "1rem",
+                          width: "1rem",
+                          // background: "rgba(255, 255, 255, 0.9)",
+                          // borderRadius: "500px",
+                          // padding: "0",
+                          // boxShadow: "0 0 10px 0 #5cb983ff",
+                        }} />
+                      }
                     </Box>
 
 
@@ -248,13 +257,14 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                           p: "0.9rem 1rem",
                           gap: "0.5rem"
                         },
-                        backgroundColor:
+                        background:
                           openedLesson.subLesson === subIndex + 1 &&
-                            openedLesson.lesson === index + 1
-                            ? "linear-gradient(to right, #FFC300, #FF5722)"
-                            : "transparent",
+                            openedLesson.lesson === index + 1 ?
+                            "linear-gradient(to right, #ffffff1a, #ffffff86)" : "transparent",
+                        boxShadow: openedLesson.subLesson === subIndex + 1 && openedLesson.lesson === index + 1 ? `inset 4px 0 0 0 ${theme.palette.secondary.main},0 4px 12px rgba(0,0,0,0.03)` : "",
+
                         "&:hover": {
-                          backgroundColor: theme.palette.primary.light,
+                          background: "linear-gradient(to right, #ffffff1a, #ffffff3f)",
                         },
                       }}
                       onClick={() => {
@@ -273,11 +283,12 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                         width: "2rem",
                         height: "2rem",
                         borderRadius: "500px",
-                        backgroundColor: 1 == 2 || subIndex == 0 ? leftPanelColor : "rgba(255, 255, 255, 0.5)",
-                        boxShadow: 1 == 2 ? `0 0 10px 0 ${leftPanelColor}` : "",
+                        backgroundColor: openedLesson.subLesson === subIndex + 1 && openedLesson.lesson === index + 1 ? theme.palette.secondary.main : "rgba(255, 255, 255, 0.5)",
+                        boxShadow: openedLesson.subLesson === subIndex + 1 && openedLesson.lesson === index + 1 ? `0 0 10px 0 ${theme.palette.secondary.main}` : "",
                         overflow: "hidden",
                         alignSelf: "center",
                         flexShrink: 0,
+                        transition: "all 0.3s ease-in-out",
                       }}>
                         {/* <CircularProgress variant="determinate" value={75} thickness={7} size={20} sx={{
                         color: "#31a3e6ff",
@@ -292,28 +303,37 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop }) => {
                         padding: "0",
                         boxShadow: "0 0 10px 0 #5cb983ff",
                       }} /> */}
-                        {subIndex == 0 ?
+                        {openedLesson.subLesson === subIndex + 1 && openedLesson.lesson === index + 1 ?
 
-                          <CheckIcon
-
+                          <PiPlayBold
                             style={{
-                              // background: "rgba(255,255,255, 0.9)",
-                              fontSize: "1rem",
                               color: "#1febfaff",
-                              padding: 0,
-
+                              height: "1rem",
+                              width: "1rem",
                             }}
-                          />
+                          /> : Math.random() > 0.5 ?
 
-                          :
-                          <RadioButtonUncheckedIcon
-                            size={20}
-                            style={{
-                              // background: "rgba(255,255,255, 0.9)",
-                              color: "#707070ff",
-                              padding: 0,
-                            }}
-                          />
+                            <CheckIcon
+
+                              style={{
+                                // background: "rgba(255,255,255, 0.9)",
+                                fontSize: "1rem",
+                                color: "#1febfaff",
+                                padding: 0,
+
+                              }}
+                            />
+
+                            :
+                            <RadioButtonUncheckedIcon
+                              size={20}
+                              style={{
+                                // background: "rgba(255,255,255, 0.9)",
+                                color: "#707070ff",
+                                padding: 0,
+                              }}
+                            />
+
                         }
                       </Box>
                       <Box

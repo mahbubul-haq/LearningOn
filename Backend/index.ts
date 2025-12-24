@@ -45,7 +45,7 @@ app.use(express.urlencoded({
 
 app.use(cors(
     {
-        origin: ["https://learning-on.vercel.app", "http://localhost:5173", process.env.CLIENT_URL],
+        origin: ["https://learning-on.vercel.app", "http://localhost:5173", process.env.CLIENT_URL!],
         credentials: true,
     }
 ));
@@ -84,11 +84,7 @@ connectSocket(server);
 server.listen(5000, () => {
     console.log("Server is running on port 5000");
     mongoose
-        .connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            autoIndex: true,
-        })
+        .connect(process.env.MONGO_URI!)
         .then(() => console.log("Connected to MongoDB"))
         .catch((err) => console.log("Database connection failed"));
 });

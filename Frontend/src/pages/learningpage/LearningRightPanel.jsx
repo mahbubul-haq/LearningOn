@@ -10,58 +10,12 @@ import Questions from "./Questions";
 import { Button } from "@mui/material";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import VideoPlayer from "./VideoPlayer";
 
 const LearningRightPanel = ({ courseInfo, progressData }) => {
   const { openedLesson } = useContext(LearningCourseContext);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const theme = useTheme();
-
-  useEffect(() => {
-    const video = document.querySelector(".lecture-video");
-    if (!video) return;
-
-    let startTime = 0,
-      totalPlayedTime = 0;
-
-    let handlePlay = () => {
-      startTime = Date.now();
-    };
-
-    const handlePause = () => {
-      const endTime = Date.now();
-      totalPlayedTime += (endTime - startTime) / 1000;
-    };
-
-    const handleEnd = () => {
-      const endTime = Date.now();
-      totalPlayedTime += (endTime - startTime) / 1000;
-    };
-
-    const handleTimeUpdate = () => {
-      //console.log(video.currentTime);
-      const percentagePlayed = (video.currentTime / video.duration) * 100;
-      if (video.currentTime <= 0.01) totalPlayedTime = 0;
-      console.log("Percentage played:", percentagePlayed);
-      if (percentagePlayed > 80) {
-        const endTime = Date.now();
-        totalPlayedTime += (endTime - startTime) / 1000;
-        startTime = Date.now();
-      }
-      console.log((totalPlayedTime / video.duration) * 100);
-    };
-
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("play", handlePlay);
-    video.addEventListener("pause", handlePause);
-    video.addEventListener("ended", handleEnd);
-
-    return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("play", handlePlay);
-      video.removeEventListener("pause", handlePause);
-      video.removeEventListener("ended", handleEnd);
-    };
-  }, []);
 
 
 
@@ -180,69 +134,7 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
                 {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
                   openedLesson.subLesson - 1
                 ].videoLink && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "0.5rem",
-                      }}
-                    >
-
-                      <Box
-                        sx={{
-                          width: "100%",
-                          // maxHeight: "500px",
-                          padding: "0.7rem 0.7rem 0.4rem 0.7rem",
-                          ...theme.palette.glassMorphismCard,
-
-                        }}
-                      >
-                        <Typography
-                          variant="h4"
-                          sx={{
-                            fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
-                            mb: "1rem",
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                            }}
-                          >
-                            Lecture Video {openedLesson.lesson}.
-                            {openedLesson.subLesson}
-                          </span>
-                          &nbsp;&nbsp;
-                          {
-                            courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
-                              openedLesson.subLesson - 1
-                            ].title
-                          }
-                        </Typography>
-                        <AdvancedVideo
-                          className="lecture-video"
-                          cldVid={cloudinaryCld.video(
-                            courseInfo?.lessons[openedLesson.lesson - 1]
-                              .subLessons[openedLesson.subLesson - 1].videoLink
-                          )}
-                          plugins={[lazyload()]}
-                          style={{
-                            width: "100%",
-                            aspectRatio: "16 / 9",
-                            padding: "0",
-                            margin: "0",
-                            borderRadius: "0.5rem",
-                          }}
-                          //add title and caption
-                          title={
-                            courseInfo?.lessons[openedLesson.lesson - 1]
-                              .subLessons[openedLesson.subLesson - 1].title
-                          }
-                          alt="Intro video"
-                          controls
-                        />
-                      </Box>
-                    </Box>
+                    <VideoPlayer courseInfo={courseInfo} openedLesson={openedLesson} />
                   )}
 
                 {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[

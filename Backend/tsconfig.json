@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "ES2022", // JS target
+        "module": "ESNext", // preserves ES module imports
+        "moduleResolution": "node",
+        "outDir": "dist", // all compiled files go here
+        "rootDir": ".", // root of your backend project
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "allowJs": true, // <-- compile JS files too
+        "checkJs": false, // optional, enable if you want TS type checking for JS
+        "resolveJsonModule": true,
+        "declaration": false // no need for .d.ts unless you want
+    },
+    "include": [
+        "**/*.ts",
+        "**/*.js"
+    ], // include all JS and TS
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
