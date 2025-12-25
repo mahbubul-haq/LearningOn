@@ -43,7 +43,7 @@ const HomeCourses = () => {
   useEffect(() => {
     console.log(courseType, selectedItem);
     console.log("Selected Courses Changed", selectedCourses);
-  
+
   }, [selectedCourses]);
 
   useEffect(() => {
@@ -115,9 +115,9 @@ const HomeCourses = () => {
 
   const changeCourseType = () => {
     if (courseType === "My Courses") {
-      setFilteredCourses(user?.courses?.filter((course) => course.courseStatus=="published"));
+      setFilteredCourses(user?.courses?.filter((course) => course.courseStatus == "published"));
     } else if (courseType === "I am Learning") {
-      setFilteredCourses(user?.learning?.filter((course) => course.course.courseStatus == "published").map((course) => course.course));
+      setFilteredCourses(user?.enrolledCourses?.filter((course) => course.course.courseStatus == "published").map((course) => course.course));
     } else if (courseType === "Popular Courses") {
       setFilteredCourses(courses);
     }
@@ -196,8 +196,8 @@ const HomeCourses = () => {
   useEffect(() => {
 
     setTimeout(() => {
-    changingCourseTypeRef.current = false;
-    setChangingCourseType(false);
+      changingCourseTypeRef.current = false;
+      setChangingCourseType(false);
     }, 500);
 
     console.log("Selected courses changed in HomeCourses:", selectedCourses);

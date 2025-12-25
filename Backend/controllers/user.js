@@ -29,7 +29,7 @@ const getUser = async (req, res) => {
                 },
             })
             .populate({
-                path: "learning",
+                path: "enrolledCourses",
                 populate: {
                     path: "courseId",
                     select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice courseStatus",
@@ -42,7 +42,7 @@ const getUser = async (req, res) => {
             .exec();
 
         user = user._doc;
-    
+
         user.courses = user.courses.map((course) => {
             return {
                 ...course._doc,
@@ -53,44 +53,44 @@ const getUser = async (req, res) => {
             };
         });
 
-        user.learning = user.learning.map((course) => {
-          if (!course._doc.courseId) return null;
+        user.enrolledCourses = user.enrolledCourses?.map((course) => {
+            if (!course._doc.courseId) return null;
 
-          let modified = {
-            ...course._doc,
-            course: {
-              category: course._doc.courseId?.category,
-              coursePrice: course._doc.courseId?.coursePrice,
-              courseTitle: course._doc.courseId?.courseTitle,
-              skillTags: course._doc.courseId?.skillTags,
-              courseThumbnail: course._doc.courseId?.courseThumbnail,
-              courseStatus: course._doc.courseId?.courseStatus,
-              _id: course._doc.courseId?._id,
+            let modified = {
+                ...course._doc,
+                course: {
+                    category: course._doc.courseId?.category,
+                    coursePrice: course._doc.courseId?.coursePrice,
+                    courseTitle: course._doc.courseId?.courseTitle,
+                    skillTags: course._doc.courseId?.skillTags,
+                    courseThumbnail: course._doc.courseId?.courseThumbnail,
+                    courseStatus: course._doc.courseId?.courseStatus,
+                    _id: course._doc.courseId?._id,
 
-              owner: {
-                _id: course._doc.courseId?.owner?._id,
-                name: course._doc.courseId?.owner?.name
-              },
-              ratings: {
-                totalRating: course._doc.courseId?.ratings?.totalRating,
-                numberOfRatings: course._doc.courseId?.ratings?.numberOfRatings
-              }
+                    owner: {
+                        _id: course._doc.courseId?.owner?._id,
+                        name: course._doc.courseId?.owner?.name
+                    },
+                    ratings: {
+                        totalRating: course._doc.courseId?.ratings?.totalRating,
+                        numberOfRatings: course._doc.courseId?.ratings?.numberOfRatings
+                    }
+                }
+
             }
-            
-          }
-          delete modified.courseId;
+            delete modified.courseId;
 
-          return modified;
+            return modified;
         })
 
-        user.learning = user.learning.filter(user => user);
-        
+        user.enrolledCourses = user.enrolledCourses?.filter(user => user);
+
         res.status(200).json({
             success: true,
             user: user,
         });
     } catch (error) {
-      console.log(error);
+        console.log(error);
         res.status(400).json({
             success: false,
             message: error.message,

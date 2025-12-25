@@ -89,7 +89,7 @@ const updateCourse = async (req, res) => {
     let courseId = req.params.courseId;
     const status = req.params.status;
 
-   // console.log("update course", courseId, status);
+    // console.log("update course", courseId, status);
 
     try {
         let course;

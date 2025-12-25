@@ -83,33 +83,29 @@ const PeopleSchema = new mongoose.Schema(
             required: false,
             default: "",
         },
-        learning: {
-            type: [
-                {
-                    courseId: {
-                        type: mongoose.Schema.Types.ObjectId,
-                        ref: "Course",
-                    },
-                    completedLessons: {//array of sublessons that are completed
-                        type: [String],
-                        default: [],
-                    },
-                    answers: {
-                        type: [{
-                            question: String,//2.4 -> Lesson 2, 4 number question
-                            response: String// a, b, c, d, e etc
-                        }],
-                        default: [],
-                    },
-                    
-                    status: {
-                        type: String,
-                        enum: ["active", "postponed", "completed"],
-                        default: "active",
-                    },
-                    enrolledOn: Date,
+        enrolledCourses: {
+
+            type: [{
+                courseId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Course",
+                    required: true,
                 },
-            ],
+                enrollmentDate: {
+                    type: Date,
+                    required: true,
+                },
+                status: {
+                    type: String,
+                    enum: ["active", "postponed", "completed"],
+                    default: "active",
+                },
+                progress: {
+                    type: Number,
+                    default: 0,
+                },
+
+            }],
             required: false,
             default: [],
         },

@@ -75,7 +75,7 @@ const login = async (req, res) => {
                 },
             })
             .populate({
-                path: "learning",
+                path: "enrolledCourses",
                 populate: {
                     path: "courseId",
                     select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice courseStatus",
@@ -115,7 +115,7 @@ const login = async (req, res) => {
 
         user = user._doc;
 
-        user.courses = user.courses.map((course) => {
+        user.courses = user.courses?.map((course) => {
             return {
                 ...course._doc,
                 ratings: {
@@ -125,7 +125,7 @@ const login = async (req, res) => {
             };
         });
 
-        user.learning = user.learning.map((course) => {
+        user.enrolledCourses = user.enrolledCourses?.map((course) => {
             if (!course._doc.courseId) return null;
 
             let modified = {
@@ -154,7 +154,7 @@ const login = async (req, res) => {
             return modified;
         });
 
-        user.learning = user.learning.filter((user) => user);
+        user.enrolledCourses = user.enrolledCourses?.filter((user) => user);
 
         const token = jwt.sign(
             {

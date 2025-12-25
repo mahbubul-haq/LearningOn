@@ -67,7 +67,7 @@ app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);
 app.delete("/filedelete/:fileName/:isVideo", deleteFile);
 
 app.get("/", (req, res) => {
-    res.send("Hello World2");
+    res.send("Hello World");
 });
 
 app.use((req, res, next) => {

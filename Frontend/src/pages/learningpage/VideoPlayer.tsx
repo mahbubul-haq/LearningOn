@@ -26,18 +26,6 @@ const VideoPlayer = ({ courseInfo, openedLesson }: VideoPlayerProps) => {
     const theme = useTheme()
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)")
     const videoRef = useRef<AdvancedVideo | null>(null)
-    const courseInfoRef = useRef<typeof courseInfo>(courseInfo)
-    const openedLessonRef = useRef<typeof openedLesson>(openedLesson)
-
-    useEffect(() => {
-        console.log("video player re-rendered")
-        if (courseInfoRef.current !== courseInfo) {
-            console.log("course info changed")
-        }
-        if (openedLessonRef.current !== openedLesson) {
-            console.log("opened lesson changed")
-        }
-    });
 
 
 
@@ -45,6 +33,7 @@ const VideoPlayer = ({ courseInfo, openedLesson }: VideoPlayerProps) => {
         if (!videoRef.current) return
         const video = videoRef.current.htmlVideoLayerInstance.videoElement;
         console.log(videoRef);
+
         const handleLoadMetadata = () => {
             console.log("Metadata loaded");
         }
@@ -167,10 +156,8 @@ const VideoPlayer = ({ courseInfo, openedLesson }: VideoPlayerProps) => {
                         padding: "0.5rem",
                         borderRadius: "100px",
                     }}>
-                        <CircularProgress variant="determinate" value={75} thickness={5} sx={{
+                        <CircularProgress variant="determinate" value={75} thickness={5} size={30} sx={{
                             color: theme.palette.primary.main,
-                            height: "5rem",
-                            width: "5rem",
                             filter: "drop-shadow(0 0 5px rgba(0, 242, 254, 0.4))",
                             // filter: "drop-shadow(0 0 15px rgba(0, 242, 254, 1))",
 

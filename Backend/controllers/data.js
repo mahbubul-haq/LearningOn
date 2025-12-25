@@ -236,11 +236,11 @@ const stripeWebHook = async (req, res) => {
                         await course.save();
                     }
 
-                    user.learning.push({
+                    user.enrolledCourses.push({
                         courseId: item.courseId,
-                        enrolledOn: Date.now(),
+                        enrollmentDate: Date.now(),
                         status: "active",
-                        completedLessons: [],
+                        progress: 0,
                     });
 
                     await user.save();

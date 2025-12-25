@@ -1,5 +1,45 @@
 import mongoose from "mongoose";
 
+const subLessonSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+    },
+    videoLink: String,
+    lectureNote: String,
+}, {
+    _id: true
+});
+
+const questionSchema = new mongoose.Schema({
+    question: String,
+    options: [String],
+    answer: String,
+}, {
+    _id: true
+});
+
+const lessonSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: false,
+    },
+    subLessons: { type: [subLessonSchema], default: [] },
+    questions: {
+        questions: { type: [questionSchema], default: [] },
+        examDuration: {
+            type: Number,// minutes _> dfault infinity
+            default: Number.MAX_SAFE_INTEGER,
+        },
+    }
+}, {
+    _id: true
+});
+
 const CourseSchema = new mongoose.Schema(
     {
         category: {
@@ -96,11 +136,8 @@ const CourseSchema = new mongoose.Schema(
                 ratings: [],
             },
         },
- 
-        lessons: {
-            type: [Object],/// lesson: title, descriptions, subLessions, questions: [{question: , options: [], answer: }]
-            default: [],
-        },
+
+        lessons: { type: [lessonSchema], default: [] },
         courseStatus: {
             type: String,
             enum: ["draft", "pending", "published", "unpublished"],
