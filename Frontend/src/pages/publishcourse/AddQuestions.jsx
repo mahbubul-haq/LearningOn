@@ -24,9 +24,12 @@ const AddQuestions = ({
           if (idx == lesson) {
             return {
               ...curLesson,
-              questions: curLesson.questions
-                ? [...curLesson.questions, { ...newQuestion }]
-                : [{ ...newQuestion }],
+              questions: curLesson.questions ?
+                {
+                  questions:
+                    [...curLesson.questions.questions, { ...newQuestion }]
+                }
+                : { questions: [{ ...newQuestion }] }
             };
           } else {
             return curLesson;
@@ -62,8 +65,8 @@ const AddQuestions = ({
           }}
         >
           Add Question {prefix}
-          {courseState?.lessons && courseState.lessons[lesson].questions
-            ? courseState.lessons[lesson].questions.length + 1
+          {courseState?.lessons[lesson]?.questions?.questions
+            ? courseState.lessons[lesson].questions.questions.length + 1
             : 1}
         </Typography>
       </Fab>

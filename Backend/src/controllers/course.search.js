@@ -179,6 +179,7 @@ const getPopularCourses = async (req, res) => {
 };
 
 const getCourseLessons = async (req, res) => {
+    console.log("getCourseLessons", req.params.courseId, req.userId);
     try {
         const userId = req.userId;
         const courseId = req.params.courseId;
@@ -207,9 +208,11 @@ const getCourseLessons = async (req, res) => {
                 lessons: course._doc?.lessons,
             };
 
+            //console.log(courseInfo);
+
             courseInfo.lessons = courseInfo.lessons?.map((lesson) => {
                 if (lesson.questions) {
-                    lesson.questions = lesson.questions.map((q) => {
+                    lesson.questions.questions = lesson.questions.questions?.map((q) => {
                         return {
                             options: q.options,
                             question: q.question,
@@ -218,7 +221,7 @@ const getCourseLessons = async (req, res) => {
                     return lesson;
                 } else return lesson;
             });
-            //console.log(courseInfo);
+            console.log(courseInfo);
 
             res.status(200).json({
                 success: true,
@@ -230,6 +233,7 @@ const getCourseLessons = async (req, res) => {
             });
         }
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             success: false,
         });

@@ -90,27 +90,28 @@ const updateCourse = async (req, res) => {
     const status = req.params.status;
 
     // console.log("update course", courseId, status);
+    if (courseId == undefined || courseId == "undefined") {
+        return res.status(400).json({
+            success: false,
+            message: "Course ID is required",
+        });
+    }
+    else if (req.body?.id && req.body.id != courseId) {
+        return res.status(400).json({
+            success: false,
+            message: "Course ID does not match",
+        });
+    }
 
     try {
         let course;
-        if (courseId == undefined || courseId == "undefined") {
-            course = new Course({
-                ...req.body,
-                courseStatus: status,
-                owner: req.userId,
-            });
-            course = await course.save();
-        } else {
-            course = await Course.findById(courseId);
-        }
+        course = await Course.findById(courseId);
 
         if (!course) {
-            course = new Course({
-                ...req.body,
-                courseStatus: status,
-                owner: req.userId,
+            return res.status(404).json({
+                success: false,
+                message: "Course not found",
             });
-            course = await course.save();
         }
 
         courseId = course._id;
@@ -177,10 +178,11 @@ const updateCourse = async (req, res) => {
         };
 
         //console.log(courseInfo, req.body);
+        const { _id, ...updateFields } = courseInfo;
 
         const updatedCourse = await Course.findByIdAndUpdate(
             courseId,
-            courseInfo,
+            updateFields,
             {
                 new: true,
             }
@@ -213,6 +215,7 @@ const updateCourse = async (req, res) => {
             courseInfo: updatedCourse,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             success: false,
             message: error.message,

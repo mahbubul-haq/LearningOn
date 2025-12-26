@@ -1,5 +1,7 @@
 import Course from "../models/Course.js";
 
+console.log("great");
+
 const updateStatus = async (req, res) => {
     try {
         const { courseId, status } = req.body;

@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { uploadImage, deleteImage } from "../utils/cloudinary.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+console.log("upload dirname", __dirname);
 const uploadFile = async (req, res) => {
   // follow up of multer upload.single("picture")
 
@@ -17,7 +17,7 @@ const uploadFile = async (req, res) => {
     const uploadRes = await uploadImage(req.file.path, isVideo);
     //console.log('not sure what is happening here', uploadRes);
     fs.unlink(
-      path.join(__dirname, "../assets/images", req.file.filename),
+      path.join(__dirname, "../../assets/images", req.file.filename),
       (err) => {
         if (err) {
           console.log(err);

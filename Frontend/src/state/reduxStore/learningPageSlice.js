@@ -9,7 +9,7 @@ const initialState = {
 
 export const submitQuiz = createAsyncThunk(
   "/learning/submitQuiz",
-  async ({ courseId, token, lessonNo, answer }, {dispatch}) => {
+  async ({ courseId, token, lessonNo, answer }, { dispatch }) => {
     try {
 
       let tempAnswer = {};
@@ -34,7 +34,7 @@ export const submitQuiz = createAsyncThunk(
       );
       const data = await res.json();
       if (data.success) {
-        let newObj = {...answer};
+        let newObj = { ...answer };
         Object.keys(tempAnswer).forEach(key => {
           delete newObj[key];
         })
@@ -93,7 +93,7 @@ export const fetchLessons = createAsyncThunk(
 
       const data = await res.json();
 
-      // console.log("lessons", data);
+      console.log("lessons", data);
       return data.courseInfo;
     } catch (err) {
       //
@@ -140,7 +140,7 @@ const learningPageSlice = createSlice({
     }).addCase(submitQuiz.rejected, () => {
 
     });
-   
+
   },
 });
 

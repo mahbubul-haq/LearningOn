@@ -4,7 +4,7 @@
         "module": "ESNext", // preserves ES module imports
         "moduleResolution": "node",
         "outDir": "dist", // all compiled files go here
-        "rootDir": ".", // root of your backend project
+        "rootDir": "src", // root of your backend project
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,

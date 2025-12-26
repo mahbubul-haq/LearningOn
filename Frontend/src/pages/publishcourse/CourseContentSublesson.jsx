@@ -10,6 +10,7 @@ import VideoUpload from "../../components/videoUpload/VideoUpload";
 import InputLabel from "@mui/material/InputLabel";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { useContext, useState, useEffect, useCallback } from "react";
+import SubLessonVideoUploader from "./SubLessonVideoUploader";
 
 
 const CourseContentSublesson = ({
@@ -175,32 +176,13 @@ const CourseContentSublesson = ({
               </Typography>
             </InputLabel>
 
-            <VideoUpload
-              id="sublesson-video"
-              name="videoLink"
-              updateCallBack={updateCallback}
-              fileName={subLesson.videoLink}
-              setFileName={useCallback((fileName) => {
-                const e = {
-                  target: {
-                    name: "videoLink",
-                    value: fileName,
-                  },
-                };
-
-                handleInput(e, index, subIndex);
-
-                if (fileName) {
-                  setVideoLinks((prev) => [...prev, fileName]);
-                } else {
-                  setVideoLinks((prev) => [...prev.filter((link) => link !== subLesson.videoLink)]);
-                  // setVideoLinks([
-                  //   ...videoLinks.filter(
-                  //     (link) => link !== subLesson.videoLink
-                  //   ),
-                  // ]);
-                }
-              }, [handleInput, subLesson.videoLink, index, subIndex])}
+            <SubLessonVideoUploader
+              updateCallback={updateCallback}
+              subLessonVideoLink={subLesson.videoLink}
+              index={index}
+              subIndex={subIndex}
+              handleInput={handleInput}
+              setVideoLinks={setVideoLinks}
             />
 
             <InputLabel htmlFor="sublesson-note">

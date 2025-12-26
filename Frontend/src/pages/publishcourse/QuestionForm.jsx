@@ -42,16 +42,20 @@ const QuestionForm = ({
           if (idx == lessonIdx) {
             return {
               ...curLesson,
-              questions: curLesson.questions.map((curQuestion, idx1) => {
-                if (idx1 == questionNo) {
-                  return {
-                    ...curQuestion,
-                    question: event.target.value,
-                  };
-                } else {
-                  return curQuestion;
-                }
-              }),
+              questions: {
+                ...curLesson.questions,
+                questions: curLesson.questions?.questions?.map((curQuestion, idx1) => {
+                  if (idx1 == questionNo) {
+                    return {
+                      ...curQuestion,
+                      question: event.target.value,
+                    };
+                  } else {
+                    return curQuestion;
+                  }
+                }),
+              },
+
             };
           } else {
             return curLesson;
@@ -69,9 +73,12 @@ const QuestionForm = ({
           if (idx == lessonIdx) {
             return {
               ...curLesson,
-              questions: curLesson.questions.filter(
-                (curQuestion, idx1) => idx1 !== questionNo
-              ),
+              questions: {
+                ...curLesson.questions,
+                questions: curLesson.questions?.questions?.filter(
+                  (curQuestion, idx1) => idx1 !== questionNo
+                ),
+              },
             };
           } else {
             return curLesson;
@@ -87,7 +94,7 @@ const QuestionForm = ({
         backgroundColor: "white",
       }}
       expanded={isExpanded}
-      //onChange={() => setIsExpanded(!isExpanded)}
+    //onChange={() => setIsExpanded(!isExpanded)}
     >
       <AccordionSummary
         expandIcon={
@@ -138,7 +145,7 @@ const QuestionForm = ({
 
           // add styl
         }}
-        onClick={(event) => {}}
+        onClick={(event) => { }}
       >
         <Box
           sx={{
@@ -158,8 +165,8 @@ const QuestionForm = ({
             }}
           >
             {question.question &&
-            question.answer &&
-            question.options?.reduce((acc, cur) => acc && cur, true) ? (
+              question.answer &&
+              question.options?.reduce((acc, cur) => acc && cur, true) ? (
               <IoCheckmarkDoneCircleSharp
                 title="Question is complete"
                 style={{
@@ -229,7 +236,7 @@ const QuestionForm = ({
             >
               Delete
             </StyledButton>
-            
+
           </Box>
 
           <Box>
@@ -245,7 +252,9 @@ const QuestionForm = ({
               // change font size of input
               onChange={(e) => {
                 setCurrQuestion(e.target.value);
-                courseStateRef.current.lessons[lessonIdx].questions[questionNo].question = e.target.value;
+                if (courseStateRef.current.lessons[lessonIdx].questions?.questions[questionNo]) {
+                  courseStateRef.current.lessons[lessonIdx].questions.questions[questionNo].question = e.target.value;
+                }
               }}
               value={currQuestion}
               onBlur={setQuestion}

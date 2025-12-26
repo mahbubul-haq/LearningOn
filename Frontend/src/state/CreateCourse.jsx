@@ -124,7 +124,7 @@ export const CreateCourseState = (props) => {
     }
     let flag = true;
     courseState.lessons?.forEach((lesson) => {
-      lesson.questions?.forEach((question) => {
+      lesson.questions?.questions?.forEach((question) => {
         if (!question.question || !question.answer) flag = false;
         question.options?.forEach((option) => {
           if (!option) flag = false;

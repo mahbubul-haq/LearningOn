@@ -16,7 +16,7 @@ import StyledTextField1 from "../../components/StyledTextField1";
 import AddQuestions from "./AddQuestions";
 import CourseContentSublesson from "./CourseContentSublesson";
 import QuestionForm from "./QuestionForm";
-import {useContext, useState, useEffect} from "react";
+import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 
 const CourseContentCourseAccordion = ({
@@ -35,7 +35,7 @@ const CourseContentCourseAccordion = ({
 }) => {
   const theme = useTheme();
   const isMobileScreens = useMediaQuery("(max-width:600px)");
-  const {courseStateRef} = useContext(CreateCourseContext);
+  const { courseStateRef } = useContext(CreateCourseContext);
   const [lessonTitle, setLessonTitle] = useState(lesson.title);
   const [lessonDescription, setLessonDescription] = useState(lesson.description);
 
@@ -197,7 +197,7 @@ const CourseContentCourseAccordion = ({
             setLessonDescription(event.target.value);
             courseStateRef.current.lessons[index].description = event.target.value;
           }}
-          value ={lessonDescription}
+          value={lessonDescription}
           onBlur={(event) => {
             setCourseState({
               ...courseStateRef.current
@@ -289,7 +289,7 @@ const CourseContentCourseAccordion = ({
             borderRadius: "0.2rem",
           }}
         >
-          {courseState?.lessons[index]?.questions?.map((question, index1) => {
+          {courseState?.lessons[index]?.questions?.questions?.map((question, index1) => {
             return (
               <QuestionForm
                 key={index1}
@@ -305,13 +305,13 @@ const CourseContentCourseAccordion = ({
             mt: "1rem",
           }}>
 
-          <AddQuestions
-            prefix={index + 1 + "."}
-            courseState={courseState}
-            setCourseState={setCourseState}
-            lesson={index}
+            <AddQuestions
+              prefix={index + 1 + "."}
+              courseState={courseState}
+              setCourseState={setCourseState}
+              lesson={index}
             />
-            </Box>
+          </Box>
         </Box>
       </AccordionDetails>
       <AccordionActions></AccordionActions>

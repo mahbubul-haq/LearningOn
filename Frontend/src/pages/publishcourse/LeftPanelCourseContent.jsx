@@ -14,6 +14,7 @@ const LeftPanelCourseContent = ({
 
   const checkQuestions = (questions) => {
     let flag = true;
+    if (!questions) return true;
     questions?.forEach((question) => {
       if (question.question === "") flag = false;
       question.options?.forEach((option) => {
@@ -106,21 +107,21 @@ const LeftPanelCourseContent = ({
                           subLesson.videoLink?.length > 0 ||
                           subLesson.lectureNote?.length > 0
                       )
-                      && checkQuestions(lesson.questions)
-                      
+                      && checkQuestions(lesson.questions?.questions)
+
                     }
                     sx={{
                       "&&": {
                         // different color if checked vs unchecked
                         color:
                           Boolean(lesson.title) &&
-                          Boolean(lesson.subLessons) &&
-                          lesson.subLessons.length > 0 &&
-                          lesson.subLessons.every(
-                            (subLesson) =>
-                              subLesson.videoLink?.length > 0 ||
-                              subLesson.lectureNote?.length > 0
-                          )
+                            Boolean(lesson.subLessons) &&
+                            lesson.subLessons.length > 0 &&
+                            lesson.subLessons.every(
+                              (subLesson) =>
+                                subLesson.videoLink?.length > 0 ||
+                                subLesson.lectureNote?.length > 0
+                            )
                             ? (theme) => theme.palette.primary.dark
                             : (theme) => theme.palette.grey.grey400,
                       },
@@ -179,15 +180,15 @@ const LeftPanelCourseContent = ({
                         (Boolean(subLesson.videoLink) ||
                           Boolean(subLesson.lectureNote))
 
-                        
+
                       }
                       sx={{
                         "&&": {
                           // different color if checked vs unchecked
                           color:
                             Boolean(subLesson.title) &&
-                            (Boolean(subLesson.videoLink) ||
-                              Boolean(subLesson.lectureNote))
+                              (Boolean(subLesson.videoLink) ||
+                                Boolean(subLesson.lectureNote))
                               ? (theme) => theme.palette.primary.dark
                               : (theme) => theme.palette.grey.grey400,
                         },

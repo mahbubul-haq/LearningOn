@@ -16,18 +16,17 @@ import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.js";
 import cloudinaryRoutes from "./routes/cloudinary.js";
 import courseRoutes from "./routes/course.js";
-import courseProgressRoutes from "./routes/courseProgress.js";
+// import courseProgressRoutes from "./routes/courseProgress.js";
 import dataRoutes from "./routes/data.js";
 import notificationRoutes from "./routes/notification.js";
 import userRoutes from "./routes/user.js";
 import { connectSocket } from "./socket.io.js";
 import { cloudinaryConfig } from "./utils/cloudinary.js";
-// configurations
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+console.log("dirname", __dirname);
 
 const app = express();
 
@@ -50,7 +49,7 @@ app.use(cors(
     }
 ));
 
-app.use("/images", express.static(path.join(__dirname, "assets/images")));
+app.use("/images", express.static(path.join(__dirname, "../assets/images")));
 
 // routes
 
@@ -61,7 +60,7 @@ app.use("/users", userRoutes);
 app.use("/notification", notificationRoutes);
 app.use("/cloudinary", cloudinaryRoutes);
 app.use("/admin", adminRoutes);
-app.use("/learning", courseProgressRoutes);
+// app.use("/learning", courseProgressRoutes);
 
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);
 app.delete("/filedelete/:fileName/:isVideo", deleteFile);

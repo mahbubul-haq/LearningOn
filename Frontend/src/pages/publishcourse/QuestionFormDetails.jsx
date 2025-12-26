@@ -1,7 +1,7 @@
 import { Autocomplete, Box, Typography, useMediaQuery } from "@mui/material";
 import React, { useEffect } from "react";
 import StyledTextField1 from "../../components/StyledTextField1";
-import {useContext,  useRef} from "react";
+import { useContext, useRef } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 
 const QuestionFormDetails = ({
@@ -25,22 +25,25 @@ const QuestionFormDetails = ({
           if (idx == lessonIdx) {
             return {
               ...curLesson,
-              questions: curLesson.questions?.map((curQuestion, idx1) => {
-                if (idx1 == questionNo) {
-                  return {
-                    ...curQuestion,
-                    options: curQuestion.options.map((curOption, idx2) => {
-                      if (idx2 == index) {
-                        return e.target.value;
-                      } else {
-                        return curOption;
-                      }
-                    }),
-                  };
-                } else {
-                  return curQuestion;
-                }
-              }),
+              questions: {
+                ...curLesson.questions,
+                questions: curLesson.questions?.questions?.map((curQuestion, idx1) => {
+                  if (idx1 == questionNo) {
+                    return {
+                      ...curQuestion,
+                      options: curQuestion.options.map((curOption, idx2) => {
+                        if (idx2 == index) {
+                          return e.target.value;
+                        } else {
+                          return curOption;
+                        }
+                      }),
+                    };
+                  } else {
+                    return curQuestion;
+                  }
+                })
+              }
             };
           } else {
             return curLesson;
@@ -90,7 +93,9 @@ const QuestionFormDetails = ({
                 let newOptions = [...options];
                 newOptions[index] = e.target.value;
                 setOptions(newOptions);
-                courseStateRef.current.lessons[lessonIdx].questions[questionNo].options = newOptions;
+                if (courseStateRef.current.lessons[lessonIdx].questions?.questions[questionNo]) {
+                  courseStateRef.current.lessons[lessonIdx].questions.questions[questionNo].options = newOptions;
+                }
               }}
               onBlur={(e) => changeOption(e, index)}
               sx={{
@@ -114,9 +119,9 @@ const QuestionFormDetails = ({
         alignItems: isMobileScreens ? "flex-start" : "center",
       }}>
         <Typography sx={{
-            whiteSpace: "nowrap",
-            // fontSize: "1rem",
-            fontWeight: "500",
+          whiteSpace: "nowrap",
+          // fontSize: "1rem",
+          fontWeight: "500",
         }}>Correct Option</Typography>
         <Autocomplete
           disablePortal
@@ -127,24 +132,27 @@ const QuestionFormDetails = ({
                 if (idx == lessonIdx) {
                   return {
                     ...curLesson,
-                    questions: curLesson.questions.map((curQuestion, idx1) => {
-                      if (idx1 == questionNo) {
-                        return {
-                          ...curQuestion,
-                          answer: value ? value.label : "",
-                        };
-                      } else {
-                        return curQuestion;
-                      }
-                    }),
-                  };
+                    questions: {
+                      ...curLesson.questions,
+                      questions: curLesson.questions?.questions?.map((curQuestion, idx1) => {
+                        if (idx1 == questionNo) {
+                          return {
+                            ...curQuestion,
+                            answer: value ? value.label : "",
+                          };
+                        } else {
+                          return curQuestion;
+                        }
+                      }),
+                    }
+                  }
                 } else {
                   return curLesson;
                 }
               }),
             }));
           }}
-          value={ question.answer ? {
+          value={question.answer ? {
             label: question.answer,
             value: question.answer,
           } : null}

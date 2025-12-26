@@ -48,7 +48,7 @@ const LearningPage = () => {
     if (courseId) {
       dispatch(setCourseId({ courseId: courseId }));
       dispatch(fetchLessons({ courseId: courseId, token: token }));
-      dispatch(fetchProgress({ courseId: courseId, token: token }));
+      //dispatch(fetchProgress({ courseId: courseId, token: token }));
     }
   }, [courseId]);
 

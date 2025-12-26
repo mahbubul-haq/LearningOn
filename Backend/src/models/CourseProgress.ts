@@ -13,6 +13,7 @@ export interface CourseProgressDocument extends Document {
     lessonsProgress: {
         lessonId: Types.ObjectId; // references Course.lessons[i]._id
         subLessonsProgress: SubLessonProgress[];
+        completed: boolean;
     }[];
     completed: boolean;
     updatedAt: Date;
@@ -36,7 +37,9 @@ const courseProgressSchema = new Schema<CourseProgressDocument>(
             {
                 lessonId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
                 subLessonsProgress: [subLessonProgressSchema],
+                completed: { type: Boolean, default: false },
             },
+
         ],
         completed: { type: Boolean, default: false },
     },
