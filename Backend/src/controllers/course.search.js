@@ -221,7 +221,7 @@ const getCourseLessons = async (req, res) => {
                     return lesson;
                 } else return lesson;
             });
-            console.log(courseInfo);
+            // console.log(courseInfo);
 
             res.status(200).json({
                 success: true,

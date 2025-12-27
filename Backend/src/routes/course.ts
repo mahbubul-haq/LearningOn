@@ -2,8 +2,8 @@ import { Router } from "express";
 
 import { deleteCourse, getAllCourses, getCourseById, getCourseByIdWithOutPopulate, getDraftCourses, newCourse, updateCourse } from "../controllers/course.js";
 import { getCourseLessons, getFilteredCourses, getPopularCourses } from "../controllers/course.search.js";
-import verifyToken from "../middlewares/auth.js";
-import { getCourseProgress } from "../controllers/course.learning.js";
+import verifyToken, { verifyTokenLight } from "../middlewares/auth.js";
+import { getCourseProgress, updateProgress, updateWatchTime } from "../controllers/course.learning.js";
 
 
 const router = Router();
@@ -24,5 +24,7 @@ router.get("/getlessons/:courseId", verifyToken, getCourseLessons);
 //Learning
 
 router.get("/learning/progress/:courseId", verifyToken, getCourseProgress);
+router.put("/learning/updateprogress/:courseId", verifyToken, updateProgress);
+router.put("/learning/updatetime/:courseId", verifyTokenLight, updateWatchTime);
 
 export default router;

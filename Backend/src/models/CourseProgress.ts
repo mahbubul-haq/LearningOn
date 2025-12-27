@@ -3,8 +3,8 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 interface SubLessonProgress {
     subLessonId: Types.ObjectId; // references Course.lessons[i].subLessons[j]._id
     completed: boolean;
-    videoPlayDuration?: number; // in seconds
-    currentVideoTime?: number;  // in seconds
+    watchTime?: number; // in seconds
+    currentTime?: number;  // in seconds
 }
 
 export interface CourseProgressDocument extends Document {
@@ -16,15 +16,14 @@ export interface CourseProgressDocument extends Document {
         completed: boolean;
     }[];
     completed: boolean;
-    updatedAt: Date;
 }
 
 const subLessonProgressSchema = new Schema<SubLessonProgress>(
     {
         subLessonId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
         completed: { type: Boolean, default: false },
-        videoPlayDuration: { type: Number, default: 0 },
-        currentVideoTime: { type: Number, default: 0 },
+        watchTime: { type: Number, default: 0 },
+        currentTime: { type: Number, default: 0 },
     },
     { _id: false } // do not need separate _id for progress entries
 );
