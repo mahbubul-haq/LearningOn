@@ -11,32 +11,49 @@ const uploadFile = async (req, res) => {
   // upload the image in cloudinary using uploadImage function
   //console.log(req.body);
   let isVideo = req.body.isVideo === "true";
+  try {
 
-  if (req.file?.filename) {
-    //console.log("here", req.file);
-    const uploadRes = await uploadImage(req.file.path, isVideo);
-    //console.log('not sure what is happening here', uploadRes);
-    fs.unlink(
-      path.join(__dirname, "../../assets/images", req.file.filename),
-      (err) => {
-        if (err) {
-          console.log(err);
+    if (req.file?.filename) {
+      //console.log("here", req.file);
+      const uploadRes = await uploadImage(req.file.path, isVideo);
+      //console.log('not sure what is happening here', uploadRes);
+
+      fs.unlink(
+        path.join(__dirname, "../../assets/images", req.file.filename),
+        (err) => {
+          if (err) {
+            console.log(err);
+          }
         }
-      }
-    );
+      );
 
-    if (uploadRes.success) {
-      res.status(200).json({
-        success: true,
-        fileName: uploadRes.uploadResponse.public_id,
-      });
+      if (uploadRes.success) {
+        console.log("uploaded to cloudinary");
+        const response = {
+          success: true,
+          fileName: uploadRes.uploadResponse.public_id,
+        };
+
+        if (isVideo) {
+          response.videoDuration = uploadRes.uploadResponse.duration;
+        }
+
+        res.status(200).json(response);
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "File upload failed",
+        });
+      }
     } else {
       res.status(400).json({
         success: false,
         message: "File upload failed",
       });
     }
-  } else {
+  }
+  catch (err) {
+    console.log(err);
     res.status(400).json({
       success: false,
       message: "File upload failed",
@@ -50,21 +67,30 @@ const deleteFile = async (req, res) => {
   fileName = fileName.replace(/@/g, "/");
   //console.log(resource_type, fileName)
 
-  const deleteRes = await deleteImage(fileName, resource_type);
-  //console.log(deleteRes, fileName);
+  console.log(fileName);
+  try {
+    const deleteRes = await deleteImage(fileName, resource_type);
+    //console.log(deleteRes, fileName);
 
-  if (deleteRes.success) {
-    res.status(200).json({
-      success: true,
-      message: "File deleted",
-    });
-  } else {
+    if (deleteRes.success) {
+      res.status(200).json({
+        success: true,
+        message: "File deleted",
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "File delete failed",
+      });
+    }
+  }
+  catch (err) {
+    console.log(err);
     res.status(400).json({
       success: false,
       message: "File delete failed",
     });
   }
-
   //   fs.unlink(path.join(__dirname, "../assets/images", fileName), (err) => {
   //     if (err) {
   //       console.log(err);

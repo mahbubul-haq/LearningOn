@@ -1,7 +1,7 @@
 import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../state/GlobalContext";
@@ -10,12 +10,15 @@ import {
   fetchLessons,
   fetchProgress,
   setCourseId,
+  updateProgress,
 } from "../../state/reduxStore/learningPageSlice";
 import { LearningLeftPanel } from "./LearningLeftPanel";
 import LearningPageTop from "./LearningPageTop";
 import LearningRightPanel from "./LearningRightPanel";
 import NextPrevButtons from "./NextPrevButtons";
-
+import { useAppDispatch } from "../../state/reduxStore/hooks";
+import "./LearningPage.css"
+import { BsBox } from "react-icons/bs";
 
 const LearningPage = () => {
   const { courseId } = useParams();
@@ -27,15 +30,32 @@ const LearningPage = () => {
     useContext(LearningCourseContext);
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.auth);
-  const { courseInfo, progressData } = useSelector((state) => state.course);
-  const dispatch = useDispatch();
+  const { courseInfo, courseProgress } = useSelector((state) => state.course);
+  const dispatch = useAppDispatch();
+  const [learningPageWidth, setLearningPageWidth] = useState(0);
 
   useEffect(() => {
-    setExpandedLessons([]);
-    setOpenedLesson({
-      lesson: 1,
-      subLesson: 0,
-    });
+    let lessonId = openedLesson?.lesson > 0 && courseInfo?.lessons?.length > 0 ? courseInfo?.lessons[openedLesson.lesson - 1]?._id?.toString() || "" : "";
+    let subLessonId = openedLesson?.subLesson > 0 && courseInfo?.lessons?.length > 0 && courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons?.length > 0 ? courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]?._id?.toString() || "" : "";
+
+    if (subLessonId) {
+      console.log("inside", lessonId, subLessonId);
+      if (courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]) {
+        if (!courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]?.videoLink?.trim()) {
+          console.log("dispatching", lessonId, subLessonId);
+          dispatch(updateProgress({ courseId: courseInfo?._id, token: token, lessonId: lessonId, subLessonId: subLessonId }));
+        }
+      }
+    }
+  }, [openedLesson]);
+
+  useEffect(() => {
+    setExpandedLessons((prev) => [...prev, openedLesson.lesson ? openedLesson.lesson : 1]);
+    setOpenedLesson(
+      localStorage.getItem("openedLesson") ? JSON.parse(localStorage.getItem("openedLesson")) : {
+        lesson: 1,
+        subLesson: 0,
+      });
     if (!user) {
       navigate("/");
     }
@@ -48,13 +68,13 @@ const LearningPage = () => {
     if (courseId) {
       dispatch(setCourseId({ courseId: courseId }));
       dispatch(fetchLessons({ courseId: courseId, token: token }));
-      //dispatch(fetchProgress({ courseId: courseId, token: token }));
+      dispatch(fetchProgress({ courseId: courseId, token: token }));
     }
   }, [courseId]);
 
   useEffect(() => {
-    console.log("courseId + info", courseInfo);
-  }, [courseInfo]);
+    console.log("courseId + info", courseInfo, courseProgress);
+  }, [courseInfo, courseProgress]);
 
   const scrollTop = () => {
     document.querySelector(".learning-page-main").scrollTop = 0;
@@ -65,26 +85,21 @@ const LearningPage = () => {
 
       <Box
         className="learning-page-main"
-        // ref={scrollPositionRef}
         sx={{
-          // marginTop: isNonMobileScreens ? "5rem" : "4rem",
-          height: "100%",
-          overflowY: "scroll",
+          height: "100vh",
+          overflow: "auto",
           width: "100%",
-          scrollBehavior: "smooth",
-          bgcolor: '#8b4157ff', // Very light mint/white base
-
+          bgcolor: '#1a060cff',
           /* LAYER 1: SOFT ENVIRONMENTAL WASH (Fixed) */
           backgroundImage: `linear-gradient(180deg, ${theme.palette.glassMorphism.fixedBackgroundTop} 0%, ${theme.palette.glassMorphism.fixedBackgroundBottom} 100%)`,
           backgroundColor: "#1a0b0bff",
-          backgroundAttachment: 'fixed',
+          backgroundAttachment: "fixed",
           position: "relative",
           zIndex: 0,
-          // clipPath: 'inset(16px 0 0 0)',
+
         }}
 
       >
-        {/* <Box sx={{ position: "absolute", top: "", left: "0", overflow: "hidden", width: "100%", height: "100%", background: "transparent", zIndex: 0 }}> */}
 
         {/* Mist Texture */}
         <Box sx={{
@@ -94,107 +109,79 @@ const LearningPage = () => {
           backgroundImage: theme.palette.glassMorphism.fixedBackgroundImage
         }} />
 
-        {/* </Box> */}
         {/* Noise Texture */}
         <Box sx={{
           ...theme.palette.glassMorphism.noise
         }} />
-        <Box
+        {/* <Box
           sx={{
             position: "sticky",
-            top: "0",
-            zIndex: "1",
+            top: 0,
+            zIndex: 1,
             height: isMobileScreens ? "4rem" : "5rem",
-            //border: "2px solid red",
-
           }}
         >
 
           <LearningPageTop courseInfo={courseInfo} scrollTop={scrollTop} />
-        </Box >
+        </Box > */}
 
-        {/* Gradient Background */}
-        <Box sx={{
-          width: "100%",
-          backgroundImage: theme.palette.glassMorphism.scrollBackgroundImage,
-          backgroundSize: '100% 160vh',
-          backgroundRepeat: 'repeat-y',
-          /* Use 'overlay' or 'multiply' for light backgrounds to prevent washing out */
-          // mixBlendMode: 'overlay',
-          zIndex: 2,
-          // add scroll property
-          backgroundAttachment: 'scroll',
 
-        }}>
-          <Box
+        <Box className="learning-page-container"
+          sx={{
+
+            width: "100%",
+            maxWidth: "2000px",
+            mx: "auto",
+            px: "2rem",
+
+
+            display: "grid",
+            gridTemplateColumns: isNonMobileScreens ? "35% 1fr" : "1fr",
+            gap: "2rem",
+            gridTemplateRows: "1fr",
+            // overflowY: "hidden",
+            position: "sticky",
+            top: 0,
+            // border: "2px solid red",
+
+          }}
+        >
+          {isNonMobileScreens && (
+            <Box className="sidebar-container"
+              sx={{
+                width: "100%",
+                height: "100vh",
+                position: "sticky",
+                top: "0",
+              }}>
+
+              <LearningLeftPanel
+                courseInfo={courseInfo}
+                scrollTop={scrollTop}
+                courseProgress={courseProgress}
+              />
+
+            </Box>
+          )}
+
+          <Box className="rightpanel-container"
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-
-              padding: isNonMobileScreens
-                ? "0 2rem"
-                : isMobileScreens
-                  ? "0 1rem"
-                  : "0 2rem",
+              // height: `calc(100vh)`,
               width: "100%",
-              maxWidth: "2000px",
-              mx: "auto",
+              py: isNonMobileScreens ? "1.9rem" : "2rem",
+              pb: "5rem",
+
+              display: "flex",
+              flexDirection: "column",
+              gap: "2rem",
+              // overflow: "auto",
+              scrollBehavior: "smooth",
+              zIndex: 1,
               position: "sticky",
-              top: isNonMobileScreens ? "5rem" : "4rem",
-              height: "10000px",
-
-
-
+              top: 0,
             }}
           >
-            {isNonMobileScreens && (
-              <Box
-                sx={{
-                  width: "25%",
-                  maxWidth: "400px",
-                  position: "fixed",
-                  top: isNonMobileScreens ? "5rem" : "4rem",
-                  height: `calc(100vh - 9rem)`,
-                  height: "auto",
-                  py: "1rem",
-                  //pb: "20rem",
-                  maxHeight: `calc(100vh - 9rem)`,
-                  minHeight: "60vh",
-                  // border: "1px solid red",
-
-                  mt: "2rem",
-                  background: "rgba(255, 255, 255, 0.6)",
-                  backdropFilter: "blur(20px) saturate(200%)",
-                  WebkitBackdropFilter: "blur(20px) saturate(200%)",
-                  // border: '1px solid rgba(255, 255,255, 0.4)',
-                  borderRadius: "1rem",
-                  boxShadow: "0 10px 20px rgba(0, 0, 0, 0.05), inset 0 0 10px rgba(255, 255, 255, 0.75)",
-                  overflowY: "auto",
-                  ...theme.palette.glassMorphismCard,
-                  border: "none",
-                }}
-              >
-                <LearningLeftPanel
-                  courseInfo={courseInfo}
-                  scrollTop={scrollTop}
-                />
-              </Box>
-            )}
-
-            <Box
-              sx={{
-                //width: isNonMobileScreens ? "65%" : "100%",
-                // border: "1px solid red",
-                width: isNonMobileScreens ? `calc(75% - 5rem)` : "100%",
-                py: isNonMobileScreens ? "1.9rem" : "2rem",
-                position: "relative",
-                left: isNonMobileScreens ? `calc(25% + 5rem)` : "auto",
-                display: "flex",
-                flexDirection: "column",
-                gap: "2rem",
-              }}
-            >
-              <NextPrevButtons
+            {/* <NextPrevButtons
                 openedLesson={openedLesson}
                 setOpenedLesson={setOpenedLesson}
                 scrollTop={scrollTop}
@@ -202,24 +189,24 @@ const LearningPage = () => {
                 expandedLessons={expandedLessons}
                 setExpandedLessons={setExpandedLessons}
                 topButtons={true}
-              />
-              <LearningRightPanel
-                courseInfo={courseInfo}
-                progressData={progressData}
+              /> */}
+            <LearningRightPanel
+              courseInfo={courseInfo}
+              courseProgress={courseProgress}
 
-              />
-              <NextPrevButtons
-                openedLesson={openedLesson}
-                setOpenedLesson={setOpenedLesson}
-                scrollTop={scrollTop}
-                courseInfo={courseInfo}
-                expandedLessons={expandedLessons}
-                setExpandedLessons={setExpandedLessons}
-                topButtons={false}
-              />
-            </Box>
+            />
+            <NextPrevButtons
+              openedLesson={openedLesson}
+              setOpenedLesson={setOpenedLesson}
+              scrollTop={scrollTop}
+              courseInfo={courseInfo}
+              expandedLessons={expandedLessons}
+              setExpandedLessons={setExpandedLessons}
+              topButtons={false}
+            />
           </Box>
-        </Box >
+        </Box>
+
       </Box >
     </>
   );

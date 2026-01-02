@@ -12,7 +12,7 @@ const Option = ({
   lessonIdx,
   questionIdx,
   optionIdx,
-  progressData,
+  courseProgress,
   answer,
   attemptLeft,
   option,
@@ -23,26 +23,26 @@ const Option = ({
   const dispatch = useDispatch();
 
   const getOptionBackground = (lessonNo, questionIdx, optionIdx) => {
-    if (!progressData) return;
+    if (!courseProgress) return;
     let q = "Q" + lessonNo + "_" + (questionIdx + 1);
 
     if (answer[q] == `${optionIdx + 1}`) {
       return theme.palette.background.questionSelected;
     } else if (
-      progressData.ongoing.includes(q) &&
-      progressData.progressData[q].yourAnswer == "" + (optionIdx + 1)
+      courseProgress.ongoing.includes(q) &&
+      courseProgress.courseProgress[q].yourAnswer == "" + (optionIdx + 1)
     ) {
       return theme.palette.error.light1;
     } else if (
-      progressData.completed.includes(q) &&
-      progressData.progressData[q].isCorrect == false &&
-      progressData.progressData[q].yourAnswer == "" + (optionIdx + 1)
+      courseProgress.completed.includes(q) &&
+      courseProgress.courseProgress[q].isCorrect == false &&
+      courseProgress.courseProgress[q].yourAnswer == "" + (optionIdx + 1)
     ) {
       return theme.palette.error.light1;
     } else if (
-      progressData.completed.includes(q) &&
-      progressData.progressData[q].isCorrect == true &&
-      progressData.progressData[q].correctAnswer == "" + (optionIdx + 1)
+      courseProgress.completed.includes(q) &&
+      courseProgress.courseProgress[q].isCorrect == true &&
+      courseProgress.courseProgress[q].correctAnswer == "" + (optionIdx + 1)
     ) {
       return theme.palette.background.questionCorrect;
     } else {
@@ -50,11 +50,11 @@ const Option = ({
     }
   };
 
-  
 
-  
 
-  
+
+
+
   return (
     <Box
       sx={{
@@ -85,9 +85,9 @@ const Option = ({
           if (
             answer[`Q${openedLesson.lesson}_${questionIdx + 1}`] ==
             `${optionIdx + 1}`
-          ) { 
+          ) {
             let key = `Q${openedLesson.lesson}_${questionIdx + 1}`
-            const {[key]: removed, ...rest} = answer;
+            const { [key]: removed, ...rest } = answer;
             dispatch(
               setAnswer(
                 rest
@@ -98,11 +98,11 @@ const Option = ({
             //   [`Q${openedLesson.lesson}_${questionIdx + 1}`]: "",
             // });
           } else {
-            
+
             dispatch(
               setAnswer({
                 ...answer,
-                [`Q${openedLesson.lesson}_${questionIdx + 1}`] : `${optionIdx + 1}`,
+                [`Q${openedLesson.lesson}_${questionIdx + 1}`]: `${optionIdx + 1}`,
               })
             );
 

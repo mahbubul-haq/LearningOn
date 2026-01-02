@@ -1,10 +1,12 @@
+import "dotenv/config";
+
 import cors from "cors";
-import dotenv from "dotenv";
+
 import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
-dotenv.config();
+
 
 // internal imports
 import http from "http";
@@ -14,15 +16,15 @@ import { deleteFile, uploadFile } from "./controllers/uploads.js";
 import verifyToken from "./middlewares/auth.js";
 import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.js";
-import cloudinaryRoutes from "./routes/cloudinary.js";
+
 import courseRoutes from "./routes/course.js";
 // import courseProgressRoutes from "./routes/courseProgress.js";
 import dataRoutes from "./routes/data.js";
 import notificationRoutes from "./routes/notification.js";
 import userRoutes from "./routes/user.js";
 import { connectSocket } from "./socket.io.js";
-import { cloudinaryConfig } from "./utils/cloudinary.js";
-
+import "./utils/cloudinary.js";
+import cloudinaryRoutes from "./routes/cloudinary.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,7 +32,10 @@ console.log("dirname", __dirname);
 
 const app = express();
 
-cloudinaryConfig();
+
+
+
+
 initializeStripe();
 
 // middlewares

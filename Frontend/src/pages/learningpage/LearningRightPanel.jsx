@@ -12,7 +12,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import VideoPlayer from "./VideoPlayer";
 
-const LearningRightPanel = ({ courseInfo, progressData }) => {
+const LearningRightPanel = ({ courseInfo, courseProgress }) => {
   const { openedLesson } = useContext(LearningCourseContext);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const theme = useTheme();
@@ -118,7 +118,7 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
           )}
           {openedLesson.subLesson ===
             courseInfo?.lessons[openedLesson.lesson - 1].subLessons?.length +
-            1 && <Questions courseInfo={courseInfo} progressData={progressData} />}
+            1 && <Questions courseInfo={courseInfo} courseProgress={courseProgress} />}
           {openedLesson.subLesson > 0 &&
             openedLesson.subLesson <=
             courseInfo?.lessons[openedLesson.lesson - 1].subLessons
@@ -134,7 +134,7 @@ const LearningRightPanel = ({ courseInfo, progressData }) => {
                 {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
                   openedLesson.subLesson - 1
                 ].videoLink && (
-                    <VideoPlayer courseInfo={courseInfo} openedLesson={openedLesson} />
+                    <VideoPlayer courseInfo={courseInfo} openedLesson={openedLesson} courseProgress={courseProgress} />
                   )}
 
                 {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[

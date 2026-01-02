@@ -5,6 +5,8 @@ interface SubLessonProgress {
     completed: boolean;
     watchTime?: number; // in seconds
     currentTime?: number;  // in seconds
+    videoDuration?: number; // in seconds
+
 }
 
 export interface CourseProgressDocument extends Document {
@@ -14,8 +16,10 @@ export interface CourseProgressDocument extends Document {
         lessonId: Types.ObjectId; // references Course.lessons[i]._id
         subLessonsProgress: SubLessonProgress[];
         completed: boolean;
+        progressPercentage: number;
     }[];
     completed: boolean;
+    progressPercentage: number;
 }
 
 const subLessonProgressSchema = new Schema<SubLessonProgress>(
@@ -24,6 +28,7 @@ const subLessonProgressSchema = new Schema<SubLessonProgress>(
         completed: { type: Boolean, default: false },
         watchTime: { type: Number, default: 0 },
         currentTime: { type: Number, default: 0 },
+        videoDuration: { type: Number, default: 0 },
     },
     { _id: false } // do not need separate _id for progress entries
 );
@@ -37,10 +42,12 @@ const courseProgressSchema = new Schema<CourseProgressDocument>(
                 lessonId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
                 subLessonsProgress: [subLessonProgressSchema],
                 completed: { type: Boolean, default: false },
+                progressPercentage: { type: Number, default: 0 },
             },
 
         ],
         completed: { type: Boolean, default: false },
+        progressPercentage: { type: Number, default: 0 },
     },
     { timestamps: true }
 );

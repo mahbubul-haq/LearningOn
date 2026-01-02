@@ -43,7 +43,7 @@ export const CreateCourseState = (props) => {
 
   useEffect(() => {
     courseStateRef.current = courseState;
-
+    console.log("courseState Changed", courseState);
   }, [courseState]);
 
   const [introVideoUrl, setIntroVideoUrl] = React.useState("");
@@ -226,9 +226,10 @@ export const CreateCourseState = (props) => {
   const updateCourse = async (status) => {
     //console.log(courseState);
     // console.log("update course called", status, courseState);
+    console.log("updating courseStateId", courseStateRef.current?._id);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/update/${courseState._id
+        `${import.meta.env.VITE_SERVER_URL}/course/update/${courseStateRef.current?._id
         }/${status}`,
         {
           method: "PUT",

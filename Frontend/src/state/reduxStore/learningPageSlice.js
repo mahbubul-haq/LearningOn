@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   courseInfo: {},
   courseId: null,
-  progressData: null,
+  courseProgress: {},
   answer: {},
 };
 
@@ -49,11 +49,11 @@ export const submitQuiz = createAsyncThunk(
 );
 
 export const fetchProgress = createAsyncThunk(
-  "/learning",
+  "/course/learning/progress",
   async ({ courseId, token }) => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/learning/${courseId}`,
+        `${import.meta.env.VITE_SERVER_URL}/course/learning/progress/${courseId}`,
         {
           method: "GET",
           headers: {
@@ -101,6 +101,67 @@ export const fetchLessons = createAsyncThunk(
   }
 );
 
+/**
+ * @param {{ courseId: string; token: string; lessonId: string; subLessonId: string; watchTime: number; currentTime: number }} params
+ */
+export const updateWatchTime = createAsyncThunk(
+  "/course/learning/updatetime",
+  async (/** @type {{ courseId: string; token: string; lessonId: string; subLessonId: string; watchTime: number; currentTime: number }} */ { courseId, token, lessonId, subLessonId, watchTime, currentTime }) => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/course/learning/updatetime/${courseId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+          body: JSON.stringify({
+            lessonId: lessonId,
+            subLessonId: subLessonId,
+            watchTime: watchTime,
+            currentTime: currentTime
+          }),
+        }
+      );
+      const data = await res.json();
+      if (data.success) {
+        return data;
+      }
+    } catch (err) {
+      //
+    }
+  }
+);
+
+export const updateProgress = createAsyncThunk(
+  "/course/learning/updateprogress",
+  async (/** @type {{ courseId: string; token: string; lessonId: string; subLessonId: string; }} */ { courseId, token, lessonId, subLessonId }) => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/course/learning/updateprogress/${courseId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+          body: JSON.stringify({
+            lessonId: lessonId,
+            subLessonId: subLessonId,
+          }),
+        }
+      );
+      const data = await res.json();
+      if (data.success) {
+        return data.courseProgress;
+      }
+    } catch (err) {
+      //
+    }
+  }
+);
+
 const learningPageSlice = createSlice({
   name: "course",
   initialState,
@@ -113,6 +174,23 @@ const learningPageSlice = createSlice({
         ...action.payload
       }
     },
+    syncCourseProgress: (state, action) => {
+      console.log("syncCourseProgress", action.payload)
+      const { lessonId, subLessonId, watchTime, currentTime } = action.payload;
+      state.courseProgress.lessonsProgress = state.courseProgress.lessonsProgress.map((lesson) => {
+        if (lesson.lessonId === lessonId) {
+          lesson.subLessonsProgress = lesson.subLessonsProgress.map((subLesson) => {
+            if (subLesson.subLessonId === subLessonId) {
+              subLesson.watchTime = watchTime;
+              subLesson.currentTime = currentTime;
+            }
+            return subLesson;
+          });
+        }
+        return lesson;
+      });
+
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -128,7 +206,7 @@ const learningPageSlice = createSlice({
     builder.addCase(fetchProgress.pending, () => {
 
     }).addCase(fetchProgress.fulfilled, (state, action) => {
-      state.progressData = action.payload;
+      state.courseProgress = action.payload;
     }).addCase(fetchProgress.rejected, () => {
 
     });
@@ -141,9 +219,25 @@ const learningPageSlice = createSlice({
 
     });
 
+    builder.addCase(updateWatchTime.pending, () => {
+
+    }).addCase(updateWatchTime.fulfilled, (state, action) => {
+      console.log("watchTime updated", action.payload);
+    }).addCase(updateWatchTime.rejected, () => {
+
+    });
+
+    builder.addCase(updateProgress.pending, () => {
+
+    }).addCase(updateProgress.fulfilled, (state, action) => {
+      state.courseProgress = action.payload;
+    }).addCase(updateProgress.rejected, () => {
+
+    });
+
   },
 });
 
-export const { setCourseId, setAnswer } = learningPageSlice.actions;
+export const { setCourseId, setAnswer, syncCourseProgress } = learningPageSlice.actions;
 
 export default learningPageSlice.reducer;

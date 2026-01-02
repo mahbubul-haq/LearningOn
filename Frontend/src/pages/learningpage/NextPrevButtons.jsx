@@ -27,12 +27,14 @@ const NextPrevButtons = ({
     } else {
       if (
         openedLesson.subLesson ===
-        courseInfo.lessons[openedLesson.lesson - 1].subLessons.length
+        courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons?.length
       ) {
-        if (courseInfo.lessons[openedLesson.lesson - 1].questions?.length > 0) {
+        if (courseInfo?.lessons[openedLesson.lesson - 1]?.questions?.questions?.length > 0) {
           setOpenedLesson({
-            lesson: openedLesson.lesson,
-            subLesson: openedLesson.subLesson + 1,
+            // lesson: openedLesson.lesson,
+            // subLesson: openedLesson.subLesson + 1,
+            lesson: openedLesson.lesson + 1,
+            subLesson: 0,
           });
         } else {
           setOpenedLesson({
@@ -42,7 +44,7 @@ const NextPrevButtons = ({
         }
       } else if (
         openedLesson.subLesson ===
-        courseInfo.lessons[openedLesson.lesson - 1].subLessons.length + 1
+        courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons?.length + 1
       ) {
         setOpenedLesson({
           lesson: openedLesson.lesson + 1,
@@ -65,15 +67,15 @@ const NextPrevButtons = ({
 
   const lastSubLesson = () => {
     if (openedLesson.lesson === courseInfo?.lessons?.length) {
-      if (courseInfo.lessons[openedLesson.lesson - 1].questions?.length > 0) {
+      if (courseInfo?.lessons[openedLesson.lesson - 1]?.questions?.length > 0) {
         return (
           openedLesson.subLesson ===
-          courseInfo.lessons[openedLesson.lesson - 1].subLessons.length + 1
+          courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons?.length + 1
         );
       }
       return (
         openedLesson.subLesson ===
-        courseInfo.lessons[openedLesson.lesson - 1].subLessons.length
+        courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons?.length
       );
     }
     return false;
@@ -85,10 +87,10 @@ const NextPrevButtons = ({
         setOpenedLesson({
           lesson: openedLesson.lesson - 1,
           subLesson:
-            courseInfo.lessons[openedLesson.lesson - 2].questions?.length > 0
-              ? courseInfo.lessons[openedLesson.lesson - 2].subLessons.length +
+            courseInfo?.lessons[openedLesson.lesson - 2]?.questions?.length > 0
+              ? courseInfo?.lessons[openedLesson.lesson - 2]?.subLessons?.length +
               1
-              : courseInfo.lessons[openedLesson.lesson - 2].subLessons.length,
+              : courseInfo?.lessons[openedLesson.lesson - 2]?.subLessons?.length,
         });
 
         if (!expandedLessons.includes(openedLesson.lesson - 1)) {

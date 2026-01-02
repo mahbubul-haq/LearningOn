@@ -6,22 +6,25 @@ type Props = {
     subLessonVideoLink: string;
     index: number;
     subIndex: number;
-    handleInput: (event: { target: { name: string; value: string } }, index: number, subIndex?: number) => void;
+    handleInput: (event: { target: { name: string; value: string, value1?: number, name1?: string } }, index: number, subIndex?: number) => void;
     setVideoLinks: Dispatch<SetStateAction<string[]>>;
 }
 
 export default React.memo(function SubLessonVideoUploader({ updateCallback, subLessonVideoLink, index, subIndex, handleInput, setVideoLinks }: Props) {
 
-    const setFileName = useCallback((fileName: string) => {
+    const setFileName = useCallback((fileName: string, duration?: number) => {
         const e = {
             target: {
                 name: "videoLink",
                 value: fileName,
+                name1: duration ? "videoDuration" : "",
+                value1: duration ? duration : 0,
             },
         };
 
         if (fileName) {
             setVideoLinks((prev: string[]) => [...prev, fileName]);
+
         } else {
             setVideoLinks((prev: string[]) => [...prev.filter((link: string) => link !== subLessonVideoLink)]);
             // setVideoLinks([

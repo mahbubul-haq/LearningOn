@@ -120,10 +120,7 @@ export const CourseExplorerState = (props) => {
       }
       if (courseExplorer) {
         if (withNavComponentContainer) {
-          if (timeoutIdWNCC) clearTimeout(timeoutIdWNCC);
-          timeoutIdWNCC = setTimeout(() => {
-            withNavComponentContainer.style.opacity = 0.5;
-          }, 300);
+          withNavComponentContainer.style.opacity = 0.5;
         }
 
         courseExplorer.style.height = "calc(100vh - 7rem)";
@@ -143,7 +140,7 @@ export const CourseExplorerState = (props) => {
       }
       if (courseExplorer) {
         if (withNavComponentContainer) {
-          if (timeoutIdWNCC) clearTimeout(timeoutIdWNCC);
+
           withNavComponentContainer.style.opacity = 1;
         }
         courseExplorer.style.height = 0;
@@ -218,7 +215,7 @@ export const CourseExplorerState = (props) => {
 
 
   useEffect(() => {
-    
+
 
     console.log(filteredCourses);
     console.log("setting loading false");

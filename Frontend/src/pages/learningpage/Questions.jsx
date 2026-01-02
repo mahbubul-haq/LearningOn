@@ -10,7 +10,7 @@ import { submitQuiz } from "../../state/reduxStore/learningPageSlice";
 import Option from "./Option";
 
 
-const Questions = ({ courseInfo, progressData }) => {
+const Questions = ({ courseInfo, courseProgress }) => {
   const { openedLesson } = useContext(LearningCourseContext);
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const { answer } = useSelector((state) => state.course);
@@ -19,7 +19,7 @@ const Questions = ({ courseInfo, progressData }) => {
   const { token } = useSelector((state) => state.auth);
   useEffect(() => {
     console.log("questions", courseInfo);
-    console.log("progressData", progressData);
+    console.log("courseProgress", courseProgress);
   });
   useEffect(() => {
     console.log("answer", answer);
@@ -28,9 +28,9 @@ const Questions = ({ courseInfo, progressData }) => {
   const attemptLeft = (lessonNo, questionNo) => {
     let q = "Q" + lessonNo + "_" + questionNo;
     let remAttempt = 2;
-    if (progressData?.completed?.includes(q)) {
+    if (courseProgress?.completed?.includes(q)) {
       remAttempt = 0;
-    } else if (progressData.ongoing.includes(q)) {
+    } else if (courseProgress.ongoing.includes(q)) {
       remAttempt = 1;
     }
 
@@ -38,17 +38,17 @@ const Questions = ({ courseInfo, progressData }) => {
   };
 
   const isWrong = (lessonNo, questionIdx, optionIdx) => {
-    if (!progressData) return;
+    if (!courseProgress) return;
     let q = "Q" + lessonNo + "_" + (questionIdx + 1);
     if (
-      progressData.completed.includes(q) &&
-      progressData.progressData[q].isCorrect == false &&
-      progressData.progressData[q].yourAnswer == "" + (optionIdx + 1)
+      courseProgress.completed.includes(q) &&
+      courseProgress.courseProgress[q].isCorrect == false &&
+      courseProgress.courseProgress[q].yourAnswer == "" + (optionIdx + 1)
     ) {
       return true;
     } else if (
-      progressData.ongoing.includes(q) &&
-      progressData.progressData[q].yourAnswer == "" + (optionIdx + 1)
+      courseProgress.ongoing.includes(q) &&
+      courseProgress.courseProgress[q].yourAnswer == "" + (optionIdx + 1)
     ) {
       return true;
     }
@@ -57,17 +57,17 @@ const Questions = ({ courseInfo, progressData }) => {
   };
 
   const isCorrect = (lessonNo, questionIdx, optionIdx) => {
-      if (!progressData) return;
-      let q = "Q" + lessonNo + "_" + (questionIdx + 1);
-      if (
-        progressData.completed.includes(q) &&
-        progressData.progressData[q].isCorrect == true &&
-        progressData.progressData[q].correctAnswer == "" + (optionIdx + 1)
-      ) {
-        return true;
-      }
-      return false;
-    };
+    if (!courseProgress) return;
+    let q = "Q" + lessonNo + "_" + (questionIdx + 1);
+    if (
+      courseProgress.completed.includes(q) &&
+      courseProgress.courseProgress[q].isCorrect == true &&
+      courseProgress.courseProgress[q].correctAnswer == "" + (optionIdx + 1)
+    ) {
+      return true;
+    }
+    return false;
+  };
   const formQuestion = (lessonNo, questionIdx) => {
     return `Q${lessonNo}_${questionIdx + 1}`;
   };
@@ -76,13 +76,13 @@ const Questions = ({ courseInfo, progressData }) => {
     let attempting = 0;
     let totalCorrect = 0;
     let completed = 0;
-    progressData?.completed?.forEach((cur) => {
+    courseProgress?.completed?.forEach((cur) => {
       let lessonNumber = parseInt(cur.split("_")[0].substring(1));
       if (lessonNumber == lessonNo) completed++;
-      if (lessonNumber == lessonNo && progressData.progressData[cur].isCorrect) totalCorrect++;
+      if (lessonNumber == lessonNo && courseProgress.courseProgress[cur].isCorrect) totalCorrect++;
     });
 
-    progressData?.ongoing?.forEach((cur) => {
+    courseProgress?.ongoing?.forEach((cur) => {
       let lessonNumber = parseInt(cur.split("_")[0].substring(1));
       if (lessonNumber == lessonNo) attempting++;
     })
@@ -146,7 +146,7 @@ const Questions = ({ courseInfo, progressData }) => {
                               optionIdx={idx2}
                               answer={answer}
                               attemptLeft={attemptLeft}
-                              progressData={progressData}
+                              courseProgress={courseProgress}
                               option={option}
                               isWrong={isWrong}
                               isCorrect={isCorrect}
@@ -169,13 +169,13 @@ const Questions = ({ courseInfo, progressData }) => {
                             }}
                           >
                             Attempt left&nbsp;
-                              <FaLongArrowAltRight />
-                              &nbsp;
+                            <FaLongArrowAltRight />
+                            &nbsp;
                             {attemptLeft(openedLesson.lesson, idx1 + 1)}
                           </Typography>
-                        ) : progressData?.progressData[
-                            formQuestion(openedLesson.lesson, idx1)
-                          ]?.yourAnswer ? (
+                        ) : courseProgress?.courseProgress[
+                          formQuestion(openedLesson.lesson, idx1)
+                        ]?.yourAnswer ? (
                           <Box
                             sx={{
                               display: "flex",
@@ -191,7 +191,7 @@ const Questions = ({ courseInfo, progressData }) => {
                               &nbsp;
                               <b>
                                 {
-                                  progressData?.progressData[
+                                  courseProgress?.courseProgress[
                                     formQuestion(openedLesson.lesson, idx1)
                                   ].correctAnswer
                                 }
@@ -217,7 +217,7 @@ const Questions = ({ courseInfo, progressData }) => {
                     flexDirection: "column"
                   }}
                 >
-                  
+
                   <StyledButton
                     disabled={noAnswer(openedLesson.lesson)}
                     sx={{
@@ -245,27 +245,27 @@ const Questions = ({ courseInfo, progressData }) => {
                     gap: "1rem",
                     mt: "3rem",
                     flexDirection: isMobileScreens ? "column" : "row",
-                   
+
                     alignItems: "center",
                   }}>
-                  <Typography sx={{
-                    color: theme.palette.secondary.main,
-                    fontWeight: 500,
-                  }}>
-                    Completed:  {totalAttemptCorrect(openedLesson.lesson)[0]}/{lesson.questions?.length}
-                  </Typography>
-                  <Typography sx={{
-                    color: theme.palette.success.main,
-                    fontWeight: 500,
-                  }}>
-                    Correct: {totalAttemptCorrect(openedLesson.lesson)[1]}
-                  </Typography>
-                  <Typography sx={{
-                    color: theme.palette.error.main,
-                    fontWeight: 500,
-                  }}>
-                    Attempting: {totalAttemptCorrect(openedLesson.lesson)[2]}
-                  </Typography>
+                    <Typography sx={{
+                      color: theme.palette.secondary.main,
+                      fontWeight: 500,
+                    }}>
+                      Completed:  {totalAttemptCorrect(openedLesson.lesson)[0]}/{lesson.questions?.length}
+                    </Typography>
+                    <Typography sx={{
+                      color: theme.palette.success.main,
+                      fontWeight: 500,
+                    }}>
+                      Correct: {totalAttemptCorrect(openedLesson.lesson)[1]}
+                    </Typography>
+                    <Typography sx={{
+                      color: theme.palette.error.main,
+                      fontWeight: 500,
+                    }}>
+                      Attempting: {totalAttemptCorrect(openedLesson.lesson)[2]}
+                    </Typography>
                   </Box>
                 </Box>
               </Box>

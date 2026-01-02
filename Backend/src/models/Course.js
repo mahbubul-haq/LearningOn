@@ -6,6 +6,10 @@ const subLessonSchema = new mongoose.Schema({
         required: true,
     },
     videoLink: String,
+    videoDuration: {
+        type: Number,
+        default: 0,
+    },
     lectureNote: String,
 }, {
     _id: true

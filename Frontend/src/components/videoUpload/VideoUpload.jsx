@@ -104,7 +104,7 @@ const VideoUpload = ({
       // console.log(res.data);
 
       if (res.data.success) {
-        setFileName(res.data.fileName);
+        setFileName(res.data.fileName, res.data.videoDuration);
 
         //   setUploadProgress(100);
         //   setWaitingFile(res.data.fileName);
@@ -151,14 +151,30 @@ const VideoUpload = ({
         // console.log("deleted", res.data);
         setFileName("");
       } else {
-        setFileName(""); //
+        // setFileName(""); //
+        setUploadProgress(0);
+        setPreview(null);
+        setDeleting(false);
+        setOpenSnackbar(true);
+        setSnackbarMessage("File Deletion Failed!");
+        setSnackbarSeverity("error");
+        uploadStatusRef.current = "";
+        setUploadStatus("");
       }
     } catch (err) {
       console.log(err);
       //   setUploadProgress(0);
-      setFileName("");
+      // setFileName("");
 
       //   setPreview(null);
+      setUploadProgress(0);
+      setPreview(null);
+      setDeleting(false);
+      setOpenSnackbar(true);
+      setSnackbarMessage("File Deletion Failed!");
+      setSnackbarSeverity("error");
+      uploadStatusRef.current = "";
+      setUploadStatus("");
     }
   };
 

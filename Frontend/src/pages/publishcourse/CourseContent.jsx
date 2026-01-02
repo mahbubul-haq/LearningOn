@@ -115,6 +115,13 @@ const CourseContent = () => {
                 subLessons: [
                   ...lesson.subLessons.map((subLesson, curSubIndex) => {
                     if (curSubIndex === subIndex) {
+                      if (event.target.name1 === "videoDuration") {
+                        return {
+                          ...subLesson,
+                          [event.target.name]: event.target.value,
+                          [event.target.name1]: event.target.value1,
+                        };
+                      }
                       return {
                         ...subLesson,
                         [event.target.name]: event.target.value,

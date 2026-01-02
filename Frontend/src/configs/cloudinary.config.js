@@ -4,3 +4,4 @@ export const cloudinaryCld = new Cloudinary({
         cloudName: 'dvmqygstw'
     }
 });
+

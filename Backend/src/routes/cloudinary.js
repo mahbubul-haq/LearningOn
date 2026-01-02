@@ -1,4 +1,4 @@
-import { cloudinary, uploadImage, deleteImage } from "../utils/cloudinary.js";
+import { uploadImage, deleteImage } from "../utils/cloudinary.js";
 import { Router } from "express";
 
 const router = Router();

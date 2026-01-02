@@ -24,7 +24,7 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  
+
   margin-inline: auto;
 }
 
@@ -32,36 +32,39 @@ body {
   color: "#3F3D56";
 }
 
-.nav-tabs, .nav-link, .nav-item {
-    border-bottom: none;
-    padding: 0;
-    color: #3F3D56;
-    margin: 0;
+.nav-tabs,
+.nav-link,
+.nav-item {
+  border-bottom: none;
+  padding: 0;
+  color: #3F3D56;
+  margin: 0;
 }
+
 .nav-tabs .nav-link.active {
-    background-color: #EBF5E2;
+  background-color: #EBF5E2;
 }
 
 .dashboard-tabs .nav-link {
-    /* add padding  */
-    padding: 0.5rem 1rem;
+  /* add padding  */
+  padding: 0.5rem 1rem;
 }
 
 #coursepage-mainsection ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 #coursepage-mainsection ul li {
-    padding: 0;
+  padding: 0;
 }
 
 #coursepage-mainsection ul li a {
-    color: #3F3D56;
-    text-decoration: none;
-    display: block;
-    padding: 0;
+  color: #3F3D56;
+  text-decoration: none;
+  display: block;
+  padding: 0;
 }
 
 /* .MuiAutocomplete-root .MuiAutocomplete-popper {
@@ -86,3 +89,50 @@ body {
   z-index: 2;
 }
 
+/* The container holding your lessons */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  /* Make it very thin */
+}
+
+/* The background of the scrollbar area */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.2);
+  /* Keeps the gradient visible */
+}
+
+/* The draggable handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  /* Rounds the edges */
+}
+
+/* Highlight the handle on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* The container holding your lessons */
+.custom-scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  /* Make it very thin */
+}
+
+/* The background of the scrollbar area */
+.custom-scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.2);
+  /* Keeps the gradient visible */
+}
+
+/* The draggable handle */
+.custom-scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  /* Rounds the edges */
+}
+
+/* Highlight the handle on hover */
+.custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}

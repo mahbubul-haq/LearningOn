@@ -1,0 +1,47 @@
+/* The container holding your lessons */
+.sidebar-container::-webkit-scrollbar {
+    width: 6px;
+    /* Make it very thin */
+}
+
+/* The background of the scrollbar area */
+.sidebar-container::-webkit-scrollbar-track {
+    background: transparent;
+    /* Keeps the gradient visible */
+}
+
+/* The draggable handle */
+.sidebar-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    /* Rounds the edges */
+}
+
+/* Highlight the handle on hover */
+.sidebar-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+/* The container holding your lessons */
+.rightpanel-container::-webkit-scrollbar {
+    width: 10px;
+    /* Make it very thin */
+}
+
+/* The background of the scrollbar area */
+.rightpanel-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.2);
+    /* Keeps the gradient visible */
+}
+
+/* The draggable handle */
+.rightpanel-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    /* Rounds the edges */
+}
+
+/* Highlight the handle on hover */
+.rightpanel-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6);
+}

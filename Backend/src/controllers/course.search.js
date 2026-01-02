@@ -188,6 +188,7 @@ const getCourseLessons = async (req, res) => {
             lessons: 1,
             courseInstructors: 1,
             owner: 1,
+            courseTitle: 1,
             enrolledStudents: 1, ///improvement -> just select the ids instead of whole objects
         });
         ///console.log(course, userId);
@@ -206,6 +207,7 @@ const getCourseLessons = async (req, res) => {
             let courseInfo = {
                 _id: course._doc?._id,
                 lessons: course._doc?.lessons,
+                courseTitle: course._doc?.courseTitle,
             };
 
             //console.log(courseInfo);
