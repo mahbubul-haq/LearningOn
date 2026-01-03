@@ -87,6 +87,7 @@ export const themeSettings = (mode) => {
                     primary: {
                         darker: "#0c8e97ff",
                         dark: "#0db7c4ff",
+                        dark1: "#29d1ddff",
                         main: "#1febfaff",
                         main1: "#1febfaff",
                         light: "#4be8f3ff",

@@ -39,10 +39,10 @@ const LearningPage = () => {
     let subLessonId = openedLesson?.subLesson > 0 && courseInfo?.lessons?.length > 0 && courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons?.length > 0 ? courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]?._id?.toString() || "" : "";
 
     if (subLessonId) {
-      console.log("inside", lessonId, subLessonId);
+      //console.log("inside", lessonId, subLessonId);
       if (courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]) {
         if (!courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]?.videoLink?.trim()) {
-          console.log("dispatching", lessonId, subLessonId);
+          //console.log("dispatching", lessonId, subLessonId);
           dispatch(updateProgress({ courseId: courseInfo?._id, token: token, lessonId: lessonId, subLessonId: subLessonId }));
         }
       }
@@ -54,7 +54,7 @@ const LearningPage = () => {
     setOpenedLesson(
       localStorage.getItem("openedLesson") ? JSON.parse(localStorage.getItem("openedLesson")) : {
         lesson: 1,
-        subLesson: 0,
+        subLesson: 1,
       });
     if (!user) {
       navigate("/");

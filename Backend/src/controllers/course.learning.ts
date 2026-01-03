@@ -183,13 +183,11 @@ const updateProgress = async (req: any, res: any) => {
                         isCurLessonComplete = false;
                         return;
                     }
-                    if (subLesson.completed) {
+                    if (subLesson.completed || subLesson.subLessonId.toString() == subLessonId) {
                         totalCompletedSubLessons++;
-                    }
-                    curLessonTotalSubLessons++;
-                    if (subLesson.completed) {
                         curLessonCompletedSubLessons++;
                     }
+                    curLessonTotalSubLessons++;
                 });
             } else if (lesson.lessonId.toString() != lessonId && !lesson.completed) {
                 isOtherLessonsComplete = false;

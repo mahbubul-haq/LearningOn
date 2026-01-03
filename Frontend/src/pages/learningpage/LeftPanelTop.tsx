@@ -48,10 +48,10 @@ const LeftPanelTop = ({ courseInfo, courseProgress }: Props) => {
                     Course Progress
                 </Typography>
                 <Typography variant='h7' sx={{ color: theme.palette.text.secondary }}>
-                    {courseProgress?.progressPercentage}%
+                    {Math.round(courseProgress?.progressPercentage)}%
                 </Typography>
             </FlexBetween>
-            <LinearProgress color="secondary" variant="determinate" value={courseProgress?.progressPercentage} sx={{
+            <LinearProgress color="secondary" variant="determinate" value={Math.round(courseProgress?.progressPercentage)} sx={{
                 borderRadius: "1000px",
                 background: "rgba(255, 255, 255, 0.3)",
 

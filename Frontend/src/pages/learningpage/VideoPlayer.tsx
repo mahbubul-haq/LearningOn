@@ -175,7 +175,7 @@ const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerPr
 
             delta = watchTimeRef.current - lastWatchTimeRef.current;
             if (delta >= threshold) {
-                console.log("Threshold reached", currentTimeRef.current, watchTimeRef.current);
+                //console.log("Threshold reached", currentTimeRef.current, watchTimeRef.current);
                 //call wathtime update
                 dispatch(updateWatchTime({
                     courseId: courseInfo._id,
@@ -189,7 +189,7 @@ const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerPr
                 lastWatchTimeRef.current = watchTimeRef.current;
             }
             if (watchTimeRef.current >= video.duration * 0.9 && !completedRef.current) {
-                console.log("90% reached", watchTimeRef.current, video.duration);
+                //console.log("90% reached", watchTimeRef.current, video.duration);
                 //call sublesson update
                 dispatch(updateProgress({
                     courseId: courseInfo._id,

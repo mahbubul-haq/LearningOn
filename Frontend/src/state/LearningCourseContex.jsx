@@ -8,7 +8,7 @@ export const LearningCourseState = ({ children }) => {
         subLesson: JSON.parse(localStorage.getItem("openedLesson")).subLesson,
     } : {
         lesson: 1,
-        subLesson: 0,
+        subLesson: 1,
     });
     const [expandedLessons, setExpandedLessons] = useState([]);
     const [openDrawer, setOpenDrawer] = useState(false);
