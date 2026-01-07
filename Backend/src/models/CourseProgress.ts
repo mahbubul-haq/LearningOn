@@ -24,7 +24,7 @@ export interface CourseProgressDocument extends Document {
 
 const subLessonProgressSchema = new Schema<SubLessonProgress>(
     {
-        subLessonId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
+        subLessonId: { type: Schema.Types.ObjectId, required: true },
         completed: { type: Boolean, default: false },
         watchTime: { type: Number, default: 0 },
         currentTime: { type: Number, default: 0 },
@@ -39,7 +39,7 @@ const courseProgressSchema = new Schema<CourseProgressDocument>(
         userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
         lessonsProgress: [
             {
-                lessonId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
+                lessonId: { type: Schema.Types.ObjectId, required: true },
                 subLessonsProgress: [subLessonProgressSchema],
                 completed: { type: Boolean, default: false },
                 progressPercentage: { type: Number, default: 0 },

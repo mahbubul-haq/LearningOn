@@ -13,6 +13,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { MdOutlinePlayCircle } from "react-icons/md";
 import { MdOutlineSpeakerNotes } from "react-icons/md";
+import QuizIcon from '@mui/icons-material/Quiz';
+import { Button } from "@mui/material";
+import QuizAttemptDialog from "./QuizAttemptDialog";
 
 const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
 
@@ -34,8 +37,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
     if (lesson?.completed) {
       return 100;
     }
-    let completedSubLessons = lesson?.subLessonsProgress?.filter((subLesson) => subLesson?.completed)?.length || 0;
-    return completedSubLessons / Math.max(lesson?.subLessonsProgress?.length, 1) * 100;
+    return lesson?.progressPercentage || 0;
 
   }
   const {
@@ -44,6 +46,8 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
     expandedLessons,
     setExpandedLessons,
     setOpenDrawer,
+    quizStatus,
+    setQuizStatus,
   } = useContext(LearningCourseContext);
   return (
     <React.Fragment key={courseInfo.lessons?.length}>
@@ -214,73 +218,39 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                 </Box>
               </FlexBetween>
             ))}
-            {lesson.questions?.length > 0 && (
-              <FlexBetween
-                key={lesson.questions[0].question + index}
-
-                sx={{
-                  "&&": {
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    cursor: "pointer",
-                    p: "0.9rem 1rem",
-                    gap: "0.5rem",
-                  },
-                  backgroundColor:
-                    openedLesson.subLesson === lesson.subLessons.length + 1 &&
-                      openedLesson.lesson === index + 1
-                      ? `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.primary.light})`
-                      : "transparent",
-                  "&:hover": {
-                    backgroundColor: theme.palette.primary.light,
-                  },
-                }}
+            {lesson.questions?.questions?.length > 0 && (<>
+              <Button
                 onClick={() => {
-                  setOpenedLesson({
-                    lesson: index + 1,
-                    subLesson: lesson.subLessons.length + 1,
+                  setQuizStatus({
+                    lessonNo: index + 1,
+                    status: "attempting",
                   });
-                  setOpenDrawer(false);
-                  scrollTop();
                 }}
-              >
-                <Box sx={{
+                title={getLessonProgress(lesson._id?.toString()) > 99 ? "" : "Lesson not completed"}
+                sx={{
+                  mx: "auto",
+                  width: `calc(100% - 6.2rem)`,
+                  background: `linear-gradient(to right, ${theme.palette.primary.darker}, ${theme.palette.secondary.main})`,
+                  borderRadius: "0.7rem",
+                  p: "0.5rem 1rem",
+                  color: "white",
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  width: "2rem",
-                  height: "2rem",
-                  borderRadius: "500px",
-                  // backgroundColor: 1 == 0 ? "#02b68fff" : "rgba(255, 255, 255, 0.7)",
-                  // boxShadow: 1 == 0 ? "0 0 10px 0 #02b68fff" : "",
+                  gap: "0.5rem",
+                  my: "1rem",
+                  // opacity: "0.5",
+                  cursor: getLessonProgress(lesson._id?.toString()) > 99 ? "pointer !important" : "not-allowed !important",
+                  // pointerEvents: "none",
+                  color: getLessonProgress(lesson._id?.toString()) > 99 ? theme.palette.grey[300] : theme.palette.grey[500],
                 }}>
-                  <CircularProgress variant="determinate" value={75} thickness={5} size={16} sx={{
-                    color: "#35a0dfff",
-                  }} />
+                <QuizIcon sx={{ color: getLessonProgress(lesson._id?.toString()) > 99 ? theme.palette.primary.main : theme.palette.primary.darker }} />
+                {`TAKE MODULE ${(index + 1).toString().padStart(2, "0")} QUIZ`}
 
-
-                </Box>
-                <Box
-                  sx={{
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    gap: "0.7rem",
-                    display: "flex",
-                    // border: "2px solid black"
-                  }}
-                >
-                  <Typography
-                    variant="h7bold"
-                  >
-                    {index + 1}.{lesson.subLessons.length + 1}{" "}
-                  </Typography>
-                  <Typography
-                    variant="h7"
-                  >
-                    Lesson {index + 1} Questions
-                  </Typography>
-                </Box>
-              </FlexBetween>
+              </Button>
+              <QuizAttemptDialog />
+            </>
             )}
           </AccordionDetails>
         </Accordion>

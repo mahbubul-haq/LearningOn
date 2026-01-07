@@ -16,6 +16,7 @@ import { deleteFile, uploadFile } from "./controllers/uploads.js";
 import verifyToken from "./middlewares/auth.js";
 import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.js";
+import quizRoutes from "./routes/quiz.js";
 
 import courseRoutes from "./routes/course.js";
 // import courseProgressRoutes from "./routes/courseProgress.js";
@@ -65,6 +66,7 @@ app.use("/users", userRoutes);
 app.use("/notification", notificationRoutes);
 app.use("/cloudinary", cloudinaryRoutes);
 app.use("/admin", adminRoutes);
+app.use("/quiz", quizRoutes);
 // app.use("/learning", courseProgressRoutes);
 
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);

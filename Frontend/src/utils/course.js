@@ -2,11 +2,11 @@ export const getEnrollmentStatus = (purchased, user, courseInfo) => {
     if (purchased) {
         let isCourseInstructor = courseInfo?.courseInstructors?.reduce(
             (cur, instructor) => {
-                return cur || instructor._id == user._id;
+                return cur || instructor._id == user?._id;
             },
             false
         );
-        let isCourseOwner = courseInfo?.owner == user._id;
+        let isCourseOwner = courseInfo?.owner == user?._id;
 
         if (isCourseInstructor || isCourseOwner) {
             return "View Lessons";
@@ -26,11 +26,11 @@ export const getEnrollmentText = (purchased, user, courseInfo) => {
     } else {
         let isCourseInstructor = courseInfo?.courseInstructors?.reduce(
             (cur, instructor) => {
-                return cur || instructor._id == user._id;
+                return cur || instructor._id == user?._id;
             },
             false
         );
-        let isCourseOwner = courseInfo?.owner == user._id;
+        let isCourseOwner = courseInfo?.owner == user?._id;
         if (isCourseInstructor || isCourseOwner) {
             return `${numberOfStudents} learners enrolled`;
         } else if (purchased) {
@@ -46,7 +46,7 @@ export const getEnrollmentText = (purchased, user, courseInfo) => {
 export const isPurchased = (user, courseInfo) => {
     if (
         courseInfo?.enrolledStudents?.reduce((cur, enrollMent) => {
-            return cur || enrollMent.userId == user._id;
+            return cur || enrollMent.userId == user?._id;
         }, false)
     ) {
         return true;
@@ -54,13 +54,13 @@ export const isPurchased = (user, courseInfo) => {
 
     if (
         courseInfo?.courseInstructors?.reduce((cur, instructor) => {
-            return cur || instructor._id == user._id;
+            return cur || instructor._id == user?._id;
         }, false)
     ) {
         return true;
     }
 
-    if (courseInfo?.owner == user._id) {
+    if (courseInfo?.owner == user?._id) {
         return true;
     }
 

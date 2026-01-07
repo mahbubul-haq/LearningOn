@@ -1,24 +1,13 @@
 import { CssBaseline } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { themeSettings } from "./theme";
 
-import UnderwayAlert from "./components/UnderwayAlert";
-import WithNav from "./components/withNav";
-import Admin from "./pages/admin";
-import CoursePage from "./pages/coursepage";
-import PaymentStatus from "./pages/coursepage/PaymentStatus";
-import Courses from "./pages/courses";
-import Dashboard from "./pages/dashboard";
-import HomePage from "./pages/homepage";
-import LearningPage from "./pages/learningpage";
-import LoginSignUp from "./pages/loginpage";
-import ProfilePage from "./pages/profilepage";
-import PublishCourse from "./pages/publishcourse";
+// Contexts
 import { AdminState } from "./state/AdminContext";
 import { CourseExplorerState } from "./state/CourseExplorerContext";
 import { CreateCourseState } from "./state/CreateCourse";
@@ -28,7 +17,25 @@ import { HomePageState } from "./state/HomePageState";
 import { LearningCourseState } from "./state/LearningCourseContex";
 import { NotificationState } from "./state/NotificationContext";
 import { ProfilePageState } from "./state/ProfilePageContext";
-import QuizContainer from "./pages/learningpage/QuizContainer";
+
+// Components & Fast-Load Pages (Eager Loaded)
+import WithNav from "./components/withNav";
+import UnderwayAlert from "./components/UnderwayAlert";
+import AppFallback from "./AppFallback";
+import LoginSignUp from "./pages/loginpage";
+import Courses from "./pages/courses";
+import CoursePage from "./pages/coursepage";
+
+// Lazy-loaded pages 
+const HomePage = lazy(() => import("./pages/homepage"));
+const PublishCourse = lazy(() => import("./pages/publishcourse"));
+const LearningPage = lazy(() => import("./pages/learningpage"));
+const PaymentStatus = lazy(() => import("./pages/coursepage/PaymentStatus"));
+const ProfilePage = lazy(() => import("./pages/profilepage"));
+const Dashboard = lazy(() => import("./pages/dashboard"));
+const Admin = lazy(() => import("./pages/admin"));
+const Quiz = lazy(() => import("./pages/learningpage/Quiz"));
+const QuizContainer = lazy(() => import("./pages/learningpage/QuizContainer"));
 
 function App() {
   const mode = useSelector((state) => state.auth.mode);
@@ -53,21 +60,111 @@ function App() {
                         <UnderwayAlert />
                         <BrowserRouter>
                           <Routes>
-                            <Route path="/" element={<WithNav showNav={true} component={<HomePage />} />} />
+                            {/* eager loaded routes */}
+
                             <Route path="/login" element={<LoginSignUp />} />
                             <Route path="/signup" element={<LoginSignUp />} />
-                            <Route path="/publishcourse" element={<PublishCourse />} />
-                            <Route path="/publishcourse/:edit/:courseId" element={<PublishCourse />} />
-                            <Route path="/course/:courseId" element={<WithNav showNav={true} component={<CoursePage />} />} />
-                            <Route path="/learning/course/:courseId" element={<LearningPage />} />
-                            <Route path="/payment/:status/:courseId" element={<PaymentStatus />} />
-                            <Route path="/profile/:userId" element={<WithNav showNav={true} component={<ProfilePage />} />} />
-                            <Route path="/dashboard/:courseId" element={<WithNav showNav={true} component={<Dashboard />} />} />
-                            <Route path="/dashboard/" element={<WithNav showNav={true} component={<Dashboard />} />} />
+                            <Route
+                              path="/courses"
+                              element={<WithNav showNav={true} component={<Courses />} />}
+                            />
+                            <Route
+                              path="/course/:courseId"
+                              element={<WithNav showNav={true} component={<CoursePage />} />}
+                            />
+
+                            {/* Lazy loaded routes */}
+
+                            <Route
+                              path="/"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+
+                                  <WithNav showNav={true} component={<HomePage />} />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/learning/course/:courseId"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <LearningPage />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/publishcourse"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <PublishCourse />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/publishcourse/:edit/:courseId"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <PublishCourse />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/payment/:status/:courseId"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <PaymentStatus />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/profile/:userId"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <WithNav showNav={true} component={<ProfilePage />} />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/dashboard/:courseId"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <WithNav showNav={true} component={<Dashboard />} />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/dashboard/"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <WithNav showNav={true} component={<Dashboard />} />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/admin"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <Admin />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/quiz/:courseId/:lessonId"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <Quiz />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/quiz1"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <QuizContainer />
+                                </Suspense>
+                              }
+                            />
                             <Route path="/underway" element={<UnderwayAlert />} />
-                            <Route path="/admin" element={<Admin />} />
-                            <Route path="/courses" element={<WithNav showNav={true} component={<Courses />} />} />
-                            <Route path="/quiz" element={<QuizContainer />} />
                           </Routes>
                         </BrowserRouter>
                       </ThemeProvider>

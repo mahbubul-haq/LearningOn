@@ -90,14 +90,14 @@ export const themeSettings = (mode) => {
                         dark1: "#29d1ddff",
                         main: "#1febfaff",
                         main1: "#1febfaff",
-                        light: "#4be8f3ff",
+                        light: "#85f7ffff",
                         light2: "#70f1faff",
                         light3: "rgba(164, 249, 255, 1)",
                         cardBackground: "#8899e6ff"
                     },
                     secondary: {
                         main: "#43106dff",
-                        light: "#43106dff",
+                        light: "#b97aecff",
                         dark: "#320953ff",
 
                     },
@@ -226,6 +226,10 @@ export const themeSettings = (mode) => {
         },
         typography: {
             fontFamily: ["Roboto", "sans-serif"].join(","),
+            // allVariants: {
+            //     overflowWrap: "anywhere",
+            //     wordBreak: "break-word",
+            // },
 
             fontSize: 12,
             h1: {

@@ -13,7 +13,7 @@ export const convertTime = (timeString) => {
     diff -= hours * (1000 * 60 * 60);
     const minutes = Math.floor(diff / (1000 * 60));
     diff -= minutes * (1000 * 60);
-    
+
     if (years > 0) {
         time += years + "y ";
     } else if (months > 0) {
@@ -27,3 +27,9 @@ export const convertTime = (timeString) => {
     }
     return time + "ago";
 };
+
+export const getHourMinutes = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return { hours: hours, minutes: minutes };
+}

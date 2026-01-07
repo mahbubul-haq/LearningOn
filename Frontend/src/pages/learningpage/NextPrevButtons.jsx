@@ -25,8 +25,8 @@ const NextPrevButtons = ({
         lesson: openedLesson.lesson + 1,
         subLesson: 1,
       });
-      if (!expandedLessons.includes(openedLesson.lesson + 1)) {
-        setExpandedLessons([...expandedLessons, openedLesson.lesson + 1]);
+      if (!expandedLessons.includes(openedLesson.lesson)) {
+        setExpandedLessons((prev) => [...prev, openedLesson.lesson]);
       }
     } else {
       setOpenedLesson({
@@ -65,8 +65,8 @@ const NextPrevButtons = ({
               : courseInfo?.lessons[openedLesson.lesson - 2]?.subLessons?.length,
         });
 
-        if (!expandedLessons.includes(openedLesson.lesson - 1)) {
-          setExpandedLessons([...expandedLessons, openedLesson.lesson - 1]);
+        if (!expandedLessons.includes(openedLesson.lesson - 2)) {
+          setExpandedLessons((prev) => [...prev, openedLesson.lesson - 2]);
         }
       }
     } else {

@@ -50,7 +50,6 @@ const LearningPage = () => {
   }, [openedLesson]);
 
   useEffect(() => {
-    setExpandedLessons((prev) => [...prev, openedLesson.lesson ? openedLesson.lesson : 1]);
     setOpenedLesson(
       localStorage.getItem("openedLesson") ? JSON.parse(localStorage.getItem("openedLesson")) : {
         lesson: 1,
@@ -178,6 +177,7 @@ const LearningPage = () => {
               scrollBehavior: "smooth",
               zIndex: 1,
               position: "sticky",
+
               top: 0,
             }}
           >
