@@ -1,5 +1,5 @@
-import { Button } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
+import { colorTokens } from "../theme";
 
 const CarouselWidget = () => {
     var items = [
@@ -24,7 +24,7 @@ const CarouselWidget = () => {
             navButtonsProps={{
                 style: {
                     backgroundColor: "transparent",
-                    color: "#494949",
+                    color: colorTokens.grey[550],
                     borderRadius: 0,
                     margin: 0,
                     width: 30,
@@ -33,7 +33,7 @@ const CarouselWidget = () => {
                     top: "calc(50% - 15px)",
                     "&:hover": {
                         backgroundColor: "transparent",
-                        color: "#494949",
+                        color: colorTokens.grey[550],
                         opacity: 1,
                     },
                 },

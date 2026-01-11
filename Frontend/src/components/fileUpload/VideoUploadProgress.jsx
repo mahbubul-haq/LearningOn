@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
+import { colorTokens } from "../../theme";
 
 const VideoUploadProgress = ({ uploadProgress }) => {
     return (
@@ -17,9 +18,9 @@ const VideoUploadProgress = ({ uploadProgress }) => {
                 padding: "2rem",
                 gap: "1.2rem",
                 borderRadius: "0.25rem",
-                border: `2px dashed #ccc`,
+                border: `2px dashed ${colorTokens.grey.ccc}`,
                 "&:hover": {
-                    border: `2px dashed #aaa`,
+                    border: `2px dashed ${colorTokens.grey.aaa}`,
                 },
             }}
         >

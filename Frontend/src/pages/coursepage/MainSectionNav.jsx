@@ -14,7 +14,7 @@ const MainSectionNav = () => {
         <FlexBetween
             sx={{
                 py: isNonMobileScreens ? "0.7rem" : "0.5rem",
-                
+
             }}
         >
             <nav id="coursepage-mainsection" className="navbar navbar-light">
@@ -34,14 +34,14 @@ const MainSectionNav = () => {
                         style={{
                             padding: "0",
                             margin: "0",
-                            
+
                         }}
                     >
                         <a
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: theme.palette.text.primary,
+                                color: (theme) => theme.palette.homepage.textPrimary,
                                 paddingLeft: "0",
                                 margin: "0",
                             }}
@@ -56,7 +56,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: theme.palette.text.primary,
+                                color: (theme) => theme.palette.homepage.textPrimary,
                             }}
                         >
                             You&apos;ll Learn
@@ -68,7 +68,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: theme.palette.text.primary,
+                                color: (theme) => theme.palette.homepage.textPrimary,
                             }}
                         >
                             Lessons
@@ -80,7 +80,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: theme.palette.text.primary,
+                                color: (theme) => theme.palette.homepage.textPrimary,
                             }}
                         >
                             Instructors
@@ -92,7 +92,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: theme.palette.text.primary,
+                                color: (theme) => theme.palette.homepage.textPrimary,
                             }}
                         >
                             Reviews

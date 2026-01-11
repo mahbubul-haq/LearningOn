@@ -10,6 +10,7 @@ import {
 } from "react-icons/md";
 
 import { useTheme } from "@mui/material/styles";
+import { colorTokens } from "../theme";
 
 const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef }) => {
   const theme = useTheme();
@@ -196,10 +197,10 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           // set color if parent elements content has overflown
           cursor: "pointer",
           backgroundImage: isMobileScreens
-            ? "linear-gradient(to right, rgba(0, 0, 0, 0.7) 60%, rgba(255, 255, 255, 0))"
-            : "linear-gradient(to right, rgba(0, 0, 0, 0.7) 50%, rgba(255, 255, 255, 0))",
+            ? `linear-gradient(to right, ${theme.palette.homepageArrowBtnBg} 60%, transparent)`
+            : `linear-gradient(to right, ${theme.palette.homepageArrowBtnBg} 50%, transparent)`,
 
-          background: "rgba(0, 0, 0, 0.7)",
+          background: theme.palette.homepageArrowBtnBg,
           display: "none",
           alignItems: "center",
           justifyContent: "center",
@@ -217,7 +218,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
       >
         <MdOutlineKeyboardArrowLeft
           style={{
-            color: "white",
+            color: theme.palette.homepageArrowColor,
             fontSize: isMobileScreens ? "1.5rem" : "1.7rem",
             // border: "2px solid green",
             // marginTop: isMobileScreens ? "0.05rem" : "-0.05rem",
@@ -234,10 +235,10 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           // set color if parent elements content has overflown
           cursor: "pointer",
           backgroundImage: isMobileScreens
-            ? "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.7) 40%)"
-            : "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.7) 50%)",
+            ? `linear-gradient(to right, transparent, ${theme.palette.homepageArrowBtnBg} 40%)`
+            : `linear-gradient(to right, transparent, ${theme.palette.homepageArrowBtnBg} 50%)`,
           // pl: isMobileScreens ? "1rem" : "1rem",
-          background: "rgba(0, 0, 0, 0.7)",
+          background: theme.palette.homepageArrowBtnBg,
           display: "none",
           alignItems: "center",
           justifyContent: "center",
@@ -253,7 +254,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
       >
         <MdOutlineKeyboardArrowRight
           style={{
-            color: "white",
+            color: theme.palette.homepageArrowColor,
             fontSize: isMobileScreens ? "1.5rem" : "1.7rem",
             // marginTop: isMobileScreens ? "0.05rem" : "-0.05rem",
           }}
@@ -290,17 +291,17 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
               fontSize: "0.8rem",
               background:
                 item === selectedItem
-                  ? theme.palette.text.primary
-                  : theme.palette.grey.grey100,
+                  ? theme.palette.homepageSliderChipSelectedBg
+                  : theme.palette.homepageSliderChipBg,
               color:
-                item === selectedItem ? "white" : theme.palette.text.primary,
+                item === selectedItem ? colorTokens.white.main : theme.palette.text.primary,
               "&:hover": {
                 background:
                   item === selectedItem
-                    ? theme.palette.text.primary
-                    : theme.palette.grey.grey200,
+                    ? theme.palette.homepageSliderChipSelectedBg
+                    : theme.palette.homepageSliderChipBg,
                 color:
-                  item === selectedItem ? "white" : theme.palette.text.primary,
+                  item === selectedItem ? theme.palette.homepageSliderChipSelectedText : theme.palette.homepageSliderChipText,
               },
             }}
             onClick={() => {

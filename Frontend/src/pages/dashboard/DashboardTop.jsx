@@ -26,8 +26,7 @@ const DashboardTop = () => {
         <Box
             sx={{
                 padding: isNonMobileScreens ? "2rem 5rem 0rem 5rem" : "1rem 1rem 0rem 1rem",
-                backgroundColor: theme.palette.background.bottom,
-                backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
+                background: 'transparent',
                 color: theme.palette.text.primary,
             }}
         >
@@ -78,14 +77,14 @@ const DashboardTop = () => {
                         defaultActiveKey="Courses"
                         id="fill-tab-example"
                         className="dashboard-tabs"
-                    
+
                         onSelect={(k) => setOpenedTab(k)}
-                      
+
                         style={{
                             display: "flex",
                             justifyContent: "flex-start",
                             alignItems: "center",
-                          
+
                             fontSize: "1.2rem",
                             // fontWeight: "bold",
                             color: theme.palette.text.primary,

@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { colorTokens } from "../theme";
 import FlexBetween from "./FlexBetween";
 
 const CourseWidgetSkeleton = () => {
@@ -11,7 +12,7 @@ const CourseWidgetSkeleton = () => {
         width: "100%",
         minWidth: "300px",
         borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
-        background: "white",
+        background: colorTokens.white.main,
       }}
     >
       <Skeleton

@@ -1,20 +1,21 @@
 import { Box, Typography } from "@mui/material";
 import { Rating as MuiRating } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { colorTokens } from "../theme";
 
 const StyledRating = styled(MuiRating)(() => {
     return {
         "& .MuiRating-iconFilled": {
-            color: "#ff6d75",
+            color: colorTokens.pink.light,
         },
         "& .MuiRating-iconHover": {
-            color: "#ff3d47",
+            color: colorTokens.utility.red,
         },
     };
 });
 
 const Rating = ({ rating }) => {
-   // console.log(rating);
+    // console.log(rating);
     return (
         <Box
             sx={{
@@ -40,7 +41,7 @@ const Rating = ({ rating }) => {
                 size="small"
                 readOnly
                 max={rating.oneStar ? 1 : 5}
-                // max={1}
+            // max={1}
             />
             <Typography variant="lightGrey">
                 {`(${rating.count ? rating.count : 20})`}

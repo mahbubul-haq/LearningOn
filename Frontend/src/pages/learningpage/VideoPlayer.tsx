@@ -3,6 +3,7 @@ import { Box, CircularProgress } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { cloudinaryCld } from '../../configs/cloudinary.config'
 import { LearningCourseContext } from '../../state/LearningCourseContex'
+import { colorTokens } from '../../theme'
 import { AdvancedVideo, lazyload } from '@cloudinary/react'
 import useTheme from '@mui/material/styles/useTheme'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -230,34 +231,31 @@ const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerPr
             <Box
                 sx={{
                     width: "100%",
-                    // maxHeight: "500px",
-                    padding: "0.7rem 0.7rem 0.4rem 0.7rem",
-                    ...theme.palette.glassMorphismCard,
-
+                    padding: "1.5rem",
+                    backgroundColor: (theme) => theme.palette.learningPage.leftPanelBg,
+                    backdropFilter: "blur(20px)",
+                    boxShadow: (theme) => theme.palette.homepage.cardShadow,
+                    border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
+                    borderRadius: "1.2rem",
                 }}
             >
                 <Typography
                     variant="h4"
                     sx={{
-                        fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
-                        mb: "1rem",
+                        fontSize: isNonMobileScreens ? "1.5rem" : "1.2rem",
+                        mb: "1.5rem",
+                        color: (theme) => theme.palette.learningPage.textPrimary,
+                        fontWeight: "bold",
                     }}
                 >
-                    <span
-                        style={{
-                            fontWeight: "bold",
-                        }}
-                    >
-                        Lecture Video {openedLesson.lesson}.
-                        {openedLesson.subLesson}
-                    </span>
-                    &nbsp;&nbsp;
+                    Lesson {openedLesson.lesson}.{openedLesson.subLesson} &nbsp;&nbsp;
                     {
                         courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[
                             openedLesson.subLesson - 1
                         ]?.title
                     }
                 </Typography>
+
                 <Box
                     sx={{
                         position: "relative",
@@ -288,27 +286,19 @@ const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerPr
                     />
                     <Box sx={{
                         position: "absolute",
-                        top: isNonMobileScreens ? "1rem" : "0.5rem",
-                        right: isNonMobileScreens ? "1rem" : "0.5rem",
+                        top: isNonMobileScreens ? "1.5rem" : "0.75rem",
+                        right: isNonMobileScreens ? "1.5rem" : "0.75rem",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        // ...theme.palette.glassMorphismCard,
-                        // background: "rgba(255, 255, 255, 0.2)",
-
+                        zIndex: 100001,
                         border: "none",
                         outline: "none",
                         boxShadow: "none",
                         padding: "0rem",
                         borderRadius: "100px",
                     }}>
-                        {/* <CircularProgress variant="determinate" value={progress} thickness={5} size={30} sx={{
-                            color: theme.palette.primary.main,
-                            filter: "drop-shadow(0 0 5px rgba(0, 242, 254, 0.4))",
-                            // filter: "drop-shadow(0 0 15px rgba(0, 242, 254, 1))",
-
-                        }} /> */}
-                        <VideoProgressIndicator opacity={progressIndicatorOpacity} percentage={progress} size={isNonMobileScreens ? 40 : 25} />
+                        <VideoProgressIndicator opacity={progressIndicatorOpacity} percentage={progress} size={isNonMobileScreens ? 48 : 32} />
                     </Box>
                 </Box>
             </Box>

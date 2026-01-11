@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { colorTokens } from "../../theme";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { useContext } from "react";
@@ -42,7 +43,7 @@ const DashboardRight = () => {
                         key={index}
                         sx={{
                             width: "100%",
-                            border: "1px solid #ccc",
+                            border: `1px solid ${colorTokens.grey[300]}`,
                             borderRadius: "0.5rem",
                             padding: "0.5rem 1rem",
                             backgroundColor: (theme) =>
@@ -89,9 +90,10 @@ const DashboardRight = () => {
                                     ? enrollment.userName
                                     : "No Name"}
                             </Typography>
-                            <Typography sx={{ fontSize: "0.8rem",
-                            color: (theme) => theme.palette.grey.grey500,
-                         }}>
+                            <Typography sx={{
+                                fontSize: "0.8rem",
+                                color: (theme) => theme.palette.grey.grey500,
+                            }}>
                                 {convertTime(enrollment.enrolledOn)}
                             </Typography>
                         </FlexBetween>
@@ -101,7 +103,7 @@ const DashboardRight = () => {
                                 fontSize: "0.8rem",
                                 fontWeight: "600",
                                 textAlign: "right",
-                                
+
                             }}
                         >
                             {enrollment.paidAmount

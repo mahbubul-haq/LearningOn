@@ -22,14 +22,14 @@ const MainSection = ({ courseInfo }) => {
             <Box
                 sx={{
                     height: isNonMobileScreens ? "5rem" : "auto",
-                    minHeight: isNonMobileScreens ? "5rem": "4rem",
+                    minHeight: isNonMobileScreens ? "5rem" : "4rem",
                     width: "100%",
                     padding: isNonMobileScreens ? "0.1rem 5rem" : "0rem 1rem",
-                    backgroundColor: theme.palette.background.buttonBgPink,
+                    backgroundColor: (theme) => theme.palette.homepage.navBg,
                     position: "sticky",
                     top: "0",
                     zIndex: 100,
-                    boxShadow: "0px 4px 4px 0px rgba(0,0,0,0.1)",
+                    boxShadow: (theme) => theme.palette.homepage.navShadow,
                     display: "flex",
                     alignItems: "center",
                 }}
@@ -79,7 +79,7 @@ const MainSection = ({ courseInfo }) => {
                                 // width: isNonMobileScreens ? "65%" : "100%",
                             }}
                         >
-                           
+
                             <AdvancedVideo
                                 cldVid={cloudinaryCld.video(courseInfo?.introVideo)}
                                 plugins={[lazyload()]}
@@ -111,7 +111,7 @@ const MainSection = ({ courseInfo }) => {
                 <Divider
                     light
                     sx={{
-                        color: theme.palette.customDivider.main,
+                        borderColor: (theme) => theme.palette.homepage.divider,
                     }}
                 />
                 <Box
@@ -144,9 +144,8 @@ const MainSection = ({ courseInfo }) => {
                                     borderRadius: "2rem",
                                     fontSize: "1rem",
                                     padding: "1.2rem 0.5rem",
-                                    backgroundColor: (theme) =>
-                                        theme.palette.background
-                                            .buttonBgLightPink,
+                                    backgroundColor: (theme) => theme.palette.homepage.chipBg,
+                                    color: (theme) => theme.palette.homepage.chipText,
                                 }}
                             />
                         ))}
@@ -154,7 +153,7 @@ const MainSection = ({ courseInfo }) => {
                 </Box>
                 <Divider
                     sx={{
-                        color: theme.palette.customDivider.main,
+                        borderColor: (theme) => theme.palette.homepage.divider,
                     }}
                     light
                 />
@@ -174,7 +173,7 @@ const MainSection = ({ courseInfo }) => {
                 <Divider
                     light
                     sx={{
-                        color: theme.palette.customDivider.main,
+                        borderColor: (theme) => theme.palette.homepage.divider,
                     }}
                 />
                 <Box
@@ -194,7 +193,7 @@ const MainSection = ({ courseInfo }) => {
                 <Divider
                     light
                     sx={{
-                        color: theme.palette.customDivider.main,
+                        borderColor: (theme) => theme.palette.homepage.divider,
                     }}
                 />
 

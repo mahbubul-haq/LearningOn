@@ -18,6 +18,7 @@ import CourseContentSublesson from "./CourseContentSublesson";
 import QuestionForm from "./QuestionForm";
 import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
+import { colorTokens } from "../../theme";
 
 const CourseContentCourseAccordion = ({
   lesson,
@@ -47,7 +48,7 @@ const CourseContentCourseAccordion = ({
   return (
     <Accordion
       sx={{
-        backgroundColor: "white",
+        backgroundColor: colorTokens.white.main,
       }}
       expanded={expanded === `panel${index}`}
     >
@@ -128,7 +129,7 @@ const CourseContentCourseAccordion = ({
             Title{" "}
             <span
               style={{
-                color: "red",
+                color: colorTokens.utility.red,
                 fontSize: "1.1rem",
               }}
             >

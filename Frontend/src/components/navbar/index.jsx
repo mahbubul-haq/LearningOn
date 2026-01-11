@@ -103,10 +103,13 @@ const Navbar = () => {
         // very light gray boxShadow
         position: "sticky",
         top: 0,
-        backgroundColor: "white",
         zIndex: 100,
-        borderBottom: `1px solid ${theme.palette.grey.grey100}`,
         width: "100%",
+        ...theme.palette.glassMorphismCard,
+        borderRadius: 0,
+        borderTop: "none",
+        borderLeft: "none",
+        borderRight: "none",
       }}
     >
       <Box
@@ -127,7 +130,7 @@ const Navbar = () => {
             alignItems: "center",
             width: "100%",
             height: isNonMobileScreens ? "5rem" : "4rem",
-            backgroundColor: "white",
+            background: "transparent",
 
             padding: isNonMobileScreens ? "0rem 64px" : "0rem 24px",
           }}
@@ -191,7 +194,7 @@ const Navbar = () => {
                     className="nav-course"
                     onMouseOver={() => openCourseExplorer(true)}
                     onMouseOut={() => closeCourseExplorer(false)}
-                    
+
                     sx={{
                       // height: "100%",
                       // border: "2px solid red",

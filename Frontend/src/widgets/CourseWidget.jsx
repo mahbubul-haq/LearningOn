@@ -27,7 +27,7 @@ const CourseWidget = ({ courseInfo }) => {
 
         width: "100%",
         borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
-        boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset",
+        boxShadow: `0px 0px 2px ${theme.palette.neutral.translucentBlackLight} inset`,
         // border: "4px solid black",
         height: "auto",
         minHeight: isNonMobileScreens ? "250px" : "250px",
@@ -51,14 +51,13 @@ const CourseWidget = ({ courseInfo }) => {
           width: "100%",
           height: isNonMobileScreens ? "150px" : "130px",
           maxWidth: "100%",
-          boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25) inset",
+          boxShadow: `0px 0px 2px ${theme.palette.neutral.translucentBlackLight} inset`,
           objectFit: "cover",
           borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
           cursor: "pointer",
         }}
-        image={`https://res.cloudinary.com/${
-          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-        }/image/upload/${courseInfo?.courseThumbnail}`}
+        image={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+          }/image/upload/${courseInfo?.courseThumbnail}`}
         title={courseInfo?.courseTitle}
       />
       <CardContent
@@ -94,9 +93,8 @@ const CourseWidget = ({ courseInfo }) => {
                 color: "inherit",
               },
             }}
-            href={`${import.meta.env.VITE_CLIENT_URL}/course/${
-              courseInfo?._id
-            }`}
+            href={`${import.meta.env.VITE_CLIENT_URL}/course/${courseInfo?._id
+              }`}
             onClick={(e) => {
               e.preventDefault();
               if (showCourseExplorer) {
@@ -123,9 +121,8 @@ const CourseWidget = ({ courseInfo }) => {
                 color: (theme) => theme.palette.grey.grey700,
               },
             }}
-            href={`${import.meta.env.VITE_CLIENT_URL}/profile/${
-              courseInfo?.owner?._id
-            }`}
+            href={`${import.meta.env.VITE_CLIENT_URL}/profile/${courseInfo?.owner?._id
+              }`}
             onClick={(e) => {
               e.preventDefault();
               if (showCourseExplorer) {

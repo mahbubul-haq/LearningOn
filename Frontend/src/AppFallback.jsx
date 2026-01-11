@@ -1,6 +1,7 @@
 import { Box, Typography, keyframes } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import useTheme from "@mui/material/styles/useTheme";
+import { colorTokens } from "./theme";
 
 const rotate = keyframes`
   from { transform: rotate(0deg); }
@@ -8,8 +9,16 @@ const rotate = keyframes`
 `;
 
 const pulse = keyframes`
-  0%, 100% { opacity: 0.6; transform: scale(1); box-shadow: 0 0 10px cyan; }
-  50% { opacity: 1; transform: scale(1.1); box-shadow: 0 0 25px cyan; }
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1); 
+    box-shadow: 0 0 10px ${colorTokens.primary.light}; 
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.1); 
+    box-shadow: 0 0 25px ${colorTokens.primary.light}; 
+  }
 `;
 
 const AppFallback = () => {
@@ -32,7 +41,7 @@ const AppFallback = () => {
         <Box sx={{
             height: "100vh", width: "100vw", display: "flex", flexDirection: "column",
             justifyContent: "center", alignItems: "center",
-            background: `linear-gradient(135deg, ${theme.palette.primary.darker} 0%, ${theme.palette.secondary.main} 100%)`,
+            background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.main} 100%)`,
             backdropFilter: "blur(20px)",
 
         }}>
@@ -42,28 +51,44 @@ const AppFallback = () => {
                     <Box key={i} sx={{
                         position: "absolute", inset: i * 10, borderRadius: "50%",
                         border: "2px solid transparent",
-                        borderTopColor: i % 2 === 0 ? "cyan" : "#a855f7",
-                        // borderBottomColor: i % 2 === 0 ? "cyan" : "#a855f7",
+                        borderTopColor: i % 2 === 0 ? colorTokens.primary.light : colorTokens.secondary.light,
                         animation: `${rotate} ${speed}s linear infinite ${i % 2 === 0 ? "" : "reverse"}`,
                     }} />
                 ))}
-                {/* THE INNER CIRCLE (Returning) */}
+                {/* THE INNER CIRCLE */}
                 <Box sx={{
                     position: "absolute", inset: "35%", borderRadius: "50%",
-                    bgcolor: "cyan", animation: `${pulse} 2s infinite ease-in-out`
+                    bgcolor: colorTokens.primary.light,
+                    animation: `${pulse} 2s infinite ease-in-out`
                 }} />
             </Box>
 
             {/* Dynamic Text */}
             <Box sx={{ textAlign: "center" }}>
-                <Typography sx={{ color: "cyan", letterSpacing: 4, fontWeight: 500, fontSize: "0.85rem", mb: 2 }}>
+                <Typography sx={{
+                    color: colorTokens.primary.light,
+                    letterSpacing: 4,
+                    fontWeight: 500,
+                    fontSize: "0.85rem",
+                    mb: 2
+                }}>
                     {getStatusText()}
                 </Typography>
 
                 {/* Scan Bar */}
-                <Box sx={{ width: "200px", height: "1px", bgcolor: "rgba(0, 255, 255, 0.1)", mx: "auto", position: "relative", overflow: "hidden" }}>
+                <Box sx={{
+                    width: "200px",
+                    height: "1px",
+                    bgcolor: `rgba(107, 79, 217, ${colorTokens.opacity[10]})`,
+                    mx: "auto",
+                    position: "relative",
+                    overflow: "hidden"
+                }}>
                     <Box sx={{
-                        width: "40%", height: "100%", bgcolor: "cyan", position: "absolute",
+                        width: "40%",
+                        height: "100%",
+                        bgcolor: colorTokens.primary.light,
+                        position: "absolute",
                         animation: "scan 1.5s infinite linear",
                         "@keyframes scan": { "0%": { left: "-40%" }, "100%": { left: "100%" } }
                     }} />

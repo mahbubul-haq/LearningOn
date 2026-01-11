@@ -9,6 +9,7 @@ import Dropzone from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton.jsx";
 import StyledTextField from "../../components/StyledInputField.jsx";
+import { colorTokens } from "../../theme.js";
 
 const registerSchema = yup.object().shape({
     name: yup.string().trim().required("Name is required"),
@@ -26,7 +27,7 @@ const initialValuesRegister = {
     password: "",
 };
 
-const SignUpForm = ({redirect}) => {
+const SignUpForm = ({ redirect }) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const [picturePath, setPicturePath] = React.useState("");
     const [emailExists, setEmailExists] = React.useState("");
@@ -177,7 +178,7 @@ const SignUpForm = ({redirect}) => {
                                             : "80px",
                                         overflow: "hidden",
                                         mb: "1rem",
-                                        backgroundColor: "white",
+                                        backgroundColor: colorTokens.white.main,
                                     }}
                                 >
                                     <input {...getInputProps()} />
@@ -264,21 +265,21 @@ const SignUpForm = ({redirect}) => {
                                             : "0.5rem 1rem",
                                         backgroundColor: isNonMobileScreens
                                             ? (theme) =>
-                                                  theme.palette.primary.main
+                                                theme.palette.primary.main
                                             : (theme) =>
-                                                  theme.palette.primary.main,
+                                                theme.palette.primary.main,
                                         color: isNonMobileScreens
                                             ? (theme) =>
-                                                  theme.palette.text.primary
+                                                theme.palette.text.primary
                                             : (theme) =>
-                                                  theme.palette.text.primary,
+                                                theme.palette.text.primary,
                                         "&:hover": {
                                             backgroundColor: isNonMobileScreens
                                                 ? (theme) =>
-                                                      theme.palette.primary.dark
+                                                    theme.palette.primary.dark
                                                 : (theme) =>
-                                                      theme.palette.primary
-                                                          .dark,
+                                                    theme.palette.primary
+                                                        .dark,
                                         },
                                     },
                                     width: isNonMobileScreens ? "auto" : "100%",

@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import { StyledButton } from "../StyledButton";
-import {cloudinaryCld} from "../../configs/cloudinary.config";
+import { colorTokens } from "../../theme";
+import { cloudinaryCld } from "../../configs/cloudinary.config";
 import { AdvancedImage, lazyload, AdvancedVideo } from "@cloudinary/react";
 
 const VideoUploadedFile = ({
@@ -19,29 +20,29 @@ const VideoUploadedFile = ({
                 position: "relative",
                 height: "100%",
                 width: "100%",
-                
+
             }}
         >
             <Box
                 sx={{
                     width: "100%",
                     mb: "0.5rem",
-                    boxShadow: `0 0 0 1px #ccc inset`,
+                    boxShadow: `0 0 0 1px ${colorTokens.grey.ccc} inset`,
                 }}
             >
                 {isImage ? (
                     <AdvancedImage
-                    plugins={[lazyload()]}
-                    cldImg={cloudinaryCld.image(fileName)}
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        // borderRadius: "50%",
-                        opacity: deleting ? 0.3 : 1,
-                        aspectRatio: "16/9",
-                    }}
-                />
+                        plugins={[lazyload()]}
+                        cldImg={cloudinaryCld.image(fileName)}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            // borderRadius: "50%",
+                            opacity: deleting ? 0.3 : 1,
+                            aspectRatio: "16/9",
+                        }}
+                    />
                     // <img
                     //     src={`${import.meta.env.VITE_SERVER_URL
                     //         }/images/${fileName}`}
@@ -69,18 +70,18 @@ const VideoUploadedFile = ({
                     //     controls
                     // />
                     <AdvancedVideo
-                    plugins={[lazyload()]}
-                    cldVid={cloudinaryCld.video(fileName)}
-                    style={{
-                        width: "100%",
-                        height: "auto",
-                        
-                        objectFit: "contain",
-                        aspectRatio: "16/9",
-                        opacity: deleting ? 0.3 : 1,
-                    }}
-                    controls
-                />
+                        plugins={[lazyload()]}
+                        cldVid={cloudinaryCld.video(fileName)}
+                        style={{
+                            width: "100%",
+                            height: "auto",
+
+                            objectFit: "contain",
+                            aspectRatio: "16/9",
+                            opacity: deleting ? 0.3 : 1,
+                        }}
+                        controls
+                    />
                 )}
             </Box>
             <Box

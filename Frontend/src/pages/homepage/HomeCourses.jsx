@@ -1,4 +1,5 @@
 import { Box, useMediaQuery } from "@mui/material";
+import { colorTokens } from "../../theme";
 import React, { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
 import CustomSlider from "../../components/CustomSlider";
@@ -234,7 +235,7 @@ const HomeCourses = () => {
   return (
     <Box
       sx={{
-        backgroundColor: (theme) => theme.palette.background.default,
+        backgroundColor: (theme) => theme.palette.homepage.sectionBg,
 
         width: "100%",
       }}
@@ -256,11 +257,14 @@ const HomeCourses = () => {
         <Box
           sx={{
             p: isNonMobileScreens ? "2rem 2rem 0rem 2rem " : "0",
-            backgroundColor: isNonMobileScreens ? "white" : "transparent",
-            borderRadius: "0.25rem",
+            backgroundColor: isNonMobileScreens ? (theme) => theme.palette.homepage.cardBg : "transparent",
+            backdropFilter: isNonMobileScreens ? "blur(20px)" : "none",
+            WebkitBackdropFilter: isNonMobileScreens ? "blur(20px)" : "none",
+            border: isNonMobileScreens ? (theme) => `1px solid ${theme.palette.homepage.cardBorder}` : "none",
+            borderRadius: "12px",
+            boxShadow: isNonMobileScreens ? (theme) => `0 8px 32px ${theme.palette.homepage.cardShadow}` : "none",
             width: "100%",
             height: isNonMobileScreens ? "580px" : "520px",
-            // border: "1px solid #ec0000ff",
             position: "relative",
           }}
         >

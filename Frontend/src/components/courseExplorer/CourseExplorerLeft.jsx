@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { colorTokens } from "../../theme";
 import Typography from "@mui/material/Typography";
 import { MdOutlineChevronRight } from "react-icons/md";
 import FlexBetween from "../FlexBetween";
@@ -31,7 +32,7 @@ const CourseExplorerLeft = () => {
         display: "flex",
         flexDirection: "column",
         py: "2rem",
-        scrollbarColor: "#8b8b8b #fcfcfc",
+        scrollbarColor: `${colorTokens.grey[400]} ${colorTokens.white.nearWhite}`,
       }}
     >
       {categories?.length > 0 &&

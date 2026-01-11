@@ -20,12 +20,10 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
     return (
         <Box
             sx={{
-                backgroundColor: theme.palette.background.bottom,
-                backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
-                color: theme.palette.text.primary,
+                backgroundColor: (theme) => theme.palette.homepage.sectionBg,
+                backgroundImage: (theme) => `linear-gradient(to bottom, ${theme.palette.homepage.heroBg}, ${theme.palette.homepage.sectionBg})`,
+                color: (theme) => theme.palette.homepage.textPrimary,
                 pb: "2rem",
-                ///border: "0.1px solid" + theme.palette.background.bottom,
-                border: "0.1px solid" + theme.palette.background.top,
                 px: isMobileScreen ? "1rem" : "3rem"
             }}
         >
@@ -67,14 +65,14 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
                                 title="View Profile"
                                 sx={{
                                     // fontWeight: "bold",
-                                    color: theme.palette.text.primary,
+                                    color: (theme) => theme.palette.homepage.textPrimary,
                                     textTransform: "capitalize",
                                     fontSize: "1rem",
 
                                     mb: "0.1rem",
                                     textDecoration: "underline",
                                     "&:hover": {
-                                        color: theme.palette.text.primary,
+                                        color: (theme) => theme.palette.homepage.textPrimary,
                                         textDecoration: "underline",
                                     },
                                 }}
@@ -127,9 +125,9 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
                             // backgroundColor: "#f37f4aff",
                             width: "fit-content",
                             px: "2rem",
-                            backgroundColor: theme.palette.primary.dark,
+                            backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
                             "&:hover": {
-                                backgroundColor: theme.palette.primary.darker,
+                                backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
                                 color: "inherit"
                             },
                         },

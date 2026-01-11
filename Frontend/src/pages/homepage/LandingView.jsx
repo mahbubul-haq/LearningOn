@@ -1,4 +1,5 @@
 import FlexBetween from "../../components/FlexBetween.jsx";
+import { colorTokens } from "../../theme.js";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Box, Typography, useMediaQuery } from "@mui/material";
@@ -30,7 +31,7 @@ const LandingView = () => {
         <Box
             sx={{
                 width: "100%",
-                backgroundColor: "white",
+                backgroundColor: theme.palette.homepage.heroBg,
             }}
         >
             <Box
@@ -67,6 +68,7 @@ const LandingView = () => {
                                 fontSize: isNonMobileScreens
                                     ? "2rem"
                                     : "1.5rem",
+                                color: theme.palette.homepage.heroText,
                             }}
                         >
                             LearningOn
@@ -81,6 +83,7 @@ const LandingView = () => {
                                 fontSize: isNonMobileScreens
                                     ? "1.7rem"
                                     : "1.2rem",
+                                color: theme.palette.homepage.heroTextSecondary,
                             }}
                         >
                             Build skills with simple, flexible online courses designed for everyone.
@@ -132,13 +135,12 @@ const LandingView = () => {
                                         href={`${import.meta.env.VITE_CLIENT_URL}/dashboard`}
                                         sx={{
                                             borderRadius: "1000px",
-                                            border: "1px solid " + theme.palette.primary.darker,
+                                            border: "1px solid " + theme.palette.homepage.buttonSecondary,
                                             padding: "0.5rem 1rem",
-                                            color: (theme) => theme.palette.primary.darker,
+                                            color: theme.palette.homepage.buttonSecondary,
 
                                             "&:hover": {
-                                                backgroundColor: (theme) =>
-                                                    theme.palette.primary.light3,
+                                                backgroundColor: `rgba(194, 33, 95, ${colorTokens.opacity[10]})`,
                                                 color: "inherit",
                                             },
                                         }}
@@ -278,7 +280,7 @@ const LandingView = () => {
                     >
                         <img
                             className="landing-page-img"
-                            src="images/landing_page.svg"
+                            src={theme.palette.mode === "dark" ? "images/landing_page_dark.svg" : "images/landing_page_light.svg"}
                             alt="landing-page-img"
                             width="100%"
                             height="auto"

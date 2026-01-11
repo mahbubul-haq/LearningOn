@@ -1,6 +1,7 @@
 import { CircularProgress, Divider, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
+import { colorTokens } from "../../theme";
 import FlexBetween from "../../components/FlexBetween";
 import { useTheme } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -73,15 +74,16 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
           }}>
 
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon sx={{ color: (theme) => theme.palette.learningPage.textPrimary }} />}
             sx={{
               "&:hover": {
-                background: `linear-gradient(to right, #ffffff1a, #ffffff3f)`,
+                backgroundColor: (theme) => theme.palette.learningPage.lessonHover,
               },
               display: "flex",
               alignItems: "center",
               minHeight: "3.5rem",
               py: "0.4rem",
+              color: (theme) => theme.palette.learningPage.textPrimary,
             }}>
 
             <Typography variant="h7" sx={{ display: "flex", alignItems: "center", mr: "1.5rem" }}>
@@ -96,8 +98,9 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
               <Typography
                 variant="body1"
                 sx={{
-                  color: theme.palette.text.primary,
+                  color: (theme) => theme.palette.learningPage.textPrimary,
                   fontSize: "0.9rem",
+                  fontWeight: "500",
                 }}
               >
                 {lesson?.title}
@@ -106,7 +109,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
               <Typography
                 variant="body1"
                 sx={{
-                  color: theme.palette.grey[800],
+                  color: (theme) => theme.palette.learningPage.textSecondary,
                   fontSize: "0.7rem",
                 }}
               >
@@ -131,13 +134,13 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                   background:
                     (openedLesson.subLesson === subIndex + 1 &&
                       openedLesson.lesson === index + 1) ?
-                      "linear-gradient(to right, #ffffff1a, #ffffff86)" : "transparent",
+                      (theme) => theme.palette.learningPage.lessonActive : "transparent",
                   // add 4ppx left boxShadoww inset
                   boxShadow: openedLesson.subLesson === subIndex + 1 &&
-                    openedLesson.lesson === index + 1 ? `inset 4px 0px 0px ${theme.palette.secondary.main}` : "none",
+                    openedLesson.lesson === index + 1 ? (theme) => `inset 4px 0px 0px ${theme.palette.secondary.main}` : "none",
 
                   "&:hover": {
-                    background: "linear-gradient(to right, #ffffff1a, #ffffff3f)",
+                    backgroundColor: (theme) => theme.palette.learningPage.lessonHover,
                   },
                 }}
                 onClick={() => {
@@ -230,25 +233,27 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                 sx={{
                   mx: "auto",
                   width: `calc(100% - 6.2rem)`,
-                  background: `linear-gradient(to right, ${theme.palette.primary.darker}, ${theme.palette.secondary.main})`,
+                  backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
+                  "&:hover": {
+                    backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
+                  },
                   borderRadius: "0.7rem",
                   p: "0.5rem 1rem",
-                  color: "white",
+                  color: colorTokens.white.pure,
                   fontSize: "0.9rem",
                   fontWeight: "bold",
                   display: "flex",
                   alignItems: "center",
                   gap: "0.5rem",
                   my: "1rem",
-                  // opacity: "0.5",
-                  cursor: getLessonProgress(lesson._id?.toString()) > 99 ? "pointer !important" : "not-allowed !important",
-                  // pointerEvents: "none",
-                  color: getLessonProgress(lesson._id?.toString()) > 99 ? theme.palette.grey[300] : theme.palette.grey[500],
+                  cursor: getLessonProgress(lesson._id?.toString()) > 99 ? "pointer" : "not-allowed",
+                  opacity: getLessonProgress(lesson._id?.toString()) > 99 ? 1 : 0.5,
                 }}>
-                <QuizIcon sx={{ color: getLessonProgress(lesson._id?.toString()) > 99 ? theme.palette.primary.main : theme.palette.primary.darker }} />
+                <QuizIcon sx={{ color: colorTokens.white.pure }} />
                 {`TAKE MODULE ${(index + 1).toString().padStart(2, "0")} QUIZ`}
 
               </Button>
+
               <QuizAttemptDialog />
             </>
             )}

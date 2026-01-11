@@ -1,4 +1,5 @@
 import { Chip } from "@mui/material";
+import { colorTokens } from "../../theme";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
@@ -9,7 +10,7 @@ import { StyledButton } from "../../components/StyledButton";
 import { DashboardContext } from "../../state/DashboardContext";
 
 const DashboardLeft = () => {
-    const {selectedCourse, setSelectedCourse } = useContext(DashboardContext);
+    const { selectedCourse, setSelectedCourse } = useContext(DashboardContext);
 
     const user = useSelector((state) => state.auth.user);
     const theme = useTheme();
@@ -97,7 +98,7 @@ const DashboardLeft = () => {
                                         {course?.owner == user._id && (
                                             <Chip
                                                 sx={{
-                                                    color: "white",
+                                                    color: colorTokens.white.main,
                                                     backgroundColor: theme.palette.error.main,
                                                 }}
                                                 label="Owner"
@@ -109,16 +110,16 @@ const DashboardLeft = () => {
                                             if (curr == user._id) return true;
                                             else return acc;
                                         }, false) && (
-                                            <Chip
-                                                sx={{
-                                                    color: "white",
-                                                    backgroundColor: theme.palette.grey.grey800,
-                                                }}
-                                                label="Instructor"
-                                                size="small"
-                                                variant="contained"
-                                            />
-                                        )}
+                                                <Chip
+                                                    sx={{
+                                                        color: colorTokens.white.main,
+                                                        backgroundColor: theme.palette.grey.grey800,
+                                                    }}
+                                                    label="Instructor"
+                                                    size="small"
+                                                    variant="contained"
+                                                />
+                                            )}
                                     </Box>
                                 </Box>
                             );

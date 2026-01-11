@@ -1,5 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import React, { useContext, useEffect } from "react";
+import { colorTokens } from "../../theme";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { FaLongArrowAltRight } from "react-icons/fa";
@@ -118,13 +119,13 @@ const Questions = ({ courseInfo, courseProgress }) => {
                     >
                       <Typography
                         sx={{
-                          fontSize: "0.7rem",
-                          color: theme.palette.grey.grey200,
+                          fontSize: "0.8rem",
+                          color: (theme) => theme.palette.learningPage.textSecondary,
                         }}
                       >
                         Question {idx1 + 1} of {lesson.questions?.length}
                       </Typography>
-                      <Typography variant="h5600">
+                      <Typography variant="h5600" sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
                         {question.question}
                       </Typography>
                       <Box
@@ -165,7 +166,7 @@ const Questions = ({ courseInfo, courseProgress }) => {
                           <Typography
                             sx={{
                               fontSize: "0.8rem",
-                              color: theme.palette.grey.grey300,
+                              color: (theme) => theme.palette.learningPage.textSecondary,
                             }}
                           >
                             Attempt left&nbsp;
@@ -223,7 +224,12 @@ const Questions = ({ courseInfo, courseProgress }) => {
                     sx={{
                       "&&": {
                         borderRadius: "1000px",
-                        width: "fit-content"
+                        width: "fit-content",
+                        backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
+                        color: colorTokens.white.pure,
+                        "&:hover": {
+                          backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
+                        }
                       },
                     }}
                     onClick={() => {
@@ -240,6 +246,7 @@ const Questions = ({ courseInfo, courseProgress }) => {
                   >
                     Submit
                   </StyledButton>
+
                   <Box sx={{
                     display: "flex",
                     gap: "1rem",

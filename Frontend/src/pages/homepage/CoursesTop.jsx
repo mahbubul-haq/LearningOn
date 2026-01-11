@@ -51,7 +51,7 @@ const CoursesTop = ({ courseType, setCourseType, handleChange, setChangingCourse
             value={courseType}
             sx={{
               "& .MuiTabs-indicator": {
-                backgroundColor: (theme) => theme.palette.text.primary,
+                backgroundColor: (theme) => theme.palette.homepage.tabIndicator,
               },
             }}
           >
@@ -60,9 +60,9 @@ const CoursesTop = ({ courseType, setCourseType, handleChange, setChangingCourse
                 fontSize: "0.9rem",
                 fontWeight: "600",
                 textTransform: "capitalize",
-                color: (theme) => theme.palette.grey.grey400,
+                color: (theme) => theme.palette.homepage.tabInactive,
                 "&.Mui-selected": {
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.homepage.tabActive,
                 },
               }}
               label="My Courses"
@@ -73,9 +73,9 @@ const CoursesTop = ({ courseType, setCourseType, handleChange, setChangingCourse
                 fontSize: "0.9rem",
                 fontWeight: "600",
                 textTransform: "capitalize",
-                color: (theme) => theme.palette.grey.grey400,
+                color: (theme) => theme.palette.homepage.tabInactive,
                 "&.Mui-selected": {
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.homepage.tabActive,
                 },
               }}
               label="I am Learning"
@@ -86,9 +86,9 @@ const CoursesTop = ({ courseType, setCourseType, handleChange, setChangingCourse
                 fontSize: "0.9rem",
                 fontWeight: "600",
                 textTransform: "capitalize",
-                color: (theme) => theme.palette.grey.grey400,
+                color: (theme) => theme.palette.homepage.tabInactive,
                 "&.Mui-selected": {
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.homepage.tabActive,
                 },
               }}
               label="Popular Courses"
@@ -116,8 +116,8 @@ const CoursesTop = ({ courseType, setCourseType, handleChange, setChangingCourse
                 background: "transparent",
                 padding: "0.5rem 3rem 0.5rem 1rem",
                 borderRadius: "1000px",
-                color: theme.palette.grey.grey700,
-                border: `1px solid ${theme.palette.grey.grey200}`,
+                color: theme.palette.homepageSelectText,
+                border: `1px solid ${theme.palette.homepageSelectBorder}`,
               }}
               onChange={(e) => {
                 console.log(e.target.value);

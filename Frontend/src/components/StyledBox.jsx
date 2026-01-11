@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { colorTokens } from "../theme";
 
 export const StyledGrid2Cols = styled(Box)(() => ({
   display: "grid",
@@ -8,7 +9,7 @@ export const StyledGrid2Cols = styled(Box)(() => ({
   gap: "2rem",
 }));
 
-export const CourseNextPrevButton = styled(Box)(() => {
+export const CourseNextPrevButton = styled(Box)(({ theme }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   return {
@@ -18,13 +19,16 @@ export const CourseNextPrevButton = styled(Box)(() => {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backgroundColor: theme.palette.homepage.arrowBg,
     cursor: "pointer",
     transition: "all 0.5s ease",
     zIndex: "1",
     height: isNonMobileScreens ? "100%" : "45px",
     width: isNonMobileScreens ? "auto" : "45px",
     borderRadius: isNonMobileScreens ? "0" : "50%",
+    "&:hover": {
+      backgroundColor: theme.palette.homepage.arrowHover,
+    },
   };
 });
 

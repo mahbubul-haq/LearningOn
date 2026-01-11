@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { NotificationContext } from "../../state/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import useTheme from "@mui/material/styles/useTheme";
+import { colorTokens } from "../../theme";
 const NotificationDrawer = ({
   openNotificationDrawer,
   setOpenNotificationDrawer,
@@ -48,7 +49,7 @@ const NotificationDrawer = ({
             alignItems: "center",
             position: "sticky",
             top: 0,
-            backgroundColor: "white",
+            backgroundColor: colorTokens.white.main,
             p: "1rem",
             zIndex: 100,
           }}
@@ -123,9 +124,8 @@ const NotificationDrawer = ({
                 <img
                   src={
                     n.imageLink
-                      ? `https://res.cloudinary.com/${
-                          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-                        }/image/upload/${n.imageLink}`
+                      ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                      }/image/upload/${n.imageLink}`
                       : "/images/dummyPerson.jpeg"
                   }
                   alt="user"

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import socketIoClient from "socket.io-client";
+import { colorTokens } from "../../theme";
 
 const PaymentStatus = () => {
     const { status, courseId } = useParams();
@@ -44,13 +45,15 @@ const PaymentStatus = () => {
         >
             <Box
                 sx={{
-                    borderRadius: "0.25rem",
-                    backgroundColor: "white",
+                    borderRadius: "1rem",
+                    backgroundColor: (theme) => theme.palette.homepage.cardBg,
                     padding: "3rem 5rem",
                     display: "flex",
                     flexDirection: "column",
                     gap: "1rem",
                     alignItems: "center",
+                    boxShadow: (theme) => theme.palette.homepage.navShadow,
+                    border: (theme) => `1px solid ${theme.palette.homepage.divider}`,
                 }}
             >
                 <Box
@@ -58,16 +61,19 @@ const PaymentStatus = () => {
                         borderRadius: "50%",
                         backgroundColor:
                             status === "success"
-                                ? theme.palette.primary.light3
-                                : theme.palette.error.light1,
-                        padding: "1rem",
+                                ? `rgba(76, 175, 80, ${colorTokens.opacity[15]})`
+                                : `rgba(244, 67, 54, ${colorTokens.opacity[15]})`,
+                        padding: "1.2rem",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                     }}
                 >
                     {status === "success" && (
                         <DoneIcon
                             sx={{
-                                fontSize: "2rem",
-                                color: theme.palette.primary.dark,
+                                fontSize: "2.5rem",
+                                color: (theme) => theme.palette.success.main,
                             }}
                         />
                     )}
@@ -75,18 +81,19 @@ const PaymentStatus = () => {
                     {status === "cancel" && (
                         <CloseIcon
                             sx={{
-                                fontSize: "2rem",
-                                color: theme.palette.error.main,
+                                fontSize: "2.5rem",
+                                color: (theme) => theme.palette.error.main,
                             }}
                         />
                     )}
                 </Box>
                 <Typography
                     sx={{
-                        fontSize: "1.2rem",
-                        fontWeight: "600",
+                        fontSize: "1.5rem",
+                        fontWeight: "700",
                         textAlign: "center",
-                        color: theme.palette.grey.grey700,
+                        color: (theme) => theme.palette.homepage.textPrimary,
+                        mt: "1rem",
                     }}
                 >
                     {status === "success"
@@ -94,22 +101,36 @@ const PaymentStatus = () => {
                         : "Payment Failed"}
                 </Typography>
 
-                <Button
+                <Typography
                     sx={{
-                        mt: "1rem",
+                        fontSize: "1rem",
+                        textAlign: "center",
+                        color: (theme) => theme.palette.homepage.textSecondary,
+                        mb: "1.5rem",
                     }}
                 >
-                    <Link
-                        style={{
-                            textDecoration: "none",
-                            color: theme.palette.primary.dark,
-                            fontWeight: "600",
-                            fontSize: "1rem",
-                        }}
-                        to={`/course/${courseId}`}
-                    >
-                        Go to Course
-                    </Link>
+                    {status === "success"
+                        ? "Thank you for your purchase! You can now access all course materials."
+                        : "Something went wrong with your payment. Please try again or contact support."}
+                </Typography>
+
+                <Button
+                    component={Link}
+                    to={`/course/${courseId}`}
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
+                        color: (theme) => theme.palette.homepage.buttonPrimaryText,
+                        fontWeight: "700",
+                        padding: "0.8rem 2.5rem",
+                        borderRadius: "0.5rem",
+                        textTransform: "none",
+                        fontSize: "1.1rem",
+                        "&:hover": {
+                            backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
+                        },
+                    }}
+                >
+                    Go to Course
                 </Button>
             </Box>
         </Box>

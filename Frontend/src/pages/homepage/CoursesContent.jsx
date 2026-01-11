@@ -2,6 +2,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { colorTokens } from "../../theme";
 import { useContext, useEffect } from "react";
 import { CourseNextPrevButton } from "../../components/StyledBox";
 import { HomePageContext } from "../../state/HomePageState";
@@ -54,7 +55,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
       let distance = curTouchX - prevTouchX;
 
       if (distance > 0) {
-        handleScroll("left", distance );
+        handleScroll("left", distance);
       } else if (distance < 0) {
         handleScroll("right", -distance);
       }
@@ -91,7 +92,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
         <ArrowForwardIosIcon
           sx={{
             fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
-            color: "rgba(255, 255, 255, 1)",
+            color: (theme) => theme.palette.homepage.arrowColor,
             alignSelf: "center",
           }}
         />
@@ -109,7 +110,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
         <ArrowForwardIosIcon
           sx={{
             fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
-            color: "rgba(255, 255, 255, 1)",
+            color: (theme) => theme.palette.homepage.arrowColor,
             alignSelf: "center",
             transform: "rotate(180deg)",
           }}
@@ -199,8 +200,8 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
               }}
             >
               <Typography variant="h4grey">{
-                courseType == "Popular Courses" ? "No courses found" : courseType == "My Courses" ? 
-                "No published courses yet" : "You don't have any active courses right now"}
+                courseType == "Popular Courses" ? "No courses found" : courseType == "My Courses" ?
+                  "No published courses yet" : "You don't have any active courses right now"}
               </Typography>
               <img
                 src="/images/not_found_1.svg"

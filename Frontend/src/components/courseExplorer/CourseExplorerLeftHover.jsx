@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { colorTokens } from "../../theme";
 import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
 import { useContext, useEffect } from "react";
@@ -29,10 +30,10 @@ const CourseExplorerLeftHover = () => {
     if (showLeftHover && !closeLeftHover) {
       leftHover.style.overflowY = "hidden";
       leftHover.style.width = "300px";
-       timeoutId = setTimeout(() => {
+      timeoutId = setTimeout(() => {
         leftHover.style.overflowY = "auto";
       }, 1000);
-      
+
     } else {
       if (timeoutId) clearTimeout(timeoutId);
       leftHover.style.overflowY = "hidden";
@@ -62,7 +63,7 @@ const CourseExplorerLeftHover = () => {
         transition: "width 0.3s ease-out",
         width: 0,
         zIndex: "5000000",
-        scrollbarColor: "#8b8b8b #fcfcfc",
+        scrollbarColor: `${colorTokens.grey[400]} ${colorTokens.white.nearWhite}`,
       }}
       onMouseOver={() => setShowLeftHover(true)}
       onMouseOut={() => setShowLeftHover(false)}

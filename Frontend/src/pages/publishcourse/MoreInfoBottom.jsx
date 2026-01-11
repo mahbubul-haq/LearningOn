@@ -8,6 +8,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import InstructorProfile from "../../components/InstructorProfile";
 import { StyledButton } from "../../components/StyledButton";
 import StyledTextField1 from "../../components/StyledTextField1";
+import { colorTokens } from "../../theme";
 
 const MoreInfoBottom = ({
     courseState,
@@ -55,9 +56,9 @@ const MoreInfoBottom = ({
                         value={
                             courseState.approxTimeToComplete
                                 ? {
-                                      label: `${courseState.approxTimeToComplete} weeks`,
-                                      value: `${courseState.approxTimeToComplete} weeks`,
-                                  }
+                                    label: `${courseState.approxTimeToComplete} weeks`,
+                                    value: `${courseState.approxTimeToComplete} weeks`,
+                                }
                                 : null
                         }
                         id="completion-time"
@@ -67,11 +68,11 @@ const MoreInfoBottom = ({
                                 value: index + 1,
                             })) || [{ label: "No data" }]
                         }
-                        
+
                         sx={{
                             width: isMobileScreens ? "100%" : "250px",
                             maxWidth: "100%",
-                            background: "white",
+                            background: colorTokens.white.main,
                         }}
                         renderInput={(params) => (
                             <StyledTextField1
@@ -192,9 +193,9 @@ const MoreInfoBottom = ({
                         options={
                             users
                                 ? users.map((user) => ({
-                                      label: user.name,
-                                      value: user._id,
-                                  }))
+                                    label: user.name,
+                                    value: user._id,
+                                }))
                                 : [{ label: "No data" }]
                         }
                         sx={{

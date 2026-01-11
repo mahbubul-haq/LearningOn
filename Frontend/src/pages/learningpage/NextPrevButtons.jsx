@@ -4,6 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import { StyledButton } from "../../components/StyledButton";
 import useTheme from "@mui/material/styles/useTheme";
+import { colorTokens } from "../../theme";
 
 const NextPrevButtons = ({
   openedLesson,
@@ -78,37 +79,7 @@ const NextPrevButtons = ({
     scrollTop();
   };
 
-  const subtleBtnStyle = {
-    textTransform: 'none',
-    fontWeight: 600,
 
-    color: "#1febfaff",
-    fontSize: '0.85rem',
-    '&:hover': {
-      color: '#c3fbffff',
-      background: 'transparent'
-    }
-  };
-
-  // BOTTOM NEXT (The "Stunning" Jelly)
-  const nextBtnStyle = {
-    px: "1.7rem",
-    py: "0.5rem",
-    borderRadius: '1000px', // Matches card corner better than pill
-    background: 'linear-gradient(135deg, #90f5fcff 0%, #1febfaff 100%)',
-    boxShadow: `0 4px 15px #65eaf354, 0 8px 32px rgba(0, 0, 0, 0)`,
-
-    color: theme.palette.text.primary,
-    fontWeight: 700,
-    // border: '1px solid #02b68fff',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    '&:hover': {
-      transform: 'translateY(-2px) scale(1.02)',
-
-      background: 'linear-gradient(135deg, #b5f7fcff 0%, #96f6fdff 100%)',
-      boxShadow: `0 4px 15px #3ef2ff94, 0 8px 32px rgba(0, 0, 0, 0)`,
-    }
-  };
 
   return (
     <Box
@@ -123,40 +94,54 @@ const NextPrevButtons = ({
       {openedLesson.lesson == 1 && openedLesson.subLesson == 1 ? (
         <Box></Box>
       ) : (
-        <Button
-          // sx={navButtonStyle}
+        <StyledButton
           onClick={handlePrev}
-          sx={topButtons ? subtleBtnStyle : nextBtnStyle}
+          sx={{
+            mr: "auto",
+            backgroundColor: (theme) => theme.palette.learningPage.cardBg,
+            color: (theme) => theme.palette.learningPage.textPrimary,
+            border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
+            backdropFilter: "blur(10px)",
+            '&:hover': {
+              backgroundColor: (theme) => theme.palette.learningPage.lessonHover,
+              borderColor: (theme) => theme.palette.secondary.main,
+            }
+          }}
         >
-          <KeyboardDoubleArrowLeftIcon />
+          <KeyboardDoubleArrowLeftIcon sx={{ color: (theme) => theme.palette.secondary.main }} />
           <Typography
             sx={{
-              fontWeight: "600",
+              fontWeight: "bold",
               pl: "0.5rem",
             }}
           >
-            Prev
+            PREV
           </Typography>
-        </Button>
+        </StyledButton>
       )}
       {lastSubLesson() ? (
         <Box></Box>
       ) : (
-        <Button
-          // sx={navButtonStyle}
+        <StyledButton
           onClick={handleNext}
-          sx={topButtons ? subtleBtnStyle : nextBtnStyle}
+          sx={{
+            backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
+            color: colorTokens.white.pure,
+            '&:hover': {
+              backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
+            }
+          }}
         >
           <Typography
             sx={{
-              fontWeight: "600",
+              fontWeight: "bold",
               pr: "0.5rem",
             }}
           >
-            Next
+            NEXT
           </Typography>
           <KeyboardDoubleArrowRightIcon />
-        </Button>
+        </StyledButton>
       )}
     </Box>
   );

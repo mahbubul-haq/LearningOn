@@ -31,9 +31,12 @@ const LearningPageTop = ({ courseInfo, scrollTop }) => {
         margin: '0 auto',
         width: "100%",
         height: "100%",
-        ...theme.palette.glassMorphismCard,
-        background: 'rgba(255, 255, 255, 0.35)', // High transparency
+        backgroundColor: (theme) => theme.palette.learningPage.navBg,
+        boxShadow: (theme) => theme.palette.homepage.navShadow,
+        backdropFilter: "blur(20px)",
+        borderBottom: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
         borderRadius: 0,
+        zIndex: 100,
 
       }}
     >

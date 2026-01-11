@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTheme } from '@mui/material/styles';
+import { colorTokens } from '../../theme';
 
 interface VideoProgressIndicatorProps {
   percentage: number;
@@ -11,6 +13,7 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
   size = 60,
   opacity = 1
 }) => {
+  const theme = useTheme();
   const strokeWidth = 4;
   const center = size / 2;
   // RESTORED ORIGINAL RADIUS: No size changes
@@ -48,7 +51,7 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
           cy={center}
           r={radius}
           fill="none"
-          stroke="rgba(255, 255, 255, 0.2)"
+          stroke={theme.palette.learningPage.divider}
           strokeWidth={strokeWidth}
         />
 
@@ -58,8 +61,9 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
           cy={center}
           r={radius}
           fill="none"
-          stroke="#00e5ff"
+          stroke={theme.palette.secondary.main}
           strokeWidth={strokeWidth}
+
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
@@ -80,7 +84,7 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
             height={size * 0.35}
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#00e5ff"
+            stroke={theme.palette.primary.main}
             strokeWidth="4"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -89,7 +93,7 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         ) : (
-          <span style={styles.text(size)}>
+          <span style={styles.text(size, theme)}>
             {Math.round(validatedPercentage)}%
           </span>
         )}
@@ -117,8 +121,8 @@ const styles = {
     justifyContent: 'center',
     zIndex: 2,
   },
-  text: (size: number): React.CSSProperties => ({
-    color: '#fff',
+  text: (size: number, theme: any): React.CSSProperties => ({
+    color: theme.palette.primary.main,
     fontSize: `${size * 0.22}px`,
     fontWeight: 'bold',
     fontFamily: 'sans-serif',

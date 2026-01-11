@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import CourseWidget from "../../widgets/CourseWidget";
+import { colorTokens } from "../../theme";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -70,9 +71,9 @@ const ProfileCourses = ({ userCourses }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "rgba(0, 0, 0,0.7)",
+              backgroundColor: colorTokens.translucentBlack.x7,
               ":hover": {
-                backgroundColor: "rgba(0, 0, 0,0.9)",
+                backgroundColor: colorTokens.translucentBlack.x9,
               },
               cursor: "pointer",
               transition: "all 0.5s ease",
@@ -88,7 +89,7 @@ const ProfileCourses = ({ userCourses }) => {
             <ArrowForwardIosIcon
               sx={{
                 fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
-                color: "rgba(255, 255, 255, 1)",
+                color: colorTokens.white.main,
                 alignSelf: "center",
               }}
             />
@@ -104,9 +105,9 @@ const ProfileCourses = ({ userCourses }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "rgba(0, 0, 0,0.7)",
+              backgroundColor: colorTokens.translucentBlack.x7,
               ":hover": {
-                backgroundColor: "rgba(0, 0, 0,0.9)",
+                backgroundColor: colorTokens.translucentBlack.x9,
               },
               cursor: "pointer",
               transition: "all 0.5s ease",
@@ -124,7 +125,7 @@ const ProfileCourses = ({ userCourses }) => {
             <ArrowForwardIosIcon
               sx={{
                 fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
-                color: "rgba(255, 255, 255, 1)",
+                color: colorTokens.white.main,
                 alignSelf: "center",
                 transform: "rotate(180deg)",
               }}
@@ -170,7 +171,7 @@ const ProfileCourses = ({ userCourses }) => {
             alignItems: "center",
             height: "100%",
             width: "100%",
-            color: "rgba(0, 0, 0, 0.5)",
+            color: colorTokens.translucentBlack.x5,
             fontSize: "1rem",
             // fontWeight: "600",
           }}

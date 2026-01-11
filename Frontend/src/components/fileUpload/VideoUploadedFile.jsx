@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import { StyledButton } from "../StyledButton";
+import { colorTokens } from "../../theme";
 
 
 const VideoUploadedFile = ({
@@ -15,14 +16,14 @@ const VideoUploadedFile = ({
                 position: "relative",
                 height: "100%",
                 width: "100%",
-                
+
             }}
         >
             <Box
                 sx={{
                     width: "100%",
                     mb: "0.5rem",
-                    boxShadow: `0 0 0 1px #ccc inset`,
+                    boxShadow: `0 0 0 1px ${colorTokens.grey.ccc} inset`,
                 }}
             >
                 {isImage ? (

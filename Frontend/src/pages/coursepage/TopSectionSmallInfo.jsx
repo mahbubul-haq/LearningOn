@@ -34,11 +34,11 @@ const TopSectionSmallInfo = ({
                     <Typography
 
                         sx={{
-
+                            color: (theme) => theme.palette.homepage.textSecondary,
                             justifySelf: "left",
                         }}
                     >
-                        Course Cost: <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>$ {courseInfo?.coursePrice}</span>
+                        Course Cost: <span style={{ fontWeight: "bold", fontSize: "1.2rem", color: theme.palette.homepage.textPrimary }}>$ {courseInfo?.coursePrice}</span>
                     </Typography>
                 )}
                 <Rating
@@ -52,11 +52,11 @@ const TopSectionSmallInfo = ({
                 <Typography
 
                     sx={{
-
+                        color: (theme) => theme.palette.homepage.textSecondary,
                         justifySelf: "left",
                     }}
                 >
-                    Time to complete: <span style={{ fontWeight: "bold" }}>{courseInfo?.approxTimeToComplete} weeks</span>
+                    Time to complete: <span style={{ fontWeight: "bold", color: theme.palette.homepage.textPrimary }}>{courseInfo?.approxTimeToComplete} weeks</span>
                 </Typography>
 
             </Box>
@@ -64,7 +64,7 @@ const TopSectionSmallInfo = ({
                 position: "absolute",
                 left: "50%",
                 transform: "translateX(-50%)",
-                width: "1px", height: "5rem", backgroundColor: theme.palette.customDivider.main
+                width: "1px", height: "5rem", backgroundColor: (theme) => theme.palette.homepage.divider,
             }}>
             </Box>}
             {/* <Box sx={{
@@ -87,7 +87,7 @@ const TopSectionSmallInfo = ({
                     <Typography
 
                         sx={{
-
+                            color: (theme) => theme.palette.homepage.textSecondary,
                             justifySelf: "left",
                         }}
                     >
@@ -97,16 +97,16 @@ const TopSectionSmallInfo = ({
                 <Typography
 
                     sx={{
-
+                        color: (theme) => theme.palette.homepage.textSecondary,
                         justifySelf: "left",
                     }}
                 >
-                    Language: <span style={{ fontWeight: "bold" }}>{courseInfo?.courseLanguage}</span>
+                    Language: <span style={{ fontWeight: "bold", color: theme.palette.homepage.textPrimary }}>{courseInfo?.courseLanguage}</span>
                 </Typography>
                 <Typography
 
                     sx={{
-
+                        color: (theme) => theme.palette.homepage.textSecondary,
                         justifySelf: "left",
                     }}
                 >

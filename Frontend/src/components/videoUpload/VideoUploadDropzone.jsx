@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { StyledButton } from "../StyledButton";
+import { colorTokens } from "../../theme";
 
 
 const VideoUploadDropzone = ({
@@ -75,9 +76,9 @@ const VideoUploadDropzone = ({
                         padding: "2rem",
                         gap: "1.5rem",
                         borderRadius: "0.25rem",
-                        border: `2px dashed #ccc`,
+                        border: `2px dashed ${colorTokens.grey.ccc}`,
                         "&:hover": {
-                            border: `2px dashed #aaa`,
+                            border: `2px dashed ${colorTokens.grey.aaa}`,
                         },
                     }}
                 >

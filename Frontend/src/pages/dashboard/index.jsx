@@ -17,14 +17,14 @@ const Dashboard = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const params = useParams();
     const { setOpenedItem } = useContext(GlobalContext);
-    const {selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);
+    const { selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);
 
     useEffect(() => {
         if (!user) {
             window.location.href = "/";
         }
         setOpenedItem("dashboard");
-        
+
     }, []);
 
     useEffect(() => {
@@ -94,7 +94,7 @@ const Dashboard = () => {
             sx={{
                 // height: "100%",
                 width: "100%",
-                
+
             }}
         >
             <Box
@@ -103,7 +103,7 @@ const Dashboard = () => {
                     // height: "100%",
                     width: "100%",
                     //overflow: "auto",
-                    
+
                 }}
             >
                 {/* <Box>
@@ -121,7 +121,7 @@ const Dashboard = () => {
                 </Box>
                 <Box
                     sx={{
-                        px: isNonMobileScreens ? "5rem": "1rem",
+                        px: isNonMobileScreens ? "5rem" : "1rem",
                         display: "flex",
                         gap: "2rem",
                         py: "3rem",
@@ -131,8 +131,7 @@ const Dashboard = () => {
                         <Box
                             sx={{
                                 width: "20%",
-                                backgroundColor: theme.palette.background.alt,
-                                borderRadius: "0.25rem",
+                                ...theme.palette.glassMorphismCard,
                                 p: "1rem",
                             }}
                         >
@@ -142,11 +141,9 @@ const Dashboard = () => {
                     <Box
                         sx={{
                             width: isNonMobileScreens ? "55%" : "100%",
-                            backgroundColor: theme.palette.background.alt,
-                            borderRadius: "0.25rem",
+                            ...theme.palette.glassMorphismCard,
                             p: "1rem",
                             pb: "3rem",
-                            // maxHeight: "1000px"
                         }}
                     >
                         <DashboardMiddle />
@@ -155,8 +152,7 @@ const Dashboard = () => {
                         <Box
                             sx={{
                                 width: "25%",
-                                backgroundColor: theme.palette.background.alt,
-                                borderRadius: "0.25rem",
+                                ...theme.palette.glassMorphismCard,
                                 p: "1rem",
                                 maxHeight: "1500px",
                                 overflow: "auto",
@@ -164,7 +160,7 @@ const Dashboard = () => {
                                     width: "0.5rem",
                                 },
                                 "&::-webkit-scrollbar-track": {
-                                    background: "white",
+                                    background: "transparent",
                                     borderRadius: "0.25rem",
                                 },
                                 "&::-webkit-scrollbar-thumb": {

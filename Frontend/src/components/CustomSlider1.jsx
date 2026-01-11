@@ -1,9 +1,10 @@
-import{ useEffect } from "react";
-import { Box, Chip} from "@mui/material";
+import { Box, Chip } from "@mui/material";
+import { colorTokens } from "../theme";
 //import arrow left and right icon
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import { useTheme } from "@mui/material/styles";
+import { useEffect } from "react";
 
 
 const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
@@ -20,7 +21,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
         if (side === "prev") {
             slider.scrollLeft -= 100;
         }
-        
+
         console.log(slider.scrollLeft, slider.clientWidth, slider.scrollWidth);
 
         if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
@@ -86,7 +87,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     bottom: "0",
                     // set color if parent elements content has overflown
                     cursor: "pointer",
-                    backgroundImage: "linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
+                    backgroundImage: `linear-gradient(to right, ${colorTokens.white.main}, ${colorTokens.translucentWhite.x0})`,
                     pr: "3rem",
                     zIndex: "1",
                     display: "flex",
@@ -112,12 +113,12 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     // border: "2px solid red",
                     // set color if parent elements content has overflown
                     cursor: "pointer",
-                    backgroundImage: "linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))",
+                    backgroundImage: `linear-gradient(to right, ${colorTokens.translucentWhite.x0}, ${colorTokens.white.main})`,
                     pl: "3rem",
                     zIndex: "1",
                     display: "flex",
                     alignItems: "center",
-                   
+
                     // backdropFilter: "blur(10px)"
                 }}
                 onClick={() => {
@@ -158,10 +159,10 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                                     : theme.palette.grey.grey100,
                             color:
                                 item === selectedItem
-                                    ? "white"
+                                    ? colorTokens.white.main
                                     : theme.palette.text.primary,
                         }}
-                        
+
                     />
                 ))}
             </Box>

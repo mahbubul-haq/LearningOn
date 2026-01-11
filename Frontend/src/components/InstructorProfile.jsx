@@ -22,10 +22,14 @@ const InstructorProfile = ({ instructorId }) => {
             sx={{
                 width: "100%",
                 height: "100%",
-                maxHeight: "300px",
+                maxHeight: "350px",
                 "&&": {
-                    paddingRight: isMobileScreens ? "2rem" : "3rem",
-
+                    paddingRight: isMobileScreens ? "1rem" : "1.5rem",
+                    backgroundColor: (theme) => theme.palette.homepage.cardBg,
+                    border: (theme) => `1px solid ${theme.palette.homepage.cardBorder}`,
+                    borderRadius: "1rem",
+                    boxShadow: (theme) => theme.palette.homepage.cardShadow,
+                    backdropFilter: "blur(20px)",
                 },
             }}
         >
@@ -84,7 +88,7 @@ const InstructorProfile = ({ instructorId }) => {
                             href={`${import.meta.env.VITE_CLIENT_URL}/profile/${instructor?._id}`}
                             sx={{
                                 fontWeight: "600",
-                                fontSize: "1rem",
+                                fontSize: "1.1rem",
                                 // ellipsis: true,
                                 // overflow: "hidden",
 
@@ -93,10 +97,10 @@ const InstructorProfile = ({ instructorId }) => {
                                 maxWidth: "100%",
                                 // ellipsis after 20 characters
                                 cursor: "pointer",
-                                color: "inherit",
+                                color: (theme) => theme.palette.homepage.textPrimary,
                                 "&:hover": {
                                     textDecoration: "underline",
-                                    color: "inherit"
+                                    color: (theme) => theme.palette.homepage.textPrimary
                                 },
                             }}
                             onClick={(e) => {
@@ -128,6 +132,7 @@ const InstructorProfile = ({ instructorId }) => {
                     <Typography
                         sx={{
                             fontWeight: "600",
+                            color: (theme) => theme.palette.homepage.textPrimary,
                         }}
                     >
                         {instructor?.courses.length} courses
@@ -135,6 +140,7 @@ const InstructorProfile = ({ instructorId }) => {
                     <Typography
                         sx={{
                             fontWeight: "600",
+                            color: (theme) => theme.palette.homepage.textPrimary,
                         }}
                     >
                         {numberOfEnrolledStudents} students

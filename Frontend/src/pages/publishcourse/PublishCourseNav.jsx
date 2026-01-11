@@ -11,7 +11,7 @@ import { useContext } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { IoCloseOutline } from "react-icons/io5";
 import { HiOutlineMenu } from "react-icons/hi";
-import { Drawer } from "@mui/material";
+import { Drawer, useTheme } from "@mui/material";
 import RightButtons from "./RightButtons";
 
 
@@ -22,6 +22,7 @@ const PublishCourseNav = ({
   editMode,
 }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const { courseState,
@@ -29,7 +30,7 @@ const PublishCourseNav = ({
     setUploadStatus,
     setDeleteCourseStatus,
     inputSection
-   } = useContext(CreateCourseContext);
+  } = useContext(CreateCourseContext);
 
   // useEffect(() => {
   //     console.log("courseState publish nav", courseState);
@@ -42,11 +43,11 @@ const PublishCourseNav = ({
 
         top: 0,
         zIndex: 10,
-        backgroundColor: "rgba(255, 255, 255, 0.8)",
+        backgroundColor: theme.palette.neutral.translucentWhiteStrong,
         backdropFilter: "blur(20px)",
         // boxShadow: (theme) =>
         //     `0px 4px 8px 0px ${theme.palette.nav.boxShadow} inset`,
-        borderBottom: "1px solid #e0e0e0",
+        borderBottom: `1px solid ${theme.palette.neutral.lighter}`,
         // borderBottom: `1px dashed ${theme.palette.customDivider.main}`
       }}
     >
@@ -105,76 +106,76 @@ const PublishCourseNav = ({
             />
           </FlexBetween>
         )}
-        
-          <Box>
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: "600",
-                color: (theme) => theme.palette.grey.grey400,
-                textTransform: "capitalize",
-              }}
-            >
-              {!isNonMobileScreens? inputSection : editMode ? "Edit Course Info" : "Create new course"}
-            </Typography>
-          </Box>
-        
+
+        <Box>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: "600",
+              color: (theme) => theme.palette.grey.grey400,
+              textTransform: "capitalize",
+            }}
+          >
+            {!isNonMobileScreens ? inputSection : editMode ? "Edit Course Info" : "Create new course"}
+          </Typography>
+        </Box>
+
         <Box>
           {!isNonMobileScreens && (
             <IconButton sx={{
-              
-            }}onClick={handleClick}>
+
+            }} onClick={handleClick}>
               <HiOutlineMenu
-              size={25}
+                size={25}
                 sx={{
                   cursor: "pointer",
-                  color: "black",
+                  color: theme.palette.common.black,
                   "&:hover": {
                     color: (theme) => theme.palette.grey.grey800,
                   },
                 }}
               />
             </IconButton>
-          
+
           )}
         </Box>
         <Drawer
-            anchor="right"
-            open={mobileDrawerOpen}
-            onClose={() => handleClose()}
-            sx={{
-                "& .MuiDrawer-paper": {
-                    width: "fit-content",
-                    maxWidth: "400px",
-                  padding: isMobileScreens ? "4rem 2rem 2rem 1rem" : "4rem 1rem 3rem 1rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "3rem",
-                },
-            }}
+          anchor="right"
+          open={mobileDrawerOpen}
+          onClose={() => handleClose()}
+          sx={{
+            "& .MuiDrawer-paper": {
+              width: "fit-content",
+              maxWidth: "400px",
+              padding: isMobileScreens ? "4rem 2rem 2rem 1rem" : "4rem 1rem 3rem 1rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "3rem",
+            },
+          }}
 
         >
           <IconButton
-           
-                onClick={() => handleClose()}
-                sx={{
-                    position: "fixed",
-                    right: "2rem",
-                    top: "1rem",
-                    color: theme => theme.palette.grey.grey800,
-                }}
-            >
-                <IoCloseOutline size={25}/>
-            </IconButton>
 
-         
-           <LeftPanel />
-           
-           <RightButtons isCourseValid={isCourseValid}
+            onClick={() => handleClose()}
+            sx={{
+              position: "fixed",
+              right: "2rem",
+              top: "1rem",
+              color: theme => theme.palette.grey.grey800,
+            }}
+          >
+            <IoCloseOutline size={25} />
+          </IconButton>
+
+
+          <LeftPanel />
+
+          <RightButtons isCourseValid={isCourseValid}
             setUploadStatus={setUploadStatus}
             setDeleteCourseStatus={setDeleteCourseStatus}
-            />
-         
+          />
+
         </Drawer>
       </Box>
     </Box>

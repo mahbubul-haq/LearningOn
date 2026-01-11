@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ProfilePageContext } from "../state/ProfilePageContext";
 import FlexBetween from "./FlexBetween";
+import { colorTokens } from "../theme";
 
 const ProfileCard = ({ userInfo }) => {
     const user = useSelector((state) => state.auth.user);
@@ -33,7 +34,7 @@ const ProfileCard = ({ userInfo }) => {
                 width: "100%",
                 padding: "1rem",
                 borderRadius: "0.5rem",
-                backgroundColor: "white",
+                backgroundColor: colorTokens.white.main,
             }}
         >
             <FlexBetween>

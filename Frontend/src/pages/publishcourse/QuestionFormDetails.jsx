@@ -15,8 +15,7 @@ const QuestionFormDetails = ({
   const { courseStateRef } = useContext(CreateCourseContext);
   const [options, setOptions] = React.useState(question?.options || ["", "", "", ""]);
   useEffect(() => {
-    console.log("question", question);
-  });
+  }, [question]);
   const changeOption = (e, index) => {
     setCourseState((prevState) => ({
       ...prevState,

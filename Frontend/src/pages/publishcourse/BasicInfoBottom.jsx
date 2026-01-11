@@ -12,6 +12,7 @@ import InputBase from "@mui/material/InputBase";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
+import { colorTokens } from "../../theme.js";
 
 const BasicInfoBottom = ({
     courseState,
@@ -22,7 +23,7 @@ const BasicInfoBottom = ({
     skillName,
 }) => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const {courseStateRef} = useContext(CreateCourseContext);
+    const { courseStateRef } = useContext(CreateCourseContext);
     const [studentRequirements, setStudentRequirements] = useState(courseState.studentRequirements);
 
 
@@ -147,7 +148,7 @@ const BasicInfoBottom = ({
                             deleteIcon={
                                 <DeleteIcon
                                     sx={{
-                                        color: "black",
+                                        color: colorTokens.black.main,
                                     }}
                                 />
                             }

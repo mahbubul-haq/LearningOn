@@ -1,6 +1,7 @@
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { Box, Divider, Typography } from '@mui/material';
+import { colorTokens } from "../../theme.js";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useContext } from 'react';
 import { StyledButton } from '../../components/StyledButton';
@@ -8,7 +9,7 @@ import { CreateCourseContext } from '../../state/CreateCourse';
 
 const RightPanelBottom = () => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const {inputSection, setInputSection, editMode, setUpdating} = useContext(CreateCourseContext);
+    const { inputSection, setInputSection, editMode, setUpdating } = useContext(CreateCourseContext);
 
     const handleNext = () => {
         if (inputSection === "basic info") {
@@ -30,9 +31,9 @@ const RightPanelBottom = () => {
         }
     };
 
-  return (
-    <>
-    <Divider
+    return (
+        <>
+            <Divider
                 sx={{
                     my: "2rem",
                     zIndex: -1,
@@ -90,7 +91,7 @@ const RightPanelBottom = () => {
                             "&&": {
                                 padding: "0.4rem 0.8rem",
                                 background: (theme) => theme.palette.grey.grey700,
-                                color: "white",
+                                color: colorTokens.white.main,
                                 "&:hover": {
                                     background: (theme) => theme.palette.grey.grey900,
                                 },
@@ -149,8 +150,8 @@ const RightPanelBottom = () => {
                     <Box></Box>
                 )}
             </Box>
-    </>
-  )
+        </>
+    )
 }
 
 export default RightPanelBottom

@@ -2,6 +2,7 @@ import { AdvancedImage, lazyload } from "@cloudinary/react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import useTheme from "@mui/material/styles/useTheme";
+import { colorTokens } from "../../theme";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext } from "react";
@@ -31,8 +32,8 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
         marginTop: isNonMobileScreens
           ? "-2rem"
           : isMobileScreens
-          ? "1rem"
-          : "-1rem",
+            ? "1rem"
+            : "-1rem",
         display: "flex",
         justifyContent: isMobileScreens ? "space-between" : "flex-start",
         alignItems: "flex-end",
@@ -45,15 +46,15 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
           width: isNonMobileScreens
             ? "180px"
             : isMobileScreens
-            ? "120px"
-            : "130px",
+              ? "120px"
+              : "130px",
           height: isNonMobileScreens
             ? "180px"
             : isMobileScreens
-            ? "120px"
-            : "130px",
+              ? "120px"
+              : "130px",
           borderRadius: "50%",
-          boxShadow: "0 0 0 5px rgba(0, 0, 0, 0.2)",
+          boxShadow: `0 0 0 5px ${colorTokens.translucentBlack.x2}`,
           transform: isMobileScreens ? "translateY(20%)" : "translateY(40%)",
           position: "relative",
           aspectRatio: "1/1",
@@ -91,7 +92,7 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
               height: "100%",
               borderRadius: "50%",
               //backgroundColor: "rgba(255, 255, 255, 0.5)",
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              backgroundColor: colorTokens.translucentBlack.x1,
               top: 0,
               left: 0,
               cursor: "pointer",
@@ -109,7 +110,7 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
                 left: isNonMobileScreens ? "75%" : "65%",
                 backgroundColor: theme.palette.grey[200],
                 padding: "0.7rem",
-                boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",
+                boxShadow: `0 0 5px ${colorTokens.translucentBlack.x5}`,
               }}
             >
               <MdAddPhotoAlternate
@@ -199,8 +200,8 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
                 }
                 return prev || false;
               })
-            ? "Unfollow"
-            : "Follow"}
+              ? "Unfollow"
+              : "Follow"}
         </StyledButton>
       </FlexBetween>
     </Box>

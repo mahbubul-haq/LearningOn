@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { TextField } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
+import { colorTokens } from "../theme";
 
 const StyledTextField2 = styled(TextField)(({ theme }) => {
     const isNonMobileScreen = useMediaQuery("(min-width: 1000px)");
@@ -9,7 +10,7 @@ const StyledTextField2 = styled(TextField)(({ theme }) => {
         marginBottom: "1rem",
 
         "& .MuiOutlinedInput-root": {
-            backgroundColor: "white",
+            backgroundColor: colorTokens.white.main,
             borderRadius: "1000px",
             marginBottom: 0,
             // input text color
@@ -49,7 +50,7 @@ const StyledTextField2 = styled(TextField)(({ theme }) => {
             fontSize: "1rem",
 
         },
-        
+
         "& .MuiInputLabel-root.Mui-focused": {
             color: isNonMobileScreen ? theme.palette.text.secondary : theme.palette.text.secondary,
         },
@@ -63,7 +64,7 @@ const StyledTextField2 = styled(TextField)(({ theme }) => {
             color: isNonMobileScreen ? theme.palette.error.secondary : theme.palette.error.secondary,
         },
         "& .MuiFormHelperText-root.Mui-error": {
-            color: "red",
+            color: colorTokens.error,
         },
     };
 });

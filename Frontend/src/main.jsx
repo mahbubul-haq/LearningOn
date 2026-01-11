@@ -4,14 +4,14 @@ import App from "./App.jsx";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import {
-    FLUSH,
-    PAUSE,
-    PERSIST,
-    persistReducer,
-    persistStore,
-    PURGE,
-    REGISTER,
-    REHYDRATE,
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  persistStore,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
 } from "redux-persist";
 
 import { PersistGate } from "redux-persist/integration/react";

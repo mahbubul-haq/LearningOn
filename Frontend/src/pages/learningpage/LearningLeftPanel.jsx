@@ -21,15 +21,19 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop, courseProgress }) => 
         position: "sticky",
         top: "2rem",
         height: `calc(100vh - 4rem)`,
-        ...theme.palette.glassMorphismCard,
-        border: "none",
+        backgroundColor: (theme) => theme.palette.learningPage.leftPanelBg,
+        boxShadow: (theme) => theme.palette.learningPage.glassShadow,
+        backdropFilter: (theme) => theme.palette.learningPage.backdropFilter,
+        border: (theme) => `1px solid ${theme.palette.learningPage.glassBorder}`,
+        borderRadius: "1rem",
         overflow: "hidden",
         display: "grid",
         gridTemplateRows: "auto auto 1fr",
         gap: "0",
       }}>
       <LeftPanelTop courseInfo={courseInfo} courseProgress={courseProgress} />
-      <Divider sx={{ mt: "0.5rem" }} />
+      <Divider sx={{ backgroundColor: (theme) => theme.palette.learningPage.divider }} />
+
 
       <Box className="custom-scrollbar-thin"
         sx={{

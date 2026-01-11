@@ -1,6 +1,7 @@
 import { AdvancedVideo, lazyload } from "@cloudinary/react";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
+import { colorTokens } from "../../theme";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React, { useContext, useEffect } from "react";
@@ -30,46 +31,43 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                 flexDirection: "column",
                 justifyContent: "flex-start",
                 gap: "0.5rem",
-                padding: "1rem",
-                ...theme.palette.glassMorphismCard,
+                padding: "1.5rem",
+                backgroundColor: (theme) => theme.palette.mode === 'dark' ? "rgba(20, 20, 30, 0.6)" : "rgba(255, 255, 255, 0.5)", // Direct value for debugging/reliability
+                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.15)",
+                backdropFilter: "blur(12px)",
+                border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.4)"}`,
+                borderRadius: "1rem",
+                color: (theme) => theme.palette.learningPage.textPrimary,
               }}
             >
               <Typography
                 variant="h4"
                 sx={{
-                  fontSize: isNonMobileScreens ? "1.3rem" : "1.1rem",
-                  mb: "1rem",
+                  fontSize: isNonMobileScreens ? "1.5rem" : "1.2rem",
+                  mb: "1.5rem",
+                  fontWeight: "bold",
                 }}
               >
-                <span
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  Lesson {openedLesson.lesson}
-                </span>
-                &nbsp;&nbsp;
-                {courseInfo?.lessons[openedLesson.lesson - 1]
-                  ? courseInfo?.lessons[openedLesson.lesson - 1].title
-                  : ""}
+                Lesson {openedLesson.lesson} &nbsp;&nbsp;
+                {courseInfo?.lessons[openedLesson.lesson - 1]?.title}
               </Typography>
               <Box
                 sx={{
-                  padding: isNonMobileScreens ? "1rem" : "1rem",
-                  ...theme.palette.glassMorphismCard,
-                  background: 'rgba(255, 255,255, 0.2)',
-                  border: "none",
-                  boxShadow: "none",
+                  padding: "1.5rem",
+                  backgroundColor: (theme) => theme.palette.learningPage.cardBg,
+                  borderRadius: "0.8rem",
+                  border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
                 }}
               >
+
                 {courseInfo?.lessons[openedLesson.lesson - 1] &&
                   courseInfo?.lessons[openedLesson.lesson - 1].description && (
                     <Typography
                       sx={{
-                        fontSize: "1rem",
-                        lineHeight: "1.5rem",
+                        fontSize: "1.1rem",
+                        lineHeight: "1.8rem",
                         mb: "3rem",
-                        color: theme.palette.grey.grey1000,
+                        color: (theme) => theme.palette.learningPage.textPrimary,
                       }}
                     >
                       {courseInfo?.lessons[openedLesson.lesson - 1].description
@@ -87,8 +85,7 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                   sx={{
                     fontSize: "1rem",
                     lineHeight: "1.5rem",
-
-                    color: theme.palette.grey.grey1000,
+                    color: (theme) => theme.palette.learningPage.textSecondary,
                   }}
                 >
                   This lesson has total &nbsp;
@@ -117,11 +114,11 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
             </Box>
           )}
           {openedLesson.subLesson ===
-            courseInfo?.lessons[openedLesson.lesson - 1].subLessons?.length +
+            courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons?.length +
             1 && <Questions courseInfo={courseInfo} courseProgress={courseProgress} />}
           {openedLesson.subLesson > 0 &&
             openedLesson.subLesson <=
-            courseInfo?.lessons[openedLesson.lesson - 1].subLessons
+            courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons
               ?.length && (
               <Box
                 sx={{
@@ -131,9 +128,9 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                   gap: "2rem",
                 }}
               >
-                {courseInfo?.lessons[openedLesson.lesson - 1].subLessons[
+                {courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[
                   openedLesson.subLesson - 1
-                ].videoLink && (
+                ]?.videoLink && (
                     <VideoPlayer courseInfo={courseInfo} openedLesson={openedLesson} courseProgress={courseProgress} />
                   )}
 
@@ -145,9 +142,13 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                         display: "flex",
                         flexDirection: "column",
                         gap: "0.5rem",
-                        padding: "0.7rem",
-                        ...theme.palette.glassMorphismCard,
-                        background: 'rgba(255, 255,255, 0.2)',
+                        padding: "1.5rem",
+                        backgroundColor: (theme) => theme.palette.learningPage.leftPanelBg,
+                        boxShadow: (theme) => theme.palette.learningPage.glassShadow,
+                        backdropFilter: (theme) => theme.palette.learningPage.backdropFilter,
+                        border: (theme) => `1px solid ${theme.palette.learningPage.glassBorder}`,
+                        borderRadius: "1rem",
+                        color: (theme) => theme.palette.learningPage.textPrimary,
                       }}
                     >
                       <Typography
@@ -174,20 +175,18 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                       </Typography>
                       <Box
                         sx={{
-                          padding: isNonMobileScreens ? "1rem" : "1rem",
-                          ...theme.palette.glassMorphismCard,
-                          border: "none",
-                          boxShadow: "none",
+                          padding: "1.5rem",
+                          backgroundColor: (theme) => theme.palette.learningPage.cardBg,
+                          borderRadius: "0.8rem",
+                          border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
                         }}
                       >
                         <Typography
                           sx={{
-                            fontSize: "0.9rem",
-                            // perfect letterspacing & lineheight combination for verdana font
+                            fontSize: "1rem",
                             letterSpacing: "0.005rem",
                             lineHeight: "2rem",
-
-                            color: theme.palette.grey.grey1000,
+                            color: (theme) => theme.palette.learningPage.textPrimary,
                             fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
                           }}
                         >

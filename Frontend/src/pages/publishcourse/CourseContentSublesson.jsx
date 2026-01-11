@@ -9,6 +9,7 @@ import StyledTextField1 from "../../components/StyledTextField1";
 import VideoUpload from "../../components/videoUpload/VideoUpload";
 import InputLabel from "@mui/material/InputLabel";
 import { CreateCourseContext } from "../../state/CreateCourse";
+import { colorTokens } from "../../theme";
 import { useContext, useState, useEffect, useCallback } from "react";
 import SubLessonVideoUploader from "./SubLessonVideoUploader";
 
@@ -118,7 +119,7 @@ const CourseContentSublesson = ({
                 Title{" "}
                 <span
                   style={{
-                    color: "red",
+                    color: colorTokens.utility.red,
                     fontSize: "1.1rem",
                   }}
                 >

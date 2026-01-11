@@ -1,236 +1,446 @@
 
 export const colorTokens = {
-    grey: {
-        0: "#FFFFFF",
-        10: "#F6F6F6",
-        50: "#F0F0F0",
-        100: "#E0E0E0",
-        200: "#C2C2C2",
-        300: "#A3A3A3",
-        400: "#858585",
-        500: "#666666",
-        600: "#4D4D4D",
-        700: "#333333",
-        800: "#1A1A1A",
-        900: "#0A0A0A",
-        1000: "#000000",
-    },
+    // #used - Primary Color (Purple)
     primary: {
-        50: "#FFF4F8",
-        100: "#FFD5E1",
-        200: "#FD8EB0",
-        300: "#F25E8B",
-        400: "#EA2863",
-        500: "#CF0945",
-        600: "#BA093F",
-        700: "#7E092D",
-        800: "#3B0314",
-        900: "#180108",
+        main: "#4522ba",      // Base primary
+        light: "#6b4fd9",     // Lighter variant
+        lighter: "#9178e6",   // Even lighter
+        dark: "#2f1880",      // Darker variant
+        darker: "#1f0f55",    // Even darker
     },
-    background: {
-        light100: "#EBF5E2",
-        light200: "#D8EBC9",
-        light300: "#C7D9B8",
 
-        imagesBg: "#C8E7CD",
-        buttonBgPink: "#F7A0FF",
-        buttonBgLightPink: "#FCBBBB",
+    // #used - Secondary Color (Pink/Magenta)
+    secondary: {
+        main: "#c2215f",      // Base secondary
+        light: "#d94d85",     // Lighter variant
+        lighter: "#e879aa",   // Even lighter
+        dark: "#8f1844",      // Darker variant
+        darker: "#5f0f2d",    // Even darker
     },
-    text: {
-        primary: "#222121",
-        secondary: "#3f3f3fff",
+
+    // #used - Whites & Light Greys
+    white: {
+        pure: "#FFFFFF",
+        main: "#FAFAFA",
+        light: "#F5F5F5",
     },
-    brand: {
-        secondaryMain: "#64E579",
-        secondaryDark: "#19A52F",
+
+    // #used - Blacks & Dark Greys
+    black: {
+        pure: "#000000",
+        main: "#0A0A0A",
+        light: "#1A1A1A",
+        lighter: "#2A2A2A",
     },
-    shadow: {
-        primary: "#9F9F9F",
+
+    // #used - Grey Scale (simplified, even steps)
+    grey: {
+        50: "#F5F5F5",
+        100: "#E5E5E5",
+        200: "#D0D0D0",
+        300: "#B0B0B0",
+        400: "#909090",
+        500: "#707070",
+        600: "#505050",
+        700: "#303030",
+        800: "#202020",
+        900: "#101010",
+    },
+
+    // #used - Glassmorphism Utilities
+    glass: {
+        // Light mode glass
+        light: {
+            bg: "rgba(255, 255, 255, 0.4)", // More opaque for visibility
+            bgStrong: "rgba(255, 255, 255, 0.6)",
+            border: "rgba(255, 255, 255, 0.6)",
+            borderSubtle: "rgba(255, 255, 255, 0.3)",
+            shadow: "0 8px 32px 0 rgba(31, 38, 135, 0.15)", // Premium colored shadow
+            shadowStrong: "0 8px 32px 0 rgba(31, 38, 135, 0.25)",
+            backdropFilter: "blur(12px)",
+        },
+        // Dark mode glass
+        dark: {
+            bg: "rgba(20, 20, 25, 0.4)", // Darker, transparent bg
+            bgStrong: "rgba(30, 30, 35, 0.6)",
+            border: "rgba(255, 255, 255, 0.08)", // Subtle white border
+            borderSubtle: "rgba(255, 255, 255, 0.05)",
+            shadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
+            shadowStrong: "0 8px 32px 0 rgba(0, 0, 0, 0.5)",
+            backdropFilter: "blur(12px)",
+        },
+    },
+
+    // #used - Gradients for Mesh Background
+    gradients: {
+        light: {
+            mesh: "radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)", // Fallback / Base
+            // We'll use a more complex CSS value in the component for the full effect, or define colors here
+            orb1: "#6b4fd9", // Primary Light
+            orb2: "#d94d85", // Secondary Light
+            bgBase: "#f0f2f5", // Light greyish blue base
+        },
+        dark: {
+            orb1: "#2f1880", // Primary Dark
+            orb2: "#8f1844", // Secondary Dark
+            bgBase: "#050505", // Deep black base
+        }
+    },
+
+    // #used - Opacity variants (standardized to 0.05 increments)
+    opacity: {
+        5: "0.05",
+        10: "0.1",
+        15: "0.15",
+        20: "0.2",
+        25: "0.25",
+        30: "0.3",
+        35: "0.35",
+        40: "0.4",
+        45: "0.45",
+        50: "0.5",
+        55: "0.55",
+        60: "0.6",
+        65: "0.65",
+        70: "0.7",
+        75: "0.75",
+        80: "0.8",
+        85: "0.85",
+        90: "0.9",
+        95: "0.95",
+        100: "1",
+    },
+
+    // Utility colors (kept minimal)
+    success: "#10b981",
+    warning: "#f59e0b",
+    error: "#ef4444",
+    info: "#3b82f6",
+
+    // ========================================
+    // LEGACY COLORS (for non-refactored components)
+    // These will be gradually removed as pages are refactored
+    // ========================================
+
+    // Legacy purples & pinks
+    purple: {
+        neon: "#D835E6",
+        bright: "#a855f7",
+        deep: "#791535",
+        deepRich: "#9c27b0",
+        lavender: "#b97aecff",
+    },
+
+    pink: {
+        neon: "#F7A0FF",
+        soft: "#FD8EB0",
+        medium: "#F25E8B",
+        error: "#ff6b81",
+    },
+
+    // Legacy cyans & teals
+    cyan: {
+        neon: "#00E0FF",
+        bright: "#1febfaff",
+        teal: "#00acc1",
+    },
+
+    // Legacy greens
+    green: {
+        success: "#2ed573",
+        mint: "#CBEFD1",
+        lightMint: "#BCECD1",
+        neon: "#00E0FF", // Redirected to cyan neon if neon green was similar or using original values
+        darker: "#004d40",
+        bright: "#1febfaff",
+    },
+
+    // Legacy oranges
+    orange: {
+        warning: "#ffa502",
+    },
+
+    // Legacy blues
+    blue: {
+        darkBlueGrey: "#3F3D56",
+    },
+
+    // Legacy backgrounds
+    background: {
+        light100: "#F6F6F6",
+        light200: "#F0F0F0",
+        light300: "#E0E0E0",
+        imagesBg: "#F6F6F6",
+        imagesBg1: "#CBEFD1",
+    },
+
+    // Legacy translucent colors
+    translucentWhite: {
+        x1: "rgba(255, 255, 255, 0.1)",
+        x2: "rgba(255, 255, 255, 0.2)",
+        x05: "rgba(255, 255, 255, 0.05)",
+        x3: "rgba(255, 255, 255, 0.3)",
+        x8: "rgba(255, 255, 255, 0.8)",
+    },
+
+    translucentBlack: {
+        x5: "rgba(0, 0, 0, 0.5)",
+        x25: "rgba(0, 0, 0, 0.25)",
+        x1: "rgba(0, 0, 0, 0.1)",
+    },
+
+    // Legacy utility
+    utility: {
+        red: "#ef4444",
+        green: "#10b981",
+        yellow: "#f59e0b",
+        blue: "#3b82f6",
+    },
+
+    // Legacy translucent variants
+    translucentCyan: {
+        x1: "rgba(0, 224, 255, 0.1)",
+    },
+    translucentGreen: {
+        x15: "rgba(16, 185, 129, 0.15)",
     },
 };
 
 // mui theme settings
 
-export const themeSettings = (mode) => {
+export const themeSettings = ({ mode }) => {
     return {
         palette: {
             mode: mode,
             ...(mode === "dark"
                 ? {
+                    // DARK MODE
                     primary: {
-                        darker: "#0F661C",
-
-                        dark: colorTokens.brand.secondaryDark,
-                        main: colorTokens.brand.secondaryMain,
-                        light: colorTokens.brand.secondaryMain,
-                    },
-                    text: {
-                        primary: colorTokens.text.primary,
-                        secondary: colorTokens.text.secondary,
-                    },
-                    neutral: {
-                        shadow: colorTokens.shadow.primary,
-                    },
-                    background: {
-                        default: colorTokens.background.light100,
-                        alt: colorTokens.background.light200,
-                        light200: colorTokens.background.light200,
-                        light300: colorTokens.background.light300,
-                        imagesBg: colorTokens.background.imagesBg,
-                        buttonBgPink: colorTokens.background.buttonBgPink,
-                        buttonBgLightPink:
-                            colorTokens.background.buttonBgLightPink,
-                        buttonBgLightPinkDark: "#E69A9A",
-                    },
-                }
-                : {
-                    primary: {
-                        darker: "#0c8e97ff",
-                        dark: "#0db7c4ff",
-                        dark1: "#29d1ddff",
-                        main: "#1febfaff",
-                        main1: "#1febfaff",
-                        light: "#85f7ffff",
-                        light2: "#70f1faff",
-                        light3: "rgba(164, 249, 255, 1)",
-                        cardBackground: "#8899e6ff"
+                        main: colorTokens.primary.light,
+                        light: colorTokens.primary.lighter,
+                        dark: colorTokens.primary.main,
                     },
                     secondary: {
-                        main: "#43106dff",
-                        light: "#b97aecff",
-                        dark: "#320953ff",
-
-                    },
-                    text: {
-                        primary: colorTokens.text.primary,
-                        secondary: colorTokens.text.secondary,
-                    },
-                    neutral: {
-                        shadow: colorTokens.shadow.primary,
+                        main: colorTokens.secondary.light,
+                        light: colorTokens.secondary.lighter,
+                        dark: colorTokens.secondary.main,
                     },
                     background: {
-                        default: colorTokens.background.light100,
-                        alt: colorTokens.background.light200,
-                        light200: colorTokens.background.light200,
-                        light300: colorTokens.background.light300,
-                        imagesBg: colorTokens.background.imagesBg,
-                        imagesBg1: "#CBEFD1",
-                        buttonBgPink: colorTokens.background.buttonBgPink,
-                        buttonBgPinkDark: "#E482EC",
-                        buttonBgPinkDark2: "#D835E6",
-                        buttonBgLightPink:
-                            colorTokens.background.buttonBgLightPink,
-                        buttonBgLightPinkDark: "#E69A9A",
+                        default: colorTokens.black.main,
+                        paper: colorTokens.black.light,
+                        elevated: colorTokens.black.lighter,
+                    },
+                    text: {
+                        primary: colorTokens.white.pure,
+                        secondary: colorTokens.grey[400],
+                        disabled: colorTokens.grey[600],
+                    },
+                    divider: `rgba(255, 255, 255, ${colorTokens.opacity[10]})`,
 
-                        gradient2: "#BCECC5",
-                        top: "#E5F3E7",
-                        bottom: "#B4EBC0",
-                        questionHover: "#CCE5B5",
-                        questionSelected: "#C1ED9A",
-                        questionCorrect: "#A7D87C",
-                    },
-                    nav: {
-                        boxShadow: "#E5E5E5",
-                    },
-                    rating: "#F4B30A",
-                    error: {
-                        main: "#CD103E",
-                        main1: "#F31C1C",
-                        secondary: "#EEA4B6",
-                        light: "#FFB5B5",
-                        light1: "#FFD7D7",
-                        questionError: "#F0D1CE",
-                    },
-                    warning: {
-                        main: "#ff9966",
-                    },
-                    customDivider: {
-                        main: "#909090",
-                    },
-                    grey: {
-                        grey0: "#FFFFFF",
-                        grey10: "#F6F6F6",
-                        grey50: "#F0F0F0",
-                        grey100: "#E0E0E0",
-                        grey150: "#DEDEDE",
-                        grey200: "#C2C2C2",
-                        grey300: "#A3A3A3",
-                        grey400: "#858585",
-                        grey500: "#666666",
-                        grey600: "#4D4D4D",
-                        grey700: "#333333",
-                        grey800: "#1A1A1A",
-                        grey900: "#0A0A0A",
-                        grey1000: "#000000",
-                    },
-                    glassMorphism: {
-                        threeCornerColor: "#3e6e77ff",
-                        rightBottomColor: "#3e6e77ff",
-                        fixedBackgroundTop: "#3e6e77ff",
-                        fixedBackgroundBottom: "#3e6e77ff",
-                        backgroundGradient: "#3e6e77ff",
-                        fixedBackgroundImage: `
-      radial-gradient(circle at 100% 100%, #d1709056 0%, transparent 60%),
-      radial-gradient(circle at 100% 0%, #3e6e77ff 0%, transparent 50%),
-      radial-gradient(circle at 0% 0%, #3e6e77ff 0%, transparent 50%),
-      radial-gradient(circle at 0% 100%, #ff6d9e8f 0%, transparent 60%),
-    radial-gradient(at 0% 0%, rgba(0, 255, 157, 1) 0px, transparent 50%), /* Top-left Teal glow */
-     radial-gradient(at 100% 100%, rgba(255, 0, 149, 0.38) 0px, transparent 50%), /* Bottom-right Pink glow */
-    radial-gradient(at 50% 50%, rgba(5, 234, 250, 1) 0px, transparent 100%), /* Deep center depth */
-    radial-gradient(at 20% 50%, rgba(255, 255, 255, 0.95) 0px, transparent 100%) /* Deep center depth */
-    `,
-                        scrollBackgroundImage: `
-                              radial-gradient(
-                                ellipse 50vw 40vh at 50vw 40vh, 
-                                #3e6e77ff 0%, 
-                                transparent 100%
-                              ),
-                        
-                              radial-gradient(
-                                ellipse 50vw 80vh at 50vw 80vh, 
-                                #3e6e77ff 0%, 
-                                transparent 100%
-                              )
-                            `,
-                        noise: {
-                            position: 'fixed', // Stays over the screen while you scroll
-                            top: 0, left: 0, width: '100%', height: '100%',
-                            opacity: 0.03, // Very subtle
-                            pointerEvents: 'none',
-                            zIndex: 0,
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                            filter: 'contrast(150%) brightness(100%)',
-                            pointerEvents: 'none',
-                        }
-                    },
-                    glassMorphismCard: {
-                        background: "rgba(255, 255, 255, 0.03)", // Extremely low opacity
-                        backdropFilter: "blur(25px) saturate(160%)", // High saturation is the key
-                        WebkitBackdropFilter: "blur(25px) saturate(160%)", // High saturation is the key
-                        // The 'Light Leak' Border: Brighter at the top, invisible at the bottom
-                        borderTop: "1px solid rgba(255, 255, 255, 0.2)",
-                        borderLeft: "1px solid rgba(255, 255, 255, 0.1)",
-                        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-                        borderRight: "1px solid rgba(255, 255, 255, 0.05)",
+                    // #used - Homepage semantic tokens (DARK MODE)
+                    homepage: {
+                        // Hero section
+                        heroBg: colorTokens.black.pure,
+                        heroText: colorTokens.white.pure,
+                        heroTextSecondary: colorTokens.grey[300],
 
-                        borderRadius: "20px",
+                        // Navigation
+                        navBg: colorTokens.glass.dark.bg,
+                        navBorder: colorTokens.glass.dark.border,
+                        navShadow: colorTokens.glass.dark.shadow,
 
-                        // Two shadows: One for the 'drop' and one 'inset' for the glass edge
-                        boxShadow: `
-                        0 20px 40px rgba(0, 0, 0, 0.06), 
-                        inset 0 0 0 1px rgba(255, 255, 255, 0.05)
-                      `,
+                        // Cards
+                        cardBg: colorTokens.glass.dark.bg,
+                        cardBgHover: colorTokens.glass.dark.bgStrong,
+                        cardBorder: colorTokens.glass.dark.borderSubtle,
+                        cardShadow: colorTokens.glass.dark.shadow,
+
+                        // Buttons
+                        buttonPrimary: colorTokens.primary.light,
+                        buttonPrimaryHover: colorTokens.primary.lighter,
+                        buttonPrimaryText: colorTokens.white.pure,
+                        buttonSecondary: colorTokens.secondary.light,
+                        buttonSecondaryHover: colorTokens.secondary.lighter,
+                        buttonSecondaryText: colorTokens.white.pure,
+
+                        // Tabs
+                        tabActive: colorTokens.primary.light,
+                        tabInactive: colorTokens.grey[400],
+                        tabIndicator: colorTokens.primary.light,
+
+                        // Text
+                        textPrimary: colorTokens.white.pure,
+                        textSecondary: colorTokens.grey[300],
+                        textTertiary: colorTokens.grey[500],
+
+                        // Borders & Dividers
+                        border: `rgba(255, 255, 255, ${colorTokens.opacity[10]})`,
+                        divider: `rgba(255, 255, 255, ${colorTokens.opacity[5]})`,
+
+                        // Backgrounds
+                        sectionBg: colorTokens.black.light,
+                        sectionBgAlt: colorTokens.black.lighter,
+
+                        // Arrows & Navigation
+                        arrowHover: `rgba(0, 0, 0, ${colorTokens.opacity[85]})`,
+                    },
+
+                    // #used - Learning Page semantic tokens (DARK MODE)
+                    learningPage: {
+                        leftPanelBg: colorTokens.glass.dark.bg, // Glass bg
+                        navBg: colorTokens.glass.dark.bg,
+                        lessonActive: `rgba(107, 79, 217, 0.3)`, // primary.light with more opacity
+                        lessonHover: "rgba(255, 255, 255, 0.05)",
+                        textPrimary: colorTokens.white.pure,
+                        textSecondary: colorTokens.grey[400],
+                        divider: colorTokens.glass.dark.borderSubtle,
+                        cardBg: colorTokens.glass.dark.bgStrong,
+                        glassBorder: colorTokens.glass.dark.border,
+                        glassShadow: colorTokens.glass.dark.shadow,
+                        backdropFilter: colorTokens.glass.dark.backdropFilter,
+                    },
+
+                }
+                : {
+                    // LIGHT MODE
+                    primary: {
+                        main: colorTokens.primary.main,
+                        light: colorTokens.primary.light,
+                        dark: colorTokens.primary.dark,
+                    },
+                    secondary: {
+                        main: colorTokens.secondary.main,
+                        light: colorTokens.secondary.light,
+                        dark: colorTokens.secondary.dark,
+                    },
+                    background: {
+                        default: colorTokens.white.light,
+                        paper: colorTokens.white.pure,
+                        elevated: colorTokens.white.main,
+                    },
+                    text: {
+                        primary: colorTokens.black.main,
+                        secondary: colorTokens.grey[600],
+                        disabled: colorTokens.grey[400],
+                    },
+                    divider: `rgba(0, 0, 0, ${colorTokens.opacity[10]})`,
+
+                    // #used - Homepage semantic tokens (LIGHT MODE)
+                    homepage: {
+                        // Hero section
+                        heroBg: colorTokens.white.pure,
+                        heroText: colorTokens.black.main,
+                        heroTextSecondary: colorTokens.grey[600],
+
+                        // Navigation
+                        navBg: colorTokens.glass.light.bg,
+                        navBorder: colorTokens.glass.light.border,
+                        navShadow: colorTokens.glass.light.shadow,
+
+                        // Cards
+                        cardBg: colorTokens.glass.light.bg,
+                        cardBgHover: colorTokens.glass.light.bgStrong,
+                        cardBorder: colorTokens.glass.light.borderSubtle,
+                        cardShadow: colorTokens.glass.light.shadow,
+
+                        // Buttons
+                        buttonPrimary: colorTokens.primary.main,
+                        buttonPrimaryHover: colorTokens.primary.dark,
+                        buttonPrimaryText: colorTokens.white.pure,
+                        buttonSecondary: colorTokens.secondary.main,
+                        buttonSecondaryHover: colorTokens.secondary.dark,
+                        buttonSecondaryText: colorTokens.white.pure,
+
+                        // Tabs
+                        tabActive: colorTokens.primary.main,
+                        tabInactive: colorTokens.grey[600],
+                        tabIndicator: colorTokens.primary.main,
+
+                        // Text
+                        textPrimary: colorTokens.black.main,
+                        textSecondary: colorTokens.grey[600],
+                        textTertiary: colorTokens.grey[500],
+
+                        // Borders & Dividers
+                        border: `rgba(0, 0, 0, ${colorTokens.opacity[10]})`,
+                        divider: `rgba(0, 0, 0, ${colorTokens.opacity[5]})`,
+
+                        // Backgrounds
+                        sectionBg: colorTokens.white.light,
+                        sectionBgAlt: colorTokens.white.main,
+
+                        // Arrows & Navigation
+                        arrowBg: `rgba(0, 0, 0, ${colorTokens.opacity[70]})`,
+                        arrowHover: `rgba(0, 0, 0, ${colorTokens.opacity[85]})`,
+                    },
+
+                    // #used - Learning Page semantic tokens (LIGHT MODE)
+                    learningPage: {
+                        leftPanelBg: colorTokens.glass.light.bg,
+                        navBg: colorTokens.glass.light.bg,
+                        lessonActive: `rgba(69, 34, 186, 0.15)`, // primary.main with 0.15 opacity
+                        lessonHover: "rgba(0, 0, 0, 0.03)",
+                        textPrimary: colorTokens.black.main,
+                        textSecondary: colorTokens.grey[600],
+                        divider: colorTokens.glass.light.borderSubtle,
+                        cardBg: colorTokens.glass.light.bgStrong,
+                        glassBorder: colorTokens.glass.light.border,
+                        glassShadow: colorTokens.glass.light.shadow,
+                        backdropFilter: colorTokens.glass.light.backdropFilter,
                     },
 
                 }),
+
+            // Common colors (same in both modes)
+            success: {
+                main: colorTokens.success,
+            },
+            warning: {
+                main: colorTokens.warning,
+            },
+            error: {
+                main: colorTokens.error,
+            },
+            info: {
+                main: colorTokens.info,
+            },
+
+            // ========================================
+            // LEGACY PALETTE PROPERTIES
+            // For backward compatibility with non-refactored components
+            // ========================================
+            grey: {
+                grey0: mode === "dark" ? "#121212" : "#FFFFFF",
+                grey10: mode === "dark" ? "#1E1E1E" : "#F6F6F6",
+                grey50: mode === "dark" ? "#232323" : "#F0F0F0",
+                grey100: mode === "dark" ? "#2C2C2C" : "#E0E0E0",
+                grey150: mode === "dark" ? "#383838" : "#DEDEDE",
+                grey200: mode === "dark" ? "#4F4F4F" : "#C2C2C2",
+                grey300: mode === "dark" ? "#828282" : "#A3A3A3",
+                grey400: mode === "dark" ? "#BDBDBD" : "#858585",
+                grey500: mode === "dark" ? "#E0E0E0" : "#666666",
+                grey600: mode === "dark" ? "#F2F2F2" : "#4D4D4D",
+                grey700: mode === "dark" ? "#F5F5F5" : "#333333",
+                grey800: mode === "dark" ? "#FAFAFA" : "#1A1A1A",
+                grey900: mode === "dark" ? "#FFFFFF" : "#0A0A0A",
+                grey1000: mode === "dark" ? "#FFFFFF" : "#000000",
+            },
+            neutral: {
+                shadow: colorTokens.black.main,
+                darkBlueGrey: colorTokens.blue.darkBlueGrey,
+                main: colorTokens.grey[500],
+                light: colorTokens.grey[200],
+                lighter: colorTokens.grey[100],
+                nearWhite: colorTokens.white.light,
+                offWhite: colorTokens.white.light,
+                translucentWhite: colorTokens.translucentWhite.x1,
+                translucentWhiteStrong: colorTokens.translucentWhite.x8,
+                translucentBlack: colorTokens.translucentBlack.x5,
+                translucentBlackLight: colorTokens.translucentBlack.x25,
+            },
         },
         typography: {
             fontFamily: ["Roboto", "sans-serif"].join(","),
-            // allVariants: {
-            //     overflowWrap: "anywhere",
-            //     wordBreak: "break-word",
-            // },
-
             fontSize: 12,
             h1: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
@@ -244,78 +454,30 @@ export const themeSettings = (mode) => {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
                 fontSize: 24,
             },
-            h3bold: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
-                fontSize: 24,
-                fontWeight: 600,
-            },
-            h3600: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
-                fontSize: 24,
-                fontWeight: 600,
-            },
-            h3grey: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
-                fontSize: 24,
-                color: colorTokens.grey[400],
-            },
             h4: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
                 fontSize: 20,
-
-            },
-            h4bold: {
-                fontFamily: ["Roboto", 'sans-serif'].join(","),
-                fontSize: 20,
-                fontWeight: 600,
-            },
-
-            h4grey: {
-                fontSize: 20,
-                fontWeight: 400,
-                color: colorTokens.grey[400],
             },
             h5: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
                 fontSize: 16,
             },
-            h5600: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
-                fontSize: 16,
-                fontWeight: 600,
-            },
             h6: {
                 fontFamily: ["Rubik", "sans-serif"].join(","),
                 fontSize: 14,
-                fontWeight: "bold"
             },
-            lightGrey: {
-                fontFamily: ["Roboto", 'sans-serif'].join(","),
-                fontSize: 14,
-                fontWeight: 300,
-                color: colorTokens.grey[500],
+        },
+        components: {
+            MuiButton: {
+                styleOverrides: {
+                    root: {
+                        textTransform: "none",
+                        borderRadius: "8px",
+                    },
+                },
             },
-            grey: {
-                fontSize: 16,
-                fontWeight: 400,
-                color: colorTokens.grey[500]
-            },
-            body: {
-                fontSize: 16,
-                fontWeight: 400,
-            },
-            h7bold: { ///
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                color: colorTokens.text.primary,
-            }
-            ,
-            h7: {
-                fontSize: "0.8rem",
-                fontWeight: 400,
-                color: colorTokens.text.primary,
-            }
-
         },
     };
 };
+
+export default themeSettings;

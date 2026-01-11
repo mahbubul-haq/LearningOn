@@ -2,22 +2,21 @@ import Box from "@mui/material/Box";
 import { useContext, useEffect } from "react";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 import useTheme from "@mui/material/styles/useTheme";
+import { colorTokens } from "../../theme";
 import CourseExplorerLeft from "./CourseExplorerLeft";
 import CourseExplorerLeftHover from "./CourseExplorerLeftHover";
 import { GlobalContext } from "../../state/GlobalContext";
 import CourseExplorerRightTop from "./CourseExplorerRightTop";
 import CourseExplorerRIghtBottom from "./CourseExplorerRIghtBottom";
 const CourseExplorer = () => {
-  const {openCourseExplorer, closeCourseExplorer, filteredCourses, categoryChangedRef, setCategoryChanged,  getFilteredCourses} = useContext(CourseExplorerContext);
+  const { openCourseExplorer, closeCourseExplorer, filteredCourses, categoryChangedRef, setCategoryChanged, getFilteredCourses } = useContext(CourseExplorerContext);
   const { getCategories, listOfCategories, categories } =
     useContext(GlobalContext);
   const theme = useTheme();
   useEffect(() => {
     if (!categories || categories.length == 0) {
-      console.log("calling for categories in explorer");
       getCategories();
     }
-    console.log("inside explorer", listOfCategories, categories);
   }, [categories]);
 
   useEffect(() => {
@@ -27,7 +26,7 @@ const CourseExplorer = () => {
       getFilteredCourses(true);
     }
   }, []);
-      
+
 
   return (
     <Box
@@ -55,7 +54,7 @@ const CourseExplorer = () => {
         transition: "height 0.3s ease-out",
         maxWidth: "2000px",
         mx: "auto",
-        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+        boxShadow: `0px 2px 4px ${colorTokens.translucentBlack.x2}`,
       }}
     >
       <Box
@@ -80,7 +79,7 @@ const CourseExplorer = () => {
           padding: "0",
           position: "relative",
           scrollBehavior: "smooth",
-          scrollbarColor: "#8b8b8b #fcfcfc",
+          scrollbarColor: `${colorTokens.grey[400]} ${colorTokens.white.nearWhite}`,
         }}
       >
         <CourseExplorerRightTop />

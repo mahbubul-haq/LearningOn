@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { colorTokens } from "../../theme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -120,7 +121,7 @@ const PublishCourse = () => {
           overflow: "auto",
           scrollBehavior: "smooth",
           position: "relative",
-          backgroundColor: "white",
+          backgroundColor: colorTokens.white.main,
           // backgroundColor: theme.palette.background.default,
         }}
       >
@@ -163,7 +164,7 @@ const PublishCourse = () => {
               padding: "0",
               pr: "1rem",
               // borderRight: `1px dashed ${theme.palette.customDivider.main}`,
-              borderRight: "1px solid #e0e0e0",
+              borderRight: `1px solid ${colorTokens.grey[200]}`,
             }}
           >
             <Box
@@ -212,12 +213,12 @@ const PublishCourse = () => {
               display: isNonMobileScreens ? "block" : "none",
             }}
           >
-            <RightButtons 
+            <RightButtons
               isCourseValid={isCourseValid}
               setUploadStatus={setUploadStatus}
               setDeleteCourseStatus={setDeleteCourseStatus}
             />
-            
+
           </Box>
         </Box>
       </Box>

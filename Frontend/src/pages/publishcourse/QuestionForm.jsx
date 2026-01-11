@@ -16,6 +16,7 @@ import StyledTextField1 from "../../components/StyledTextField1";
 import QuestionFormDetails from "./QuestionFormDetails";
 import { useContext, useRef, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
+import { colorTokens } from "../../theme";
 
 const QuestionForm = ({
   question,
@@ -91,7 +92,7 @@ const QuestionForm = ({
   return (
     <Accordion
       sx={{
-        backgroundColor: "white",
+        backgroundColor: colorTokens.white.main,
       }}
       expanded={isExpanded}
     //onChange={() => setIsExpanded(!isExpanded)}

@@ -1,3 +1,26 @@
+:root {
+  --color-primary-main: #D835E6;
+  --color-primary-dark: #791535;
+  --color-primary-light: #ff61ff;
+  --color-secondary-main: #00E0FF;
+  --color-secondary-dark: #00acc1;
+  --color-text-primary: var(--color-text-primary);
+  /* Keeping legacy darkBlueGrey as text primary for CSS */
+  --color-background-light100: var(--color-background-light100);
+
+  /* Glassmorphism system */
+  --glass-bg-1: rgba(255, 255, 255, 0.1);
+  --glass-bg-2: rgba(255, 255, 255, 0.2);
+  --glass-bg-3: rgba(255, 255, 255, 0.3);
+  --glass-bg-5: rgba(255, 255, 255, 0.5);
+  --glass-bg-6: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-light: rgba(255, 255, 255, 0.2);
+  --glass-border-rich: rgba(231, 169, 219, 0.4);
+  --glass-scrollbar-thumb: rgba(4, 65, 70, 0.336);
+  --glass-scrollbar-hover: rgba(4, 65, 70, 0.445);
+}
+
 *,
 *::after,
 *::before {
@@ -29,7 +52,7 @@ body {
 }
 
 .color {
-  color: "#3F3D56";
+  color: "var(--color-text-primary)";
 }
 
 .nav-tabs,
@@ -37,12 +60,12 @@ body {
 .nav-item {
   border-bottom: none;
   padding: 0;
-  color: #3F3D56;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
 .nav-tabs .nav-link.active {
-  background-color: #EBF5E2;
+  background-color: var(--color-background-light100);
 }
 
 .dashboard-tabs .nav-link {
@@ -61,7 +84,7 @@ body {
 }
 
 #coursepage-mainsection ul li a {
-  color: #3F3D56;
+  color: var(--color-text-primary);
   text-decoration: none;
   display: block;
   padding: 0;
@@ -97,20 +120,20 @@ body {
 
 /* The background of the scrollbar area */
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--glass-bg-2);
   /* Keeps the gradient visible */
 }
 
 /* The draggable handle */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--glass-bg-5);
   border-radius: 10px;
   /* Rounds the edges */
 }
 
 /* Highlight the handle on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--glass-bg-3);
 }
 
 /* The container holding your lessons */
@@ -121,13 +144,13 @@ body {
 
 /* The background of the scrollbar area */
 .custom-scrollbar-thin::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--glass-bg-2);
   /* Keeps the gradient visible */
 }
 
 /* The draggable handle */
 .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(4, 65, 70, 0.336);
+  background: var(--glass-scrollbar-thumb);
   backdrop-filter: blur(25px) saturate(200%);
   border-radius: 10px;
   /* Rounds the edges */
@@ -135,6 +158,5 @@ body {
 
 /* Highlight the handle on hover */
 .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(4, 65, 70, 0.445);
-
+  background: var(--glass-scrollbar-hover);
 }

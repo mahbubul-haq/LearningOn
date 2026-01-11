@@ -22,33 +22,30 @@ const Option = ({
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const getOptionBackground = (lessonNo, questionIdx, optionIdx) => {
-    if (!courseProgress) return;
+  const getOptionBackground = (lessonNo, questionIdx, optionIdx, theme) => {
+    if (!courseProgress) return "transparent";
     let q = "Q" + lessonNo + "_" + (questionIdx + 1);
 
     if (answer[q] == `${optionIdx + 1}`) {
-      return theme.palette.background.questionSelected;
+      return (theme) => theme.palette.learningPage.lessonActive;
     } else if (
-      courseProgress.ongoing.includes(q) &&
+      (courseProgress.ongoing.includes(q) || courseProgress.completed.includes(q)) &&
       courseProgress.courseProgress[q].yourAnswer == "" + (optionIdx + 1)
     ) {
-      return theme.palette.error.light1;
-    } else if (
-      courseProgress.completed.includes(q) &&
-      courseProgress.courseProgress[q].isCorrect == false &&
-      courseProgress.courseProgress[q].yourAnswer == "" + (optionIdx + 1)
-    ) {
-      return theme.palette.error.light1;
+      return courseProgress.courseProgress[q].isCorrect ?
+        `rgba(16, 185, 129, 0.15)` : // success with low opacity
+        `rgba(239, 68, 68, 0.15)`;   // error with low opacity
     } else if (
       courseProgress.completed.includes(q) &&
       courseProgress.courseProgress[q].isCorrect == true &&
       courseProgress.courseProgress[q].correctAnswer == "" + (optionIdx + 1)
     ) {
-      return theme.palette.background.questionCorrect;
+      return `rgba(16, 185, 129, 0.15)`;
     } else {
-      return theme.palette.grey.grey150;
+      return (theme) => theme.palette.learningPage.cardBg;
     }
   };
+
 
 
 
@@ -62,22 +59,23 @@ const Option = ({
         alignItems: "center",
         justifyContent: "space-between",
         gap: "0.5rem",
-        background: getOptionBackground(
+        backgroundColor: getOptionBackground(
           openedLesson.lesson,
           questionIdx,
-          optionIdx
+          optionIdx,
+          theme
         ),
-        padding: "0.6rem 0.6rem",
-        borderRadius: "0.1rem",
+        padding: "0.8rem 1rem",
+        borderRadius: "0.5rem",
+        border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
         cursor:
           attemptLeft(openedLesson.lesson, questionIdx + 1) > 0
             ? "pointer"
             : "auto",
+        transition: "all 0.2s ease",
         "&:hover": {
-          outline:
-            attemptLeft(openedLesson.lesson, questionIdx + 1) > 0
-              ? `2px solid ${theme.palette.primary.main}`
-              : "none",
+          backgroundColor: (theme) => theme.palette.learningPage.lessonHover,
+          border: (theme) => `1px solid ${theme.palette.secondary.main}`,
         },
       }}
       onClick={() => {
@@ -93,10 +91,6 @@ const Option = ({
                 rest
               )
             );
-            // setAnswer({
-            //   ...answer,
-            //   [`Q${openedLesson.lesson}_${questionIdx + 1}`]: "",
-            // });
           } else {
 
             dispatch(
@@ -105,13 +99,6 @@ const Option = ({
                 [`Q${openedLesson.lesson}_${questionIdx + 1}`]: `${optionIdx + 1}`,
               })
             );
-
-            // setAnswer({
-            //   ...answer,
-            //   [`Q${openedLesson.lesson}_${questionIdx + 1}`]: `${
-            //     optionIdx + 1
-            //   }`,
-            // });
           }
         }
       }}
@@ -125,28 +112,32 @@ const Option = ({
       >
         <Box
           sx={{
-            border: `1px solid ${theme.palette.grey.grey400}`,
+            border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
+            backgroundColor: (theme) => theme.palette.learningPage.cardBg,
             padding: "0.2rem",
             borderRadius: "50%",
-            width: "24px",
-            height: "24px",
+            width: "28px",
+            height: "28px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontWeight: 500,
-            fontSize: "0.8rem",
+            fontWeight: "bold",
+            fontSize: "0.9rem",
+            color: (theme) => theme.palette.learningPage.textPrimary,
           }}
         >
           {optionIdx + 1}
         </Box>
         <Typography
           sx={{
-            fontSize: "0.9rem",
+            fontSize: "1rem",
+            color: (theme) => theme.palette.learningPage.textPrimary,
           }}
         >
           {" "}
           {option}
         </Typography>
+
       </Box>
       {isCorrect(openedLesson.lesson, questionIdx, optionIdx) && (
         <Box

@@ -1,14 +1,16 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import useTheme from "@mui/material/styles/useTheme";
 
 const DashboardCard = ({ title, value }) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const theme = useTheme();
     return (
         <Box
             sx={{
                 padding: "1rem",
-                backgroundColor: "#f5f5f5",
+                backgroundColor: theme.palette.neutral.offWhite,
 
                 borderRadius: "0.5rem",
                 minWidth: isNonMobileScreens ? "240px" : "200px",
@@ -27,7 +29,7 @@ const DashboardCard = ({ title, value }) => {
                     alignItems: "center",
                     justifyContent: "center",
                     padding: "2rem 2rem",
-                    
+
                 }}
             >
                 <Typography

@@ -39,10 +39,11 @@ const QuizContainer = lazy(() => import("./pages/learningpage/QuizContainer"));
 
 function App() {
   const mode = useSelector((state) => state.auth.mode);
-  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  const theme = useMemo(() => createTheme(themeSettings({ mode })), [mode]);
 
   useEffect(() => {
-    sessionStorage.setItem("firstTime", "true");
+    // sessionStorage.setItem("firstTime", "true");
+    console.log(mode);
   }, [mode]);
 
   return (

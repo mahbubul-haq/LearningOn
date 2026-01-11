@@ -12,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
+import { colorTokens } from "../../theme";
 
 const CoursePageLessons = ({ courseInfo }) => {
     const [expanded, setExpanded] = React.useState("");
@@ -35,7 +36,7 @@ const CoursePageLessons = ({ courseInfo }) => {
                 <Accordion
                     key={index}
                     sx={{
-                        backgroundColor: "white",
+                        backgroundColor: (theme) => theme.palette.homepage.cardBg,
                     }}
                     expanded={expanded === `panel${index}`}
                 >
@@ -43,7 +44,7 @@ const CoursePageLessons = ({ courseInfo }) => {
                         expandIcon={
                             <ExpandMoreIcon
                                 sx={{
-                                    color: theme.palette.grey.grey800,
+                                    color: (theme) => theme.palette.homepage.textPrimary,
                                     fontSize: "2rem",
                                     p: 0,
                                     m: 0,
@@ -66,12 +67,12 @@ const CoursePageLessons = ({ courseInfo }) => {
                         <Typography
                             sx={{
                                 fontSize: "1.2rem",
-                                color: theme.palette.grey.grey800,
+                                color: (theme) => theme.palette.homepage.textPrimary,
                             }}
                         >
                             <span
                                 style={{
-                                    color: theme.palette.grey.grey800,
+                                    color: (theme) => theme.palette.homepage.textPrimary,
                                     fontWeight: "600",
                                 }}
                             >
@@ -92,7 +93,7 @@ const CoursePageLessons = ({ courseInfo }) => {
                                     lineHeight: "1.5rem",
                                     mb: "1rem",
 
-                                    color: (theme) => theme.palette.grey.grey800,
+                                    color: (theme) => theme.palette.homepage.textSecondary,
                                 }}
                             >
                                 {lesson.description?.split("\n").map(
@@ -106,7 +107,7 @@ const CoursePageLessons = ({ courseInfo }) => {
                                 )}
                             </Typography>
                         )}
-                        <TableContainer component={Paper}>
+                        <TableContainer component={Paper} sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
                             <Table>
                                 <TableBody>
                                     {lesson.subLessons.map((subLesson, subIndex) => (
@@ -114,8 +115,8 @@ const CoursePageLessons = ({ courseInfo }) => {
                                             <TableCell
                                                 sx={{
                                                     fontSize: "1rem",
-
-                                                    color: theme.palette.grey.grey800,
+                                                    borderColor: (theme) => theme.palette.homepage.divider,
+                                                    color: (theme) => theme.palette.homepage.textPrimary,
                                                 }}
                                             >
                                                 <span

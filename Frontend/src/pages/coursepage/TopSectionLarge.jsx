@@ -21,9 +21,9 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
             padding: "3rem 5rem",
             display: "grid",
             gridTemplateColumns: "70% 30%",
-            backgroundColor: theme.palette.background.bottom,
-            backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
-            color: theme.palette.text.primary,
+            backgroundColor: (theme) => theme.palette.homepage.sectionBg,
+            backgroundImage: (theme) => `linear-gradient(to bottom, ${theme.palette.homepage.heroBg}, ${theme.palette.homepage.sectionBg})`,
+            color: (theme) => theme.palette.homepage.textPrimary,
         }}>
             <Box sx={{
                 // border: "1px solid red",
@@ -48,6 +48,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Typography
                         sx={{
                             fontSize: "1.1rem",
+                            color: (theme) => theme.palette.homepage.textSecondary,
                         }}
                     >
                         Instructors{" "}
@@ -58,15 +59,15 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                                     key={index}
                                     title="View Profile"
                                     sx={{
-                                        fontWeight: "bold",
-                                        color: theme.palette.text.primary,
+                                        // fontWeight: "bold",
+                                        color: (theme) => theme.palette.homepage.textPrimary,
                                         textTransform: "capitalize",
-                                        fontSize: "1.1rem",
-                                        m: 0,
+                                        fontSize: "1.2rem",
+
                                         mb: "0.1rem",
                                         textDecoration: "underline",
                                         "&:hover": {
-                                            color: theme.palette.text.primary,
+                                            color: (theme) => theme.palette.homepage.textPrimary,
                                             textDecoration: "underline",
                                         },
                                     }}
@@ -84,7 +85,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
 
                 </Box>
 
-                <Divider />
+                <Divider sx={{ backgroundColor: (theme) => theme.palette.homepage.divider }} />
 
                 <Box sx={{
                     display: "flex",
@@ -106,6 +107,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Typography
                         sx={{
                             fontSize: "1.1rem",
+                            color: (theme) => theme.palette.homepage.textSecondary,
                         }}
                     >
                         Language <b>{courseInfo?.courseLanguage}</b>
@@ -115,6 +117,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Typography
                         sx={{
                             fontSize: "1.1rem",
+                            color: (theme) => theme.palette.homepage.textSecondary,
                         }}
                     >
                         Time to complete <b>{courseInfo?.approxTimeToComplete} weeks</b> (Approx)
@@ -122,6 +125,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Typography
                         sx={{
                             fontSize: "1.1rem",
+                            color: (theme) => theme.palette.homepage.textSecondary,
                         }}
                     >
                         Requirements: {courseInfo?.studentRequirements}
@@ -138,8 +142,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                 pl: "1rem",
             }}>
                 <Box sx={{
-                    backgroundColor: "rgba(255, 255, 255, 0.7)",
-                    // backgroundColor: "#e2a968ff",
+                    backgroundColor: (theme) => theme.palette.homepage.cardBg,
                     p: "2rem",
                     width: "100%",
                     borderRadius: "1rem",
@@ -147,19 +150,25 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     flexDirection: "column",
                     gap: "1rem",
                     justifyContent: "center",
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                    backdropFilter: "blur(10px)"
+                    boxShadow: (theme) => theme.palette.homepage.cardShadow,
+                    backdropFilter: "blur(20px)",
+                    border: (theme) => `1px solid ${theme.palette.homepage.cardBorder}`,
                 }}>
                     <Typography
-                        variant="h2"
+                        variant="h3"
                         sx={{
                             fontWeight: "bold",
+                            color: (theme) => theme.palette.homepage.textPrimary,
+                            textAlign: "center",
+                            fontSize: "2rem",
                         }}>
                         {`$ ${courseInfo?.coursePrice}`}
                     </Typography>
                     <Typography
                         sx={{
-                            fontSize: "1.1rem",
+                            textAlign: "center",
+                            fontSize: "0.9rem",
+                            color: (theme) => theme.palette.homepage.textSecondary,
                         }}
                     >
                         {getEnrollmentText(purchased, user, courseInfo)}
@@ -191,11 +200,9 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                             color: "inherit",
                             mt: "2rem",
                             "&&": {
-                                // backgroundColor: "#f37f4aff",
-                                backgroundColor: theme.palette.primary.dark,
+                                backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
                                 "&:hover": {
-                                    backgroundColor: theme.palette.primary.darker,
-                                    color: "inherit"
+                                    backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
                                 },
                             },
                         }}

@@ -1,4 +1,5 @@
 import React from 'react'
+import { colorTokens } from '../../theme'
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Box } from '@mui/material'
 import { useContext, useState, useEffect } from 'react'
 import { LearningCourseContext } from '../../state/LearningCourseContex'
@@ -60,33 +61,27 @@ const QuizAttemptDialog = () => {
             aria-labelledby="responsive-dialog-title"
             disableEscapeKeyDown
             sx={{
-                background: "rgba(255, 255, 255, 0.2)",
                 backdropFilter: "blur(10px) saturate(180%)",
             }}
             PaperProps={{
                 sx: {
-                    border: `2px solid ${theme.palette.primary.main}`,
-                    // background: "rgba(255, 255, 255, 0.8)",
-                    // linear gradiennt to bottom right -> theme.palete.darker to theme secondary main
-                    background: `linear-gradient(to bottom, ${theme.palette.primary.darker}, ${theme.palette.secondary.main})`,
+                    backgroundColor: (theme) => theme.palette.learningPage.leftPanelBg,
                     backdropFilter: "blur(30px) saturate(180%)",
                     borderRadius: "1.5rem",
-                    // ...theme.palette.glassMorphismCard,
-                    // background: "rgba(255, 255, 255, 0.8)",
-                    //glow 
-                    boxShadow: `0 0 10px ${theme.palette.primary.main}`,
+                    border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
+                    boxShadow: (theme) => theme.palette.homepage.cardShadow,
                 },
             }}
         >
-            <DialogTitle id="responsive-dialog-title">Quiz Attempt</DialogTitle>
+            <DialogTitle id="responsive-dialog-title" sx={{ color: (theme) => theme.palette.learningPage.textPrimary, fontWeight: "bold" }}>Quiz Attempt</DialogTitle>
             <DialogContent sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
                 mt: "1rem",
-                color: "rgba(235, 235, 235, 1)",
+                color: (theme) => theme.palette.learningPage.textPrimary,
             }}>
-                <Typography variant="h4bold" sx={{ color: theme.palette.primary.main }}>
+                <Typography variant="h4bold" sx={{ color: (theme) => theme.palette.primary.main }}>
                     Lesson {quizDialogState.lessonNo.toString().padStart(2, "0")}: {courseInfo?.lessons?.[quizDialogState.lessonNo - 1]?.title}
                 </Typography>
 
@@ -101,23 +96,23 @@ const QuizAttemptDialog = () => {
                     },
                 }}>
                     <ListItem>
-                        <Typography>
-                            <strong style={{ color: theme.palette.primary.main }}>Number of Questions:</strong> {quizDialogState.numberOfQuestions}
+                        <Typography sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
+                            <strong style={{ color: theme.palette.secondary.main }}>Number of Questions:</strong> {quizDialogState.numberOfQuestions}
                         </Typography>
                     </ListItem>
                     <ListItem>
-                        <Typography>
-                            <strong style={{ color: theme.palette.primary.main }}>Total Time:</strong> {Math.min(quizDialogState.totalTime.hours, 100)}h {quizDialogState.totalTime.minutes}m
+                        <Typography sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
+                            <strong style={{ color: theme.palette.secondary.main }}>Total Time:</strong> {Math.min(quizDialogState.totalTime.hours, 100)}h {quizDialogState.totalTime.minutes}m
                         </Typography>
                     </ListItem>
                     <ListItem>
-                        <Typography>
-                            <strong style={{ color: theme.palette.primary.main }}>Question Type:</strong> {quizDialogState.questionType}
+                        <Typography sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
+                            <strong style={{ color: theme.palette.secondary.main }}>Question Type:</strong> {quizDialogState.questionType}
                         </Typography>
                     </ListItem>
                     <ListItem>
-                        <Typography >
-                            <strong style={{ color: theme.palette.primary.main }}>Instructions:</strong> {quizDialogState.instructions}
+                        <Typography sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
+                            <strong style={{ color: theme.palette.secondary.main }}>Instructions:</strong> {quizDialogState.instructions}
                         </Typography>
                     </ListItem>
                 </List>
@@ -136,17 +131,14 @@ const QuizAttemptDialog = () => {
                         fontWeight: "600",
                         cursor: "pointer",
                         "&&": {
-                            border: `1px solid ${theme.palette.primary.main}`,
+                            border: (theme) => `1px solid ${theme.palette.secondary.main}`,
                             borderRadius: "2rem",
-                            padding: "0.4rem 1rem",
-                            // fontWeight: "600",
-                            background: "transparent",
-                            color: theme.palette.primary.main,
+                            padding: "0.4rem 1.5rem",
+                            backgroundColor: "transparent",
+                            color: (theme) => theme.palette.secondary.main,
                             "&:hover": {
-                                color: theme.palette.primary.light,
-                                border: `1px solid ${theme.palette.primary.light}`,
-                                background: "transparent",
-                                transform: "scale(1.05)",
+                                backgroundColor: (theme) => theme.palette.learningPage.lessonHover,
+                                transform: "scale(1.02)",
                             },
                         },
                     }}
@@ -162,20 +154,16 @@ const QuizAttemptDialog = () => {
                 <StyledButton
                     sx={{
                         textTransform: "capitalize",
-                        fontWeight: "600",
-
+                        fontWeight: "bold",
                         cursor: "pointer",
                         "&&": {
-                            padding: "0.4rem 1rem",
-                            fontWeight: "600",
+                            padding: "0.4rem 2rem",
                             borderRadius: "2rem",
-                            background: theme.palette.primary.main,
-                            border: `1px solid ${theme.palette.primary.main}`,
-                            color: theme.palette.text.primary,
+                            backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
+                            color: colorTokens.white.pure,
                             "&:hover": {
-                                background: theme.palette.primary.light,
-                                border: `1px solid ${theme.palette.primary.light}`,
-                                transform: "scale(1.05)",
+                                backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
+                                transform: "scale(1.02)",
                             },
                         },
                     }}

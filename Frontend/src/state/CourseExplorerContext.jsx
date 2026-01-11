@@ -1,4 +1,5 @@
 import { createContext, useCallback, useEffect, useRef, useState, useContext } from "react";
+import { colorTokens } from "../theme";
 import { useSelector } from "react-redux";
 import { GlobalContext } from "./GlobalContext";
 export const CourseExplorerContext = createContext();
@@ -105,7 +106,7 @@ export const CourseExplorerState = (props) => {
       if (navCourse) navCourse.style.height = "100%";
       // if (appContainer) appContainer.style.overflow = "hidden";
       if (appContainer) {
-        appContainer.style.scrollbarColor = "transparent #fcfcfc";
+        appContainer.style.scrollbarColor = `transparent ${colorTokens.white.nearWhite}`;
 
       }
       if (explorerLeft) {
@@ -156,7 +157,7 @@ export const CourseExplorerState = (props) => {
       if (appContainer) {
         if (timeoutId) clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
-          appContainer.style.scrollbarColor = "#8b8b8b #fcfcfc";
+          appContainer.style.scrollbarColor = `${colorTokens.grey[400]} ${colorTokens.white.nearWhite}`;
         }, 200);
       }
     }

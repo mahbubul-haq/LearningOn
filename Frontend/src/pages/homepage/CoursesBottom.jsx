@@ -117,9 +117,9 @@ const CoursesBottom = ({
             },
             cursor: isDisabled() ? "default" : "pointer",
             opacity: isDisabled() ? 0.5 : 1,
-            color: (theme) => theme.palette.grey.grey500,
+            color: (theme) => theme.palette.homepage.textSecondary,
             "&:hover": {
-              color: isDisabled() ? (theme) => theme.palette.grey.grey500 : (theme) => theme.palette.grey.grey700,
+              color: isDisabled() ? (theme) => theme.palette.homepage.textSecondary : (theme) => theme.palette.homepage.textPrimary,
             },
           }}
         >
