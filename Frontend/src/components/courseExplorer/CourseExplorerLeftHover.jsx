@@ -59,7 +59,11 @@ const CourseExplorerLeftHover = () => {
         right: 0,
         transform: "translateX(100%)",
         top: 0,
-        background: theme.palette.background.light300,
+        // background: theme.palette.background.light300,
+        ...theme.palette.glassSheet, // Apply glass style
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+        borderLeft: "none", // Integrate seamlessly
         transition: "width 0.3s ease-out",
         width: 0,
         zIndex: "5000000",

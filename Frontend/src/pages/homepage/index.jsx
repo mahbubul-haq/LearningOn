@@ -57,7 +57,9 @@ const HomePage = () => {
 
     return (
         <>
-            <Box className="homepage-main">
+            <Box className="homepage-main" sx={{
+
+            }}>
                 <LandingView />
                 <HomeCourses />
             </Box>

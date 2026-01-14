@@ -21,8 +21,8 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
             padding: "3rem 5rem",
             display: "grid",
             gridTemplateColumns: "70% 30%",
-            backgroundColor: (theme) => theme.palette.homepage.sectionBg,
-            backgroundImage: (theme) => `linear-gradient(to bottom, ${theme.palette.homepage.heroBg}, ${theme.palette.homepage.sectionBg})`,
+            backgroundColor: (theme) => theme.palette.background.paper, // Solid base
+            backgroundImage: (theme) => `linear-gradient(to bottom, ${theme.palette.background.paper}, ${theme.palette.homepage.sectionBg})`,
             color: (theme) => theme.palette.homepage.textPrimary,
         }}>
             <Box sx={{

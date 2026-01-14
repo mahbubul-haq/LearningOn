@@ -90,60 +90,12 @@ const LearningPage = () => {
           height: "100vh",
           overflow: "auto",
           width: "100%",
-          backgroundColor: theme.palette.mode == 'dark' ? "#0f0f13" : "#F0F4F8",
-          backgroundImage: theme.palette.mode == 'dark'
-            ? `
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)
-              `
-            : `
-                radial-gradient(at 40% 20%, hsla(266, 60%, 90%, 1) 0px, transparent 50%),
-                radial-gradient(at 80% 0%, hsla(289, 100%, 86%, 1) 0px, transparent 50%),
-                radial-gradient(at 0% 50%, hsla(220, 100%, 87%, 1) 0px, transparent 50%),
-                radial-gradient(at 80% 50%, hsla(240, 100%, 93%, 1) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, hsla(340, 100%, 86%, 1) 0px, transparent 50%),
-                radial-gradient(at 80% 100%, hsla(220, 100%, 82%, 1) 0px, transparent 50%),
-                radial-gradient(at 0% 0%, hsla(330, 100%, 96%, 1) 0px, transparent 50%)
-              `,
-          backgroundSize: "100% 100%",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
           position: "relative",
           zIndex: 0,
         }}
       >
-
-        {/* Noise Texture for premium feel */}
-        <Box sx={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          opacity: 0.4, // Increased opacity for visibility
-          pointerEvents: "none",
-          zIndex: -1, // Behind content
-          backgroundImage: `url("https://grainy-gradients.vercel.app/noise.svg")`,
-          filter: "contrast(170%) brightness(100%)",
-        }} />
-
-        {/* <Box
-          sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1,
-            height: isMobileScreens ? "4rem" : "5rem",
-          }}
-        >
-
-          <LearningPageTop courseInfo={courseInfo} scrollTop={scrollTop} />
-        </Box > */}
-
-
         <Box className="learning-page-container"
           sx={{
-
             width: "100%",
             maxWidth: "2000px",
             mx: "auto",

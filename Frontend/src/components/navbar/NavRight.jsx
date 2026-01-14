@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import FlexBetween from "../FlexBetween";
 import { StyledButton } from "../StyledButton";
 import NavRightIsUser from "./NavRightIsUser";
+import { useDispatch } from "react-redux";
+import { setMode } from "../../state/reduxStore/authSlice";
+import { DarkMode, LightMode } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 const NavRight = ({
     handleClick,
@@ -21,6 +25,8 @@ const NavRight = ({
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const theme = useTheme();
     const navRightIsUser = (
         <NavRightIsUser
             handleClick={handleClick}
@@ -38,6 +44,13 @@ const NavRight = ({
             {isNonMobileScreens ? (
 
                 <FlexBetween gap="0.6rem">
+                    <IconButton onClick={() => dispatch(setMode())}>
+                        {theme.palette.mode === "dark" ? (
+                            <LightMode sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }} />
+                        ) : (
+                            <DarkMode sx={{ fontSize: "25px" }} />
+                        )}
+                    </IconButton>
                     {user ? (
                         <>
                             {navRightIsUser}

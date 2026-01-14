@@ -33,6 +33,16 @@ const CourseExplorerLeft = () => {
         flexDirection: "column",
         py: "2rem",
         scrollbarColor: `${colorTokens.grey[400]} ${colorTokens.white.nearWhite}`,
+        ...theme.palette.glassSheet, // Apply glass style
+        borderRadius: "0", // Reset border radius for full height panel if needed, or keep it. Let's keep distinct panel look.
+        // actually, reset radius if it's a sidebar, but user said "left", typically sidebars are rects. 
+        // But let's assume it's a panel inside a layout.
+        // Overriding partial styles for sidebar fit:
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+        borderLeft: "none",
+        borderTop: "none",
+        borderBottom: "none",
       }}
     >
       {categories?.length > 0 &&

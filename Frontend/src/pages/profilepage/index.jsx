@@ -16,14 +16,14 @@ import Divider from "@mui/material/Divider";
 
 const ProfilePage = () => {
     const { userId } = useParams();
-    const { userById, getUserById,  setOpenedItem } = useContext(GlobalContext);
+    const { userById, getUserById, setOpenedItem } = useContext(GlobalContext);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const { setOpenedTab,
         editProfileStatus,
         setEditProfileStatus,
         setProfileInfoChanged,
-     } = useContext(ProfilePageContext);
+    } = useContext(ProfilePageContext);
     const theme = useTheme();
 
     const getQualifications = () => {
@@ -70,7 +70,7 @@ const ProfilePage = () => {
     return (
         <Box
             sx={{
-               
+
                 width: "100%",
                 minHeight: "600px",
                 paddingBottom: "2rem",
@@ -130,7 +130,9 @@ const ProfilePage = () => {
                     sx={{
                         width: isNonMobileScreens ? "80%" : "100%",
                         // border: "1px solid #ccc",
-                        backgroundColor: isMobileScreens ? "transparent" : theme.palette.background.imagesBg1,
+                        ...theme.palette.glassSheet,
+                        // Add some internal padding so content doesn't touch the glass edges
+                        padding: "2rem",
                     }}
                 >
                     <ProfileRight userInfo={userById} />

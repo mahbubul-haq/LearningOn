@@ -204,6 +204,35 @@ export const colorTokens = {
     translucentGreen: {
         x15: "rgba(16, 185, 129, 0.15)",
     },
+    glassMorphism: {
+        backgroundImageDark: `
+                                    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                                    radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                                    radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)`,
+        backgroundImageLight: `
+                                    radial-gradient(at 40% 20%, hsla(266, 60%, 90%, 1) 0px, transparent 50%),
+                                    radial-gradient(at 80% 0%, hsla(289, 100%, 86%, 1) 0px, transparent 50%),
+                                    radial-gradient(at 0% 50%, hsla(220, 100%, 87%, 1) 0px, transparent 50%),
+                                    radial-gradient(at 80% 50%, hsla(240, 100%, 93%, 1) 0px, transparent 50%),
+                                    radial-gradient(at 0% 100%, hsla(340, 100%, 86%, 1) 0px, transparent 50%),
+                                    radial-gradient(at 80% 100%, hsla(220, 100%, 82%, 1) 0px, transparent 50%),
+                                    radial-gradient(at 0% 0%, hsla(330, 100%, 96%, 1) 0px, transparent 50%)
+                                  `,
+        noise: {
+            content: '""',
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            opacity: 0.4,
+            pointerEvents: "none",
+            zIndex: -1,
+            backgroundImage: `url("https://grainy-gradients.vercel.app/noise.svg")`,
+            filter: "contrast(170%) brightness(50%)",
+
+        }
+    },
 };
 
 // mui theme settings
@@ -212,6 +241,30 @@ export const themeSettings = ({ mode }) => {
     return {
         palette: {
             mode: mode,
+            glassNavbar: mode === "dark" ? {
+                background: "rgba(20, 20, 25, 0.4)",
+                backdropFilter: "blur(12px)",
+                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            } : {
+                background: "rgba(255, 255, 255, 0.4)",
+                backdropFilter: "blur(12px)",
+                borderBottom: "1px solid rgba(255, 255, 255, 0.3)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.05)",
+            },
+            glassSheet: mode === "dark" ? {
+                background: "rgba(30, 30, 35, 0.6)", // Semi-transparent dark
+                backdropFilter: "blur(20px)",         // Strong blur
+                borderRadius: "16px",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
+            } : {
+                background: "rgba(255, 255, 255, 0.7)", // Semi-transparent white
+                backdropFilter: "blur(20px)",
+                borderRadius: "16px",
+                border: "1px solid rgba(255, 255, 255, 0.4)",
+                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.1)",
+            },
             ...(mode === "dark"
                 ? {
                     // DARK MODE
@@ -240,9 +293,10 @@ export const themeSettings = ({ mode }) => {
                     // #used - Homepage semantic tokens (DARK MODE)
                     homepage: {
                         // Hero section
-                        heroBg: colorTokens.black.pure,
+                        heroBg: "transparent", // Made transparent for global background
                         heroText: colorTokens.white.pure,
                         heroTextSecondary: colorTokens.grey[300],
+                        heroTextShadow: 'rgba(255, 255, 255, 0.3)',
 
                         // Navigation
                         navBg: colorTokens.glass.dark.bg,
@@ -300,6 +354,7 @@ export const themeSettings = ({ mode }) => {
                         backdropFilter: colorTokens.glass.dark.backdropFilter,
                     },
 
+
                 }
                 : {
                     // LIGHT MODE
@@ -328,9 +383,10 @@ export const themeSettings = ({ mode }) => {
                     // #used - Homepage semantic tokens (LIGHT MODE)
                     homepage: {
                         // Hero section
-                        heroBg: colorTokens.white.pure,
+                        heroBg: "transparent", // Made transparent for global background
                         heroText: colorTokens.black.main,
                         heroTextSecondary: colorTokens.grey[600],
+                        heroTextShadow: 'rgba(0, 0, 0, 0.3)',
 
                         // Navigation
                         navBg: colorTokens.glass.light.bg,
@@ -425,6 +481,9 @@ export const themeSettings = ({ mode }) => {
                 grey900: mode === "dark" ? "#FFFFFF" : "#0A0A0A",
                 grey1000: mode === "dark" ? "#FFFFFF" : "#000000",
             },
+            customDivider: {
+                main: mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
+            },
             neutral: {
                 shadow: colorTokens.black.main,
                 darkBlueGrey: colorTokens.blue.darkBlueGrey,
@@ -474,6 +533,37 @@ export const themeSettings = ({ mode }) => {
                         textTransform: "none",
                         borderRadius: "8px",
                     },
+                },
+            },
+            MuiCssBaseline: {
+                styleOverrides: {
+                    body: {
+                        minHeight: "100vh",
+                        backgroundColor: mode === 'dark' ? "#0f0f13" : "#F0F4F8",
+                        position: "relative",
+                        "&::before": {
+                            content: '""',
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            zIndex: -2,
+                            backgroundImage: mode === 'dark'
+                                ? colorTokens.glassMorphism.backgroundImageDark
+                                : colorTokens.glassMorphism.backgroundImageLight,
+                            backgroundSize: "100% 100%",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                        }
+                    },
+                    "#root": {
+                        position: "relative",
+                        minHeight: "100vh",
+                        "&::before": {
+                            ...colorTokens.glassMorphism.noise
+                        }
+                    }
                 },
             },
         },

@@ -105,11 +105,7 @@ const Navbar = () => {
         top: 0,
         zIndex: 100,
         width: "100%",
-        ...theme.palette.glassMorphismCard,
-        borderRadius: 0,
-        borderTop: "none",
-        borderLeft: "none",
-        borderRight: "none",
+        ...theme.palette.glassNavbar,
       }}
     >
       <Box

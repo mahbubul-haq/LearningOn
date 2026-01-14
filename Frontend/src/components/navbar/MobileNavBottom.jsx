@@ -8,9 +8,10 @@ import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setLogout } from "../../state/reduxStore/authSlice";
+import { setLogout, setMode } from "../../state/reduxStore/authSlice";
 import { MobileNavItem } from "../StyledBox";
 import { StyledButton } from "../StyledButton";
+import { DarkMode, LightMode } from "@mui/icons-material";
 
 const MobileNavBottom = ({ setOpenDrawer }) => {
   const theme = useTheme();
@@ -114,17 +115,17 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
         >
           <StyledButton
             onClick={() => {
-                if (user) {
+              if (user) {
                 navigate("/publishcourse");
-                }
-                else {
-                    navigate("/login", {
-                        state: {
-                            isLogin: true,
-                            redirect: "/publishcourse"
-                        }
-                    })
-                }
+              }
+              else {
+                navigate("/login", {
+                  state: {
+                    isLogin: true,
+                    redirect: "/publishcourse"
+                  }
+                })
+              }
               setOpenDrawer(false);
             }}
           >
@@ -145,6 +146,21 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
           light
         />
       </>
+
+      <Box sx={{ px: "1rem" }}>
+        <MobileNavItem onClick={() => dispatch(setMode())}>
+          {theme.palette.mode === "dark" ? (
+            <LightMode sx={{ fontSize: "1.2rem", color: (theme) => theme.palette.grey.grey400 }} />
+          ) : (
+            <DarkMode sx={{ fontSize: "1.2rem", color: (theme) => theme.palette.grey.grey400 }} />
+          )}
+          <Typography sx={{ fontSize: "1.2rem" }}>
+            {theme.palette.mode === "dark" ? "Light Mode" : "Dark Mode"}
+          </Typography>
+        </MobileNavItem>
+      </Box>
+      <Divider sx={{ color: theme.palette.customDivider.main, my: "1rem" }} light />
+
       {user && (
         <Box
           sx={{
