@@ -39,8 +39,9 @@ const CourseExplorerRightTop = ({ coursePage }) => {
         flexDirection: "column",
         gap: "2rem",
         alignItems: "flex-end",
-        background: theme.palette.background.default,
-        borderBottom: `1px solid ${theme.palette.grey[300]}`,
+        backgroundColor: theme.palette.courseExplorer.headerBg,
+        backdropFilter: theme.palette.courseExplorer.backdropFilter,
+        borderBottom: `1px solid ${theme.palette.courseExplorer.border}`,
         zIndex: "5000",
       }}
     >
@@ -52,17 +53,17 @@ const CourseExplorerRightTop = ({ coursePage }) => {
         >
           <Breadcrumbs
             sx={{
-              color: theme.palette.grey.grey300,
+              color: theme.palette.courseExplorer.textSecondary,
               "& .MuiBreadcrumbs-separator": {
-                color: theme.palette.grey.grey300,
+                color: theme.palette.courseExplorer.textSecondary,
               },
             }}
             aria-label="breadcrumb"
           >
-            <Typography sx={{ fontSize: "1rem" }}>Courses</Typography>
+            <Typography sx={{ fontSize: "1rem", color: theme.palette.courseExplorer.textSecondary }}>Courses</Typography>
 
             {selectedSubCategory && (
-              <Typography sx={{ fontSize: "1rem" }}>
+              <Typography sx={{ fontSize: "1rem", color: theme.palette.courseExplorer.textSecondary }}>
                 {selectedCategory}
               </Typography>
             )}
@@ -70,7 +71,8 @@ const CourseExplorerRightTop = ({ coursePage }) => {
             <Typography
               sx={{
                 fontSize: "1rem",
-                color: theme.palette.grey.grey600,
+                color: theme.palette.courseExplorer.textPrimary,
+                fontWeight: 600,
               }}
             >
               {selectedSubCategory
@@ -81,9 +83,14 @@ const CourseExplorerRightTop = ({ coursePage }) => {
 
           <Typography
             onClick={() => closeCourseExplorer(true)}
-            variant="grey"
             sx={{
               cursor: "pointer",
+              color: theme.palette.courseExplorer.textSecondary,
+              fontSize: "0.95rem",
+              "&:hover": {
+                color: theme.palette.courseExplorer.textPrimary,
+                textDecoration: "underline",
+              }
             }}
           >
             Close
@@ -99,7 +106,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
             alignItems: "center",
             // flexDirection: isMobileScreens ? "column" : "row"
             flexDirection: "row",
-            
+
           },
         }}
       >
@@ -117,24 +124,26 @@ const CourseExplorerRightTop = ({ coursePage }) => {
           }}
         >
           {!maxWidth700 && (
-          <Typography
-            variant={minWidth1300 ? "h2" : "h4"}
-            sx={{
-              maxWidth: "25ch",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {selectedSubCategory || selectedCategory || "Courses"}
-          </Typography>
+            <Typography
+              variant={minWidth1300 ? "h2" : "h4"}
+              sx={{
+                maxWidth: "25ch",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                color: theme.palette.courseExplorer.textPrimary,
+              }}
+            >
+              {selectedSubCategory || selectedCategory || "Courses"}
+            </Typography>
           )}
           <Typography
-            variant="h4grey"
             sx={{
-              mb: maxWidth700? "1rem" : (minWidth1300 ? "-0.25rem" : "0rem"),
+              mb: maxWidth700 ? "1rem" : (minWidth1300 ? "-0.25rem" : "0rem"),
               height: "100%",
               width: "fit-content",
+              color: theme.palette.courseExplorer.textSecondary,
+              fontSize: "1.5rem",
             }}
           >
             ({filteredCourses?.length} / {totalDocuments})
@@ -143,7 +152,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
         <Autocomplete
           disablePortal
           value={selectedSubCategory || selectedCategory || "All"}
-          onChange={(e, newValue) => {      
+          onChange={(e, newValue) => {
 
             if (newValue && newValue.label !== "All") {
               if (newValue.label === newValue.category) {
@@ -171,10 +180,37 @@ const CourseExplorerRightTop = ({ coursePage }) => {
             }
           }}
           id="combo-box-demo"
-          options={[{label: "All", category: "All", id: Infinity}, ...categoriesWithLabel]}
+          options={[{ label: "All", category: "All", id: Infinity }, ...categoriesWithLabel]}
           sx={{
             minWidth: "250px",
             maxWidth: "300px",
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: `${theme.palette.courseExplorer.sidebarBg} !important`,
+              borderRadius: "8px",
+              padding: "4px 8px",
+
+              "& input": {
+                color: `${theme.palette.courseExplorer.textPrimary} !important`,
+              },
+              "& fieldset": {
+                borderColor: `${theme.palette.courseExplorer.border} !important`,
+              },
+              "&:hover fieldset": {
+                borderColor: `${theme.palette.courseExplorer.border} !important`,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: `${theme.palette.courseExplorer.border} !important`,
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: `${theme.palette.courseExplorer.textSecondary} !important`,
+              "&.Mui-focused": {
+                color: `${theme.palette.courseExplorer.textPrimary} !important`,
+              },
+            },
+            "& .MuiSvgIcon-root": {
+              color: theme.palette.courseExplorer.textSecondary,
+            }
           }}
           renderInput={(params) => (
             <StyledTextField2

@@ -9,7 +9,7 @@ import { GlobalContext } from "../../state/GlobalContext";
 import CourseExplorerRightTop from "./CourseExplorerRightTop";
 import CourseExplorerRIghtBottom from "./CourseExplorerRIghtBottom";
 const CourseExplorer = () => {
-  const { openCourseExplorer, closeCourseExplorer, filteredCourses, categoryChangedRef, setCategoryChanged, getFilteredCourses } = useContext(CourseExplorerContext);
+  const { openCourseExplorer, closeCourseExplorer, filteredCourses, categoryChangedRef, setCategoryChanged, getFilteredCourses, showCourseExplorer } = useContext(CourseExplorerContext);
   const { getCategories, listOfCategories, categories } =
     useContext(GlobalContext);
   const theme = useTheme();
@@ -35,36 +35,32 @@ const CourseExplorer = () => {
       onMouseOut={() => closeCourseExplorer(false)}
       sx={{
         position: "absolute",
-
-        // height: "calc(100vh - 5rem)",
         height: 0,
         maxHeight: "1000px",
         width: `calc(100% - 8rem)`,
         top: "5rem",
         left: "50%",
         transform: "translateX(-50%)",
-        // marginTop: "5rem",
-        background: theme.palette.background.default,
-        // border: "5px solid red",
+        backgroundColor: theme.palette.courseExplorer.bg,
+        backdropFilter: theme.palette.courseExplorer.backdropFilter,
+        border: showCourseExplorer ? `1px solid ${theme.palette.courseExplorer.border}` : "none",
+        borderRadius: "0 0 16px 16px",
         overflow: "hidden",
-        //visibility: showCourseExplorer ? "visible" : "hidden",
-        // zIndex: showCourseExplorer ? 10000000 : -100,
         zIndex: 1000000,
         display: "flex",
         transition: "height 0.3s ease-out",
         maxWidth: "2000px",
         mx: "auto",
-        boxShadow: `0px 2px 4px ${colorTokens.translucentBlack.x2}`,
+        boxShadow: showCourseExplorer ? theme.palette.courseExplorer.shadow : "none",
       }}
     >
       <Box
         sx={{
           height: "100%",
-
-          //   overflow: "hidden",
-          background: theme.palette.background.light200,
+          backgroundColor: theme.palette.courseExplorer.sidebarBg,
           minWidth: "300px",
           position: "relative",
+          borderRight: `1px solid ${theme.palette.courseExplorer.divider}`,
         }}
       >
         <CourseExplorerLeft />
@@ -79,7 +75,6 @@ const CourseExplorer = () => {
           padding: "0",
           position: "relative",
           scrollBehavior: "smooth",
-          scrollbarColor: `${colorTokens.grey[400]} ${colorTokens.white.nearWhite}`,
         }}
       >
         <CourseExplorerRightTop />

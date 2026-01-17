@@ -293,8 +293,8 @@ export const themeSettings = ({ mode }) => {
                     divider: `rgba(255, 255, 255, ${colorTokens.opacity[10]})`,
 
                     // #used - Homepage semantic tokens (DARK MODE)
-                    homepageSliderChipBg: colorTokens.grey[700],
-                    homepageSliderChipHoverBg: colorTokens.grey[600],
+                    homepageSliderChipBg: "rgba(255, 255, 255, 0.08)",
+                    homepageSliderChipHoverBg: "rgba(255, 255, 255, 0.15)",
                     homepageSliderChipSelectedBg: colorTokens.primary.light,
                     homepageSliderChipSelectedText: colorTokens.white.pure,
                     homepage: {
@@ -342,9 +342,9 @@ export const themeSettings = ({ mode }) => {
                         sectionBgAlt: colorTokens.black.lighter,
 
                         // Arrows & Navigation
-                        arrowBg: `rgba(0, 0, 0, ${colorTokens.opacity[70]})`,
-                        arrowHover: `rgba(0, 0, 0, ${colorTokens.opacity[85]})`,
-                        arrowColor: colorTokens.white.light,
+                        arrowBg: `rgba(255, 255, 255, ${colorTokens.opacity[30]})`,
+                        arrowHover: `rgba(255, 255, 255, ${colorTokens.opacity[45]})`,
+                        arrowColor: colorTokens.black.main,
 
                         // Course Placeholder (Locked colors)
                         coursePlaceholder: {
@@ -358,6 +358,11 @@ export const themeSettings = ({ mode }) => {
                             errorIndicator: `#ff4d4d`,
                             reloadButtonBg: `#333333`,
                             reloadButtonHover: `#000000`,
+                        },
+                        signUpBtn: {
+                            text: colorTokens.white.pure,
+                            bg: "transparent",
+                            hoverBg: colorTokens.primary.main,
                         },
                     },
 
@@ -374,6 +379,65 @@ export const themeSettings = ({ mode }) => {
                         glassBorder: colorTokens.glass.dark.border,
                         glassShadow: colorTokens.glass.dark.shadow,
                         backdropFilter: colorTokens.glass.dark.backdropFilter,
+                    },
+
+                    // #used - Mobile Nav semantic tokens (DARK MODE)
+                    mobileNav: {
+                        drawerBg: colorTokens.glass.dark.bgStrong,
+                        drawerBorder: colorTokens.glass.dark.border,
+                        drawerShadow: colorTokens.glass.dark.shadowStrong,
+                        itemHover: "rgba(255, 255, 255, 0.05)",
+                    },
+
+                    // #used - Notification Menu semantic tokens (DARK MODE)
+                    notificationMenu: {
+                        bg: colorTokens.glass.dark.bgStrong,
+                        backdropFilter: "blur(20px)",
+                        border: colorTokens.glass.dark.border,
+                        shadow: "0 8px 32px rgba(0,0,0,0.5)",
+                        itemBgRead: "transparent",
+                        itemBgUnread: "rgba(69, 34, 186, 0.25)",
+                        itemHover: "rgba(255,255,255,0.08)",
+                        textPrimary: colorTokens.white.pure,
+                        textSecondary: colorTokens.grey[400],
+                        divider: "rgba(255,255,255,0.05)",
+                    },
+
+                    // #used - Course Explorer semantic tokens (DARK MODE)
+                    courseExplorer: {
+                        bg: colorTokens.glass.dark.bgStrong,
+                        backdropFilter: "blur(20px)",
+                        border: colorTokens.glass.dark.border,
+                        shadow: "0 8px 32px rgba(0,0,0,0.5)",
+                        sidebarBg: "rgba(0,0,0,0.2)",
+                        headerBg: "rgba(10, 10, 20, 0.7)", // Semi-transparent for sticky header
+                        itemHover: "rgba(255,255,255,0.08)",
+                        textPrimary: colorTokens.white.pure,
+                        textSecondary: colorTokens.grey[400],
+                        divider: "rgba(255,255,255,0.05)",
+                        activeItemBg: "rgba(69, 34, 186, 0.25)",
+                    },
+
+                    // #used - To Top Button semantic tokens (DARK MODE)
+                    toTopButton: {
+                        bg: colorTokens.glass.dark.bgStrong,
+                        color: colorTokens.primary.lighter,
+                        border: colorTokens.glass.dark.border,
+                        shadow: "0 8px 32px rgba(0,0,0,0.3)",
+                        hoverBg: colorTokens.primary.main,
+                        hoverColor: colorTokens.white.pure,
+                        backdropFilter: "blur(12px)",
+                    },
+
+                    // #used - Course Widget semantic tokens (DARK MODE)
+                    courseWidget: {
+                        bg: colorTokens.glass.dark.bgStrong,
+                        border: colorTokens.glass.dark.border,
+                        shadow: "0 8px 32px rgba(0,0,0,0.3)",
+                        titleColor: colorTokens.white.pure,
+                        authorColor: colorTokens.grey[400],
+                        priceColor: colorTokens.primary.lighter,
+                        divider: "rgba(255,255,255,0.05)",
                     },
 
 
@@ -469,6 +533,11 @@ export const themeSettings = ({ mode }) => {
                             reloadButtonBg: `#333333`,
                             reloadButtonHover: `#000000`,
                         },
+                        signUpBtn: {
+                            text: colorTokens.primary.main,
+                            bg: "rgba(69, 34, 186, 0.05)",
+                            hoverBg: colorTokens.primary.dark,
+                        },
                     },
 
                     // #used - Learning Page semantic tokens (LIGHT MODE)
@@ -484,6 +553,65 @@ export const themeSettings = ({ mode }) => {
                         glassBorder: colorTokens.glass.light.border,
                         glassShadow: colorTokens.glass.light.shadow,
                         backdropFilter: colorTokens.glass.light.backdropFilter,
+                    },
+
+                    // #used - Mobile Nav semantic tokens (LIGHT MODE)
+                    mobileNav: {
+                        drawerBg: colorTokens.glass.light.bgStrong,
+                        drawerBorder: colorTokens.glass.light.border,
+                        drawerShadow: colorTokens.glass.light.shadowStrong,
+                        itemHover: "rgba(0, 0, 0, 0.03)",
+                    },
+
+                    // #used - Notification Menu semantic tokens (LIGHT MODE)
+                    notificationMenu: {
+                        bg: "rgba(255, 255, 255, 0.85)",
+                        backdropFilter: "blur(20px)",
+                        border: colorTokens.glass.light.border,
+                        shadow: "0 8px 32px rgba(31, 38, 135, 0.15)",
+                        itemBgRead: "transparent",
+                        itemBgUnread: "rgba(69, 34, 186, 0.08)",
+                        itemHover: "rgba(0, 0, 0, 0.04)",
+                        textPrimary: colorTokens.black.main,
+                        textSecondary: colorTokens.grey[600],
+                        divider: "rgba(0,0,0,0.05)",
+                    },
+
+                    // #used - Course Explorer semantic tokens (LIGHT MODE)
+                    courseExplorer: {
+                        bg: "rgba(255, 255, 255, 0.95)", // Strong opacity
+                        backdropFilter: "blur(20px)",
+                        border: colorTokens.glass.light.border,
+                        shadow: "0 8px 32px rgba(31, 38, 135, 0.15)",
+                        sidebarBg: "rgba(0,0,0,0.02)",
+                        headerBg: "rgba(255, 255, 255, 0.8)",
+                        itemHover: "rgba(0,0,0,0.04)",
+                        textPrimary: colorTokens.black.main,
+                        textSecondary: colorTokens.grey[600],
+                        divider: "rgba(0,0,0,0.05)",
+                        activeItemBg: "rgba(69, 34, 186, 0.08)",
+                    },
+
+                    // #used - To Top Button semantic tokens (LIGHT MODE)
+                    toTopButton: {
+                        bg: colorTokens.glass.light.bgStrong,
+                        color: colorTokens.primary.main,
+                        border: colorTokens.glass.light.border,
+                        shadow: "0 8px 32px rgba(31, 38, 135, 0.15)",
+                        hoverBg: colorTokens.primary.main,
+                        hoverColor: colorTokens.white.pure,
+                        backdropFilter: "blur(12px)",
+                    },
+
+                    // #used - Course Widget semantic tokens (LIGHT MODE)
+                    courseWidget: {
+                        bg: colorTokens.glass.light.bgStrong,
+                        border: colorTokens.glass.light.border,
+                        shadow: "0 8px 32px rgba(31, 38, 135, 0.1)",
+                        titleColor: colorTokens.black.main,
+                        authorColor: colorTokens.grey[600],
+                        priceColor: colorTokens.primary.main,
+                        divider: "rgba(0,0,0,0.05)",
                     },
 
                 }),
@@ -604,7 +732,22 @@ export const themeSettings = ({ mode }) => {
                         "&::before": {
                             ...colorTokens.glassMorphism.noise
                         }
-                    }
+                    },
+                    "*::-webkit-scrollbar": {
+                        width: "6px",
+                        height: "6px",
+                    },
+                    "*::-webkit-scrollbar-track": {
+                        background: "transparent",
+                    },
+                    "*::-webkit-scrollbar-thumb": {
+                        background: mode === 'dark' ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)",
+                        borderRadius: "10px",
+                        transition: "background 0.3s ease",
+                    },
+                    "*::-webkit-scrollbar-thumb:hover": {
+                        background: mode === 'dark' ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)",
+                    },
                 },
             },
         },

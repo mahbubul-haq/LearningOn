@@ -47,6 +47,7 @@ const CourseExplorerLeftHover = () => {
     }
   }, [showLeftHover, closeLeftHover]);
 
+
   return (
     <Box
       className="explorer-left-hover"
@@ -59,15 +60,14 @@ const CourseExplorerLeftHover = () => {
         right: 0,
         transform: "translateX(100%)",
         top: 0,
-        // background: theme.palette.background.light300,
-        ...theme.palette.glassSheet, // Apply glass style
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-        borderLeft: "none", // Integrate seamlessly
+        backgroundColor: theme.palette.courseExplorer.bg,
+        backdropFilter: theme.palette.courseExplorer.backdropFilter,
+        border: `1px solid ${theme.palette.courseExplorer.border}`,
+        borderLeft: "none", // seamless with key panel
         transition: "width 0.3s ease-out",
         width: 0,
         zIndex: "5000000",
-        scrollbarColor: `${colorTokens.grey[400]} ${colorTokens.white.nearWhite}`,
+        // scrollbarColor handled globally
       }}
       onMouseOver={() => setShowLeftHover(true)}
       onMouseOut={() => setShowLeftHover(false)}
@@ -86,16 +86,17 @@ const CourseExplorerLeftHover = () => {
               setCloseLeftHover(true);
             }}
             sx={{
-              "&&": {
-                padding: "0.7rem 2rem",
-              },
+              padding: "0.8rem 2rem",
               cursor: "pointer",
+              backgroundColor: (selectedSubCategory === subcategory) ? theme.palette.courseExplorer.activeItemBg : "transparent",
+              color: (selectedSubCategory === subcategory) ? theme.palette.primary.main : theme.palette.courseExplorer.textPrimary,
+              transition: "all 0.2s ease",
               "&:hover": {
-                background: theme.palette.background.imagesBg,
+                background: theme.palette.courseExplorer.itemHover,
               },
             }}
           >
-            <Typography variant="body">{subcategory}</Typography>
+            <Typography variant="body" sx={{ fontWeight: (selectedSubCategory === subcategory) ? 600 : 400 }}>{subcategory}</Typography>
           </FlexBetween>
         ))}
     </Box>

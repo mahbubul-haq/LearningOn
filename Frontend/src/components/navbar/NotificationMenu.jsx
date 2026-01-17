@@ -25,6 +25,7 @@ const NotificationMenu = ({
             onClose={handleClose}
             MenuListProps={{
                 "aria-labelledby": "basic-button",
+                sx: { padding: "0.5rem 0" }
             }}
             anchorOrigin={{
                 vertical: "bottom",
@@ -34,16 +35,32 @@ const NotificationMenu = ({
                 vertical: "top",
                 horizontal: "right",
             }}
+            PaperProps={{
+                sx: {
+                    mt: 1.5,
+                    backgroundColor: theme.palette.notificationMenu.bg,
+                    backdropFilter: theme.palette.notificationMenu.backdropFilter,
+                    border: `1px solid ${theme.palette.notificationMenu.border}`,
+                    boxShadow: theme.palette.notificationMenu.shadow,
+                    borderRadius: "16px",
+                    overflow: "hidden",
+                    maxHeight: "80vh",
+                    minWidth: "350px",
+                }
+            }}
         >
             {notifications?.length == 0 && (
-                <Typography
-                    sx={{
-                        padding: "2rem 4rem",
-                        fontSize: "1.2rem",
-                    }}
-                >
-                    You have no notifications yet!
-                </Typography>
+                <Box sx={{ padding: "2rem", textAlign: "center" }}>
+                    <Typography
+                        sx={{
+                            fontSize: "1rem",
+                            color: theme.palette.notificationMenu.textSecondary,
+                            fontWeight: 500,
+                        }}
+                    >
+                        You have no notifications yet!
+                    </Typography>
+                </Box>
             )}
             {notifications?.map((n, index) => (
                 <MenuItem
@@ -58,77 +75,90 @@ const NotificationMenu = ({
                                 courseId = courseId[courseId.length - 1];
                                 navigate("/dashboard/" + courseId);
                             } else {
-                                //console.log("link", n.link);
-
-                                // window.location.href =
-                                //     import.meta.env.VITE_CLIENT_URL +
-                                //     "/" +
-                                //     n.link;
                                 navigate("/" + n.link);
                             }
                         }
                         handleClose();
                     }}
                     sx={{
-                        maxWidth: "500px",
-                        padding: "1rem",
-                        whiteSpace: "wrap",
-                        opacity: n.status === "opened" ? 1 : 0.9,
+                        maxWidth: "400px",
+                        padding: "1rem 1.2rem",
+                        whiteSpace: "normal", // allow wrapping
                         backgroundColor:
                             n.status === "opened"
-                                ? theme.palette.background.imagesBg1
-                                : theme.palette.grey.grey50,
+                                ? theme.palette.notificationMenu.itemBgRead
+                                : theme.palette.notificationMenu.itemBgUnread,
+                        borderBottom: index !== notifications.length - 1
+                            ? `1px solid ${theme.palette.notificationMenu.divider}`
+                            : "none",
+                        transition: "all 0.2s ease",
                         "&:hover": {
-                            backgroundColor: theme.palette.background.imagesBg1,
+                            backgroundColor: theme.palette.notificationMenu.itemHover,
                         },
                     }}
                 >
                     <FlexBetween
                         sx={{
                             width: "100%",
-                            "&&": {
-                                alignItems: "flex-start",
-                            },
+                            alignItems: "flex-start",
+                            gap: "1rem",
                         }}
-                        gap="1rem"
                     >
                         <img
                             src={
                                 n.imageLink
                                     ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-                                      }/image/upload/${n.imageLink}`
+                                    }/image/upload/${n.imageLink}`
                                     : "/images/dummyPerson.jpeg"
                             }
                             alt="user"
                             style={{
-                                width: "2.5rem",
-                                height: "2.5rem",
+                                width: "40px",
+                                height: "40px",
                                 borderRadius: "50%",
-                                aspectRatio: "1/1",
-                                objectFit: "cover"
+                                objectFit: "cover",
+                                flexShrink: 0,
+                                alignSelf: "center",
+                                border: `1px solid ${theme.palette.notificationMenu.border}`,
                             }}
                         />
-                        <Box
-                            sx={{
-                                flexGrow: 1,
-                            }}
-                        >
-                            <div
+                        <Box sx={{ flexGrow: 1 }}>
+                            <Box
+                                sx={{
+                                    fontSize: "0.9rem",
+                                    color: theme.palette.notificationMenu.textPrimary,
+                                    lineHeight: "1.4",
+                                    "& strong": {
+                                        fontWeight: 600,
+                                        color: theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main,
+                                    }
+                                }}
                                 dangerouslySetInnerHTML={{
                                     __html: n.message,
                                 }}
-                            ></div>
+                            />
+                            <Typography
+                                sx={{
+                                    fontSize: "0.75rem",
+                                    color: theme.palette.notificationMenu.textSecondary,
+                                    mt: 0.5,
+                                }}
+                            >
+                                {convertTime(n.createdAt)}
+                            </Typography>
                         </Box>
-                        <Typography
-                            sx={{
-                                fontSize: "0.8rem",
-                                textAlign: "right",
-                                whiteSpace: "nowrap",
-                                color: (theme) => theme.palette.text.secondary,
-                            }}
-                        >
-                            {convertTime(n.createdAt)}
-                        </Typography>
+                        {n.status !== "opened" && (
+                            <Box
+                                sx={{
+                                    width: "8px",
+                                    height: "8px",
+                                    borderRadius: "50%",
+                                    backgroundColor: theme.palette.primary.main,
+                                    mt: 1,
+                                    flexShrink: 0,
+                                }}
+                            />
+                        )}
                     </FlexBetween>
                 </MenuItem>
             ))}

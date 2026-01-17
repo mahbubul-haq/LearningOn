@@ -121,39 +121,68 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
 
   useEffect(() => {
     let customSlider = document.querySelector(".custom-slider");
-
     let slider = document.querySelector(".custom-slider-items");
+
     if (!slider || !customSlider) return;
 
-    let initialX,
-      finalX,
-      prevTouchX = 0,
-      curTouchX;
+    let touchStartX = 0;
+    let touchStartTime = 0;
+    let lastTouchX = 0;
+    let isDragging = false;
+
+    const MIN_SWIPE_DISTANCE = 30; // Minimum distance to trigger swipe
+    const MIN_SWIPE_VELOCITY = 0.3; // Minimum velocity (px/ms) to trigger momentum scroll
+
     const handleTouchStart = (event) => {
-      initialX = event.changedTouches[0].clientX;
-      prevTouchX = initialX;
-    };
-    const handleTouchEnd = (event) => {
-      finalX = event.changedTouches[0].clientX;
-      let swipeDistance = finalX - initialX;
-      if (swipeDistance > 0) {
-        handleNext("prev", swipeDistance * 2);
-      } else {
-        handleNext("next", -swipeDistance * 2);
-      }
+      touchStartX = event.changedTouches[0].clientX;
+      lastTouchX = touchStartX;
+      touchStartTime = Date.now();
+      isDragging = false;
     };
 
     const handleTouchMove = (event) => {
-      curTouchX = event.touches[0].clientX;
+      const currentTouchX = event.touches[0].clientX;
+      const deltaX = currentTouchX - lastTouchX;
 
-      let distance = curTouchX - prevTouchX;
-      if (curTouchX > prevTouchX) handleNext("prev", distance);
-      else handleNext("next", -distance);
-      prevTouchX = curTouchX;
+      // Only scroll if there's meaningful movement
+      if (Math.abs(deltaX) > 0.5) {
+        isDragging = true;
+        const absDistance = Math.abs(deltaX);
+        const direction = deltaX > 0 ? "prev" : "next";
+
+        handleNext(direction, absDistance);
+        lastTouchX = currentTouchX;
+      }
+    };
+
+    const handleTouchEnd = (event) => {
+      const touchEndX = event.changedTouches[0].clientX;
+      const totalDistance = touchEndX - touchStartX;
+      const totalTime = Date.now() - touchStartTime;
+
+      // Calculate velocity (pixels per millisecond)
+      const velocity = Math.abs(totalDistance) / totalTime;
+
+      // Only trigger momentum scroll if:
+      // 1. User swiped with sufficient velocity
+      // 2. Total distance exceeds minimum threshold
+      // 3. User didn't just drag (quick flick gesture)
+      if (
+        velocity > MIN_SWIPE_VELOCITY &&
+        Math.abs(totalDistance) > MIN_SWIPE_DISTANCE &&
+        totalTime < 300 // Quick gesture (less than 300ms)
+      ) {
+        const direction = totalDistance > 0 ? "prev" : "next";
+        // Apply momentum: velocity * time factor for smooth deceleration
+        const momentumDistance = velocity * 400; // Adjust multiplier for desired scroll distance
+
+        handleNext(direction, momentumDistance);
+      }
+
+      isDragging = false;
     };
 
     const handleMouseOver = () => {
-      // console.log("focusing");
       slider.focus();
     };
 
@@ -166,11 +195,12 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
         handleNext("next");
       }
     };
+
     customSlider.addEventListener("mouseover", handleMouseOver);
     slider.addEventListener("keydown", handleKeyDown);
-    slider.addEventListener("touchstart", handleTouchStart);
-    slider.addEventListener("touchend", handleTouchEnd);
-    slider.addEventListener("touchmove", handleTouchMove);
+    slider.addEventListener("touchstart", handleTouchStart, { passive: true });
+    slider.addEventListener("touchend", handleTouchEnd, { passive: true });
+    slider.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
       if (slider) {
@@ -221,6 +251,8 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           height: "30px",
           width: "30px",
           overflow: "hidden",
+          flexShrink: 0,
+          alignSelf: "center",
         }}
         onClick={() => {
           handleNext("prev", 300, true);
@@ -234,6 +266,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
             alignItems: "center",
             justifyContent: "center",
             background: theme.palette.homepage.arrowBg,
+            backdropFilter: "blur(20px) saturate(200%)",
           }}>
           <KeyboardDoubleArrowLeftIcon
             style={{
@@ -263,6 +296,8 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           height: "30px",
           width: "30px",
           overflow: "hidden",
+          flexShrink: 0,
+          alignSelf: "center",
         }}
         onClick={() => {
           handleNext("next", 300, true);
@@ -276,6 +311,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
             alignItems: "center",
             justifyContent: "center",
             background: theme.palette.homepage.arrowBg,
+            backdropFilter: "blur(20px) saturate(200%)",
           }}>
           <KeyboardDoubleArrowRightIcon
             style={{

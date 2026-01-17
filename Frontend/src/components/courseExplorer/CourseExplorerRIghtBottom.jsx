@@ -21,9 +21,9 @@ const CourseExplorerRIghtBottom = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const theme = useTheme();
   const [showLoadMore, setShowLoadMore] = useState(true);
-  
+
   useEffect(() => {
-    console.log("loading," , loading);
+    console.log("loading,", loading);
     console.log("filteredCourses,", filteredCourses);
   })
 
@@ -93,7 +93,7 @@ const CourseExplorerRIghtBottom = () => {
         <Box
           // onClick={() => setLoading(true)}
           sx={{
-            border: `1px solid ${theme.palette.grey.grey200}`,
+            border: `1px solid ${theme.palette.courseExplorer.border}`,
             height: "100%",
             display: "flex",
             alignItems: "center",

@@ -21,14 +21,16 @@ const MobileNav = ({
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
             sx={{
-               
                 "& .MuiDrawer-paper": {
                     width: "100%",
                     maxWidth: "400px",
+                    backgroundColor: (theme) => theme.palette.mobileNav.drawerBg,
+                    backdropFilter: "blur(20px)",
+                    borderLeft: (theme) => `1px solid ${theme.palette.mobileNav.drawerBorder}`,
+                    boxShadow: (theme) => `0 8px 32px 0 ${theme.palette.mobileNav.drawerShadow}`,
                 },
                 zIndex: 5000000,
             }}
-
         >
             <Box
                 sx={{

@@ -23,6 +23,7 @@ const CourseExplorerLeft = () => {
   } = useContext(CourseExplorerContext);
   const { categories } = useContext(GlobalContext);
   return (
+
     <Box
       className="explorer-left"
       sx={{
@@ -32,17 +33,7 @@ const CourseExplorerLeft = () => {
         display: "flex",
         flexDirection: "column",
         py: "2rem",
-        scrollbarColor: `${colorTokens.grey[400]} ${colorTokens.white.nearWhite}`,
-        ...theme.palette.glassSheet, // Apply glass style
-        borderRadius: "0", // Reset border radius for full height panel if needed, or keep it. Let's keep distinct panel look.
-        // actually, reset radius if it's a sidebar, but user said "left", typically sidebars are rects. 
-        // But let's assume it's a panel inside a layout.
-        // Overriding partial styles for sidebar fit:
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
-        borderLeft: "none",
-        borderTop: "none",
-        borderBottom: "none",
+        // scrollbarColor handled globally
       }}
     >
       {categories?.length > 0 &&
@@ -62,19 +53,23 @@ const CourseExplorerLeft = () => {
               setShowLeftHover(true);
               setCloseLeftHover(false);
             }}
+            // onMouseOut={() => setShowLeftHover(false)} // handled by parent container logic mostly, but keep if needed. 
+            // In original code: onMouseOut={() => setShowLeftHover(false)}
             onMouseOut={() => setShowLeftHover(false)}
             sx={{
-              "&&": {
-                padding: "0.7rem 2rem",
-              },
+              padding: "0.8rem 2rem",
               cursor: "pointer",
+              backgroundColor: (selectedCategory === category.name) ? theme.palette.courseExplorer.activeItemBg : "transparent",
+              color: (selectedCategory === category.name) ? theme.palette.primary.main : theme.palette.courseExplorer.textPrimary,
+              borderLeft: (selectedCategory === category.name) ? `3px solid ${theme.palette.primary.main}` : "3px solid transparent",
+              transition: "all 0.2s ease",
               "&:hover": {
-                background: theme.palette.background.imagesBg,
+                background: theme.palette.courseExplorer.itemHover,
               },
             }}
           >
-            <Typography variant="body">{category.name}</Typography>
-            <MdOutlineChevronRight size={20} />
+            <Typography variant="body" sx={{ fontWeight: (selectedCategory === category.name) ? 600 : 400 }}>{category.name}</Typography>
+            <MdOutlineChevronRight size={20} style={{ opacity: 0.7 }} />
           </FlexBetween>
         ))}
     </Box>

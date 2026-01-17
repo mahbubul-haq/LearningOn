@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setMode } from "../../state/reduxStore/authSlice";
 import { DarkMode, LightMode } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
+import { colorTokens } from "../../theme";
 
 const NavRight = ({
     handleClick,
@@ -45,7 +46,7 @@ const NavRight = ({
 
                 <FlexBetween gap="0.6rem">
                     <IconButton onClick={() => dispatch(setMode())}>
-                        {theme.palette.mode === "dark" ? (
+                        {theme.palette.mode === "light" ? (
                             <LightMode sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }} />
                         ) : (
                             <DarkMode sx={{ fontSize: "25px" }} />
@@ -79,13 +80,14 @@ const NavRight = ({
                                 variant="outlined"
                                 sx={{
                                     marginLeft: "1rem",
-
                                     "&&": {
                                         padding: "0.3rem 1rem",
                                         fontWeight: "600",
-                                        backgroundColor: "transparent",
+                                        backgroundColor: (theme) => theme.palette.homepage.signUpBtn.bg,
+                                        color: (theme) => theme.palette.homepage.signUpBtn.text,
                                         "&:hover": {
-                                            backgroundColor: (theme) => theme.palette.primary.main,
+                                            backgroundColor: (theme) => theme.palette.homepage.signUpBtn.hoverBg,
+                                            color: colorTokens.white.main,
                                         },
                                     },
                                 }}

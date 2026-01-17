@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import useTheme from "@mui/material/styles/useTheme";
 import React, { useContext } from "react";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -6,6 +7,7 @@ import { StyledButton } from "../StyledButton";
 
 const NoCourseFound = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
+    const theme = useTheme();
     const {
         getFilteredCourses,
         categoryChanged,
@@ -18,10 +20,10 @@ const NoCourseFound = () => {
         <Box>
             {categoryChangedRef.current || initialRender ? (
                 <Box disabled={categoryChanged}> {/* to  ensure re-render */}
-                
-                    <Typography variant="h4grey">Loading courses...</Typography>
+
+                    <Typography variant="h4" sx={{ color: theme.palette.courseExplorer.textSecondary }}>Loading courses...</Typography>
                 </Box>
-            ) : !courseLoadingError  ? (<Box
+            ) : !courseLoadingError ? (<Box
                 sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -29,7 +31,7 @@ const NoCourseFound = () => {
                     gap: "2rem",
                 }}
             >
-                <Typography variant="h4grey">No courses found</Typography>
+                <Typography variant="h4" sx={{ color: theme.palette.courseExplorer.textSecondary }}>No courses found</Typography>
                 <img
                     style={{
                         width: isNonMobileScreens ? "350px" : "250px",
@@ -50,7 +52,7 @@ const NoCourseFound = () => {
                         gap: "2rem",
                     }}
                 >
-                    <Typography variant="h4grey">Failed to load courses</Typography>
+                    <Typography variant="h4" sx={{ color: theme.palette.courseExplorer.textSecondary }}>Failed to load courses</Typography>
                     <StyledButton
                         variant="contained"
                         onClick={() => {

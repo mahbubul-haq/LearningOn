@@ -20,7 +20,7 @@ import WaveLoader from "../../components/WaveLoader";
 const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseType, changingCourseType, changingCourseTypeRef, setCourseType }) => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
-  const { loading, courseFetchError, waitingForSelectedCoursesRef, waitingForSelectedCourses, setLoading, getCourses } = useContext(HomePageContext);
+  const { loading, courseFetchError, waitingForSelectedCoursesRef, waitingForSelectedCourses, setLoading, getCourses, setCourseFetchError } = useContext(HomePageContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,49 +32,66 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
 
     if (!coursesContainer) return;
 
+    let touchStartX = 0;
+    let touchStartTime = 0;
+    let lastTouchX = 0;
+    let isDragging = false;
 
-    let initialX,
-      finalX,
-      prevTouchX = 0,
-      curTouchX,
-      startTime,
-      endTime;
+    const MIN_SWIPE_DISTANCE = 30; // Minimum distance to trigger swipe
+    const MIN_SWIPE_VELOCITY = 0.3; // Minimum velocity (px/ms) to trigger momentum scroll
 
     const handleTouchStart = (event) => {
-      initialX = event.changedTouches[0].clientX;
-      startTime = Date.now();
-      prevTouchX = initialX;
-    };
-
-    const handleTouchEnd = (event) => {
-      finalX = event.changedTouches[0].clientX;
-      let swipeDistance = finalX - initialX;
-      endTime = Date.now();
-      let time = endTime - startTime;
-      if (swipeDistance > 0.001) {
-        handleScroll("left", (swipeDistance * 500) / time);
-      } else if (Math.abs(swipeDistance) > 0.001) {
-        handleScroll("right", (-swipeDistance * 500) / time);
-      }
+      touchStartX = event.changedTouches[0].clientX;
+      lastTouchX = touchStartX;
+      touchStartTime = Date.now();
+      isDragging = false;
     };
 
     const handleTouchMove = (event) => {
-      ///event.preventDefault();
-      curTouchX = event.touches[0].clientX;
+      const currentTouchX = event.touches[0].clientX;
+      const deltaX = currentTouchX - lastTouchX;
 
-      let distance = curTouchX - prevTouchX;
+      // Only scroll if there's meaningful movement
+      if (Math.abs(deltaX) > 0.5) {
+        isDragging = true;
+        const absDistance = Math.abs(deltaX);
+        const direction = deltaX > 0 ? "left" : "right";
 
-      if (distance > 0) {
-        handleScroll("left", distance);
-      } else if (distance < 0) {
-        handleScroll("right", -distance);
+        handleScroll(direction, absDistance);
+        lastTouchX = currentTouchX;
       }
-      prevTouchX = curTouchX;
     };
 
-    coursesContainer.addEventListener("touchstart", handleTouchStart);
-    coursesContainer.addEventListener("touchend", handleTouchEnd);
-    coursesContainer.addEventListener("touchmove", handleTouchMove);
+    const handleTouchEnd = (event) => {
+      const touchEndX = event.changedTouches[0].clientX;
+      const totalDistance = touchEndX - touchStartX;
+      const totalTime = Date.now() - touchStartTime;
+
+      // Calculate velocity (pixels per millisecond)
+      const velocity = Math.abs(totalDistance) / totalTime;
+
+      // Only trigger momentum scroll if:
+      // 1. User swiped with sufficient velocity
+      // 2. Total distance exceeds minimum threshold
+      // 3. User didn't just drag (quick flick gesture)
+      if (
+        velocity > MIN_SWIPE_VELOCITY &&
+        Math.abs(totalDistance) > MIN_SWIPE_DISTANCE &&
+        totalTime < 300 // Quick gesture (less than 300ms)
+      ) {
+        const direction = totalDistance > 0 ? "left" : "right";
+        // Apply momentum: velocity * time factor for smooth deceleration
+        const momentumDistance = velocity * 400; // Adjust multiplier for desired scroll distance
+
+        handleScroll(direction, momentumDistance);
+      }
+
+      isDragging = false;
+    };
+
+    coursesContainer.addEventListener("touchstart", handleTouchStart, { passive: true });
+    coursesContainer.addEventListener("touchend", handleTouchEnd, { passive: true });
+    coursesContainer.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
       coursesContainer.removeEventListener("touchstart", handleTouchStart);
@@ -88,6 +105,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
       sx={{
         width: "100%",
         position: "relative",
+        // border: "2px solid red",
       }}
     >
       <CourseNextPrevButton
@@ -108,6 +126,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
           background: theme.palette.homepage.arrowBg,
           backdropFilter: "blur(10px) saturate(200%)",
           transition: "all 0.5s ease",
+          "&:hover": {
+            backgroundColor: theme.palette.homepage.arrowBgHover,
+          },
         }}>
           <ArrowForwardIosIcon
             sx={{
@@ -137,6 +158,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
           background: theme.palette.homepage.arrowBg,
           backdropFilter: "blur(10px) saturate(200%)",
           transition: "all 0.5s ease",
+          "&:hover": {
+            backgroundColor: theme.palette.homepage.arrowBgHover,
+          },
         }}>
           <ArrowForwardIosIcon
             sx={{
@@ -158,6 +182,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
           // overflowY: "auto",
           width: "100%",
           height: "100%",
+          // border: "2px solid red",
           scrollBehavior: "smooth",
           opacity: loading || waitingForSelectedCourses || changingCourseTypeRef.current ? 0.3 : 1,
         }}
@@ -174,7 +199,8 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
                 gridTemplateRows: "1",
                 // boxShadow: `0 8px 32px black`,
                 // py: "1rem",
-                pb: "2rem",
+                pt: "2rem",
+                pb: "3rem",
                 gridTemplateColumns: isNonMobileScreens
                   ? "repeat(auto-fit, 300px)"
                   : "repeat(auto-fit, 250px)",
@@ -195,7 +221,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
             </Box>
           );
         })}
-        {selectedCourses.length === 0 && (loading || waitingForSelectedCoursesRef.current || changingCourseTypeRef.current) && (
+        {selectedCourses.length === 0 && (loading || waitingForSelectedCoursesRef.current || changingCourseTypeRef.current) && !courseFetchError && (
           <Box sx={{ py: 10, mx: "auto", display: "flex", justifyContent: "center", alignItems: "center" }}>
 
             <WaveLoader />
@@ -272,6 +298,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
               sx={{ bgcolor: theme.palette.homepage.coursePlaceholder.reloadButtonBg, color: colorTokens.white.pure, borderRadius: 3, px: 4, '&:hover': { bgcolor: theme.palette.homepage.coursePlaceholder.reloadButtonHover } }}
               onClick={() => {
                 setLoading(true);
+                setCourseFetchError(false);
                 getCourses(selectedItem == "All" ? "all" : selectedItem);
               }}
             >

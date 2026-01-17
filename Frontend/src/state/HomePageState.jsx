@@ -36,6 +36,9 @@ export const HomePageState = (props) => {
             setLoading(false);
         }
     }, [courses]);
+    useEffect(() => {
+        if (loading) setCourseFetchError(false);
+    }, [loading]);
 
     const getCourses = async (category = "all") => {
 
@@ -71,6 +74,7 @@ export const HomePageState = (props) => {
                 waitingForSelectedCoursesRef.current = true;
                 setWaitingForSelectedCourses(true);
                 setLoading(false);
+                getCoursesAttempt.current = 0;
             }
             else {
                 if (getCoursesAttempt.current < 2) {
@@ -78,7 +82,9 @@ export const HomePageState = (props) => {
                 } else {
                     setLoading(false);
                     setCourseFetchError(true);
+                    getCoursesAttempt.current = 0;
                 }
+
             }
         } catch (err) {
             //console.log(err?.message);
@@ -88,6 +94,7 @@ export const HomePageState = (props) => {
             else {
                 setLoading(false);
                 setCourseFetchError(true);
+                getCoursesAttempt.current = 0;
             }
         }
     };

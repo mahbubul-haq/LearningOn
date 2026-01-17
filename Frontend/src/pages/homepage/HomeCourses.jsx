@@ -156,60 +156,77 @@ const HomeCourses = () => {
   }, [selectedItem, courseType]);
 
   const handleScroll = (direction, scrollValue) => {
-    let rightArrow = document.querySelector(".right-arrow");
-    let leftArrow = document.querySelector(".left-arrow");
-    let rightArrowInner = document.querySelector(".right-arrow-inner");
-    let leftArrowInner = document.querySelector(".left-arrow-inner");
-
     const container = document.querySelector(".courses-container");
+    if (!container) return;
+
     const scrollStep = scrollValue
       ? scrollValue
       : isNonMobileScreens
         ? 400
         : 200;
 
-    //console.log(container.scrollLeft);
-
     if (direction === "left") {
       container.scrollLeft -= scrollStep;
     } else {
       container.scrollLeft += scrollStep;
     }
-
-    // console.log(container.scrollLeft, container.scrollWidth - container.clientWidth);
-
-    if (
-      !(selectedCourses?.length > 0) ||
-      (container.scrollLeft === 0 && direction != "right")
-    ) {
-      leftArrowInner.style.display = "none";
-      setTimeout(() => {
-        leftArrow.style.display = "none";
-      }, 1000);
-    } else {
-      leftArrowInner.style.display = "flex";
-      setTimeout(() => {
-        leftArrow.style.display = "flex";
-      }, 1000);
-    }
-
-    if (
-      !(selectedCourses?.length > 0) ||
-      (container.scrollLeft + 1 >=
-        container.scrollWidth - container.clientWidth &&
-        direction != "left")
-    ) {
-      rightArrowInner.style.display = "none";
-      setTimeout(() => {
-        rightArrow.style.display = "none";
-      }, 1000);
-    } else {
-      rightArrowInner.style.display = "flex";
-      setTimeout(() => {
-        rightArrow.style.display = "flex";
-      }, 1000);
-    }
+    // Arrow visibility will be handled by the scroll event listener
   };
+
+  // Add scroll event listener to update arrow visibility based on actual scroll position
+  useEffect(() => {
+    const container = document.querySelector(".courses-container");
+    const rightArrow = document.querySelector(".right-arrow");
+    const leftArrow = document.querySelector(".left-arrow");
+    const leftArrowInner = document.querySelector(".left-arrow-inner");
+    const rightArrowInner = document.querySelector(".right-arrow-inner");
+
+    if (!container || !rightArrow || !leftArrow || !leftArrowInner || !rightArrowInner) return;
+
+    const updateArrowVisibility = () => {
+      // Check left arrow visibility
+      if (
+        !(selectedCourses?.length > 0) ||
+        container.scrollLeft <= 0
+      ) {
+        leftArrowInner.style.display = "none";
+        setTimeout(() => {
+          leftArrow.style.display = "none";
+        }, 1000);
+      } else {
+        leftArrowInner.style.display = "flex";
+        setTimeout(() => {
+          leftArrow.style.display = "flex";
+        }, 1000);
+      }
+
+      // Check right arrow visibility
+      if (
+        !(selectedCourses?.length > 0) ||
+        container.scrollLeft + 1 >= container.scrollWidth - container.clientWidth
+      ) {
+        rightArrowInner.style.display = "none";
+        setTimeout(() => {
+          rightArrow.style.display = "none";
+        }, 1000);
+      } else {
+        rightArrowInner.style.display = "flex";
+        setTimeout(() => {
+          rightArrow.style.display = "flex";
+        }, 1000);
+      }
+    };
+
+    // Update on scroll
+    container.addEventListener("scroll", updateArrowVisibility);
+
+    // Initial update
+    updateArrowVisibility();
+
+    return () => {
+      container.removeEventListener("scroll", updateArrowVisibility);
+    };
+  }, [selectedCourses, isNonMobileScreens]);
 
   useEffect(() => {
 
@@ -226,11 +243,16 @@ const HomeCourses = () => {
     const container = document.querySelector(".courses-container");
     let leftArrow = document.querySelector(".left-arrow");
     let rightArrow = document.querySelector(".right-arrow");
+    let leftArrowInner = document.querySelector(".left-arrow-inner");
+    let rightArrowInner = document.querySelector(".right-arrow-inner");
     if (container && leftArrow && rightArrow) {
       if (!(selectedCourses?.length > 0) || container.scrollLeft === 0) {
+        leftArrowInner.style.display = "none";
         leftArrow.style.display = "none";
+
       } else {
-        leftArrow.style.display = "flex";
+        leftArrow.style.display = "block";
+        leftArrowInner.style.display = "flex";
       }
 
       if (
@@ -238,9 +260,12 @@ const HomeCourses = () => {
         container.scrollLeft + 1 >=
         container.scrollWidth - container.clientWidth
       ) {
+        rightArrowInner.style.display = "none";
         rightArrow.style.display = "none";
+
       } else {
-        rightArrow.style.display = "flex";
+        rightArrow.style.display = "block";
+        rightArrowInner.style.display = "flex";
       }
     }
   }, [selectedCourses]);
@@ -283,13 +308,13 @@ const HomeCourses = () => {
             borderRadius: "12px",
             boxShadow: isNonMobileScreens ? (theme) => `0 8px 40px ${theme.palette.homepage.cardShadow}` : "none",
             width: "100%",
-            height: isNonMobileScreens ? "580px" : "520px",
+            height: isNonMobileScreens ? "560px" : "520px",
             position: "relative",
           }}
         >
           <Box
             sx={{
-              mb: "2rem",
+              // mb: "2rem",
             }}
           >
             <CustomSlider

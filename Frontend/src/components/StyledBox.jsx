@@ -14,15 +14,17 @@ export const CourseNextPrevButton = styled(Box)(({ theme }) => {
 
   return {
     position: "absolute",
-    top: isNonMobileScreens ? "0" : "50%",
+    top: isNonMobileScreens ? "2rem" : "50%",
     transform: isNonMobileScreens ? "none" : "translateY(-50%)",
     backgroundColor: "transparent",
+    minWidth: isNonMobileScreens ? "50px" : "45px",
+    display: "flex",
     cursor: "pointer",
-    zIndex: "1",
-    height: isNonMobileScreens ? `calc(100% - 2rem)` : "45px",
+    zIndex: 10,
+    height: isNonMobileScreens ? `calc(100% - 5rem)` : "45px",
     width: isNonMobileScreens ? "auto" : "45px",
     borderRadius: isNonMobileScreens ? "0" : "50%",
-
+    overflow: "hidden",
   };
 });
 
@@ -32,9 +34,11 @@ export const MobileNavItem = styled(Box)(({ theme }) => ({
   alignItems: "center",
   gap: "1.2rem",
   cursor: "pointer",
+  transition: "all 0.2s ease-in-out",
   "&:hover": {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.mobileNav.itemHover,
+    transform: "translateX(5px)",
   },
   padding: "0.8rem",
-  borderRadius: "0.15rem",
+  borderRadius: "0.5rem",
 }));

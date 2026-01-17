@@ -55,18 +55,24 @@ export default function ToTopButton() {
                 position: "fixed",
                 right: isNonMobileScreens ? "4rem" : "1.5rem",
                 bottom: scrollPosition > 1000 ? (isNonMobileScreens ? "3rem" : "2rem") : "-100px",
-                width: isNonMobileScreens ? 60 : 60,
-                height: isNonMobileScreens ? 60 : 60,
+                width: 60,
+                height: 60,
                 borderRadius: "50%",
-                backgroundColor: theme.palette.primary.dark,
-                color: theme.palette.background.alt,
+                backgroundColor: theme.palette.toTopButton.bg,
+                color: theme.palette.toTopButton.color,
+                border: `1px solid ${theme.palette.toTopButton.border}`,
+                backdropFilter: theme.palette.toTopButton.backdropFilter,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: 3,
+                boxShadow: theme.palette.toTopButton.shadow,
                 transition: "all 0.3s ease-in-out",
                 zIndex: 1400,
-                "&:hover": { backgroundColor: theme.palette.primary.darker }
+                "&:hover": {
+                    backgroundColor: theme.palette.toTopButton.hoverBg,
+                    color: theme.palette.toTopButton.hoverColor,
+                    border: `1px solid ${theme.palette.toTopButton.hoverBg}`,
+                }
             }}
         >
             <ArrowUpwardIcon sx={{ fontSize: isNonMobileScreens ? 30 : 25 }} />

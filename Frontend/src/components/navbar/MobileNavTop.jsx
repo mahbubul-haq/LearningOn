@@ -12,6 +12,7 @@ import { cloudinaryCld } from "../../configs/cloudinary.config";
 import FlexBetween from "../FlexBetween";
 import { MobileNavItem } from "../StyledBox";
 import { StyledButton } from "../StyledButton";
+import { colorTokens } from "../../theme";
 
 const MobileNavTop = ({
     setOpenDrawer,
@@ -39,11 +40,12 @@ const MobileNavTop = ({
                             alignItems: "center",
                             gap: "1.2rem",
                             cursor: "pointer",
+                            transition: "all 0.2s ease-in-out",
                             "&:hover": {
-                                backgroundColor: theme.palette.background.default,
+                                backgroundColor: theme.palette.mobileNav.itemHover,
                             },
                             p: "0.8rem",
-                            borderRadius: "0.15rem",
+                            borderRadius: "0.5rem",
                         }}
                         onClick={() => {
                             navigate("/profile/" + user._id);
@@ -113,9 +115,11 @@ const MobileNavTop = ({
                                 "&&": {
                                     padding: "0.3rem 1rem",
                                     fontWeight: "600",
-                                    backgroundColor: "transparent",
+                                    backgroundColor: (theme) => theme.palette.homepage.signUpBtn.bg,
+                                    color: (theme) => theme.palette.homepage.signUpBtn.text,
                                     "&:hover": {
-                                        backgroundColor: (theme) => theme.palette.primary.main,
+                                        backgroundColor: (theme) => theme.palette.homepage.signUpBtn.hoverBg,
+                                        color: colorTokens.white.main,
                                     },
                                 },
                             }}
@@ -153,11 +157,12 @@ const MobileNavTop = ({
                             sx={{
                                 display: "flex",
                                 cursor: "pointer",
+                                transition: "all 0.2s ease-in-out",
                                 "&:hover": {
-                                    backgroundColor: theme.palette.background.default,
+                                    backgroundColor: theme.palette.mobileNav.itemHover,
                                 },
                                 p: "0.8rem",
-                                borderRadius: "0.15rem",
+                                borderRadius: "0.5rem",
                             }}
                             onClick={() => {
                                 setOpenNotificationDrawer(true);
@@ -174,7 +179,7 @@ const MobileNavTop = ({
                                 <NotificationsIcon
                                     sx={{
                                         fontSize: "1.2rem",
-                                        color: (theme) => theme.palette.grey.grey400,
+                                        color: (theme) => theme.palette.text.secondary,
                                     }}
                                 />
                                 <Typography
@@ -203,7 +208,7 @@ const MobileNavTop = ({
                             <DashboardIcon
                                 sx={{
                                     fontSize: "1.2rem",
-                                    color: (theme) => theme.palette.grey.grey400,
+                                    color: (theme) => theme.palette.text.secondary,
                                 }}
                             />
                             <Typography

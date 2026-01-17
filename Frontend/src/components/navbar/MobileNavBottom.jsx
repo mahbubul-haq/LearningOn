@@ -38,7 +38,7 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
             <LocalLibraryIcon
               sx={{
                 fontSize: "1.2rem",
-                color: (theme) => theme.palette.grey.grey400,
+                color: (theme) => theme.palette.text.secondary,
               }}
             />
             <Typography
@@ -149,13 +149,13 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
 
       <Box sx={{ px: "1rem" }}>
         <MobileNavItem onClick={() => dispatch(setMode())}>
-          {theme.palette.mode === "dark" ? (
-            <LightMode sx={{ fontSize: "1.2rem", color: (theme) => theme.palette.grey.grey400 }} />
+          {theme.palette.mode === "light" ? (
+            <LightMode sx={{ fontSize: "1.2rem", color: (theme) => theme.palette.text.secondary }} />
           ) : (
-            <DarkMode sx={{ fontSize: "1.2rem", color: (theme) => theme.palette.grey.grey400 }} />
+            <DarkMode sx={{ fontSize: "1.2rem", color: (theme) => theme.palette.text.secondary }} />
           )}
           <Typography sx={{ fontSize: "1.2rem" }}>
-            {theme.palette.mode === "dark" ? "Light Mode" : "Dark Mode"}
+            {theme.palette.mode === "light" ? "Light Mode" : "Dark Mode"}
           </Typography>
         </MobileNavItem>
       </Box>
@@ -180,7 +180,7 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
             <LogoutIcon
               sx={{
                 fontSize: "1.2rem",
-                color: (theme) => theme.palette.grey.grey400,
+                color: (theme) => theme.palette.text.secondary,
               }}
             />
             <Typography
