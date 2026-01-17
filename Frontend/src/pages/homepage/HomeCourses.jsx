@@ -158,6 +158,8 @@ const HomeCourses = () => {
   const handleScroll = (direction, scrollValue) => {
     let rightArrow = document.querySelector(".right-arrow");
     let leftArrow = document.querySelector(".left-arrow");
+    let rightArrowInner = document.querySelector(".right-arrow-inner");
+    let leftArrowInner = document.querySelector(".left-arrow-inner");
 
     const container = document.querySelector(".courses-container");
     const scrollStep = scrollValue
@@ -180,10 +182,12 @@ const HomeCourses = () => {
       !(selectedCourses?.length > 0) ||
       (container.scrollLeft === 0 && direction != "right")
     ) {
+      leftArrowInner.style.display = "none";
       setTimeout(() => {
         leftArrow.style.display = "none";
       }, 1000);
     } else {
+      leftArrowInner.style.display = "flex";
       setTimeout(() => {
         leftArrow.style.display = "flex";
       }, 1000);
@@ -195,10 +199,12 @@ const HomeCourses = () => {
         container.scrollWidth - container.clientWidth &&
         direction != "left")
     ) {
+      rightArrowInner.style.display = "none";
       setTimeout(() => {
         rightArrow.style.display = "none";
       }, 1000);
     } else {
+      rightArrowInner.style.display = "flex";
       setTimeout(() => {
         rightArrow.style.display = "flex";
       }, 1000);

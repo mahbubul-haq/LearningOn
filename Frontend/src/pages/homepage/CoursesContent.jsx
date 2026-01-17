@@ -14,6 +14,8 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import WifiOffIcon from '@mui/icons-material/WifiOff';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useNavigate } from "react-router-dom";
+import WaveLoader from "../../components/WaveLoader";
+
 
 const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseType, changingCourseType, changingCourseTypeRef, setCourseType }) => {
   const theme = useTheme();
@@ -97,13 +99,24 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
           handleScroll("right");
         }}
       >
-        <ArrowForwardIosIcon
-          sx={{
-            fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
-            color: (theme) => theme.palette.homepage.arrowColor,
-            alignSelf: "center",
-          }}
-        />
+        <Box className="right-arrow-inner" sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          height: "100%",
+          background: theme.palette.homepage.arrowBg,
+          backdropFilter: "blur(10px) saturate(200%)",
+          transition: "all 0.5s ease",
+        }}>
+          <ArrowForwardIosIcon
+            sx={{
+              fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
+              color: (theme) => theme.palette.homepage.arrowColor,
+              alignSelf: "center",
+            }}
+          />
+        </Box>
       </CourseNextPrevButton>
 
       <CourseNextPrevButton
@@ -115,14 +128,25 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
           handleScroll("left");
         }}
       >
-        <ArrowForwardIosIcon
-          sx={{
-            fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
-            color: (theme) => theme.palette.homepage.arrowColor,
-            alignSelf: "center",
-            transform: "rotate(180deg)",
-          }}
-        />
+        <Box className="left-arrow-inner" sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          height: "100%",
+          background: theme.palette.homepage.arrowBg,
+          backdropFilter: "blur(10px) saturate(200%)",
+          transition: "all 0.5s ease",
+        }}>
+          <ArrowForwardIosIcon
+            sx={{
+              fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
+              color: (theme) => theme.palette.homepage.arrowColor,
+              alignSelf: "center",
+              transform: "rotate(180deg)",
+            }}
+          />
+        </Box>
       </CourseNextPrevButton>
       <Box
         className="courses-container"
@@ -172,17 +196,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
           );
         })}
         {selectedCourses.length === 0 && (loading || waitingForSelectedCoursesRef.current || changingCourseTypeRef.current) && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-              width: "100%",
-              //border: "1px solid rgba(0, 0, 0, 0.23)",
-            }}
-          >
-            <Typography variant="h4grey">Loading courses...</Typography>
+          <Box sx={{ py: 10, mx: "auto", display: "flex", justifyContent: "center", alignItems: "center" }}>
+
+            <WaveLoader />
           </Box>
         )}
         {selectedCourses.length === 0 && !loading && !waitingForSelectedCoursesRef.current && !courseFetchError && !changingCourseType &&

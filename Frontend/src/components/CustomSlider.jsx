@@ -21,7 +21,9 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
     let slider = document.querySelector(".custom-slider-items");
     let leftArrow = document.querySelector(".custom-slider-left-arrow");
     let rightArrow = document.querySelector(".custom-slider-right-arrow");
-    if (!slider || !leftArrow || !rightArrow) return;
+    let leftArrowInner = document.querySelector(".custom-slider-left-arrow-inner");
+    let rightArrowInner = document.querySelector(".custom-slider-right-arrow-inner");
+    if (!slider || !leftArrow || !rightArrow || !leftArrowInner || !rightArrowInner) return;
 
     if (focus) slider.focus();
     // console.log(slider.scrollLeft, swipeDistance);
@@ -36,20 +38,24 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
     if (side == "") slider.scrollLeft = 0;
 
     if (slider.scrollLeft === 0) {
+      leftArrowInner.style.display = "none";
       setTimeout(() => {
         leftArrow.style.display = "none";
       }, 1000);
     } else {
+      leftArrowInner.style.display = "flex";
       setTimeout(() => {
         leftArrow.style.display = "flex";
       }, 1000);
     }
 
     if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
+      rightArrowInner.style.display = "none";
       setTimeout(() => {
         rightArrow.style.display = "none";
       }, 1000);
     } else {
+      rightArrowInner.style.display = "flex";
       setTimeout(() => {
         rightArrow.style.display = "flex";
       }, 1000);
@@ -75,25 +81,31 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
     let slider = document.querySelector(".custom-slider-items");
     let leftArrow = document.querySelector(".custom-slider-left-arrow");
     let rightArrow = document.querySelector(".custom-slider-right-arrow");
-    if (!slider || !leftArrow || !rightArrow) return;
+    let leftArrowInner = document.querySelector(".custom-slider-left-arrow-inner");
+    let rightArrowInner = document.querySelector(".custom-slider-right-arrow-inner");
+    if (!slider || !leftArrow || !rightArrow || !leftArrowInner || !rightArrowInner) return;
 
     const handleScroll = () => {
       //console.log("handleScroll");
       if (slider.scrollLeft === 0) {
+        leftArrowInner.style.display = "none";
         setTimeout(() => {
           leftArrow.style.display = "none";
         }, 1000);
       } else {
+        leftArrowInner.style.display = "flex";
         setTimeout(() => {
           leftArrow.style.display = "flex";
         }, 1000);
       }
 
       if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
+        rightArrowInner.style.display = "none";
         setTimeout(() => {
           rightArrow.style.display = "none";
         }, 1000);
       } else {
+        rightArrowInner.style.display = "flex";
         setTimeout(() => {
           rightArrow.style.display = "flex";
         }, 1000);
@@ -183,6 +195,7 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
         // px: "3rem",
         position: "relative",
         // border: "2px solid red",
+        minHeight: "2.5rem",
         // borderRadius: "1000px",
         // overflowY: "hidden",
       }}
@@ -198,10 +211,8 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           // set color if parent elements content has overflown
           cursor: "pointer",
 
-          background: theme.palette.homepage.arrowBg,
-          display: "none",
-          alignItems: "center",
-          justifyContent: "center",
+
+          background: "transparent",
 
           //   pr: isMobileScreens ? "1rem" : "1rem",
           zIndex: "1",
@@ -209,19 +220,30 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           borderRadius: "1000px",
           height: "30px",
           width: "30px",
+          overflow: "hidden",
         }}
         onClick={() => {
           handleNext("prev", 300, true);
         }}
       >
-        <KeyboardDoubleArrowLeftIcon
-          style={{
-            color: theme.palette.homepage.arrowColor,
-            fontSize: isMobileScreens ? "1.5rem" : "1.7rem",
-            // border: "2px solid green",
-            // marginTop: isMobileScreens ? "0.05rem" : "-0.05rem",
-          }}
-        />
+        <Box className="custom-slider-left-arrow-inner"
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: theme.palette.homepage.arrowBg,
+          }}>
+          <KeyboardDoubleArrowLeftIcon
+            style={{
+              color: theme.palette.homepage.arrowColor,
+              fontSize: isMobileScreens ? "1.5rem" : "1.7rem",
+              // border: "2px solid green",
+              // marginTop: isMobileScreens ? "0.05rem" : "-0.05rem",
+            }}
+          />
+        </Box>
       </Box>
       <Box
         className="custom-slider-right-arrow"
@@ -233,27 +255,36 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           // set color if parent elements content has overflown
           cursor: "pointer",
 
-          background: theme.palette.homepage.arrowBg,
-          display: "none",
-          alignItems: "center",
-          justifyContent: "center",
+          background: "transparent",
+
           transform: "translateY(-50%)",
           zIndex: "1",
           borderRadius: "1000px",
           height: "30px",
           width: "30px",
+          overflow: "hidden",
         }}
         onClick={() => {
           handleNext("next", 300, true);
         }}
       >
-        <KeyboardDoubleArrowRightIcon
-          style={{
-            color: theme.palette.homepage.arrowColor,
-            fontSize: isMobileScreens ? "1.5rem" : "1.7rem",
-            // marginTop: isMobileScreens ? "0.05rem" : "-0.05rem",
-          }}
-        />
+        <Box className="custom-slider-right-arrow-inner"
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: theme.palette.homepage.arrowBg,
+          }}>
+          <KeyboardDoubleArrowRightIcon
+            style={{
+              color: theme.palette.homepage.arrowColor,
+              fontSize: isMobileScreens ? "1.5rem" : "1.7rem",
+              // marginTop: isMobileScreens ? "0.05rem" : "-0.05rem",
+            }}
+          />
+        </Box>
       </Box>
       <Box
         tabIndex="0"

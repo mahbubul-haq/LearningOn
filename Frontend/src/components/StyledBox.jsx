@@ -16,20 +16,13 @@ export const CourseNextPrevButton = styled(Box)(({ theme }) => {
     position: "absolute",
     top: isNonMobileScreens ? "0" : "50%",
     transform: isNonMobileScreens ? "none" : "translateY(-50%)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: theme.palette.homepage.arrowBg,
+    backgroundColor: "transparent",
     cursor: "pointer",
-    transition: "all 0.5s ease",
     zIndex: "1",
     height: isNonMobileScreens ? `calc(100% - 2rem)` : "45px",
-    backdropFilter: "blur(10px) saturate(200%)",
     width: isNonMobileScreens ? "auto" : "45px",
     borderRadius: isNonMobileScreens ? "0" : "50%",
-    "&:hover": {
-      backgroundColor: theme.palette.homepage.arrowHover,
-    },
+
   };
 });
 
