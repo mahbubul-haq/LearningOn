@@ -4,7 +4,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import useTheme from "@mui/material/styles/useTheme";
 
 const DashboardCard = ({ title, value }) => {
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     const theme = useTheme();
     return (
         <Box

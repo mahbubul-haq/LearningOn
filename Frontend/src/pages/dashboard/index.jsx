@@ -14,7 +14,7 @@ import DashboardTop from "./DashboardTop";
 const Dashboard = () => {
     const theme = useTheme();
     const user = useSelector((state) => state.auth.user);
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     const params = useParams();
     const { setOpenedItem } = useContext(GlobalContext);
     const { selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);

@@ -10,7 +10,7 @@ export const StyledGrid2Cols = styled(Box)(() => ({
 }));
 
 export const CourseNextPrevButton = styled(Box)(({ theme }) => {
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
 
   return {
     position: "absolute",
@@ -23,7 +23,8 @@ export const CourseNextPrevButton = styled(Box)(({ theme }) => {
     cursor: "pointer",
     transition: "all 0.5s ease",
     zIndex: "1",
-    height: isNonMobileScreens ? "100%" : "45px",
+    height: isNonMobileScreens ? `calc(100% - 2rem)` : "45px",
+    backdropFilter: "blur(10px) saturate(200%)",
     width: isNonMobileScreens ? "auto" : "45px",
     borderRadius: isNonMobileScreens ? "0" : "50%",
     "&:hover": {

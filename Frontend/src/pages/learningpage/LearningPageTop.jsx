@@ -14,7 +14,7 @@ import { LearningLeftPanel } from "./LearningLeftPanel";
 const LearningPageTop = ({ courseInfo, scrollTop }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const minWidth300 = useMediaQuery("(min-width:300px)");
   const minWidth250 = useMediaQuery("(min-width: 250px)");

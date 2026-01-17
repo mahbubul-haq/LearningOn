@@ -24,7 +24,7 @@ export const HomePageState = (props) => {
         popularCourses: [],
     });
 
-    
+
 
     useEffect(() => {
         waitingForSelectedCoursesRef.current = waitingForSelectedCourses;
@@ -37,7 +37,7 @@ export const HomePageState = (props) => {
         }
     }, [courses]);
 
-    const getCourses = async (category="all") => {
+    const getCourses = async (category = "all") => {
 
         getCoursesAttempt.current += 1;
         console.log("getCourses attempt:", getCoursesAttempt.current, "category:", category);
@@ -60,8 +60,8 @@ export const HomePageState = (props) => {
             clearTimeout(timeoutId);
 
             const data = await response.json();
-           // console.log("courses, ", data);
-           
+            // console.log("courses, ", data);
+
 
             if (data.success) {
                 //console.log("courses", data.courses);
@@ -73,16 +73,16 @@ export const HomePageState = (props) => {
                 setLoading(false);
             }
             else {
-                if (getCoursesAttempt.current < 3) {
+                if (getCoursesAttempt.current < 2) {
                     getCourses(category);
-                }else {
+                } else {
                     setLoading(false);
                     setCourseFetchError(true);
                 }
             }
         } catch (err) {
             //console.log(err?.message);
-            if (getCoursesAttempt.current < 3) {
+            if (getCoursesAttempt.current < 2) {
                 getCourses(category);
             }
             else {

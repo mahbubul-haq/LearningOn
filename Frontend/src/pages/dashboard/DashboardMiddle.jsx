@@ -13,7 +13,7 @@ import DashboardCard from "../../widgets/DashboardCard";
 const DashboardMiddle = () => {
   const { selectedCourse } = useContext(DashboardContext);
   const user = useSelector((state) => state.auth.user);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const navigate = useNavigate();
 
   const getTotalStudents = () => {

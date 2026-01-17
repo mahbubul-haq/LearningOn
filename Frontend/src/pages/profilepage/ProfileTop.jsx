@@ -18,7 +18,7 @@ const ProfileTop = ({ userInfo }) => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
   //console.log(user, token);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const mounted = React.useRef(true);
   const {

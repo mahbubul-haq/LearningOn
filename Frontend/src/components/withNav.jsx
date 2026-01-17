@@ -8,7 +8,7 @@ import { GlobalContext } from "../state/GlobalContext";
 
 const WithNav = ({ component, showNav }) => {
   const [basePath, setBasePath] = useState("/");
-  const {openedItem} = useContext(GlobalContext);
+  const { openedItem } = useContext(GlobalContext);
 
   const location = useLocation();
 
@@ -23,11 +23,19 @@ const WithNav = ({ component, showNav }) => {
 
   return (
     <Box
-      className="app-container"
+      className="app-container custom-scrollbar"
       sx={{
         height: "100%",
         overflow: "auto",
         scrollBehavior: "smooth",
+        "@media (hover: none) and (pointer: coarse)": {
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
+        "&::-webkit-scrollbar": {
+          width: { xs: "6px", sm: "10px", md: "12px" },
+        },
       }}
     >
       <CourseExplorer />

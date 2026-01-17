@@ -54,7 +54,7 @@ const MemoizedVideo = React.memo(forwardRef((props: any, ref: any) => {
 
 const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerProps) => {
     const theme = useTheme()
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)")
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)")
     const videoRef = useRef<AdvancedVideo | null>(null);
     const [lessonId, setLessonId] = useState<string>(courseInfo?.lessons[openedLesson.lesson - 1]?._id?.toString() || "")
     const [subLessonId, setSubLessonId] = useState<string>(courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]?._id?.toString() || "")

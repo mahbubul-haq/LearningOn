@@ -15,7 +15,7 @@ import NavRight from "./NavRight.jsx";
 import NotificationDrawer from "./NotificationDrawer.jsx";
 
 const Navbar = () => {
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const [newNotifications, setNewNotifications] = useState(0);

@@ -5,7 +5,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { StyledButton } from "../StyledButton";
 
 const NoCourseFound = () => {
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     const {
         getFilteredCourses,
         categoryChanged,

@@ -5,7 +5,7 @@ import LoginForm from "./LoginForm";
 import SignUpForm from "./SignupForm";
 
 const LoginSignUp = () => {
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     const isLogin = useLocation().state?.isLogin;
     const redirect = useLocation().state?.redirect;
     const navigate = useNavigate();

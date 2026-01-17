@@ -4,7 +4,7 @@ import { useMediaQuery } from "@mui/material";
 import { colorTokens } from "../theme";
 
 const StyledTextField2 = styled(TextField)(({ theme }) => {
-    const isNonMobileScreen = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreen = useMediaQuery("(min-width: 900px)");
     return {
         variant: "standard",
         marginBottom: "1rem",

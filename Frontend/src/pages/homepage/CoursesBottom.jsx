@@ -17,7 +17,7 @@ const CoursesBottom = ({
   waitingForSelectedCoursesRef,
   loading,
 }) => {
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const navigate = useNavigate();
   const { changeCategory } = useContext(CourseExplorerContext);
 

@@ -55,8 +55,8 @@ export const colorTokens = {
             bgStrong: "rgba(255, 255, 255, 0.6)",
             border: "rgba(255, 255, 255, 0.6)",
             borderSubtle: "rgba(255, 255, 255, 0.3)",
-            shadow: "0 8px 32px 0 rgba(31, 38, 135, 0.15)", // Premium colored shadow
-            shadowStrong: "0 8px 32px 0 rgba(31, 38, 135, 0.25)",
+            shadow: "rgba(31, 38, 135, 0.08)", // Premium colored shadow
+            shadowStrong: "rgba(31, 38, 135, 0.15)",
             backdropFilter: "blur(12px)",
         },
         // Dark mode glass
@@ -65,8 +65,8 @@ export const colorTokens = {
             bgStrong: "rgba(30, 30, 35, 0.6)",
             border: "rgba(255, 255, 255, 0.08)", // Subtle white border
             borderSubtle: "rgba(255, 255, 255, 0.05)",
-            shadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
-            shadowStrong: "0 8px 32px 0 rgba(0, 0, 0, 0.5)",
+            shadow: "rgba(0, 0, 0, 0.15)",
+            shadowStrong: "rgba(0, 0, 0, 0.25)",
             backdropFilter: "blur(12px)",
         },
     },
@@ -205,6 +205,8 @@ export const colorTokens = {
         x15: "rgba(16, 185, 129, 0.15)",
     },
     glassMorphism: {
+        backgroundColorDark: "#0f0f13",
+        backgroundColorLight: "#F0F4F8",
         backgroundImageDark: `
                                     radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
                                     radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
@@ -291,12 +293,16 @@ export const themeSettings = ({ mode }) => {
                     divider: `rgba(255, 255, 255, ${colorTokens.opacity[10]})`,
 
                     // #used - Homepage semantic tokens (DARK MODE)
+                    homepageSliderChipBg: colorTokens.grey[700],
+                    homepageSliderChipHoverBg: colorTokens.grey[600],
+                    homepageSliderChipSelectedBg: colorTokens.primary.light,
+                    homepageSliderChipSelectedText: colorTokens.white.pure,
                     homepage: {
                         // Hero section
                         heroBg: "transparent", // Made transparent for global background
                         heroText: colorTokens.white.pure,
                         heroTextSecondary: colorTokens.grey[300],
-                        heroTextShadow: 'rgba(255, 255, 255, 0.3)',
+                        heroTextShadow: 'rgba(255, 255, 255, 0.2)',
 
                         // Navigation
                         navBg: colorTokens.glass.dark.bg,
@@ -304,9 +310,9 @@ export const themeSettings = ({ mode }) => {
                         navShadow: colorTokens.glass.dark.shadow,
 
                         // Cards
-                        cardBg: colorTokens.glass.dark.bg,
+                        cardBg: colorTokens.glass.dark.bgStrong,
                         cardBgHover: colorTokens.glass.dark.bgStrong,
-                        cardBorder: colorTokens.glass.dark.borderSubtle,
+                        cardBorder: colorTokens.glass.dark.border,
                         cardShadow: colorTokens.glass.dark.shadow,
 
                         // Buttons
@@ -332,11 +338,27 @@ export const themeSettings = ({ mode }) => {
                         divider: `rgba(255, 255, 255, ${colorTokens.opacity[5]})`,
 
                         // Backgrounds
-                        sectionBg: colorTokens.black.light,
+                        sectionBg: colorTokens.black.main,
                         sectionBgAlt: colorTokens.black.lighter,
 
                         // Arrows & Navigation
+                        arrowBg: `rgba(0, 0, 0, ${colorTokens.opacity[70]})`,
                         arrowHover: `rgba(0, 0, 0, ${colorTokens.opacity[85]})`,
+                        arrowColor: colorTokens.white.light,
+
+                        // Course Placeholder (Locked colors)
+                        coursePlaceholder: {
+                            adventureIconBg: `rgba(145, 120, 230, 0.1)`,
+                            adventureIcon: colorTokens.primary.lighter,
+                            adventureButton: colorTokens.primary.lighter,
+                            createIconGradient: `linear-gradient(135deg, ${colorTokens.primary.lighter} 0%, ${colorTokens.secondary.main} 100%)`,
+                            createIconShadow: `0 10px 20px rgba(194, 33, 95, 0.3)`,
+                            createButtonText: colorTokens.secondary.main,
+                            createButtonHover: `rgba(194, 33, 95, 0.05)`,
+                            errorIndicator: `#ff4d4d`,
+                            reloadButtonBg: `#333333`,
+                            reloadButtonHover: `#000000`,
+                        },
                     },
 
                     // #used - Learning Page semantic tokens (DARK MODE)
@@ -381,6 +403,10 @@ export const themeSettings = ({ mode }) => {
                     divider: `rgba(0, 0, 0, ${colorTokens.opacity[10]})`,
 
                     // #used - Homepage semantic tokens (LIGHT MODE)
+                    homepageSliderChipBg: colorTokens.grey[200],
+                    homepageSliderChipHoverBg: colorTokens.grey[300],
+                    homepageSliderChipSelectedBg: colorTokens.primary.light,
+                    homepageSliderChipSelectedText: colorTokens.white.pure,
                     homepage: {
                         // Hero section
                         heroBg: "transparent", // Made transparent for global background
@@ -396,7 +422,7 @@ export const themeSettings = ({ mode }) => {
                         // Cards
                         cardBg: colorTokens.glass.light.bg,
                         cardBgHover: colorTokens.glass.light.bgStrong,
-                        cardBorder: colorTokens.glass.light.borderSubtle,
+                        cardBorder: colorTokens.glass.light.border,
                         cardShadow: colorTokens.glass.light.shadow,
 
                         // Buttons
@@ -422,12 +448,27 @@ export const themeSettings = ({ mode }) => {
                         divider: `rgba(0, 0, 0, ${colorTokens.opacity[5]})`,
 
                         // Backgrounds
-                        sectionBg: colorTokens.white.light,
+                        sectionBg: colorTokens.grey[100],
                         sectionBgAlt: colorTokens.white.main,
 
                         // Arrows & Navigation
-                        arrowBg: `rgba(0, 0, 0, ${colorTokens.opacity[70]})`,
-                        arrowHover: `rgba(0, 0, 0, ${colorTokens.opacity[85]})`,
+                        arrowBg: `rgba(0, 0, 0, ${colorTokens.opacity[50]})`,
+                        arrowHover: `rgba(0, 0, 0, ${colorTokens.opacity[65]})`,
+                        arrowColor: colorTokens.white.main,
+
+                        // Course Placeholder (Locked colors)
+                        coursePlaceholder: {
+                            adventureIconBg: `rgba(145, 120, 230, 0.1)`,
+                            adventureIcon: colorTokens.primary.lighter,
+                            adventureButton: colorTokens.primary.lighter,
+                            createIconGradient: `linear-gradient(135deg, ${colorTokens.primary.lighter} 0%, ${colorTokens.secondary.main} 100%)`,
+                            createIconShadow: `0 10px 20px rgba(194, 33, 95, 0.3)`,
+                            createButtonText: colorTokens.secondary.main,
+                            createButtonHover: `rgba(194, 33, 95, 0.05)`,
+                            errorIndicator: `#ff4d4d`,
+                            reloadButtonBg: `#333333`,
+                            reloadButtonHover: `#000000`,
+                        },
                     },
 
                     // #used - Learning Page semantic tokens (LIGHT MODE)

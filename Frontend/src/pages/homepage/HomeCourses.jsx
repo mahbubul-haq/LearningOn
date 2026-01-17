@@ -10,7 +10,7 @@ import CoursesContent from "./CoursesContent";
 import CoursesTop from "./CoursesTop";
 
 const HomeCourses = () => {
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const [courseType, setCourseType] = React.useState("Popular Courses");
   const { listOfCategories, getCategories } = useContext(GlobalContext);
   const [categoriesWithCourse, setCategoriesWithCourse] = React.useState([]);
@@ -156,6 +156,9 @@ const HomeCourses = () => {
   }, [selectedItem, courseType]);
 
   const handleScroll = (direction, scrollValue) => {
+    let rightArrow = document.querySelector(".right-arrow");
+    let leftArrow = document.querySelector(".left-arrow");
+
     const container = document.querySelector(".courses-container");
     const scrollStep = scrollValue
       ? scrollValue
@@ -177,9 +180,13 @@ const HomeCourses = () => {
       !(selectedCourses?.length > 0) ||
       (container.scrollLeft === 0 && direction != "right")
     ) {
-      document.querySelector(".left-arrow").style.display = "none";
+      setTimeout(() => {
+        leftArrow.style.display = "none";
+      }, 1000);
     } else {
-      document.querySelector(".left-arrow").style.display = "flex";
+      setTimeout(() => {
+        leftArrow.style.display = "flex";
+      }, 1000);
     }
 
     if (
@@ -188,9 +195,13 @@ const HomeCourses = () => {
         container.scrollWidth - container.clientWidth &&
         direction != "left")
     ) {
-      document.querySelector(".right-arrow").style.display = "none";
+      setTimeout(() => {
+        rightArrow.style.display = "none";
+      }, 1000);
     } else {
-      document.querySelector(".right-arrow").style.display = "flex";
+      setTimeout(() => {
+        rightArrow.style.display = "flex";
+      }, 1000);
     }
   };
 
@@ -207,11 +218,13 @@ const HomeCourses = () => {
     setWaitingForSelectedCourses(false);
 
     const container = document.querySelector(".courses-container");
-    if (container) {
+    let leftArrow = document.querySelector(".left-arrow");
+    let rightArrow = document.querySelector(".right-arrow");
+    if (container && leftArrow && rightArrow) {
       if (!(selectedCourses?.length > 0) || container.scrollLeft === 0) {
-        document.querySelector(".left-arrow").style.display = "none";
+        leftArrow.style.display = "none";
       } else {
-        document.querySelector(".left-arrow").style.display = "flex";
+        leftArrow.style.display = "flex";
       }
 
       if (
@@ -219,9 +232,9 @@ const HomeCourses = () => {
         container.scrollLeft + 1 >=
         container.scrollWidth - container.clientWidth
       ) {
-        document.querySelector(".right-arrow").style.display = "none";
+        rightArrow.style.display = "none";
       } else {
-        document.querySelector(".right-arrow").style.display = "flex";
+        rightArrow.style.display = "flex";
       }
     }
   }, [selectedCourses]);
@@ -262,7 +275,7 @@ const HomeCourses = () => {
             WebkitBackdropFilter: isNonMobileScreens ? "blur(20px)" : "none",
             border: isNonMobileScreens ? (theme) => `1px solid ${theme.palette.homepage.cardBorder}` : "none",
             borderRadius: "12px",
-            boxShadow: isNonMobileScreens ? (theme) => `0 8px 32px ${theme.palette.homepage.cardShadow}` : "none",
+            boxShadow: isNonMobileScreens ? (theme) => `0 8px 40px ${theme.palette.homepage.cardShadow}` : "none",
             width: "100%",
             height: isNonMobileScreens ? "580px" : "520px",
             position: "relative",
@@ -296,6 +309,7 @@ const HomeCourses = () => {
               courseType={courseType}
               changingCourseType={changingCourseType}
               changingCourseTypeRef={changingCourseTypeRef}
+              setCourseType={setCourseType}
             />
 
 

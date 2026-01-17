@@ -71,7 +71,7 @@ const CourseExplorer = () => {
         <CourseExplorerLeftHover />
       </Box>
       <Box
-        className="explorer-right-container"
+        className="explorer-right-container custom-scrollbar"
         sx={{
           height: "100%",
           overflow: "auto",

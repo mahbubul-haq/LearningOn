@@ -14,7 +14,7 @@ import { cloudinaryCld } from "../../configs/cloudinary.config";
 import { ProfilePageContext } from "../../state/ProfilePageContext";
 
 const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture }) => {
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const {
     editProfileStatus,

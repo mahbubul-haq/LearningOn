@@ -24,7 +24,7 @@ import { BsBox } from "react-icons/bs";
 const LearningPage = () => {
   const { courseId } = useParams();
   const { setOpenedItem } = useContext(GlobalContext);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
   const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons } =

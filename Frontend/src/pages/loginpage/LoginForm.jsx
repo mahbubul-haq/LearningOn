@@ -21,7 +21,7 @@ const initialValuesLogin = {
 };
 
 const LoginForm = ({ redirect }) => {
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
 
     const [emailError, setEmailError] = React.useState("");
     const [passwordError, setPasswordError] = React.useState("");

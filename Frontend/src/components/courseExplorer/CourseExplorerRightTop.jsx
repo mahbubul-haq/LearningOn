@@ -27,7 +27,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
   const minWidth1300 = useMediaQuery("(min-width: 1300px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const maxWidth700 = useMediaQuery("(max-width: 700px)");
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   return (
     <Box
       sx={{

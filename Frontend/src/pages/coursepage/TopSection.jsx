@@ -10,7 +10,7 @@ const TopSection = ({
     courseInfo,
 }) => {
 
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
 
     const { user, token } = useSelector((state) => state.auth);
 

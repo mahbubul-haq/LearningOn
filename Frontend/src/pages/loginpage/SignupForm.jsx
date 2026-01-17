@@ -28,7 +28,7 @@ const initialValuesRegister = {
 };
 
 const SignUpForm = ({ redirect }) => {
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     const [picturePath, setPicturePath] = React.useState("");
     const [emailExists, setEmailExists] = React.useState("");
     const [openSnackbar, setOpenSnackbar] = React.useState(false);

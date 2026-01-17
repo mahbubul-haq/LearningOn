@@ -15,7 +15,7 @@ import VideoPlayer from "./VideoPlayer";
 
 const LearningRightPanel = ({ courseInfo, courseProgress }) => {
   const { openedLesson } = useContext(LearningCourseContext);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const theme = useTheme();
 
 

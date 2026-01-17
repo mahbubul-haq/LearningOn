@@ -6,9 +6,12 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import FlexBetween from "../../components/FlexBetween";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const CoursesTop = ({ courseType, setCourseType, handleChange, setChangingCourseType, changingCourseTypeRef }) => {
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const user = useSelector((state) => state.auth.user);
   const theme = useTheme();
@@ -98,92 +101,77 @@ const CoursesTop = ({ courseType, setCourseType, handleChange, setChangingCourse
         </Box>
       )}
       {user && isMobileScreens && (
-        <Box
-          sx={{
-            my: "1rem",
-          }}
-        >
-          <Box
+        <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+          <Select
+            labelId="courseType"
+            value={courseType}
             sx={{
-              position: "relative",
+              borderRadius: "50px",
+            }}
+
+            onChange={(e) => {
+              changingCourseTypeRef.current = true;
+              setChangingCourseType(true);
+              setCourseType(e.target.value);
             }}
           >
-            <select
-              style={{
-                appearance: "none",
-                WebkitAppearance: "none",
-                MozAppearance: "none",
-                background: "transparent",
-                padding: "0.5rem 3rem 0.5rem 1rem",
-                borderRadius: "1000px",
-                color: theme.palette.homepageSelectText,
-                border: `1px solid ${theme.palette.homepageSelectBorder}`,
-              }}
-              onChange={(e) => {
-                console.log(e.target.value);
-                changingCourseTypeRef.current = true;
-                setChangingCourseType(true);
-                setCourseType(e.target.value);
-              }}
-            >
-              <option value="Popular Courses">Popular Courses</option>
-              <option value="My Courses">My Courses</option>
-              <option value="I am Learning">I am Learning</option>
-            </select>
-            <Box className="home-coursetype-select-arrow"></Box>
-          </Box>
-        </Box>
-      )}
-      {/* {!user && isMobileScreens && (
-                <Box
-                    sx={{
-                        width: "100%",
-                        my: "1rem",
-                        mb: "0",
-                        // border: "1px solid rgba(0, 0, 0, 0.23)",
-                        display: "flex",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Autocomplete
-                        disablePortal
-                        onChange={(event, value) => {
-                            if (value) {
-                                setCourseType(value.value);
-                            }
-                        }}
-                        value={courseType}
-                        id="category"
-                        options={[{ label: "My Courses", value: "My Courses" }, { label: "I am Learning", value: "I am Learning" }, { label: "Popular Courses", value: "Popular Courses" }]}
-                        sx={{
-                            maxWidth: "300px",
-                            width: "100%",
-                        }}
-                        renderInput={(params) => (
-                            <StyledTextField1
-                                placeholder={courseType}
-                                {...params}
-                                size="small"
-                                // change font size of input
-                                sx={{
-                                    p: 0,
-                                    "& .MuiInputBase-input": {
-                                        fontSize: "1rem",
-                                        fontWeight: "600",
-                                    },
+            <MenuItem value="Popular Courses">Popular Courses</MenuItem>
+            <MenuItem value="My Courses">My Courses</MenuItem>
+            <MenuItem value="I am Learning">I am Learning</MenuItem>
+          </Select>
+        </FormControl>
 
-                                    "&&": {
-                                        "& .MuiInputBase-root": {
-                                            color: (theme) => theme.palette.grey.grey600,
-                                        },
-                                    },
-                                    //enforce color of input
-                                }}
-                            />
-                        )}
-                    />
-                </Box>
-            )} */}
+        // <Box
+        //   sx={{
+        //     my: "1rem",
+        //   }}
+        // >
+        //   <Box
+        //     sx={{
+        //       position: "relative",
+        //     }}
+        //   >
+        //     <select
+        //       style={{
+        //         appearance: "none",
+        //         WebkitAppearance: "none",
+        //         MozAppearance: "none",
+        //         background: "transparent",
+        //         padding: "0.5rem 3rem 0.5rem 1rem",
+        //         borderRadius: "1000px",
+        //         color: theme.palette.text.primary,
+        //         border: `1px solid ${theme.palette.primary.main}`,
+        //       }}
+        //       onChange={(e) => {
+        //         console.log(e.target.value);
+        //         changingCourseTypeRef.current = true;
+        //         setChangingCourseType(true);
+        //         setCourseType(e.target.value);
+        //       }}
+        //     >
+        //       <option value="Popular Courses">Popular Courses</option>
+        //       <option value="My Courses">My Courses</option>
+        //       <option value="I am Learning">I am Learning</option>
+        //     </select>
+        //     <Box sx={{
+        //       position: "absolute",
+
+        //       backgroundImage: "url(/images/down_arrow.svg)",
+        //       backgroundRepeat: "no-repeat",
+        //       backgroundPositionX: "center",
+        //       backgroundSize: "12px 12px",
+        //       backgroundPositionY: "center",
+        //       right: "0.8rem",
+        //       top: "50%",
+        //       transform: "translateY(-50%)",
+        //       height: "12px",
+        //       width: "12px",
+        //       zIndex: 2,
+        //     }}></Box>
+        //   </Box>
+        // </Box>
+      )}
+
     </FlexBetween>
   );
 };

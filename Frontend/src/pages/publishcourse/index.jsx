@@ -14,7 +14,7 @@ import RightButtons from "./RightButtons";
 import RightPanel from "./RightPanel";
 
 const PublishCourse = () => {
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   //const [dialogOpen, setDialogOpen] = React.useState(0);
   const user = useSelector((state) => state.auth.user);
   const edit = useParams().edit;

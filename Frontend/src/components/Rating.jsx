@@ -6,7 +6,7 @@ import { colorTokens } from "../theme";
 const StyledRating = styled(MuiRating)(() => {
     return {
         "& .MuiRating-iconFilled": {
-            color: colorTokens.pink.light,
+            color: colorTokens.secondary.lighter,
         },
         "& .MuiRating-iconHover": {
             color: colorTokens.utility.red,

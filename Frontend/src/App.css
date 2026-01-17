@@ -19,6 +19,9 @@
   --glass-border-rich: rgba(231, 169, 219, 0.4);
   --glass-scrollbar-thumb: rgba(4, 65, 70, 0.336);
   --glass-scrollbar-hover: rgba(4, 65, 70, 0.445);
+  --scrollbar-gradient: linear-gradient(180deg, #6b4fd970 0%, #d94d8571 100%);
+  --scrollbar-gradient-hover: linear-gradient(180deg, #6b4fd9cc 0%, #d94d85d7 100%);
+  --scrollbar-track-bg: rgba(0, 0, 0, 0.05);
 }
 
 *,
@@ -114,49 +117,51 @@ body {
 
 /* The container holding your lessons */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
   /* Make it very thin */
 }
 
 /* The background of the scrollbar area */
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: var(--glass-bg-2);
+  background: var(--scrollbar-track-bg);
   /* Keeps the gradient visible */
 }
 
 /* The draggable handle */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--glass-bg-5);
-  border-radius: 10px;
+  background: var(--scrollbar-gradient);
+  border-radius: 12px;
   /* Rounds the edges */
 }
 
 /* Highlight the handle on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--glass-bg-3);
+  background: var(--scrollbar-gradient-hover);
+  filter: brightness(1.2);
 }
 
 /* The container holding your lessons */
 .custom-scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
   /* Make it very thin */
 }
 
 /* The background of the scrollbar area */
 .custom-scrollbar-thin::-webkit-scrollbar-track {
-  background: var(--glass-bg-2);
+  background: var(--scrollbar-track-bg);
   /* Keeps the gradient visible */
 }
 
 /* The draggable handle */
 .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-  background: var(--glass-scrollbar-thumb);
+  background: var(--scrollbar-gradient);
   backdrop-filter: blur(25px) saturate(200%);
-  border-radius: 10px;
+  border-radius: 8px;
   /* Rounds the edges */
 }
 
 /* Highlight the handle on hover */
 .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: var(--glass-scrollbar-hover);
+  background: var(--scrollbar-gradient);
+  filter: brightness(1.2);
 }

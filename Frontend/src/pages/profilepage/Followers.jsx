@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 
 const Followers = ({ user, followers }) => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     return (
         <Box
             sx={{

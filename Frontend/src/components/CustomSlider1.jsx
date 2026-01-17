@@ -87,8 +87,12 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     bottom: "0",
                     // set color if parent elements content has overflown
                     cursor: "pointer",
-                    backgroundImage: `linear-gradient(to right, ${colorTokens.white.main}, ${colorTokens.translucentWhite.x0})`,
-                    pr: "3rem",
+                    background: theme.palette.homepage.arrowBg,
+                    borderRadius: "50%",
+                    flexShrink: 0,
+                    alignSelf: "center",
+
+                    // pr: "3rem",
                     zIndex: "1",
                     display: "flex",
                     alignItems: "center"
@@ -99,7 +103,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
             >
                 <KeyboardDoubleArrowLeftIcon
                     sx={{
-                        color: theme.palette.grey.grey600,
+                        color: theme.palette.homepage.arrowColor,
                     }}
                 />
             </Box>
@@ -113,8 +117,11 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     // border: "2px solid red",
                     // set color if parent elements content has overflown
                     cursor: "pointer",
-                    backgroundImage: `linear-gradient(to right, ${colorTokens.translucentWhite.x0}, ${colorTokens.white.main})`,
-                    pl: "3rem",
+                    background: theme.palette.homepage.arrowBg,
+                    borderRadius: "50%",
+                    flexShrink: "0",
+                    alignSelf: "center",
+                    // pl: "3rem",
                     zIndex: "1",
                     display: "flex",
                     alignItems: "center",
@@ -127,7 +134,7 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
             >
                 <KeyboardDoubleArrowRightIcon
                     sx={{
-                        color: theme.palette.grey.grey700,
+                        color: theme.palette.homepage.arrowColor,
                         // border: "2px solid green",
                     }}
                 />
@@ -155,11 +162,11 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                             px: "0.1rem",
                             background:
                                 item === selectedItem
-                                    ? theme.palette.text.primary
-                                    : theme.palette.grey.grey100,
+                                    ? theme.palette.homepageSliderChipSelectedBg
+                                    : theme.palette.homepageSliderChipBg,
                             color:
                                 item === selectedItem
-                                    ? colorTokens.white.main
+                                    ? theme.palette.homepageSliderChipSelectedText
                                     : theme.palette.text.primary,
                         }}
 

@@ -5,7 +5,7 @@ import { colorTokens } from "../theme";
 import FlexBetween from "./FlexBetween";
 
 const CourseWidgetSkeleton = () => {
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   return (
     <Box
       sx={{

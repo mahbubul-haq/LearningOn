@@ -17,7 +17,7 @@ const DashboardTop = () => {
     const theme = useTheme();
     const navigate = useNavigate();
     const { openedTab, setOpenedTab } = useContext(DashboardContext);
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     // useEffect(() => {
     //     console.log(key);
     // }, [key]);

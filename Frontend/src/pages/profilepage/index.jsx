@@ -17,7 +17,7 @@ import Divider from "@mui/material/Divider";
 const ProfilePage = () => {
     const { userId } = useParams();
     const { userById, getUserById, setOpenedItem } = useContext(GlobalContext);
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const { setOpenedTab,
         editProfileStatus,

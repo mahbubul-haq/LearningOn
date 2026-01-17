@@ -86,18 +86,7 @@ const LandingView = () => {
                                 width: isNonMobileScreens ? maxWidth1300 ? "50%" : "45%" : "100%",
                             }}
                         >
-                            {/* <Typography
-                                variant="h4"
-                                sx={{
-                                    fontWeight: "600",
-                                    fontSize: isNonMobileScreens
-                                        ? "5rem"
-                                        : "2.5rem",
-                                    color: theme.palette.homepage.heroText,
-                                }}
-                            >
-                                LearningOn
-                            </Typography> */}
+
 
                             <Typography
                                 variant="h1"
@@ -115,21 +104,7 @@ const LandingView = () => {
                             >
                                 Build skills with simple, flexible online courses designed for everyone.
                             </Typography>
-                            {/* <Typography
-                                variant="body1"
-                                sx={{
-                                    mb: "1.5rem",
-                                    textAlign: isNonMobileScreens
-                                        ? "left"
-                                        : "center",
-                                    fontSize: isNonMobileScreens
-                                        ? "1.7rem"
-                                        : "1.2rem",
-                                    color: theme.palette.homepage.heroTextSecondary,
-                                }}
-                            >
-                                Build skills with simple, flexible online courses designed for everyone.
-                            </Typography> */}
+
 
                             {isNonMobileScreens && (
                                 <FlexBetween sx={{
@@ -220,94 +195,7 @@ const LandingView = () => {
                                     }}
                                 >
 
-                                    {/* {isNonMobileScreens && (
-                                    <FlexBetween
-                                        sx={{
-                                            gap: "1.5rem",
-                                            flexWrap: "wrap",
-                                            "&&": {
-                                                flexDirection:
-                                                    isNonMobileScreens
-                                                        ? "row"
-                                                        : "column",
-                                                alignItems: isNonMobileScreens
-                                                    ? "flex-start"
-                                                    : "center",
-                                            },
-                                        }}
-                                    >
-                                        {/* <StyledButton disabled
-                                            onClick={() => {
-                                                navigate("/signup", {
-                                                    state: { isLogin: false },
-                                                });
-                                            }}
-                                            sx={{
-                                                opacity: 0.5,
-                                                "&&": {
-                                                    padding: isNonMobileScreens
-                                                        ? "0.5rem 2rem"
-                                                        : "0.4rem 1.5rem",
-                                                    borderRadius: "2rem",
-                                                    backgroundColor: (theme) =>
-                                                        theme.palette.background
-                                                            .buttonBgPink,
-                                                    "&:hover": {
-                                                        backgroundColor: (
-                                                            theme
-                                                        ) =>
-                                                            theme.palette
-                                                                .background
-                                                                .buttonBgPinkDark,
-                                                    },
-                                                },
-                                            }}
-                                        >
-                                            <Typography variant="h4">
-                                                Start Tutoring
-                                            </Typography>
-                                        </StyledButton> */}
-                                    {/* {isNonMobileScreens && (
-                                            <StyledButton disabled
-                                                onClick={() => {
-                                                    navigate("/signup", {
-                                                        state: {
-                                                            isLogin: false,
-                                                        },
-                                                    });
-                                                }}
-                                                sx={{
-                                                    opacity: 0.5,
-                                                    "&&": {
-                                                        padding:
-                                                            isNonMobileScreens
-                                                                ? "0.5rem 2rem"
-                                                                : "0.4rem 1.5rem",
-                                                        borderRadius: "2rem",
-                                                        backgroundColor: (
-                                                            theme
-                                                        ) =>
-                                                            theme.palette
-                                                                .background
-                                                                .buttonBgLightPink,
-                                                        "&:hover": {
-                                                            backgroundColor: (
-                                                                theme
-                                                            ) =>
-                                                                theme.palette
-                                                                    .background
-                                                                    .buttonBgLightPinkDark,
-                                                        },
-                                                    },
-                                                }}
-                                            >
-                                                <Typography variant="h4">
-                                                    Browse Blogs
-                                                </Typography>
-                                            </StyledButton>
-                                        )} 
-                                    </FlexBetween>
-                                )} */}
+
                                 </Box>
                             )}
                         </Box>

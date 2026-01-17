@@ -14,7 +14,7 @@ import { CourseExplorerContext } from "../state/CourseExplorerContext";
 
 const CourseWidget = ({ courseInfo }) => {
   const navigate = useNavigate();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const theme = useTheme();
   const { setShowCourseExplorer, showCourseExplorer, setCloseBtnClicked } =
     useContext(CourseExplorerContext);
@@ -27,8 +27,9 @@ const CourseWidget = ({ courseInfo }) => {
 
         width: "100%",
         borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
-        boxShadow: `0px 0px 2px ${theme.palette.neutral.translucentBlackLight} inset`,
-        // border: "4px solid black",
+        boxShadow: `0px 0px 2px ${theme.palette.neutral.translucentBlackLight} inset${theme.palette.mode == "light" ? `, 0 8px 32px ${theme.palette.homepage.cardShadow}` : ""}`,
+        border: `1px solid ${theme.palette.divider}`,
+        backgroundColor: theme.palette.background.paper,
         height: "auto",
         minHeight: isNonMobileScreens ? "250px" : "250px",
         padding: 0,

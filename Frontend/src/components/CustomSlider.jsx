@@ -1,9 +1,10 @@
 import { Box, Chip } from "@mui/material";
 import { useCallback, useEffect } from "react";
 //import arrow left and right icon
-// import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-// import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
@@ -37,21 +38,21 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
     if (slider.scrollLeft === 0) {
       setTimeout(() => {
         leftArrow.style.display = "none";
-      }, 300);
+      }, 1000);
     } else {
       setTimeout(() => {
         leftArrow.style.display = "flex";
-      }, 300);
+      }, 1000);
     }
 
     if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
       setTimeout(() => {
         rightArrow.style.display = "none";
-      }, 300);
+      }, 1000);
     } else {
       setTimeout(() => {
         rightArrow.style.display = "flex";
-      }, 300);
+      }, 1000);
     }
   }, []);
 
@@ -81,21 +82,21 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
       if (slider.scrollLeft === 0) {
         setTimeout(() => {
           leftArrow.style.display = "none";
-        }, 300);
+        }, 1000);
       } else {
         setTimeout(() => {
           leftArrow.style.display = "flex";
-        }, 300);
+        }, 1000);
       }
 
       if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
         setTimeout(() => {
           rightArrow.style.display = "none";
-        }, 300);
+        }, 1000);
       } else {
         setTimeout(() => {
           rightArrow.style.display = "flex";
-        }, 300);
+        }, 1000);
       }
     };
 
@@ -196,11 +197,8 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           //   bottom: "0",
           // set color if parent elements content has overflown
           cursor: "pointer",
-          backgroundImage: isMobileScreens
-            ? `linear-gradient(to right, ${theme.palette.homepageArrowBtnBg} 60%, transparent)`
-            : `linear-gradient(to right, ${theme.palette.homepageArrowBtnBg} 50%, transparent)`,
 
-          background: theme.palette.homepageArrowBtnBg,
+          background: theme.palette.homepage.arrowBg,
           display: "none",
           alignItems: "center",
           justifyContent: "center",
@@ -216,9 +214,9 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           handleNext("prev", 300, true);
         }}
       >
-        <MdOutlineKeyboardArrowLeft
+        <KeyboardDoubleArrowLeftIcon
           style={{
-            color: theme.palette.homepageArrowColor,
+            color: theme.palette.homepage.arrowColor,
             fontSize: isMobileScreens ? "1.5rem" : "1.7rem",
             // border: "2px solid green",
             // marginTop: isMobileScreens ? "0.05rem" : "-0.05rem",
@@ -234,11 +232,8 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
 
           // set color if parent elements content has overflown
           cursor: "pointer",
-          backgroundImage: isMobileScreens
-            ? `linear-gradient(to right, transparent, ${theme.palette.homepageArrowBtnBg} 40%)`
-            : `linear-gradient(to right, transparent, ${theme.palette.homepageArrowBtnBg} 50%)`,
-          // pl: isMobileScreens ? "1rem" : "1rem",
-          background: theme.palette.homepageArrowBtnBg,
+
+          background: theme.palette.homepage.arrowBg,
           display: "none",
           alignItems: "center",
           justifyContent: "center",
@@ -252,9 +247,9 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
           handleNext("next", 300, true);
         }}
       >
-        <MdOutlineKeyboardArrowRight
+        <KeyboardDoubleArrowRightIcon
           style={{
-            color: theme.palette.homepageArrowColor,
+            color: theme.palette.homepage.arrowColor,
             fontSize: isMobileScreens ? "1.5rem" : "1.7rem",
             // marginTop: isMobileScreens ? "0.05rem" : "-0.05rem",
           }}
@@ -294,15 +289,15 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
                   ? theme.palette.homepageSliderChipSelectedBg
                   : theme.palette.homepageSliderChipBg,
               color:
-                item === selectedItem ? colorTokens.white.main : theme.palette.text.primary,
+                item === selectedItem ? theme.palette.text.primary : theme.palette.text.primary,
               "&:hover": {
                 background:
                   item === selectedItem
                     ? theme.palette.homepageSliderChipSelectedBg
-                    : theme.palette.homepageSliderChipBg,
-                color:
-                  item === selectedItem ? theme.palette.homepageSliderChipSelectedText : theme.palette.homepageSliderChipText,
+                    : theme.palette.homepageSliderChipHoverBg,
               },
+              color:
+                item === selectedItem ? theme.palette.homepageSliderChipSelectedText : theme.palette.text.primary,
             }}
             onClick={() => {
               if (setSelectedItem) {

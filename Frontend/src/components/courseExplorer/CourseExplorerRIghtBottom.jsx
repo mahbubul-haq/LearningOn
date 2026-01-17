@@ -18,7 +18,7 @@ const CourseExplorerRIghtBottom = () => {
     setLoading,
   } = useContext(CourseExplorerContext);
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const theme = useTheme();
   const [showLoadMore, setShowLoadMore] = useState(true);
   
