@@ -29,7 +29,7 @@ const MainSection = ({ courseInfo }) => {
 
                     // Unified Look Adjustments
                     borderRadius: "16px 16px 0 0", // Top corners only
-                    borderBottom: "none", // Remove divider to blending
+                    borderBottom: `1px solid ${theme.palette.divider}`, // Restore border
                     marginBottom: "0px", // Touch content below
 
                     position: "sticky",
@@ -225,7 +225,7 @@ const MainSection = ({ courseInfo }) => {
                     <CoursePageReviews courseInfo={courseInfo} />
                 </Box>
             </Box>
-        </Box>
+        </Box >
     );
 };
 

@@ -34,96 +34,103 @@ const Wallet = ({ userInfo }) => {
                 >
                     My Wallet:&nbsp; $ {userInfo?.wallet}
                 </Typography>
-                {/* <Typography
-                    sx={{
-                        fontWeight: "600",
-                        fontSize: "1.2rem",
-                    }}
-                >
-                    $ {userInfo?.wallet}
-                </Typography> */}
             </FlexBetween>
-            <Box sx={{}}>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "1.5rem",
+                    width: "100%",
+                    mt: "1rem",
+                }}
+            >
                 <Box
                     sx={{
                         width: "100%",
                         maxWidth: "300px",
-                        margin: "2rem 0 0.2rem 0",
-                        // textAlign: "center",
+                        textAlign: "center",
                     }}
                 >
-                    <InputLabel htmlFor="course-price">
+                    <InputLabel htmlFor="wallet-course-price">
                         <Typography
                             sx={{
-                                mb: "0.2rem",
+                                mb: "0.5rem",
                                 textAlign: "center",
-                                color: (theme) => theme.palette.grey.grey800,
+                                color: (theme) => theme.palette.text.secondary,
+                                fontSize: "0.9rem",
                             }}
                         >
                             Withdraw Amount in USD
                         </Typography>
                     </InputLabel>
                     <StyledTextField1
-                        placeholder="$50"
+                        placeholder="50"
                         multiline
-                        maxRows={3}
+                        maxRows={1}
                         id="wallet-course-price"
                         inputProps={{
                             maxLength: 6,
                         }}
                         InputProps={{
-                            endAdornment: (
+                            startAdornment: (
                                 <AttachMoneyIcon
                                     sx={{
-                                        color: (theme) => theme.palette.grey.grey600,
-                                        fontSize: "2rem",
+                                        color: (theme) => theme.palette.text.primary,
+                                        fontSize: "1.5rem",
+                                        mr: 0.5,
                                     }}
-                                    position="end"
                                 />
                             ),
                         }}
-                        // InputProps={{
-                        //     startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                        //   }}
-                        // change font size of input
                         onChange={(event) => {
                             if (event.target.value >= 0) {
                                 setWidthdrawAmount(event.target.value);
                             }
-                            
-
-                            // if (event.target.value && event.target.value > 0) {
-                            //     setErrors({
-                            //         ...errors,
-                            //         coursePrice: "",
-                            //     });
-                            // }
                         }}
                         value={widthdrawAmount || ""}
                         sx={{
                             p: 0,
+                            "& .MuiOutlinedInput-root": {
+                                backgroundColor: (theme) => theme.palette.background.default, // or a glass bg
+                                borderRadius: "12px",
+                                padding: "0.5rem 1rem",
+                                "& fieldset": {
+                                    borderColor: (theme) => theme.palette.divider,
+                                    borderWidth: "1px",
+                                },
+                                "&:hover fieldset": {
+                                    borderColor: (theme) => theme.palette.primary.main,
+                                },
+                                "&.Mui-focused fieldset": {
+                                    borderColor: (theme) => theme.palette.primary.main,
+                                    borderWidth: "2px",
+                                },
+                            },
                             "& .MuiInputBase-input": {
                                 fontSize: "1.5rem",
                                 fontWeight: "600",
-                                color: (theme) => theme.palette.grey.grey600,
+                                color: (theme) => theme.palette.text.primary,
+                                textAlign: "center",
                             },
                             width: "100%",
-                            maxWidth: "300px",
-                            "&&": {
-                                p: 0,
-                            },
                         }}
                     />
                 </Box>
                 <Box
                     sx={{
-                        textAlign: "center",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center", // Explicit flex centering
                     }}
                 >
                     <StyledButton
                         sx={{
                             "&&": {
-                                px: "2rem",
+                                px: "3rem",
+                                py: "0.8rem",
+                                borderRadius: "12px",
+                                margin: "0",
                             },
                         }}
                     >

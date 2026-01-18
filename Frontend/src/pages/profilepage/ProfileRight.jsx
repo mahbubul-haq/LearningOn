@@ -10,8 +10,10 @@ import { ProfilePageContext } from "../../state/ProfilePageContext";
 import Followers from "./Followers";
 import ProfileCourses from "./ProfileCourses";
 import Wallet from "./Wallet";
+import useTheme from "@mui/material/styles/useTheme";
 
 const ProfileRight = ({ userInfo }) => {
+    const theme = useTheme();
     const { openedTab } = useContext(ProfilePageContext);
     const user = useSelector((state) => state.auth.user);
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
@@ -35,7 +37,7 @@ const ProfileRight = ({ userInfo }) => {
                     <Divider
                         light
                         sx={{
-                            color: (theme) => theme.palette.grey.grey400,
+                            borderColor: theme.palette.divider,
                             mt: "1rem",
                         }}
                     />
@@ -83,7 +85,7 @@ const ProfileRight = ({ userInfo }) => {
                 <Divider
                     light
                     sx={{
-                        color: (theme) => theme.palette.grey.grey400,
+                        borderColor: (theme) => theme.palette.divider,
                         mt: "2rem",
                         mb: "1rem",
                     }}
@@ -112,9 +114,9 @@ const ProfileRight = ({ userInfo }) => {
                         sx={{
                             gap: "0.5rem",
                             cursor: "pointer",
-                            color: (theme) => theme.palette.grey.grey500,
+                            color: (theme) => theme.palette.text.secondary,
                             "&:hover": {
-                                color: (theme) => theme.palette.grey.grey700,
+                                color: (theme) => theme.palette.text.primary,
                             },
                         }}
                     >
@@ -144,7 +146,7 @@ const ProfileRight = ({ userInfo }) => {
                 <Divider
                     light
                     sx={{
-                        color: (theme) => theme.palette.grey.grey400,
+                        borderColor: (theme) => theme.palette.divider,
                         mt: "2rem",
                         mb: "1rem",
                     }}
@@ -176,7 +178,7 @@ const ProfileRight = ({ userInfo }) => {
                 <Divider
                     light
                     sx={{
-                        color: (theme) => theme.palette.grey.grey400,
+                        borderColor: (theme) => theme.palette.divider,
                         mt: "2rem",
                         mb: "1rem",
                     }}

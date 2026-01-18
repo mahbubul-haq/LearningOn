@@ -1,153 +1,171 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Divider, useTheme, Avatar } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../state/GlobalContext";
-import FlexBetween from "./FlexBetween";
 import Rating from "./Rating";
-import WidgetWrapper from "./WidgetWrapper";
 
 const InstructorProfile = ({ instructorId }) => {
     const { users } = useContext(GlobalContext);
+    const theme = useTheme();
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const instructor = users.find((user) => user._id == instructorId);
+
+    // Calculate stats
     const numberOfEnrolledStudents = instructor?.courses?.reduce((acc, course) => {
         return acc + (course.enrolledStudents ? course.enrolledStudents.length : 0);
-    }, 0);
-    // console.log("instructor", instructor);
+    }, 0) || 0;
+
+    const numberOfCourses = instructor?.courses?.length || 0;
+
     const navigate = useNavigate();
 
+    if (!instructor) return null;
+
     return (
-        <WidgetWrapper
+        <Box
             sx={{
                 width: "100%",
-                height: "100%",
-                maxHeight: "350px",
-                "&&": {
-                    paddingRight: isMobileScreens ? "1rem" : "1.5rem",
-                    backgroundColor: (theme) => theme.palette.homepage.cardBg,
-                    border: (theme) => `1px solid ${theme.palette.homepage.cardBorder}`,
-                    borderRadius: "1rem",
-                    boxShadow: (theme) => theme.palette.homepage.cardShadow,
-                    backdropFilter: "blur(20px)",
-                },
+                ...theme.palette.glassSheet, // Apply centralized glassmorphism style
+                padding: "1.5rem",
+                transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+                "&:hover": {
+                    transform: "translateY(-2px)",
+                    boxShadow: theme.palette.mode === 'dark'
+                        ? "0 12px 40px 0 rgba(0, 0, 0, 0.4)"
+                        : "0 12px 40px 0 rgba(31, 38, 135, 0.15)",
+                }
             }}
         >
-            <FlexBetween
+            <Box
                 sx={{
-                    gap: isMobileScreens ? "2rem" : "3rem",
-
+                    display: "flex",
                     flexDirection: isMobileScreens ? "column" : "row",
-                    //alignItems: isMobileScreens ? "flex-start" : "center",
-                    "&&": {
-                        justifyContent: isMobileScreens ? "flex-start" : "space-between",
-                        alignItems: isMobileScreens ? "flex-start" : "center",
-                    },
-                    //border: "2px solid black"
+                    flexWrap: "wrap", // Allow wrapping if space is tight
+                    alignItems: "center",
+                    gap: isMobileScreens ? "1rem" : "1.5rem",
+                    justifyContent: "space-between",
                 }}
             >
-                <FlexBetween
+                {/* Left Side: Image and Info */}
+                <Box
                     sx={{
-                        gap: "1rem",
-                        flexDirection: isMobileScreens ? "row" : "row",
-                        // alignItems: isMobileScreens ? "flex-start" : "center",
-                        // justifyContent: isMobileScreens ? "flex-start" : "space-between",
+                        display: "flex",
+                        flexDirection: isMobileScreens ? "column" : "row",
+                        alignItems: "center",
+                        gap: "1.5rem",
+                        textAlign: isMobileScreens ? "center" : "left",
+                        flex: "1 1 200px", // Grow, shrink, min-basis
                     }}
                 >
-                    <Box
+                    <Avatar
+                        src={instructor?.picturePath
+                            ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${instructor?.picturePath}`
+                            : "/images/dummyPerson.jpeg"}
+                        alt={instructor?.name}
                         sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
+                            width: isMobileScreens ? 80 : 90,
+                            height: isMobileScreens ? 80 : 90,
+                            border: `2px solid ${theme.palette.primary.light}`,
+                            boxShadow: theme.palette.mode === 'dark' ? "0 0 20px rgba(107, 79, 217, 0.3)" : "none",
                         }}
-                    >
-                        <img
-                            // load image from public/image folder
-                            src={instructor?.picturePath ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${instructor?.picturePath}` : "/images/dummyPerson.jpeg"}
-                            alt="instructor"
-                            style={{
-                                width: isMobileScreens ? "3rem" : "4rem",
-                                height: isMobileScreens ? "3rem" : "4rem",
-                                borderRadius: "50%",
-                                objectFit: "cover",
-                            }}
-                            loading="lazy"
-                        />
-                    </Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: isMobileScreens ? "0rem" : "1rem",
-                            justifyContent: "flex-start",
-                            alignItems: isMobileScreens ? "flex-start" : "flex-start",
-                        }}
-                    >
-                        <Typography
-                            component="a"
-                            href={`${import.meta.env.VITE_CLIENT_URL}/profile/${instructor?._id}`}
-                            sx={{
-                                fontWeight: "600",
-                                fontSize: "1.1rem",
-                                // ellipsis: true,
-                                // overflow: "hidden",
+                    />
 
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                                maxWidth: "100%",
-                                // ellipsis after 20 characters
-                                cursor: "pointer",
-                                color: (theme) => theme.palette.homepage.textPrimary,
-                                "&:hover": {
-                                    textDecoration: "underline",
-                                    color: (theme) => theme.palette.homepage.textPrimary
-                                },
-                            }}
+                    <Box>
+                        <Typography
+                            variant="h5"
+                            component="div"
                             onClick={(e) => {
                                 e.preventDefault();
                                 navigate(`/profile/${instructor?._id}`);
                             }}
-                        >
-                            {instructor?.name?.length > 20 ? instructor?.name?.slice(0, 20) + "..." : instructor?.name}
-                        </Typography>
-                        <Rating
-                            rating={{
-                                rating: instructor ? instructor.rating.rating : 0,
-                                count: instructor ? instructor.rating.count : 0,
-                                showText: false,
-                                oneStar: true,
+                            sx={{
+                                fontWeight: "700",
+                                cursor: "pointer",
+                                color: theme.palette.text.primary,
+                                marginBottom: "0.25rem",
+                                textDecoration: "none",
+                                "&:hover": {
+                                    color: theme.palette.primary.main,
+                                    textDecoration: "underline",
+                                },
                             }}
-                        />
+                        >
+                            {instructor?.name}
+                        </Typography>
+
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ marginBottom: "0.5rem" }}
+                        >
+                            Instructor
+                        </Typography>
+
+                        <Box sx={{ display: "flex", justifyContent: isMobileScreens ? "center" : "flex-start" }}>
+                            <Rating
+                                rating={{
+                                    rating: instructor?.rating?.rating || 0,
+                                    count: instructor?.rating?.count || 0,
+                                    showText: true,
+                                    textStyle: { opacity: 0.8, fontSize: "0.85rem" }
+                                }}
+                            />
+                        </Box>
                     </Box>
-                </FlexBetween>
+                </Box>
+
+                {/* Divider for Desktop */}
+                {!isMobileScreens && (
+                    <Divider orientation="vertical" flexItem sx={{ borderColor: theme.palette.divider }} />
+                )}
+
+                {/* Divider for Mobile */}
+                {isMobileScreens && (
+                    <Divider flexItem sx={{ width: "100%", borderColor: theme.palette.divider }} />
+                )}
+
+                {/* Right Side: Stats */}
                 <Box
                     sx={{
                         display: "flex",
-                        flexDirection: isMobileScreens ? "row" : "column",
-                        gap: "1rem",
+                        gap: "2rem",
                         justifyContent: "center",
-                        alignItems: isMobileScreens ? "space-between" : "flex-start",
+                        minWidth: isMobileScreens ? "100%" : "auto",
                     }}
                 >
-                    <Typography
-                        sx={{
-                            fontWeight: "600",
-                            color: (theme) => theme.palette.homepage.textPrimary,
-                        }}
-                    >
-                        {instructor?.courses.length} courses
-                    </Typography>
-                    <Typography
-                        sx={{
-                            fontWeight: "600",
-                            color: (theme) => theme.palette.homepage.textPrimary,
-                        }}
-                    >
-                        {numberOfEnrolledStudents} students
-                    </Typography>
+                    <Box sx={{ textAlign: "center" }}>
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                fontWeight: "800",
+                                color: theme.palette.primary.main
+                            }}
+                        >
+                            {numberOfCourses}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "1px" }}>
+                            Courses
+                        </Typography>
+                    </Box>
+
+                    <Box sx={{ textAlign: "center" }}>
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                fontWeight: "800",
+                                color: theme.palette.secondary.main
+                            }}
+                        >
+                            {numberOfEnrolledStudents}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "1px" }}>
+                            Students
+                        </Typography>
+                    </Box>
                 </Box>
-            </FlexBetween>
-        </WidgetWrapper>
+            </Box>
+        </Box>
     );
 };
 

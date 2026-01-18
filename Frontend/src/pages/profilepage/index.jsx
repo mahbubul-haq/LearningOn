@@ -78,64 +78,62 @@ const ProfilePage = () => {
                 minWidth: "300px",
             }}
         >
-            <ProfileTop userInfo={userById} />
-            {isMobileScreens && (
-                <>
-                    <FlexBetween
-                        sx={{
-                            "&&": {
-                                flexDirection: "column",
-                                gap: "0.5rem",
-                                alignItems: "flex-start",
-                                mt: "2.5rem",
-                                mx: "1rem",
-                            },
-                        }}
-                    >
-                        <Typography sx={{ fontSize: isNonMobileScreens ? "1.5rem" : "1.2rem", fontWeight: "bold" }}>{userById?.name}</Typography>
-                        <Typography sx={{ fontSize: "0.9rem" }}>{getQualifications()}</Typography>
-                    </FlexBetween>
-                    <Divider
-                        light
-                        sx={{
-                            color: (theme) => theme.palette.grey.grey400,
-                            mt: "2rem",
-                            mb: "1rem",
-                        }}
-                    />
-                </>
-            )}
             <Box
                 sx={{
                     width: "100%",
                     maxWidth: "2000px",
                     mx: "auto",
-                    padding: isNonMobileScreens ? "7rem 64px" : isMobileScreens ? "0rem 24px" : "5rem 24px",
-                    //padding: isNonMobileScreens ? "7rem 5rem 5rem 5rem" : isMobileScreens ? "0rem 1rem 0 1rem" : "5rem 2rem 5rem 2rem",
+                    padding: isNonMobileScreens ? "2rem 64px" : "1rem 24px",
                     display: "flex",
-                    gap: "4rem",
+                    flexDirection: "column",
+                    gap: "2rem",
                 }}
             >
-                {isNonMobileScreens && (
-                    <Box
-                        sx={{
-                            width: isNonMobileScreens ? "20%" : "25%",
-                            // border: "1px solid #ccc",
-                        }}
-                    >
-                        <ProfileLeft userInfo={userById} />
-                    </Box>
-                )}
                 <Box
                     sx={{
-                        width: isNonMobileScreens ? "80%" : "100%",
-                        // border: "1px solid #ccc",
                         ...theme.palette.glassSheet,
-                        // Add some internal padding so content doesn't touch the glass edges
-                        padding: "2rem",
+                        // overflow: "hidden", // Allow profile image to protrude
+                        borderRadius: "16px",
+                        marginBottom: isNonMobileScreens ? "3.5rem" : "0", // Add spacing for desktop protrusion (overlaps otherwise)
                     }}
                 >
-                    <ProfileRight userInfo={userById} />
+                    <ProfileTop userInfo={userById} />
+                </Box>
+
+                {/* Mobile Name Block Removed - Integrated into ProfileTop */}
+
+
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: isNonMobileScreens ? "row" : "column",
+                        gap: "2rem",
+                        alignItems: "flex-start", // align to top
+                    }}
+                >
+                    {isNonMobileScreens && (
+                        <Box
+                            sx={{
+                                width: "25%",
+                                minWidth: "250px",
+                                ...theme.palette.glassSheet,
+                                overflow: "hidden",
+                                padding: "0",
+                            }}
+                        >
+                            <ProfileLeft userInfo={userById} />
+                        </Box>
+                    )}
+                    <Box
+                        sx={{
+                            flex: 1,
+                            width: isNonMobileScreens ? "auto" : "100%",
+                            ...theme.palette.glassSheet,
+                            padding: { xs: "1rem", sm: "2rem" },
+                        }}
+                    >
+                        <ProfileRight userInfo={userById} />
+                    </Box>
                 </Box>
             </Box>
         </Box>

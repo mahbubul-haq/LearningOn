@@ -81,7 +81,7 @@ const ProfileTop = ({ userInfo }) => {
     console.log(changedProfileInfo.picturePath, mounted.current);
     if (mounted.current === false && changedProfileInfo.picturePath) {
       updateProfile();
-     
+
     }
     mounted.current = false;
   }, [changedProfileInfo.picturePath]);
@@ -120,7 +120,7 @@ const ProfileTop = ({ userInfo }) => {
     );
 
     const data = res.data;
-   // console.log(data);
+    // console.log(data);
 
     if (data.success) {
       setChangedProfileInfo({
@@ -136,8 +136,7 @@ const ProfileTop = ({ userInfo }) => {
     <Box
       sx={{
         width: "100%",
-        backgroundColor: theme.palette.background.bottom,
-        backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.top}, ${theme.palette.background.bottom})`,
+        // Background handled by parent glass container
       }}
     >
       <Box
@@ -146,17 +145,15 @@ const ProfileTop = ({ userInfo }) => {
           maxWidth: "2000px",
           mx: "auto",
           padding: isNonMobileScreens
-            ? "2rem 64px 0rem 64px"
-            : isMobileScreens
-            ? "1rem 24px 0 24px"
-            : "2rem 24px 0rem 24px",
+            ? "2rem 2rem 0rem 2rem" // Reduced side padding as parent has padding
+            : "1rem 1rem 0 1rem",
         }}
       >
         <BreadCrumbs
           sx={{
-            color: theme.palette.grey.grey300,
+            color: theme.palette.text.secondary,
             "& .MuiBreadcrumbs-separator": {
-              color: theme.palette.grey.grey300,
+              color: theme.palette.text.secondary,
             },
           }}
           aria-label="breadcrumb"
@@ -193,10 +190,10 @@ const ProfileTop = ({ userInfo }) => {
         </BreadCrumbs>
         <ProfileTopBottom
           userInfo={userInfo}
-          getQualifications = {getQualifications}
+          getQualifications={getQualifications}
           changeProfilePicture={changeProfilePicture}
         />
-        
+
       </Box>
     </Box>
   );

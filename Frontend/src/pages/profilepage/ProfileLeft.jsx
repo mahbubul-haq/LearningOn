@@ -28,19 +28,21 @@ const ProfileLeft = ({ userInfo }) => {
         >
             <Box
                 sx={{
-                    padding: "0.5rem 1rem",
-                    backgroundColor: theme.palette.background.light200,
+                    padding: "0.5rem 0", // Removed h-padding as parent has it, or keep minimal
                 }}
             >
                 <MenuList
                     sx={{
                         "& .MuiMenuItem-root": {
-                            color: theme.palette.grey.grey700,
+                            color: theme.palette.text.secondary,
                             fontSize: "1rem",
-                            // fontWeight: "600",
+                            borderRadius: "8px", // Add radius
+                            margin: "0.2rem 1rem", // Add spacing
                             padding: "0.7em 1rem",
+                            transition: "all 0.2s ease",
                             "&:hover": {
-                                backgroundColor: theme.palette.background.light300,
+                                backgroundColor: theme.palette.action.hover || "rgba(255, 255, 255, 0.05)",
+                                color: theme.palette.text.primary,
                             },
                         },
                     }}
@@ -53,7 +55,8 @@ const ProfileLeft = ({ userInfo }) => {
                                 setOpenedTab("wallet");
                             }}
                             sx={{
-                                backgroundColor: openedTab === "wallet" ? theme.palette.background.light300 : "transparent",
+                                backgroundColor: openedTab === "wallet" ? "rgba(69, 34, 186, 0.1)" : "transparent",
+                                color: openedTab === "wallet" ? theme.palette.primary.main : "inherit",
                             }}
                         >
                             <FlexBetween
@@ -89,7 +92,8 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "profile" ? "600" : "400",
-                            backgroundColor: openedTab === "profile" ? theme.palette.background.light300 : "transparent",
+                            backgroundColor: openedTab === "profile" ? "rgba(69, 34, 186, 0.1)" : "transparent",
+                            color: openedTab === "profile" ? theme.palette.primary.main : "inherit",
                         }}
                     >
                         About
@@ -103,7 +107,8 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "courses" ? "600" : "400",
-                            backgroundColor: openedTab === "courses" ? theme.palette.background.light300 : "transparent",
+                            backgroundColor: openedTab === "courses" ? "rgba(69, 34, 186, 0.1)" : "transparent",
+                            color: openedTab === "courses" ? theme.palette.primary.main : "inherit",
                         }}
                     >
                         <FlexBetween
@@ -135,7 +140,8 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "blogs" ? "600" : "400",
-                            backgroundColor: openedTab === "blogs" ? theme.palette.background.light300 : "transparent",
+                            backgroundColor: openedTab === "blogs" ? "rgba(69, 34, 186, 0.1)" : "transparent",
+                            color: openedTab === "blogs" ? theme.palette.primary.main : "inherit",
                         }}
                     >
                         <FlexBetween
@@ -167,7 +173,8 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "tutoring" ? "600" : "400",
-                            backgroundColor: openedTab === "tutoring" ? theme.palette.background.light300 : "transparent",
+                            backgroundColor: openedTab === "tutoring" ? "rgba(69, 34, 186, 0.1)" : "transparent",
+                            color: openedTab === "tutoring" ? theme.palette.primary.main : "inherit",
                         }}
                     >
                         <FlexBetween
@@ -201,7 +208,8 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "followers" ? "600" : "400",
-                            backgroundColor: openedTab === "followers" ? theme.palette.background.light300 : "transparent",
+                            backgroundColor: openedTab === "followers" ? "rgba(69, 34, 186, 0.1)" : "transparent",
+                            color: openedTab === "followers" ? theme.palette.primary.main : "inherit",
                         }}
                     >
                         <FlexBetween
@@ -235,7 +243,8 @@ const ProfileLeft = ({ userInfo }) => {
                         }}
                         sx={{
                             fontWeight: openedTab === "following" ? "600" : "400",
-                            backgroundColor: openedTab === "following" ? theme.palette.background.light300 : "transparent",
+                            backgroundColor: openedTab === "following" ? "rgba(69, 34, 186, 0.1)" : "transparent",
+                            color: openedTab === "following" ? theme.palette.primary.main : "inherit",
                         }}
                     >
                         <FlexBetween
@@ -275,7 +284,9 @@ const ProfileLeft = ({ userInfo }) => {
                                 mt: "1rem",
                                 mb: "0.5rem",
                                 "&&": {
-                                    width: "100%",
+                                    width: "90%",
+                                    mx: "auto",
+                                    display: "block",
                                     backgroundColor: theme.palette.grey.grey200,
                                     "&:hover": {
                                         backgroundColor: theme.palette.grey.grey300,
