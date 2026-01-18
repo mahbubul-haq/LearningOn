@@ -31,12 +31,12 @@ const CourseWidget = ({ courseInfo }) => {
         border: `1px solid ${theme.palette.courseWidget.border}`,
         backgroundColor: theme.palette.courseWidget.bg,
         backdropFilter: "blur(12px)",
-        height: "auto",
+        height: "100%",
         minHeight: isNonMobileScreens ? "250px" : "250px",
         padding: 0,
         transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
         "&:hover": {
-          transform: "scale(1.02)",
+          // transform: "scale(1.02)",
           boxShadow: theme.palette.mode === 'dark'
             ? "0 12px 40px rgba(0,0,0,0.5)"
             : "0 12px 40px rgba(31, 38, 135, 0.2)",
@@ -86,6 +86,7 @@ const CourseWidget = ({ courseInfo }) => {
         <Box>
           <Typography
             component="a"
+
             gutterBottom
             style={{
               textDecoration: "none",

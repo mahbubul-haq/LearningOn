@@ -214,6 +214,10 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
                   //   "&:hover": {
                   //     transform: "scale(1.02)",
                   //   },
+                  // transition: "transform 0.2s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.02)",
+                  },
                 }}
               >
                 <CourseWidget courseInfo={course} />

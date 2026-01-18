@@ -8,6 +8,7 @@ import Rating from "../../components/Rating";
 import { StyledButton } from "../../components/StyledButton";
 import { getEnrollmentStatus, getEnrollmentText } from "../../utils/course";
 import WidgetWrapper from "../../components/WidgetWrapper";
+import { colorTokens } from "../../theme";
 
 const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
     const { user } = useSelector((state) => state.auth);
@@ -142,7 +143,9 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                 pl: "1rem",
             }}>
                 <Box sx={{
-                    backgroundColor: (theme) => theme.palette.homepage.cardBg,
+                    backgroundColor: (theme) => theme.palette.mode === "light"
+                        ? colorTokens.white.main // Distinct white for light mode
+                        : theme.palette.homepage.cardBg,
                     p: "2rem",
                     width: "100%",
                     borderRadius: "1rem",
@@ -150,7 +153,9 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     flexDirection: "column",
                     gap: "1rem",
                     justifyContent: "center",
-                    boxShadow: (theme) => theme.palette.homepage.cardShadow,
+                    boxShadow: (theme) => theme.palette.mode === "light"
+                        ? "0 20px 40px rgba(0,0,0,0.1)" // Stronger shadow for light mode
+                        : theme.palette.homepage.cardShadow,
                     backdropFilter: "blur(20px)",
                     border: (theme) => `1px solid ${theme.palette.homepage.cardBorder}`,
                 }}>

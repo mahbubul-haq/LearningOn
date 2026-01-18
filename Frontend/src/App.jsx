@@ -71,7 +71,7 @@ function App() {
                             />
                             <Route
                               path="/course/:courseId"
-                              element={<WithNav showNav={true} component={<CoursePage />} />}
+                              element={<CoursePage />}
                             />
 
                             {/* Lazy loaded routes */}

@@ -10,58 +10,57 @@ import { useEffect } from "react";
 const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
     const theme = useTheme();
 
-    const random = Math.floor(Math.random() * 1000000000000);
+    const random = Math.floor(Math.random() * 1000000000000 + Date.now());
+
+    const updateVisibility = () => {
+        let slider = document.querySelector(`.custom-slider-items1-${random}`);
+        let rightArrow = document.querySelector(`.custom-slider-right-arrow1-${random}`);
+        let leftArrow = document.querySelector(`.custom-slider-left-arrow1-${random}`);
+        if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
+            rightArrow.style.display = "none";
+        } else {
+            rightArrow.style.display = "flex";
+        }
+
+        // check if slider has reached start
+        if (slider.scrollLeft === 0) {
+            leftArrow.style.display = "none";
+        } else {
+            leftArrow.style.display = "flex";
+        }
+    }
 
     const handleNext = (side) => {
         let slider = document.querySelector(`.custom-slider-items1-${random}`);
 
         if (side === "next") {
-            slider.scrollLeft += 100;
+            slider.scrollLeft += 200;
         }
         if (side === "prev") {
-            slider.scrollLeft -= 100;
+            slider.scrollLeft -= 200;
         }
 
         console.log(slider.scrollLeft, slider.clientWidth, slider.scrollWidth);
 
-        if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
-            document.querySelector(`.custom-slider-right-arrow1-${random}`).style.display =
-                "none";
-        } else {
-            document.querySelector(`.custom-slider-right-arrow1-${random}`).style.display =
-                "flex";
-        }
+        updateVisibility();
 
-        // check if slider has reached start
-        if (slider.scrollLeft === 0) {
-            document.querySelector(`.custom-slider-left-arrow1-${random}`).style.display =
-                "none";
-        } else {
-            document.querySelector(`.custom-slider-left-arrow1-${random}`).style.display =
-                "flex";
-        }
     };
 
     useEffect(() => {
-        if (document.querySelector(`.custom-slider-items1-${random}`).scrollLeft === 0) {
-            document.querySelector(`.custom-slider-left-arrow1-${random}`).style.display =
-                "none";
-        } else {
-            document.querySelector(`.custom-slider-left-arrow1-${random}`).style.display =
-                "flex";
-        }
-        let slider = document.querySelector(`.custom-slider-items1-${random}`);
-        if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
-            document.querySelector(`.custom-slider-right-arrow1-${random}`).style.display =
-                "none";
-        } else {
-            document.querySelector(`.custom-slider-right-arrow1-${random}`).style.display =
-                "flex";
-        }
+        updateVisibility();
 
         if (items?.length > 0) {
             if (setSelectedItem) setSelectedItem(items[0]);
         }
+    }, []);
+
+    useEffect(() => {
+        let slider = document.querySelector(`.custom-slider-items1-${random}`);
+        slider.addEventListener("scroll", updateVisibility);
+
+        return () => {
+            slider.removeEventListener("scroll", updateVisibility);
+        };
     }, []);
 
     return (
@@ -91,6 +90,8 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     borderRadius: "50%",
                     flexShrink: 0,
                     alignSelf: "center",
+                    backdropFilter: "blur(10px) saturate(200%)",
+                    WebkitBackdropFilter: "blur(10px) saturate(200%)",
 
                     // pr: "3rem",
                     zIndex: "1",
@@ -125,6 +126,8 @@ const CustomSlider1 = ({ items, selectedItem, setSelectedItem }) => {
                     zIndex: "1",
                     display: "flex",
                     alignItems: "center",
+                    backdropFilter: "blur(10px) saturate(200%)",
+                    WebkitBackdropFilter: "blur(10px) saturate(200%)",
 
                     // backdropFilter: "blur(10px)"
                 }}

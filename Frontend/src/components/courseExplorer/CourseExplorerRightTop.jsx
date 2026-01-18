@@ -39,9 +39,10 @@ const CourseExplorerRightTop = ({ coursePage }) => {
         flexDirection: "column",
         gap: "2rem",
         alignItems: "flex-end",
-        backgroundColor: theme.palette.courseExplorer.headerBg,
-        backdropFilter: theme.palette.courseExplorer.backdropFilter,
-        borderBottom: `1px solid ${theme.palette.courseExplorer.border}`,
+        backgroundColor: coursePage ? theme.palette.glassNavbar.background : theme.palette.courseExplorer.headerBg,
+        backdropFilter: coursePage ? theme.palette.glassNavbar.backdropFilter : theme.palette.courseExplorer.backdropFilter,
+        borderBottom: coursePage ? theme.palette.glassNavbar.borderBottom : `1px solid ${theme.palette.courseExplorer.border}`,
+        boxShadow: coursePage ? theme.palette.glassNavbar.boxShadow : "none",
         zIndex: "5000",
       }}
     >

@@ -63,7 +63,6 @@ const CourseExplorerRIghtBottom = () => {
           sx={{
             height: "100%",
             display: "flex",
-            transition: "transform 0.2s ease-out",
             "&:hover": {
               transform: "scale(1.02)",
             },

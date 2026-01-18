@@ -4,11 +4,13 @@ import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../state/GlobalContext";
 import MainSection from "./MainSection";
 import TopSection from "./TopSection";
+import Navbar from "../../components/navbar";
+import RelatedCourses from "./RelatedCourses";
 
 const CoursePage = () => {
     const { courseId } = useParams();
     const [courseInfo, setCourseInfo] = React.useState({});
-    const { courseById, getCourseById} = useContext(GlobalContext);
+    const { courseById, getCourseById } = useContext(GlobalContext);
 
     // useEffect(() => {
     //     if (!user) {
@@ -53,7 +55,23 @@ const CoursePage = () => {
     // }, []);
 
     return (
-        <>
+        <Box sx={{
+            height: "100%",
+            overflow: "auto",
+            scrollBehavior: "smooth",
+            "@media (hover: none) and (pointer: coarse)": {
+                "&::-webkit-scrollbar": {
+                    display: "none",
+                },
+            },
+            "&::-webkit-scrollbar": {
+                width: { xs: "6px", sm: "10px", md: "12px" },
+            },
+        }}>
+            <Box>
+
+                <Navbar />
+            </Box>
             <Box
                 className="coursepage-main"
                 sx={{
@@ -64,6 +82,7 @@ const CoursePage = () => {
                     paddingBottom: "4rem",
                 }}
             >
+
                 {/* <Box
                     className="coursepage-sticky-top"
                     sx={{
@@ -77,19 +96,21 @@ const CoursePage = () => {
                     <Navbar />
                 </Box> */}
                 <Box
-                // sx={{
-                //     paddingTop: "5rem",
-                // }}
-                sx={{
-                    //border: "4px solid green"
-                }}
+                    // sx={{
+                    //     paddingTop: "5rem",
+                    // }}
+                    sx={{
+                        //border: "4px solid green"
+                    }}
                 >
-                   <TopSection courseInfo={courseInfo} />
+                    <TopSection courseInfo={courseInfo} />
                 </Box>
 
                 <MainSection courseInfo={courseInfo} />
+
+                <RelatedCourses courseInfo={courseInfo} />
             </Box>
-        </>
+        </Box>
     );
 };
 

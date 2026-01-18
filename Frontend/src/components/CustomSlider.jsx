@@ -17,25 +17,14 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
   const theme = useTheme();
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
 
-  const handleNext = useCallback((side, swipeDistance = 300, focus = false) => {
+
+  const updateVisibility = useCallback(() => {
     let slider = document.querySelector(".custom-slider-items");
     let leftArrow = document.querySelector(".custom-slider-left-arrow");
     let rightArrow = document.querySelector(".custom-slider-right-arrow");
     let leftArrowInner = document.querySelector(".custom-slider-left-arrow-inner");
     let rightArrowInner = document.querySelector(".custom-slider-right-arrow-inner");
     if (!slider || !leftArrow || !rightArrow || !leftArrowInner || !rightArrowInner) return;
-
-    if (focus) slider.focus();
-    // console.log(slider.scrollLeft, swipeDistance);
-    ///console.log("handleNext");
-
-    if (side === "next") {
-      slider.scrollLeft += swipeDistance;
-    }
-    if (side === "prev") {
-      slider.scrollLeft -= swipeDistance;
-    }
-    if (side == "") slider.scrollLeft = 0;
 
     if (slider.scrollLeft === 0) {
       leftArrowInner.style.display = "none";
@@ -62,6 +51,25 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
     }
   }, []);
 
+  const handleNext = useCallback((side, swipeDistance = 300, focus = false) => {
+    let slider = document.querySelector(".custom-slider-items");
+    if (!slider) return;
+
+    if (focus) slider.focus();
+    // console.log(slider.scrollLeft, swipeDistance);
+    ///console.log("handleNext");
+
+    if (side === "next") {
+      slider.scrollLeft += swipeDistance;
+    }
+    if (side === "prev") {
+      slider.scrollLeft -= swipeDistance;
+    }
+    if (side == "") slider.scrollLeft = 0;
+
+    updateVisibility();
+  }, []);
+
   useEffect(() => {
     handleNext("", 0);
 
@@ -79,43 +87,12 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
 
   useEffect(() => {
     let slider = document.querySelector(".custom-slider-items");
-    let leftArrow = document.querySelector(".custom-slider-left-arrow");
-    let rightArrow = document.querySelector(".custom-slider-right-arrow");
-    let leftArrowInner = document.querySelector(".custom-slider-left-arrow-inner");
-    let rightArrowInner = document.querySelector(".custom-slider-right-arrow-inner");
-    if (!slider || !leftArrow || !rightArrow || !leftArrowInner || !rightArrowInner) return;
+    if (!slider) return;
 
-    const handleScroll = () => {
-      //console.log("handleScroll");
-      if (slider.scrollLeft === 0) {
-        leftArrowInner.style.display = "none";
-        setTimeout(() => {
-          leftArrow.style.display = "none";
-        }, 1000);
-      } else {
-        leftArrowInner.style.display = "flex";
-        setTimeout(() => {
-          leftArrow.style.display = "flex";
-        }, 1000);
-      }
-
-      if (slider.scrollLeft + slider.clientWidth + 5 >= slider.scrollWidth) {
-        rightArrowInner.style.display = "none";
-        setTimeout(() => {
-          rightArrow.style.display = "none";
-        }, 1000);
-      } else {
-        rightArrowInner.style.display = "flex";
-        setTimeout(() => {
-          rightArrow.style.display = "flex";
-        }, 1000);
-      }
-    };
-
-    slider.addEventListener("scroll", handleScroll);
+    slider.addEventListener("scroll", updateVisibility);
 
     return () => {
-      slider.removeEventListener("scroll", handleScroll);
+      slider.removeEventListener("scroll", updateVisibility);
     };
   }, []);
 

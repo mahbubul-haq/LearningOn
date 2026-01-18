@@ -41,7 +41,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: (theme) => theme.palette.homepage.textPrimary,
+                                color: theme.palette.text.primary,
                                 paddingLeft: "0",
                                 margin: "0",
                             }}
@@ -56,7 +56,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: (theme) => theme.palette.homepage.textPrimary,
+                                color: theme.palette.text.primary,
                             }}
                         >
                             You&apos;ll Learn
@@ -68,7 +68,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: (theme) => theme.palette.homepage.textPrimary,
+                                color: theme.palette.text.primary,
                             }}
                         >
                             Lessons
@@ -80,7 +80,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: (theme) => theme.palette.homepage.textPrimary,
+                                color: theme.palette.text.primary,
                             }}
                         >
                             Instructors
@@ -92,7 +92,7 @@ const MainSectionNav = () => {
                             className="nav-link"
                             style={{
                                 fontSize: isNonMobileScreens ? "1.2rem" : "1rem",
-                                color: (theme) => theme.palette.homepage.textPrimary,
+                                color: theme.palette.text.primary,
                             }}
                         >
                             Reviews

@@ -25,12 +25,16 @@ const MainSection = ({ courseInfo }) => {
                     minHeight: isNonMobileScreens ? "5rem" : "4rem",
                     width: "100%",
                     padding: isNonMobileScreens ? "0.1rem 5rem" : "0rem 1rem",
-                    backgroundColor: (theme) => theme.palette.background.paper, // Solid background
+                    ...theme.palette.glassNavbar, // Apply glass navbar styles
+
+                    // Unified Look Adjustments
+                    borderRadius: "16px 16px 0 0", // Top corners only
+                    borderBottom: "none", // Remove divider to blending
+                    marginBottom: "0px", // Touch content below
+
                     position: "sticky",
                     top: "0",
                     zIndex: 100,
-                    // boxShadow: (theme) => theme.palette.homepage.navShadow, 
-                    borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
                     display: "flex",
                     alignItems: "center",
                 }}
@@ -48,8 +52,11 @@ const MainSection = ({ courseInfo }) => {
                     ...theme.palette.glassSheet,
                     maxWidth: "2000px",
                     mx: "auto",
-                    mt: "2rem",
+                    mt: "0rem", // No gap
                     mb: "4rem",
+                    borderTop: "none", // Remove top border to blend
+                    borderRadius: "0 0 16px 16px", // Bottom corners only
+
                     overflow: "hidden" // Ensure rounded corners work
                 }}
             >
