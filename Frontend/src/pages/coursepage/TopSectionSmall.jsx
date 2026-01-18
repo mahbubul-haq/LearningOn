@@ -20,8 +20,11 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
     return (
         <Box
             sx={{
-                backgroundColor: (theme) => theme.palette.homepage.sectionBg,
-                backgroundImage: (theme) => `linear-gradient(to bottom, ${theme.palette.homepage.heroBg}, ${theme.palette.homepage.sectionBg})`,
+                // New Gradient Background
+                background: (theme) => theme.palette.mode === 'dark'
+                    ? "linear-gradient(135deg, rgba(47, 24, 128, 0.5) 0%, rgba(143, 24, 68, 0.5) 100%)" // Deep Purple -> Deep Pink
+                    : "linear-gradient(135deg, rgba(69, 34, 186, 0.08) 0%, rgba(194, 33, 95, 0.08) 100%)", // Primary Light -> Secondary Light (faint tint)
+
                 color: (theme) => theme.palette.homepage.textPrimary,
                 pb: "2rem",
                 px: isMobileScreen ? "1rem" : "3rem"
@@ -54,6 +57,8 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
                 <Typography
                     sx={{
                         fontSize: "1rem",
+                        color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textSecondary,
+                        opacity: (theme) => theme.palette.mode === 'light' ? 0.8 : 1,
                     }}
                 >
                     Instructors{" "}
@@ -65,14 +70,14 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
                                 title="View Profile"
                                 sx={{
                                     // fontWeight: "bold",
-                                    color: (theme) => theme.palette.homepage.textPrimary,
+                                    color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textPrimary,
                                     textTransform: "capitalize",
                                     fontSize: "1rem",
 
                                     mb: "0.1rem",
                                     textDecoration: "underline",
                                     "&:hover": {
-                                        color: (theme) => theme.palette.homepage.textPrimary,
+                                        color: (theme) => theme.palette.mode === 'light' ? theme.palette.secondary.main : theme.palette.homepage.textPrimary,
                                         textDecoration: "underline",
                                     },
                                 }}

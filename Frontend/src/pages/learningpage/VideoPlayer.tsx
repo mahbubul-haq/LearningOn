@@ -141,18 +141,18 @@ const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerPr
         if (!video) return
 
         let threshold = 20; //seconds
-        let timeoutId: NodeJS.Timeout;
+        // let timeoutId: NodeJS.Timeout;
 
         const handleLoadMetadata = () => {
             video.currentTime = getCurrentTime();
         }
         const handlePause = () => {
-            if (timeoutId) clearTimeout(timeoutId);
-            setProgressIndicatorOpacity(1);
+            // if (timeoutId) clearTimeout(timeoutId);
+            // setProgressIndicatorOpacity(1);
             isPausedRef.current = true;
         }
         const handlePlay = () => {
-            timeoutId = setTimeout(() => setProgressIndicatorOpacity(0), 500);
+            // timeoutId = setTimeout(() => setProgressIndicatorOpacity(0), 500);
 
             currentTimeRef.current = video.currentTime;
             isPausedRef.current = false;

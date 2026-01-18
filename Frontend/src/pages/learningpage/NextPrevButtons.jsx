@@ -98,17 +98,17 @@ const NextPrevButtons = ({
           onClick={handlePrev}
           sx={{
             mr: "auto",
-            backgroundColor: (theme) => theme.palette.learningPage.cardBg,
+            backgroundColor: "transparent", // Removed cardBg
             color: (theme) => theme.palette.learningPage.textPrimary,
-            border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
-            backdropFilter: "blur(10px)",
+            border: (theme) => `1px solid ${theme.palette.divider}`, // Subtle divider color
             '&:hover': {
-              backgroundColor: (theme) => theme.palette.learningPage.lessonHover,
-              borderColor: (theme) => theme.palette.secondary.main,
+              backgroundColor: (theme) => theme.palette.learningPage.lessonHover, // Subtle hover
+              borderColor: (theme) => theme.palette.text.primary, // Standard hover border
+              color: (theme) => theme.palette.text.primary,
             }
           }}
         >
-          <KeyboardDoubleArrowLeftIcon sx={{ color: (theme) => theme.palette.secondary.main }} />
+          <KeyboardDoubleArrowLeftIcon sx={{ color: "inherit" }} /> {/* Inherit color */}
           <Typography
             sx={{
               fontWeight: "bold",

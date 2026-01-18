@@ -32,11 +32,7 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                 justifyContent: "flex-start",
                 gap: "0.5rem",
                 padding: "1.5rem",
-                backgroundColor: (theme) => theme.palette.mode === 'dark' ? "rgba(20, 20, 30, 0.6)" : "rgba(255, 255, 255, 0.5)", // Direct value for debugging/reliability
-                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.15)",
-                backdropFilter: "blur(12px)",
-                border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.4)"}`,
-                borderRadius: "1rem",
+                ...theme.palette.glassSheet, // Using centralized glass styles
                 color: (theme) => theme.palette.learningPage.textPrimary,
               }}
             >
@@ -143,11 +139,7 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                         flexDirection: "column",
                         gap: "0.5rem",
                         padding: "1.5rem",
-                        backgroundColor: (theme) => theme.palette.learningPage.leftPanelBg,
-                        boxShadow: (theme) => theme.palette.learningPage.glassShadow,
-                        backdropFilter: (theme) => theme.palette.learningPage.backdropFilter,
-                        border: (theme) => `1px solid ${theme.palette.learningPage.glassBorder}`,
-                        borderRadius: "1rem",
+                        ...theme.palette.glassSheet,
                         color: (theme) => theme.palette.learningPage.textPrimary,
                       }}
                     >

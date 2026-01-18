@@ -28,7 +28,7 @@ const MainSection = ({ courseInfo }) => {
                     ...theme.palette.glassNavbar, // Apply glass navbar styles
 
                     // Unified Look Adjustments
-                    borderRadius: "16px 16px 0 0", // Top corners only
+                    borderRadius: "0 0 0 0", // Top corners only
                     borderBottom: `1px solid ${theme.palette.divider}`, // Restore border
                     marginBottom: "0px", // Touch content below
 
@@ -126,7 +126,10 @@ const MainSection = ({ courseInfo }) => {
                 <Divider
                     light
                     sx={{
-                        borderColor: (theme) => theme.palette.homepage.divider,
+                        borderColor: (theme) => theme.palette.mode === 'dark'
+                            ? "rgba(255, 255, 255, 0.05)" // Very subtle in dark mode
+                            : "rgba(0, 0, 0, 0.05)",      // Very subtle in light mode
+                        borderWidth: "1px", // Ensure thinness
                     }}
                 />
                 <Box
@@ -168,7 +171,9 @@ const MainSection = ({ courseInfo }) => {
                 </Box>
                 <Divider
                     sx={{
-                        borderColor: (theme) => theme.palette.homepage.divider,
+                        borderColor: (theme) => theme.palette.mode === 'dark'
+                            ? "rgba(255, 255, 255, 0.05)"
+                            : "rgba(0, 0, 0, 0.05)",
                     }}
                     light
                 />
@@ -188,7 +193,9 @@ const MainSection = ({ courseInfo }) => {
                 <Divider
                     light
                     sx={{
-                        borderColor: (theme) => theme.palette.homepage.divider,
+                        borderColor: (theme) => theme.palette.mode === 'dark'
+                            ? "rgba(255, 255, 255, 0.05)"
+                            : "rgba(0, 0, 0, 0.05)",
                     }}
                 />
                 <Box
@@ -208,7 +215,9 @@ const MainSection = ({ courseInfo }) => {
                 <Divider
                     light
                     sx={{
-                        borderColor: (theme) => theme.palette.homepage.divider,
+                        borderColor: (theme) => theme.palette.mode === 'dark'
+                            ? "rgba(255, 255, 255, 0.05)"
+                            : "rgba(0, 0, 0, 0.05)",
                     }}
                 />
 

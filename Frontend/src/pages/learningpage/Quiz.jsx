@@ -172,7 +172,12 @@ const Quiz = () => {
             position: "relative",
             overflow: "hidden",
         }}>
-            <Container sx={{ width: isMobileScreens ? "100%" : `min(700px, 100%)`, position: 'relative', zIndex: 1 }}>
+            <Container sx={{
+                width: isMobileScreens ? "100%" : `min(700px, 100%)`,
+                position: 'relative',
+                zIndex: 1,
+                pt: "2rem" // Added space at the top
+            }}>
                 <QuizTop
                     score={quizAttempt?.score || 0}
                     timer={timer}

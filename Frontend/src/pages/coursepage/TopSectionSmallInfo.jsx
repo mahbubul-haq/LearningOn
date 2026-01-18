@@ -34,11 +34,15 @@ const TopSectionSmallInfo = ({
                     <Typography
 
                         sx={{
-                            color: (theme) => theme.palette.homepage.textSecondary,
+                            color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.secondary : theme.palette.homepage.textSecondary,
                             justifySelf: "left",
                         }}
                     >
-                        Course Cost: <span style={{ fontWeight: "bold", fontSize: "1.2rem", color: theme.palette.homepage.textPrimary }}>$ {courseInfo?.coursePrice}</span>
+                        Course Cost: <span style={{
+                            fontWeight: "bold",
+                            fontSize: "1.2rem",
+                            color: theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textPrimary
+                        }}>$ {courseInfo?.coursePrice}</span>
                     </Typography>
                 )}
                 <Rating
@@ -52,11 +56,14 @@ const TopSectionSmallInfo = ({
                 <Typography
 
                     sx={{
-                        color: (theme) => theme.palette.homepage.textSecondary,
+                        color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.secondary : theme.palette.homepage.textSecondary,
                         justifySelf: "left",
                     }}
                 >
-                    Time to complete: <span style={{ fontWeight: "bold", color: theme.palette.homepage.textPrimary }}>{courseInfo?.approxTimeToComplete} weeks</span>
+                    Time to complete: <span style={{
+                        fontWeight: "bold",
+                        color: theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textPrimary
+                    }}>{courseInfo?.approxTimeToComplete} weeks</span>
                 </Typography>
 
             </Box>
@@ -87,7 +94,7 @@ const TopSectionSmallInfo = ({
                     <Typography
 
                         sx={{
-                            color: (theme) => theme.palette.homepage.textSecondary,
+                            color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.secondary : theme.palette.homepage.textSecondary,
                             justifySelf: "left",
                         }}
                     >
@@ -97,16 +104,19 @@ const TopSectionSmallInfo = ({
                 <Typography
 
                     sx={{
-                        color: (theme) => theme.palette.homepage.textSecondary,
+                        color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.secondary : theme.palette.homepage.textSecondary,
                         justifySelf: "left",
                     }}
                 >
-                    Language: <span style={{ fontWeight: "bold", color: theme.palette.homepage.textPrimary }}>{courseInfo?.courseLanguage}</span>
+                    Language: <span style={{
+                        fontWeight: "bold",
+                        color: theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textPrimary
+                    }}>{courseInfo?.courseLanguage}</span>
                 </Typography>
                 <Typography
 
                     sx={{
-                        color: (theme) => theme.palette.homepage.textSecondary,
+                        color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.secondary : theme.palette.homepage.textSecondary,
                         justifySelf: "left",
                     }}
                 >

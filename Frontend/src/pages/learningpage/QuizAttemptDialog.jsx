@@ -1,14 +1,17 @@
 import React from 'react'
 import { colorTokens } from '../../theme'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Box } from '@mui/material'
+import { Dialog, DialogActions, DialogContent, Typography, Box, Grid, Divider } from '@mui/material'
 import { useContext, useState, useEffect } from 'react'
 import { LearningCourseContext } from '../../state/LearningCourseContex'
 import useTheme from "@mui/material/styles/useTheme"
 import { StyledButton } from '../../components/StyledButton'
 import { useSelector } from 'react-redux'
 import { getHourMinutes } from '../../utils/dateTime'
-import { List, ListItem } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import QuizIcon from '@mui/icons-material/Quiz';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const QuizAttemptDialog = () => {
     const theme = useTheme();
@@ -20,7 +23,7 @@ const QuizAttemptDialog = () => {
     const [quizDialogState, setQuizDialogState] = useState({
         lessonNo: "",
         numberOfQuestions: "",
-        questionType: "Multiple Choice Question",
+        questionType: "Multiple Choice",
         totalTime: { hours: 0, minutes: 0 },
         instructions: "For each question, 1st attempt success: 1pt, 2nd attempt success: 0.75pt, 2nd attempt fail: -0.5pt. Once started, you cannot skip any question or leave the quiz.",
     });
@@ -38,16 +41,44 @@ const QuizAttemptDialog = () => {
                 }));
             }
         }
-        else if (quizStatus.status === "active") {
-            //console.log("getQuizAttempt", courseInfo?._id, courseInfo?.lessons?.[quizStatus.lessonNo - 1]?._id, token);
+    }, [quizStatus, courseInfo]);
 
-            // getQuizAttempt(courseInfo?._id?.toString(), courseInfo?.lessons?.[quizStatus.lessonNo - 1]?._id?.toString(), token);
-        }
-        else if (quizStatus.status === "") {
-
-        }
-
-    }, [quizStatus]);
+    const StatCard = ({ icon, label, value }) => (
+        <Box sx={{
+            backgroundColor: theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.6)", // Brighter backgrounds
+            borderRadius: "1rem",
+            p: "1.5rem",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0.5rem",
+            width: "100%",
+            border: `1px solid ${theme.palette.divider}`,
+            transition: "transform 0.2s",
+            "&:hover": {
+                transform: "translateY(-5px)",
+                borderColor: theme.palette.secondary.main,
+                backgroundColor: theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.12)" : "rgba(255, 255, 255, 0.8)",
+            }
+        }}>
+            <Box sx={{ color: theme.palette.secondary.main, "& svg": { fontSize: "2rem" } }}>
+                {icon}
+            </Box>
+            <Typography variant="h6" sx={{ fontWeight: "bold", color: theme.palette.text.primary }}>
+                {value}
+            </Typography>
+            <Typography variant="body2" sx={{
+                color: theme.palette.text.primary, // Increased contrast
+                opacity: 0.7, // Subtle but readable
+                textTransform: "uppercase",
+                fontSize: "0.75rem",
+                letterSpacing: "1px",
+                fontWeight: "600"
+            }}>
+                {label}
+            </Typography>
+        </Box>
+    );
 
     return (
         <Dialog
@@ -58,129 +89,156 @@ const QuizAttemptDialog = () => {
                     status: "",
                 }));
             }}
-            aria-labelledby="responsive-dialog-title"
-            disableEscapeKeyDown
+            maxWidth="md"
+            fullWidth
             sx={{
                 backdropFilter: "blur(10px) saturate(180%)",
             }}
             PaperProps={{
                 sx: {
-                    backgroundColor: (theme) => theme.palette.learningPage.leftPanelBg,
+                    backgroundColor: (theme) => theme.palette.mode === 'dark'
+                        ? "rgba(30, 30, 40, 0.9)" // Brighter/More Opaque Dark Mode
+                        : "rgba(255, 255, 255, 0.95)", // Almost solid White for Light Mode "Light Up"
                     backdropFilter: "blur(30px) saturate(180%)",
-                    borderRadius: "1.5rem",
+                    borderRadius: "2rem",
                     border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
                     boxShadow: (theme) => theme.palette.homepage.cardShadow,
+                    p: "1rem"
                 },
             }}
         >
-            <DialogTitle id="responsive-dialog-title" sx={{ color: (theme) => theme.palette.learningPage.textPrimary, fontWeight: "bold" }}>Quiz Attempt</DialogTitle>
             <DialogContent sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "10px",
-                mt: "1rem",
-                color: (theme) => theme.palette.learningPage.textPrimary,
-            }}>
-                <Typography variant="h4bold" sx={{ color: (theme) => theme.palette.primary.main }}>
-                    Lesson {quizDialogState.lessonNo.toString().padStart(2, "0")}: {courseInfo?.lessons?.[quizDialogState.lessonNo - 1]?.title}
-                </Typography>
-
-                <List disablePadding sx={{
-                    gap: "0rem",
-                    //remove spacing between items
-                    /// add bullet points for each of the list items
-                    //local octal state is not permitted in stcit mode "\2022"
-                    "& .MuiListItem-root": {
-                        padding: "0.2rem",
-
-                    },
-                }}>
-                    <ListItem>
-                        <Typography sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
-                            <strong style={{ color: theme.palette.secondary.main }}>Number of Questions:</strong> {quizDialogState.numberOfQuestions}
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
-                            <strong style={{ color: theme.palette.secondary.main }}>Total Time:</strong> {Math.min(quizDialogState.totalTime.hours, 100)}h {quizDialogState.totalTime.minutes}m
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
-                            <strong style={{ color: theme.palette.secondary.main }}>Question Type:</strong> {quizDialogState.questionType}
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography sx={{ color: (theme) => theme.palette.learningPage.textPrimary }}>
-                            <strong style={{ color: theme.palette.secondary.main }}>Instructions:</strong> {quizDialogState.instructions}
-                        </Typography>
-                    </ListItem>
-                </List>
-
-
-            </DialogContent>
-            <DialogActions sx={{
-                display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
                 gap: "2rem",
+                p: "2rem",
             }}>
-                <StyledButton
-                    sx={{
-                        textTransform: "capitalize",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        "&&": {
-                            border: (theme) => `1px solid ${theme.palette.secondary.main}`,
-                            borderRadius: "2rem",
-                            padding: "0.4rem 1.5rem",
-                            backgroundColor: "transparent",
-                            color: (theme) => theme.palette.secondary.main,
-                            "&:hover": {
-                                backgroundColor: (theme) => theme.palette.learningPage.lessonHover,
-                                transform: "scale(1.02)",
-                            },
-                        },
-                    }}
-                    onClick={() => {
-                        setQuizStatus((prev) => ({
-                            ...prev,
-                            status: "",
-                        }));
-                    }}
-                >
-                    Back to Lessons
-                </StyledButton>
-                <StyledButton
-                    sx={{
-                        textTransform: "capitalize",
+                {/* Hero Header */}
+                <Box sx={{ textAlign: "center" }}>
+                    <Typography variant="overline" sx={{
+                        color: theme.palette.secondary.main,
                         fontWeight: "bold",
-                        cursor: "pointer",
-                        "&&": {
-                            padding: "0.4rem 2rem",
-                            borderRadius: "2rem",
-                            backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
-                            color: colorTokens.white.pure,
+                        letterSpacing: "2px",
+                        fontSize: "0.9rem"
+                    }}>
+                        LESSON {quizDialogState.lessonNo.toString().padStart(2, "0")}
+                    </Typography>
+
+                    <Typography variant="h3" sx={{
+                        fontWeight: "800",
+                        mt: 1,
+                        background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.text.secondary} 100%)`,
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                    }}>
+                        {courseInfo?.lessons?.[quizDialogState.lessonNo - 1]?.title}
+                    </Typography>
+                </Box>
+
+                {/* Stat Grid */}
+                <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" }, gap: "1rem" }}>
+                    <StatCard
+                        icon={<FormatListBulletedIcon />}
+                        label="Questions"
+                        value={quizDialogState.numberOfQuestions}
+                    />
+                    <StatCard
+                        icon={<AccessTimeIcon />}
+                        label="Duration"
+                        value={`${Math.min(quizDialogState.totalTime.hours, 100)}h ${quizDialogState.totalTime.minutes}m`}
+                    />
+                    <StatCard
+                        icon={<QuizIcon />}
+                        label="Type"
+                        value={quizDialogState.questionType}
+                    />
+                </Box>
+
+                {/* Instructions */}
+                <Box sx={{
+                    display: "flex",
+                    gap: "1rem",
+                    p: "1.5rem",
+                    borderRadius: "1rem",
+                    backgroundColor: theme.palette.mode === 'dark' ? "rgba(69, 34, 186, 0.2)" : "rgba(69, 34, 186, 0.12)", // More visible tint
+                    border: `1px dashed ${theme.palette.primary.light}`,
+                    width: "100%"
+                }}>
+                    <InfoOutlinedIcon sx={{ color: theme.palette.primary.main }} />
+                    <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 0.5 }}>
+                            Instructions
+                        </Typography>
+                        <Typography variant="body2" sx={{
+                            color: theme.palette.text.primary, // Full contrast
+                            fontWeight: 500, // Thicker font
+                            opacity: 1, // No transparency
+                            lineHeight: 1.6
+                        }}>
+                            {quizDialogState.instructions}
+                        </Typography>
+                    </Box>
+                </Box>
+
+                {/* Actions */}
+                <DialogActions sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    p: 0,
+                    mt: 1
+                }}>
+                    <StyledButton
+                        sx={{
+                            textTransform: "capitalize",
+                            fontWeight: "600",
+                            color: theme.palette.text.secondary,
                             "&:hover": {
-                                backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
-                                transform: "scale(1.02)",
+                                color: theme.palette.text.primary,
+                                backgroundColor: "transparent",
                             },
-                        },
-                    }}
-                    onClick={() => {
-                        setQuizStatus((prev) => ({
-                            ...prev,
-                            status: "active",
-                        }));
+                        }}
+                        onClick={() => {
+                            setQuizStatus((prev) => ({
+                                ...prev,
+                                status: "",
+                            }));
+                        }}
+                    >
+                        Cancel
+                    </StyledButton>
 
-                        navigate(`/quiz/${courseInfo?._id}/${courseInfo?.lessons?.[quizStatus.lessonNo - 1]?._id}`);
-                    }}
-                >
+                    <StyledButton
+                        sx={{
+                            textTransform: "capitalize",
+                            fontWeight: "bold",
+                            padding: "0.8rem 3rem",
+                            borderRadius: "2rem",
+                            fontSize: "1.1rem",
+                            // Gradient Background
+                            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                            color: colorTokens.white.pure,
+                            boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+                            "&:hover": {
+                                background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
+                                transform: "scale(1.02)",
+                                boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
+                            },
+                        }}
+                        onClick={() => {
+                            setQuizStatus((prev) => ({
+                                ...prev,
+                                status: "active",
+                            }));
 
-                    Start Quiz
-
-                </StyledButton>
-            </DialogActions>
+                            navigate(`/quiz/${courseInfo?._id}/${courseInfo?.lessons?.[quizStatus.lessonNo - 1]?._id}`);
+                        }}
+                    >
+                        Start Quiz
+                    </StyledButton>
+                </DialogActions>
+            </DialogContent>
         </Dialog>
     )
 }

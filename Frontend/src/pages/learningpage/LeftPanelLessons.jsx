@@ -233,9 +233,12 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                 sx={{
                   mx: "auto",
                   width: `calc(100% - 6.2rem)`,
-                  backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
+                  // Gradient Background
+                  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
                   "&:hover": {
-                    backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
+                    background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
+                    transform: "scale(1.02)",
+                    boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
                   },
                   borderRadius: "0.7rem",
                   p: "0.5rem 1rem",

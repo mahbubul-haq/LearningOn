@@ -22,8 +22,12 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
             padding: "3rem 5rem",
             display: "grid",
             gridTemplateColumns: "70% 30%",
-            backgroundColor: (theme) => theme.palette.background.paper, // Solid base
-            backgroundImage: (theme) => `linear-gradient(to bottom, ${theme.palette.background.paper}, ${theme.palette.homepage.sectionBg})`,
+
+            // New Gradient Background
+            background: (theme) => theme.palette.mode === 'dark'
+                ? "linear-gradient(135deg, rgba(47, 24, 128, 0.5) 0%, rgba(143, 24, 68, 0.5) 100%)" // Deep Purple -> Deep Pink
+                : "linear-gradient(135deg, rgba(69, 34, 186, 0.08) 0%, rgba(194, 33, 95, 0.08) 100%)", // Primary Light -> Secondary Light (faint tint)
+
             color: (theme) => theme.palette.homepage.textPrimary,
         }}>
             <Box sx={{
@@ -49,7 +53,8 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Typography
                         sx={{
                             fontSize: "1.1rem",
-                            color: (theme) => theme.palette.homepage.textSecondary,
+                            color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textSecondary,
+                            opacity: (theme) => theme.palette.mode === 'light' ? 0.8 : 1,
                         }}
                     >
                         Instructors{" "}
@@ -61,14 +66,14 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                                     title="View Profile"
                                     sx={{
                                         // fontWeight: "bold",
-                                        color: (theme) => theme.palette.homepage.textPrimary,
+                                        color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textPrimary,
                                         textTransform: "capitalize",
                                         fontSize: "1.2rem",
 
                                         mb: "0.1rem",
                                         textDecoration: "underline",
                                         "&:hover": {
-                                            color: (theme) => theme.palette.homepage.textPrimary,
+                                            color: (theme) => theme.palette.mode === 'light' ? theme.palette.secondary.main : theme.palette.homepage.textPrimary,
                                             textDecoration: "underline",
                                         },
                                     }}
@@ -108,7 +113,8 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Typography
                         sx={{
                             fontSize: "1.1rem",
-                            color: (theme) => theme.palette.homepage.textSecondary,
+                            color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textSecondary,
+                            opacity: (theme) => theme.palette.mode === 'light' ? 0.8 : 1,
                         }}
                     >
                         Language <b>{courseInfo?.courseLanguage}</b>
@@ -118,7 +124,8 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Typography
                         sx={{
                             fontSize: "1.1rem",
-                            color: (theme) => theme.palette.homepage.textSecondary,
+                            color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textSecondary,
+                            opacity: (theme) => theme.palette.mode === 'light' ? 0.8 : 1,
                         }}
                     >
                         Time to complete <b>{courseInfo?.approxTimeToComplete} weeks</b> (Approx)
@@ -126,7 +133,8 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Typography
                         sx={{
                             fontSize: "1.1rem",
-                            color: (theme) => theme.palette.homepage.textSecondary,
+                            color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : theme.palette.homepage.textSecondary,
+                            opacity: (theme) => theme.palette.mode === 'light' ? 0.8 : 1,
                         }}
                     >
                         Requirements: {courseInfo?.studentRequirements}

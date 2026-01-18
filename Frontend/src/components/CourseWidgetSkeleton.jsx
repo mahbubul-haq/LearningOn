@@ -12,7 +12,8 @@ const CourseWidgetSkeleton = () => {
         width: "100%",
         minWidth: "300px",
         borderRadius: isNonMobileScreens ? "0.5rem" : "0.2rem",
-        background: colorTokens.white.main,
+        background: (theme) => theme.palette.homepage.cardBg, // Use theme token
+        border: (theme) => `1px solid ${theme.palette.homepage.cardBorder}`, // Add border for definition
       }}
     >
       <Skeleton

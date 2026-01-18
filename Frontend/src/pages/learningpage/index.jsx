@@ -1,4 +1,6 @@
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery, Drawer, IconButton } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import { colorTokens } from "../../theme";
@@ -34,6 +36,7 @@ const LearningPage = () => {
   const { courseInfo, courseProgress } = useSelector((state) => state.course);
   const dispatch = useAppDispatch();
   const [learningPageWidth, setLearningPageWidth] = useState(0);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   useEffect(() => {
     let lessonId = openedLesson?.lesson > 0 && courseInfo?.lessons?.length > 0 ? courseInfo?.lessons[openedLesson.lesson - 1]?._id?.toString() || "" : "";
@@ -94,12 +97,71 @@ const LearningPage = () => {
           zIndex: 0,
         }}
       >
+        {!isNonMobileScreens && (
+          <Box sx={{
+            position: "fixed",
+            top: "1rem",
+            left: "1rem",
+            zIndex: 100,
+          }}>
+            <IconButton
+              onClick={() => setIsMobileDrawerOpen(true)}
+              sx={{
+                backgroundColor: (theme) => theme.palette.glassSheet.background,
+                backdropFilter: "blur(10px)",
+                border: (theme) => theme.palette.glassSheet.border,
+                color: (theme) => theme.palette.text.primary,
+                "&:hover": {
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: "white"
+                }
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
+        )}
+
+        <Drawer
+          anchor="left"
+          open={isMobileDrawerOpen}
+          onClose={() => setIsMobileDrawerOpen(false)}
+          PaperProps={{
+            sx: {
+              width: "85%",
+              maxWidth: "360px",
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            }
+          }}
+        >
+          <Box sx={{
+            height: "100%",
+            backgroundColor: (theme) => theme.palette.glassSheet.background,
+            backdropFilter: "blur(20px)",
+            p: "1rem",
+            display: "flex",
+            flexDirection: "column"
+          }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: "1rem" }}>
+              <IconButton onClick={() => setIsMobileDrawerOpen(false)}>
+                <CloseIcon sx={{ color: (theme) => theme.palette.text.primary }} />
+              </IconButton>
+            </Box>
+            <LearningLeftPanel
+              courseInfo={courseInfo}
+              scrollTop={scrollTop}
+              courseProgress={courseProgress}
+            />
+          </Box>
+        </Drawer>
+
         <Box className="learning-page-container"
           sx={{
             width: "100%",
             maxWidth: "2000px",
             mx: "auto",
-            px: "2rem",
+            px: { xs: "1rem", md: "2rem" },
 
 
             display: "grid",

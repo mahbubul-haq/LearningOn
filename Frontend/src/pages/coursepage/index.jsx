@@ -6,6 +6,7 @@ import MainSection from "./MainSection";
 import TopSection from "./TopSection";
 import Navbar from "../../components/navbar";
 import RelatedCourses from "./RelatedCourses";
+import CourseExplorer from "../../components/courseExplorer";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -58,6 +59,7 @@ const CoursePage = () => {
         <Box sx={{
             height: "100%",
             overflow: "auto",
+            position: "relative",
             scrollBehavior: "smooth",
             "@media (hover: none) and (pointer: coarse)": {
                 "&::-webkit-scrollbar": {
@@ -68,6 +70,7 @@ const CoursePage = () => {
                 width: { xs: "6px", sm: "10px", md: "12px" },
             },
         }}>
+            <CourseExplorer />
             <Box>
 
                 <Navbar />
