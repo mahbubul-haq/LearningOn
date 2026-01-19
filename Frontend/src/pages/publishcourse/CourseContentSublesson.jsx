@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useTheme from "@mui/material/styles/useTheme";
 import { StyledButton } from "../../components/StyledButton";
-import StyledTextField1 from "../../components/StyledTextField1";
+import TextField from "@mui/material/TextField";
 import VideoUpload from "../../components/videoUpload/VideoUpload";
 import InputLabel from "@mui/material/InputLabel";
 import { CreateCourseContext } from "../../state/CreateCourse";
@@ -128,7 +128,7 @@ const CourseContentSublesson = ({
               </Typography>
             </InputLabel>
 
-            <StyledTextField1
+            <TextField
               placeholder="Title of the lesson"
               multiline
               minRows={1}
@@ -138,8 +138,6 @@ const CourseContentSublesson = ({
               inputProps={{
                 maxLength: 100,
               }}
-              // change font size of input
-              // onChange={(event) => handleInput(event, index, subIndex)}
               onChange={(event) => {
                 const newTitles = [...subLessonTitle];
                 newTitles[subIndex] = event.target.value;
@@ -152,14 +150,10 @@ const CourseContentSublesson = ({
                 });
               }}
               value={subLessonTitle[subIndex]}
+              fullWidth
+              variant="outlined"
 
               sx={{
-                p: 0,
-                "& .MuiInputBase-input": {
-                  fontSize: "1rem",
-                  fontWeight: "600",
-                  color: (theme) => theme.palette.grey.grey600,
-                },
                 width: "100%",
               }}
             />
@@ -200,7 +194,7 @@ const CourseContentSublesson = ({
               </Typography>
             </InputLabel>
 
-            <StyledTextField1
+            <TextField
               placeholder="Add lecture note"
               multiline
               minRows={20}
@@ -210,8 +204,6 @@ const CourseContentSublesson = ({
               inputProps={{
                 maxLength: 10000,
               }}
-              // change font size of input
-              // onChange={(event) => handleInput(event, index, subIndex)}
               onChange={(event) => {
                 const newLectureNotes = [...subLessonLectureNote];
                 newLectureNotes[subIndex] = event.target.value;
@@ -224,14 +216,10 @@ const CourseContentSublesson = ({
                   ...courseStateRef.current
                 });
               }}
+              fullWidth
+              variant="outlined"
               sx={{
-                fontSize: "0.9rem",
-                letterSpacing: "0.01rem",
-                lineHeight: "1.5rem",
-                fontWeight: "400",
                 width: "100%",
-
-                color: (theme) => theme.palette.grey.grey600,
               }}
             />
           </AccordionDetails>

@@ -5,9 +5,9 @@ import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import TextField from "@mui/material/TextField";
 import InstructorProfile from "../../components/InstructorProfile";
 import { StyledButton } from "../../components/StyledButton";
-import StyledTextField1 from "../../components/StyledTextField1";
 import { colorTokens } from "../../theme";
 
 const MoreInfoBottom = ({
@@ -22,85 +22,7 @@ const MoreInfoBottom = ({
 
     return (
         <>
-            <Box>
-                <Box
-                    sx={{
-                        mb: "0.5rem",
-                    }}
-                >
-                    <InputLabel htmlFor="completion-time">
-                        <Typography
-                            variant="h6"
-                            sx={{
-                                fontWeight: "600",
 
-                                color: (theme) => theme.palette.grey.grey600,
-                            }}
-                        >
-                            Approx Time to Complete the Course
-                        </Typography>
-                    </InputLabel>
-                </Box>
-                <Box>
-                    <Autocomplete
-                        disablePortal
-                        // PopperComponent={StyledPopper}
-                        onChange={(event, value) => {
-                            setCourseState({
-                                ...courseState,
-                                approxTimeToComplete: value
-                                    ? value.value.toString()
-                                    : "",
-                            });
-                        }}
-                        value={
-                            courseState.approxTimeToComplete
-                                ? {
-                                    label: `${courseState.approxTimeToComplete} weeks`,
-                                    value: `${courseState.approxTimeToComplete} weeks`,
-                                }
-                                : null
-                        }
-                        id="completion-time"
-                        options={
-                            new Array(50).fill(0).map((_, index) => ({
-                                label: `${index + 1} weeks`,
-                                value: index + 1,
-                            })) || [{ label: "No data" }]
-                        }
-
-                        sx={{
-                            width: isMobileScreens ? "100%" : "250px",
-                            maxWidth: "100%",
-                            background: colorTokens.white.main,
-                        }}
-                        renderInput={(params) => (
-                            <StyledTextField1
-                                placeholder="number of weeks"
-                                {...params}
-                                size="small"
-                                // change font size of input
-                                sx={{
-                                    // zIndex: 5000,
-                                    p: 0,
-                                    "& .MuiInputBase-input": {
-                                        fontSize: "1rem",
-                                        fontWeight: "600",
-                                    },
-
-                                    "&&": {
-                                        "& .MuiInputBase-root": {
-                                            color: (theme) =>
-                                                theme.palette.grey.grey600,
-                                        },
-                                    },
-                                    //enforce color of input
-                                }}
-                            />
-                        )}
-                    />
-                </Box>
-            </Box>
 
             <Box>
                 <Box
@@ -110,11 +32,13 @@ const MoreInfoBottom = ({
                 >
                     <InputLabel htmlFor="course-instructors">
                         <Typography
-                            variant="h6"
+                            variant="subtitle2"
                             sx={{
-                                fontWeight: "600",
-
-                                color: (theme) => theme.palette.grey.grey600,
+                                fontWeight: 700,
+                                letterSpacing: 1,
+                                color: 'text.secondary',
+                                fontSize: '0.75rem',
+                                textTransform: 'uppercase'
                             }}
                         >
                             Course Instructors
@@ -136,7 +60,6 @@ const MoreInfoBottom = ({
                             key={id + index}
                             sx={{
                                 position: "relative",
-                                // mb: "1rem",
                                 width: "100%",
                             }}
                         >
@@ -155,8 +78,7 @@ const MoreInfoBottom = ({
                                     top: 0,
                                     right: 0,
                                     fontSize: "1rem",
-                                    color: (theme) =>
-                                        theme.palette.grey.grey1000,
+                                    color: (theme) => theme.palette.text.secondary,
                                 }}
                             >
                                 {/* <PersonRemoveIcon /> */}
@@ -203,15 +125,14 @@ const MoreInfoBottom = ({
                             maxWidth: "100%",
                             p: 0,
                             m: 0,
-                            // border: "1px solid black",
                         }}
                         renderInput={(params) => (
-                            <StyledTextField1
-                                placeholder="Add Instructor"
+                            <TextField
                                 {...params}
+                                placeholder="Add Instructor"
                                 size="small"
-                                // change font size of input
-
+                                fullWidth
+                                variant="outlined"
                                 InputProps={{
                                     ...params.InputProps,
 
@@ -222,23 +143,16 @@ const MoreInfoBottom = ({
                                             sx={{
                                                 textTransform: "capitalize",
                                                 fontWeight: "600",
-
                                                 cursor: "pointer",
                                                 "&&": {
                                                     borderRadius: "0.25",
                                                     padding: "0.4rem 0.8rem",
                                                     fontWeight: "600",
                                                     height: "100%",
-                                                    background: (theme) =>
-                                                        theme.palette.primary
-                                                            .light2,
-                                                    color: (theme) =>
-                                                        theme.palette.text
-                                                            .primary,
+                                                    background: (theme) => theme.palette.primary.light,
+                                                    color: (theme) => theme.palette.common.white,
                                                     "&:hover": {
-                                                        background: (theme) =>
-                                                            theme.palette
-                                                                .primary.dark,
+                                                        background: (theme) => theme.palette.primary.dark,
                                                     },
                                                 },
                                             }}
@@ -254,21 +168,11 @@ const MoreInfoBottom = ({
                                     ),
                                 }}
                                 sx={{
-                                    p: 0,
-                                    m: 0,
-
+                                    width: "100%",
                                     "& .MuiInputBase-input": {
                                         fontSize: "1rem",
                                         fontWeight: "600",
                                     },
-
-                                    "&&": {
-                                        "& .MuiInputBase-root": {
-                                            color: (theme) =>
-                                                theme.palette.grey.grey600,
-                                        },
-                                    },
-                                    //enforce color of input
                                 }}
                             />
                         )}

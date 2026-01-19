@@ -1,6 +1,6 @@
 import { Autocomplete, Box, Typography, useMediaQuery } from "@mui/material";
 import React, { useEffect } from "react";
-import StyledTextField1 from "../../components/StyledTextField1";
+import GlassTextField from "../../components/GlassTextField";
 import { useContext, useRef } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 
@@ -82,7 +82,7 @@ const QuestionFormDetails = ({
               Option {index + 1}
             </Typography>
 
-            <StyledTextField1
+            <GlassTextField
               placeholder={"Option " + (index + 1)}
               multiline
               minRows={1}
@@ -99,12 +99,11 @@ const QuestionFormDetails = ({
               onBlur={(e) => changeOption(e, index)}
               sx={{
                 width: "100%",
-
                 "&&": {
                   marginBottom: "0",
                 },
               }}
-            ></StyledTextField1>
+            ></GlassTextField>
           </Box>
         );
       })}
@@ -167,26 +166,15 @@ const QuestionFormDetails = ({
             maxWidth: "100%",
           }}
           renderInput={(params) => (
-            <StyledTextField1
+            <GlassTextField
               placeholder="Choose correct option"
               {...params}
               size="small"
-              // change font size of input
               sx={{
-                p: 0,
                 width: "100%",
-                "& .MuiInputBase-input": {
-                  fontSize: "1rem",
-                  fontWeight: "600",
-                },
-
                 "&&": {
-                  "& .MuiInputBase-root": {
-                    color: (theme) => theme.palette.grey.grey600,
-                  },
                   marginBottom: "0",
                 },
-                //enforce color of input
               }}
             />
           )}

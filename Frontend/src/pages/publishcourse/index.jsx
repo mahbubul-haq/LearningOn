@@ -2,28 +2,29 @@ import Box from "@mui/material/Box";
 import { colorTokens } from "../../theme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { GlobalContext } from "../../state/GlobalContext";
 import DeleteCourseDialog from "./DeleteCourseDialog";
-import LeftPanel from "./LeftPanel";
-import PublishCourseNav from "./PublishCourseNav";
 import PublishStatusDialog from "./PublishStatusDialog";
-import RightButtons from "./RightButtons";
 import RightPanel from "./RightPanel";
+import PublishStepper from "./PublishStepper";
+import { alpha, Button, IconButton, Container, useTheme } from '@mui/material';
+import { Moon, Sun, ChevronLeft } from 'lucide-react';
+import { setMode } from "../../state/reduxStore/authSlice";
 
 const PublishCourse = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
-  //const [dialogOpen, setDialogOpen] = React.useState(0);
   const user = useSelector((state) => state.auth.user);
+  const mode = useSelector((state) => state.auth.mode); // Get global mode
+  const dispatch = useDispatch();
   const edit = useParams().edit;
   const id = useParams().courseId;
-  //console.log("edit and id", edit, id);
+  const theme = useTheme(); // Access the global theme
 
   const {
     courseState,
-    isCourseValid,
     getDraftCourse,
     updateCourse,
     uploadStatus,
@@ -34,19 +35,24 @@ const PublishCourse = () => {
     inputSection,
     editMode,
     setDeleteCourseStatus,
-    mobileDrawerOpen,
     setMobileDrawerOpen,
   } = useContext(CreateCourseContext);
   const { getUsers, getCategories, getUser } = useContext(GlobalContext);
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    mobileDrawerOpen ? setMobileDrawerOpen(false) : setMobileDrawerOpen(true);
-  };
-
-  const handleClose = () => {
-    setMobileDrawerOpen(false);
-  };
+  // --- Dynamic Mesh Background ---
+  // Using direct colorTokens to match the exact original look, as theme palette shifts in dark mode
+  const meshBackground = mode === 'dark'
+    ? `
+      radial-gradient(circle at 15% 15%, ${alpha(colorTokens.primary.dark, 0.8)} 0%, transparent 50%),
+      radial-gradient(circle at 85% 85%, ${alpha(colorTokens.secondary.dark, 0.6)} 0%, transparent 50%),
+      radial-gradient(at 50% 50%, ${colorTokens.primary.darker} 0%, #000 100%)
+    `
+    : `
+      radial-gradient(circle at 0% 0%, ${alpha(colorTokens.primary.lighter, 0.4)} 0%, transparent 60%),
+      radial-gradient(circle at 100% 100%, ${alpha(colorTokens.secondary.lighter, 0.4)} 0%, transparent 60%),
+      linear-gradient(135deg, #fdfdfd 0%, #f3f4f6 100%)
+    `;
 
   useEffect(() => {
     if (edit == "edit" && id) {
@@ -59,7 +65,6 @@ const PublishCourse = () => {
   }, []);
 
   useEffect(() => {
-    console.log("publish course mounted");
     if (!user) {
       navigate("/login", {
         state: {
@@ -68,7 +73,6 @@ const PublishCourse = () => {
         }
       });
     }
-    //console.log(edit, id);
     if (edit == "edit" && id) {
       getCoursePlainById(id);
       getUsers();
@@ -77,23 +81,14 @@ const PublishCourse = () => {
       getDraftCourse();
       getUsers();
       getCategories();
-      // setOpenedItem("courses");
     }
   }, []);
-
-  // useEffect(() => {
-  //     if (courseState.courseStatus === "published") setDialogOpen(2);
-  // }, [courseState.courseStatus]);
 
   useEffect(() => {
     if (uploadStatus == "publishing") {
       updateCourse("unpublished");
     }
   }, [uploadStatus]);
-
-  useEffect(() => {
-    console.log("publish course index", courseState);
-  }, [courseState]);
 
   useEffect(() => {
     document.querySelector(".publish-course-container")?.scrollTo(0, 0);
@@ -113,116 +108,81 @@ const PublishCourse = () => {
         setCourseId={setCourseId}
         getUser={getUser}
       />
+      {/* ThemeProvider removed as we use global theme now */}
       <Box
         className="publish-course-container"
         sx={{
-          width: "100%",
-          height: "100%",
-          overflow: "auto",
-          scrollBehavior: "smooth",
-          position: "relative",
-          backgroundColor: colorTokens.white.main,
-          // backgroundColor: theme.palette.background.default,
+          minHeight: '100vh',
+          width: '100%',
+          background: meshBackground,
+          transition: 'background 0.5s ease',
+          pb: 8,
+          height: "100vh",
+          overflowY: "scroll",
         }}
       >
-        <PublishCourseNav
-          mobileDrawerOpen={mobileDrawerOpen}
-          handleClick={handleClick}
-          handleClose={handleClose}
-          setUploadStatus={setUploadStatus}
-          isCourseValid={isCourseValid}
-          editMode={editMode}
-        />
-        <Box
-          className="publish-course-main"
-          sx={{
-            //height: "100%",
-            // overflow: "auto",
-            width: "100%",
-            //position: "sticky",
-            // top: `calc(4rem + 1px)`,
-            // scrollBehavior: "smooth",
-            display: "flex",
-            mx: "auto",
-            maxWidth: "2000px",
-            // border: "2px solid red"
-            px: isNonMobileScreens ? "64px" : "24px",
-          }}
-        >
-          <Box
+        {/* --- Header / Nav --- */}
+        <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Button
+            startIcon={<ChevronLeft />}
+            onClick={() => navigate(-1)}
+            sx={{ color: 'text.secondary', fontWeight: 600 }}
+          >
+            Back to Dashboard
+          </Button>
+          <IconButton
+            onClick={() => dispatch(setMode())} // Dispatch global toggle
             sx={{
-              position: "sticky",
-              height: `calc(100vh - 4rem - 1px)`,
-
-              // zIndex: "1000",
-              // border: "2px solid red",
-              overflowY: "auto",
-              top: `calc(4rem + 1px)`,
-              width: "25%",
-              display: isNonMobileScreens ? "grid" : "none",
-              //gridTemplateRows: "100",
-              padding: "0",
-              pr: "1rem",
-              // borderRight: `1px dashed ${theme.palette.customDivider.main}`,
-              borderRight: `1px solid ${colorTokens.grey[200]}`,
+              bgcolor: mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.8)',
+              backdropFilter: 'blur(8px)',
+              boxShadow: 2
             }}
           >
-            <Box
-              sx={{
-                // overflowY: "auto",
-                // height: "100%",
-
-                // border: "1px solid red"
-                // border: "1px solid red"
-                paddingTop: "1rem",
-                paddingBottom: "2rem",
-              }}
-            >
-              <LeftPanel />
-            </Box>
-          </Box>
-
-          <Box
-            sx={{
-              // position: "fixed",
-              // height: "100%",
-              // overflowY: "auto",
-              position: "relative",
-              //left: isNonMobileScreens ? "35%" : "0",
-              //right: isNonMobileScreens ? "0" : "0",
-              padding: isNonMobileScreens ? "2rem 0 2rem 2rem" : "2rem 0",
-              zIndex: "1",
-              flex: "1",
-              width: isNonMobileScreens ? "50%" : "100%",
-              // border: "2px solid red"
-              // display: "grid",
-              // gridTemplateColumns: "80% 20%",
-            }}
-          >
-            <RightPanel />
-          </Box>
-          <Box
-            sx={{
-              width: "20%",
-              //   display: isNonMobileScreens ? "block" : "none",
-              position: "sticky",
-              top: `calc(4rem + 1px)`,
-              pl: "2rem",
-              pt: "2rem",
-              height: "100%",
-              display: isNonMobileScreens ? "block" : "none",
-            }}
-          >
-            <RightButtons
-              isCourseValid={isCourseValid}
-              setUploadStatus={setUploadStatus}
-              setDeleteCourseStatus={setDeleteCourseStatus}
-            />
-
-          </Box>
+            {mode === 'dark' ? <Sun size={20} color="#fbbf24" /> : <Moon size={20} color="#4522ba" />}
+          </IconButton>
         </Box>
+
+        <Container maxWidth="md">
+
+          {/* --- Stepper --- */}
+          {/* Passing brand/mode props for compatibility, or update Stepper to use theme internally */}
+          <Box sx={{ mb: 6, px: 2 }}>
+            <PublishStepper mode={mode} brand={colorTokens} />
+          </Box>
+
+          {/* --- MAIN CONTENT AREA --- */}
+          <Box
+            className="publish-course-main"
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              gap: "2rem"
+            }}
+          >
+            {/* Delete Button */}
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Box
+                onClick={() => setDeleteCourseStatus("initiated")}
+                sx={{
+                  color: "error.main",
+                  cursor: "pointer",
+                  fontWeight: "600",
+                  opacity: 0.7,
+                  "&:hover": { opacity: 1, textDecoration: "underline" },
+                  display: editMode ? "block" : "none"
+                }}
+              >
+                Delete Course
+              </Box>
+            </Box>
+
+            {/* RightPanel now acts as the Glass Card Wrapper */}
+            <RightPanel mode={mode} brand={colorTokens} />
+          </Box>
+
+        </Container>
       </Box>
-      {/* </Box> */}
     </>
   );
 };

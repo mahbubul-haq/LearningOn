@@ -36,7 +36,7 @@ const Dashboard = lazy(() => import("./pages/dashboard"));
 const Admin = lazy(() => import("./pages/admin"));
 const Quiz = lazy(() => import("./pages/learningpage/Quiz"));
 const QuizContainer = lazy(() => import("./pages/learningpage/QuizContainer"));
-
+const PlayGround = lazy(() => import("./playground"));
 function App() {
   const mode = useSelector((state) => state.auth.mode);
   const theme = useMemo(() => createTheme(themeSettings({ mode })), [mode]);
@@ -162,6 +162,14 @@ function App() {
                               element={
                                 <Suspense fallback={<AppFallback />}>
                                   <QuizContainer />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/playground"
+                              element={
+                                <Suspense fallback={<AppFallback />}>
+                                  <PlayGround />
                                 </Suspense>
                               }
                             />

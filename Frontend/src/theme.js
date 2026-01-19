@@ -704,6 +704,26 @@ export const themeSettings = ({ mode }) => {
                     },
                 },
             },
+            MuiOutlinedInput: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: 12, // Rounded inputs
+                        backgroundColor: mode === 'dark' ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.5)",
+                        backdropFilter: 'blur(10px)',
+                        transition: 'all 0.3s ease',
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: mode === 'dark' ? colorTokens.secondary.light : colorTokens.primary.light,
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: mode === 'dark' ? colorTokens.secondary.main : colorTokens.primary.main,
+                            borderWidth: 2,
+                        },
+                    },
+                    notchedOutline: {
+                        borderColor: mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                    }
+                },
+            },
             MuiCssBaseline: {
                 styleOverrides: {
                     body: {

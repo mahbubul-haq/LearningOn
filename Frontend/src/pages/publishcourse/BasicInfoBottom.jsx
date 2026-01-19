@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
-import StyledTextField1 from "../../components/StyledTextField1";
+import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,7 +12,8 @@ import InputBase from "@mui/material/InputBase";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
-import { colorTokens } from "../../theme.js";
+import { alpha } from "@mui/material/styles";
+import { X } from 'lucide-react'; // Using Lucide X icon like in Playground
 
 const BasicInfoBottom = ({
     courseState,
@@ -47,10 +48,13 @@ const BasicInfoBottom = ({
                 >
                     <InputLabel htmlFor="student-requirements">
                         <Typography
-                            variant="h6"
+                            variant="subtitle2"
                             sx={{
-                                fontWeight: "600",
-                                color: (theme) => theme.palette.grey.grey600,
+                                fontWeight: 700,
+                                letterSpacing: 1,
+                                color: 'text.secondary',
+                                fontSize: '0.75rem',
+                                textTransform: 'uppercase'
                             }}
                         >
                             Student Requirements
@@ -62,8 +66,8 @@ const BasicInfoBottom = ({
                         width: "100%",
                     }}
                 >
-                    <StyledTextField1
-                        placeholder="Shortly describe what are the requirements for students to take this course, e.g. programming language, software, etc."
+                    <TextField
+                        placeholder="Shortly describe what are the requirements for students to take this course..."
                         multiline
                         minRows={2}
                         maxRows={Infinity}
@@ -71,7 +75,6 @@ const BasicInfoBottom = ({
                         inputProps={{
                             maxLength: 200,
                         }}
-                        // change font size of input
                         onChange={(event) => {
                             setStudentRequirements(event.target.value);
                             courseStateRef.current.studentRequirements = event.target.value;
@@ -82,18 +85,8 @@ const BasicInfoBottom = ({
                                 ...courseStateRef.current
                             });
                         }}
-                        sx={{
-                            p: 0,
-                            "& .MuiInputBase-input": {
-                                fontSize: "0.9rem",
-                                letterSpacing: "0.01rem",
-                                lineHeight: "1.5rem",
-                                fontWeight: "400",
-
-                                color: (theme) => theme.palette.grey.grey600,
-                            },
-                            width: "100%",
-                        }}
+                        fullWidth
+                        variant="outlined"
                     />
                 </Box>
             </Box>
@@ -110,10 +103,13 @@ const BasicInfoBottom = ({
                 >
                     <InputLabel htmlFor="skill-tags">
                         <Typography
-                            variant="h6"
+                            variant="subtitle2"
                             sx={{
-                                fontWeight: "600",
-                                color: (theme) => theme.palette.grey.grey600,
+                                fontWeight: 700,
+                                letterSpacing: 1,
+                                color: 'text.secondary',
+                                fontSize: '0.75rem',
+                                textTransform: 'uppercase'
                             }}
                         >
                             Skill Tags
@@ -121,12 +117,11 @@ const BasicInfoBottom = ({
                     </InputLabel>
                 </Box>
                 <Typography
-                    variant="body2"
+                    variant="caption"
+                    display="block"
                     sx={{
-                        color: (theme) => theme.palette.grey.grey400,
-                        mt: "1rem",
-                        mb: "0.2rem",
-                        fontSize: "0.8rem",
+                        color: "text.secondary",
+                        mb: "1rem",
                     }}
                 >
                     Add the skills that students will learn from the course.
@@ -138,20 +133,14 @@ const BasicInfoBottom = ({
                         display: "flex",
                         flexWrap: "wrap",
                         flexDirection: "row",
-                        gap: "1rem",
+                        gap: "0.5rem",
                     }}
                 >
                     {courseState.skillTags?.map((skill, index) => (
                         <Chip
                             label={skill}
                             key={index}
-                            deleteIcon={
-                                <DeleteIcon
-                                    sx={{
-                                        color: colorTokens.black.main,
-                                    }}
-                                />
-                            }
+                            deleteIcon={<X size={14} />}
                             onDelete={() => {
                                 setCourseState({
                                     ...courseState,
@@ -161,115 +150,84 @@ const BasicInfoBottom = ({
                                 });
                             }}
                             sx={{
-                                borderRadius: "2rem",
-                                fontSize: "1rem",
-                                padding: "1.2rem 0.5rem",
-                                backgroundColor: (theme) =>
-                                    theme.palette.background.buttonBgPink,
+                                backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
+                                color: (theme) => theme.palette.primary.main,
+                                fontWeight: 600,
+                                border: "1px solid",
+                                borderColor: (theme) => alpha(theme.palette.primary.main, 0.2)
                             }}
                         />
                     ))}
 
                     {!addSkill && (
-                        <Fab
-                            variant="extended"
-                            size="medium"
-                            sx={{
-                                backgroundColor: (theme) =>
-                                    theme.palette.background.buttonBgPink,
-                                boxShadow: "none",
-                                "&:hover": {
-                                    backgroundColor: (theme) =>
-                                        theme.palette.background
-                                            .buttonBgPinkDark,
-                                },
-                            }}
+                        <Button
+                            variant="outlined"
+                            startIcon={<AddIcon />}
                             onClick={() => {
                                 setAddSkill(true);
                                 setSkillName("");
                             }}
-                        >
-                            <AddIcon sx={{ mr: "0.5rem" }} />
-                            <Typography
-                                sx={{
-                                    fontWeight: "600",
-                                    color: (theme) =>
-                                        theme.palette.text.primary,
-                                    textTransform: "capitalize",
-                                }}
-                            >
-                                Add Skill
-                            </Typography>
-                        </Fab>
-                    )}
-                    {addSkill && (
-                        <Box
                             sx={{
-                                display: "inline-block",
+                                borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.2)',
+                                color: 'text.primary',
+                                borderRadius: "50px", // Match typical rounded button style or keep standard
+                                textTransform: "none",
+                                '&:hover': {
+                                    borderColor: (theme) => theme.palette.primary.main,
+                                    color: (theme) => theme.palette.primary.main
+                                }
                             }}
                         >
-                            <Paper
-                                component="form"
-                                sx={{
-                                    p: "0",
-                                    m: "0",
-                                    boxShadow: "none",
-
-                                    border: "1px solid",
-                                    borderColor: (theme) =>
-                                        theme.palette.grey.grey200,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    maxWidth: "250px",
-                                    borderRadius: "2rem",
-                                }}
-                            >
-                                <InputBase
-                                    sx={{ px: "1rem", flex: 1 }}
-                                    placeholder="add skill name"
-                                    inputProps={{
-                                        "aria-label": "add skill",
-                                    }}
-                                    onChange={(event) => {
-                                        setSkillName(event.target.value);
-                                    }}
-                                />
-                                <Button
-                                    sx={{
-                                        p: "0.5rem 1rem",
-
-                                        m: 0,
-                                        color: (theme) =>
-                                            theme.palette.text.primary,
-                                        background: (theme) =>
-                                            theme.palette.background
-                                                .buttonBgPink,
-                                        "&:hover": {
-                                            background: (theme) =>
-                                                theme.palette.background
-                                                    .buttonBgPinkDark,
-                                        },
-                                        borderRadius: "0 2rem 2rem 0",
-                                        fontWeight: "600",
-                                    }}
-                                    aria-label="directions"
-                                    onClick={() => {
+                            Add Skill
+                        </Button>
+                    )}
+                    {addSkill && (
+                        <Box sx={{ display: "flex", gap: 1, alignItems: "center", flexGrow: 1, maxWidth: "300px" }}>
+                            <TextField
+                                size="small"
+                                placeholder="Add skill name"
+                                value={skillName}
+                                onChange={(event) => setSkillName(event.target.value)}
+                                autoFocus
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
                                         if (skillName !== "") {
                                             setCourseState({
                                                 ...courseState,
-                                                skillTags: [
-                                                    ...courseState.skillTags,
-                                                    skillName,
-                                                ],
+                                                skillTags: [...courseState.skillTags, skillName],
                                             });
                                             setAddSkill(false);
                                             setSkillName("");
                                         }
-                                    }}
-                                >
-                                    Add
-                                </Button>
-                            </Paper>
+                                    }
+                                }}
+                                sx={{ flexGrow: 1 }}
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    if (skillName !== "") {
+                                        setCourseState({
+                                            ...courseState,
+                                            skillTags: [...courseState.skillTags, skillName],
+                                        });
+                                        setAddSkill(false);
+                                        setSkillName("");
+                                    }
+                                }}
+                                sx={{ minWidth: "auto", px: 2 }}
+                            >
+                                Add
+                            </Button>
+                            <Button
+                                variant="text"
+                                color="inherit"
+                                onClick={() => setAddSkill(false)}
+                                sx={{ minWidth: "auto" }}
+                            >
+                                <X size={18} />
+                            </Button>
                         </Box>
                     )}
                 </Box>

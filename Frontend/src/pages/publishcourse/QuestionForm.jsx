@@ -12,7 +12,7 @@ import { useState } from "react";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { PiWarningFill } from "react-icons/pi";
 import { StyledButton } from "../../components/StyledButton";
-import StyledTextField1 from "../../components/StyledTextField1";
+import GlassTextField from "../../components/GlassTextField";
 import QuestionFormDetails from "./QuestionFormDetails";
 import { useContext, useRef, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
@@ -241,7 +241,7 @@ const QuestionForm = ({
           </Box>
 
           <Box>
-            <StyledTextField1
+            <GlassTextField
               placeholder="Write question here"
               multiline
               minRows={1}
@@ -250,7 +250,6 @@ const QuestionForm = ({
               inputProps={{
                 maxLength: 500,
               }}
-              // change font size of input
               onChange={(e) => {
                 setCurrQuestion(e.target.value);
                 if (courseStateRef.current.lessons[lessonIdx].questions?.questions[questionNo]) {
@@ -260,13 +259,6 @@ const QuestionForm = ({
               value={currQuestion}
               onBlur={setQuestion}
               sx={{
-                p: 0,
-                "& .MuiInputBase-input": {
-                  fontSize: "1rem",
-                  fontWeight: "400",
-
-                  color: (theme) => theme.palette.grey.grey600,
-                },
                 width: "100%",
               }}
             />

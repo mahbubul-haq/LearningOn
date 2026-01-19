@@ -10,9 +10,9 @@ import Fab from "@mui/material/Fab";
 import InputLabel from "@mui/material/InputLabel";
 import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { StyledButton } from "../../components/StyledButton";
-import StyledTextField1 from "../../components/StyledTextField1";
 import AddQuestions from "./AddQuestions";
 import CourseContentSublesson from "./CourseContentSublesson";
 import QuestionForm from "./QuestionForm";
@@ -138,7 +138,7 @@ const CourseContentCourseAccordion = ({
           </Typography>
         </InputLabel>
 
-        <StyledTextField1
+        <TextField
           placeholder="Title of the lesson"
           multiline
           minRows={1}
@@ -148,7 +148,6 @@ const CourseContentCourseAccordion = ({
           inputProps={{
             maxLength: 100,
           }}
-          // change font size of input
           onChange={(event) => {
             setLessonTitle(event.target.value);
             courseStateRef.current.lessons[index].title = event.target.value;
@@ -159,13 +158,9 @@ const CourseContentCourseAccordion = ({
               ...courseStateRef.current
             });
           }}
+          fullWidth
+          variant="outlined"
           sx={{
-            p: 0,
-            "& .MuiInputBase-input": {
-              fontSize: "1rem",
-              fontWeight: "600",
-              color: (theme) => theme.palette.grey.grey600,
-            },
             width: "100%",
           }}
         />
@@ -183,7 +178,7 @@ const CourseContentCourseAccordion = ({
           </Typography>
         </InputLabel>
 
-        <StyledTextField1
+        <TextField
           placeholder="Description of the lesson"
           minRows={5}
           maxRows={Infinity}
@@ -193,7 +188,6 @@ const CourseContentCourseAccordion = ({
           inputProps={{
             maxLength: 2000,
           }}
-          // change font size of input
           onChange={(event) => {
             setLessonDescription(event.target.value);
             courseStateRef.current.lessons[index].description = event.target.value;
@@ -204,14 +198,10 @@ const CourseContentCourseAccordion = ({
               ...courseStateRef.current
             });
           }}
+          fullWidth
+          variant="outlined"
           sx={{
-            fontSize: "0.9rem",
-            letterSpacing: "0.01rem",
-            lineHeight: "1.5rem",
-            fontWeight: "400",
             width: "100%",
-
-            color: (theme) => theme.palette.grey.grey600,
           }}
         />
 

@@ -1,15 +1,17 @@
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Divider, Typography, Button } from '@mui/material';
 import { colorTokens } from "../../theme.js";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useContext } from 'react';
 import { StyledButton } from '../../components/StyledButton';
 import { CreateCourseContext } from '../../state/CreateCourse';
+import useTheme from '@mui/material/styles/useTheme';
 
 const RightPanelBottom = () => {
+    const theme = useTheme();
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const { inputSection, setInputSection, editMode, setUpdating } = useContext(CreateCourseContext);
+    const { inputSection, setInputSection, editMode, setUpdating, setUploadStatus, isCourseValid } = useContext(CreateCourseContext);
 
     const handleNext = () => {
         if (inputSection === "basic info") {
@@ -48,108 +50,113 @@ const RightPanelBottom = () => {
                     zIndex: -1,
                 }}
             >
+                {/* PREV BUTTON (Subtle) */}
                 {inputSection !== "basic info" ? (
-                    <StyledButton
+                    <Button
                         sx={{
-                            textTransform: "capitalize",
-                            fontWeight: "600",
-
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
                             cursor: "pointer",
-                            "&&": {
-                                padding: "0.4rem 0.8rem",
-                                fontWeight: "600",
-                                background: "transparent",
-                                color: (theme) => theme.palette.primary.dark,
-                                "&:hover": {
-                                    color: (theme) => theme.palette.primary.darker,
-                                    background: (theme) => theme.palette.background.alt,
-                                },
-                            },
+                            padding: "0.5rem 1rem",
+                            borderRadius: "2rem",
+                            backgroundColor: (theme) => theme.palette.background.paper,
+                            border: `1px solid ${theme.palette.divider}`,
+                            boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
+                            transition: "all 0.2s ease",
+                            "&:hover": {
+                                backgroundColor: (theme) => theme.palette.action.hover,
+                                border: `1px solid ${theme.palette.primary.main}`,
+                                transform: "translateY(-1px)",
+                                boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+                                "& .prev-icon": {
+                                    color: (theme) => theme.palette.primary.main,
+                                }
+                            }
                         }}
                         onClick={handlePrev}
                     >
-                        <KeyboardDoubleArrowLeftIcon />
-                        <Typography
-                            sx={{
-                                fontWeight: "600",
-                                pl: "0.5rem",
-                            }}
-                        >
-                            Prev
-                        </Typography>
-                    </StyledButton>
+                        <KeyboardDoubleArrowLeftIcon className="prev-icon" sx={{ fontSize: "1.2rem", color: theme.palette.text.secondary }} />
+                        <Typography sx={{ fontWeight: "600", pl: "0.25rem", color: theme.palette.text.primary }}>Prev</Typography>
+                    </Button>
                 ) : (
                     <Box></Box>
                 )}
+
+                {/* SAVE PROGRESS BUTTON (Distinct) */}
                 {!editMode && (
                     <StyledButton
+                        variant="contained"
                         sx={{
                             textTransform: "capitalize",
                             fontWeight: "600",
+                            color: "#fff",
+                            boxShadow: "none",
+                            px: "2rem",
 
-                            cursor: "pointer",
-                            "&&": {
-                                padding: "0.4rem 0.8rem",
-                                background: (theme) => theme.palette.grey.grey700,
-                                color: colorTokens.white.main,
-                                "&:hover": {
-                                    background: (theme) => theme.palette.grey.grey900,
-                                },
-                            },
                         }}
                         onClick={() => {
-                            //updateCourse("draft");
                             setUpdating("updating");
-
-                            // if (updating == "updated" || updating == "failed") {
-                            //     setOpenSnackbar(true);
-                            // }
                         }}
                     >
-                        <Typography
-                            sx={{
-                                fontWeight: "600",
-                            }}
-                        >
-                            Save Progress
-                        </Typography>
+                        Save Progress
                     </StyledButton>
                 )}
+
+                {/* NEXT BUTTON (Outlined/Subtle) */}
                 {inputSection != "course content" ? (
                     <StyledButton
+                        variant="outlined"
                         sx={{
-                            textTransform: "capitalize",
-                            fontWeight: "600",
-
-                            cursor: "pointer",
                             "&&": {
-                                padding: "0.4rem 0.8rem",
-                                fontWeight: "600",
-
-                                background: "transparent",
-                                color: (theme) => theme.palette.primary.dark,
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                cursor: "pointer",
+                                padding: "0.5rem 1rem",
+                                borderRadius: "2rem",
+                                backgroundColor: (theme) => theme.palette.background.paper,
+                                border: `1px solid ${theme.palette.divider}`,
+                                boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
+                                transition: "all 0.2s ease",
                                 "&:hover": {
-                                    color: (theme) => theme.palette.primary.darker,
-                                    background: (theme) => theme.palette.background.alt,
-                                },
-                            },
+                                    backgroundColor: (theme) => theme.palette.action.hover,
+                                    border: `1px solid ${theme.palette.primary.main}`,
+                                    transform: "translateY(-1px)",
+                                    boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+                                    "& .next-icon": {
+                                        color: (theme) => theme.palette.primary.main,
+                                    }
+                                }
+                            }
                         }}
                         onClick={handleNext}
                     >
-                        <Typography
-                            sx={{
-                                fontWeight: "600",
-                                pr: "0.5rem",
-                            }}
-                        >
-                            Next
-                        </Typography>
-                        <KeyboardDoubleArrowRightIcon />
+                        <Typography sx={{ fontWeight: "600", pr: "0.5rem", color: theme.palette.text.primary }}>Next</Typography>
+                        <KeyboardDoubleArrowRightIcon className="next-icon" sx={{ fontSize: "1.2rem", color: theme.palette.text.secondary }} />
                     </StyledButton>
                 ) : (
-                    <Box></Box>
+                    // PUBLISH BUTTON (Final Step)
+                    <StyledButton
+                        variant="contained"
+                        disabled={!isCourseValid()}
+                        onClick={() => {
+                            setUploadStatus("publishing");
+                        }}
+                        sx={{
+                            textTransform: "capitalize",
+                            fontWeight: "600",
+                            background: (theme) => !isCourseValid() ? theme.palette.action.disabledBackground : theme.palette.success.main,
+                            color: colorTokens.white.pure,
+                            "&:hover": {
+                                background: (theme) => theme.palette.success.dark,
+                            },
+                        }}
+                    >
+                        <Typography sx={{ fontWeight: "600" }}>Publish Course</Typography>
+                    </StyledButton>
                 )}
-            </Box>
+            </Box >
         </>
     )
 }

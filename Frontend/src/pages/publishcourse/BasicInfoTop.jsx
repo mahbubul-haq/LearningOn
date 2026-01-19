@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
 import Autocomplete from "@mui/material/Autocomplete";
-import StyledTextField1 from "../../components/StyledTextField1";
+import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
@@ -11,13 +11,12 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const [courseTitle, setCourseTitle] = useState(courseState.courseTitle);
     const [courseDescription, setCourseDescription] = useState(courseState.courseDescription);
-    const {courseStateRef} = useContext(CreateCourseContext);
+    const { courseStateRef } = useContext(CreateCourseContext);
 
     useEffect(() => {
         if (!courseTitle || !courseDescription) {
             setCourseTitle(courseState.courseTitle);
             setCourseDescription(courseState.courseDescription);
-           // console.log(courseState.courseTitle, courseState.courseDescription);
         }
     }, [courseState]);
     return (
@@ -30,11 +29,13 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                 >
                     <InputLabel htmlFor="category">
                         <Typography
-                            variant="h6"
+                            variant="subtitle2"
                             sx={{
-                                fontWeight: "600",
-
-                                color: (theme) => theme.palette.grey.grey600,
+                                fontWeight: 700,
+                                letterSpacing: 1,
+                                color: 'text.secondary',
+                                fontSize: '0.75rem',
+                                textTransform: 'uppercase'
                             }}
                         >
                             Category of the Course
@@ -53,9 +54,9 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                         value={
                             courseState.category
                                 ? {
-                                      label: courseState.category,
-                                      value: courseState.category,
-                                  }
+                                    label: courseState.category,
+                                    value: courseState.category,
+                                }
                                 : null
                         }
                         id="category"
@@ -65,30 +66,15 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                                 : []
                         }
                         sx={{
-                            width: "350px",
-                            maxWidth: "100%",
+                            width: "100%",
                         }}
                         renderInput={(params) => (
-                            <StyledTextField1
-                                placeholder="Choose a category"
+                            <TextField
                                 {...params}
+                                placeholder="Choose a category"
                                 size="small"
-                                // change font size of input
-                                sx={{
-                                    p: 0,
-                                    "& .MuiInputBase-input": {
-                                        fontSize: "1rem",
-                                        fontWeight: "600",
-                                    },
-
-                                    "&&": {
-                                        "& .MuiInputBase-root": {
-                                            color: (theme) =>
-                                                theme.palette.grey.grey600,
-                                        },
-                                    },
-                                    //enforce color of input
-                                }}
+                                fullWidth
+                                variant="outlined"
                             />
                         )}
                     />
@@ -107,10 +93,13 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                 >
                     <InputLabel htmlFor="title">
                         <Typography
-                            variant="h6"
+                            variant="subtitle2"
                             sx={{
-                                fontWeight: "600",
-                                color: (theme) => theme.palette.grey.grey600,
+                                fontWeight: 700,
+                                letterSpacing: 1,
+                                color: 'text.secondary',
+                                fontSize: '0.75rem',
+                                textTransform: 'uppercase'
                             }}
                         >
                             Course Title
@@ -122,7 +111,7 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                         width: "100%",
                     }}
                 >
-                    <StyledTextField1
+                    <TextField
                         placeholder="Give a nice title for your course"
                         multiline
                         minRows={1}
@@ -131,7 +120,6 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                         inputProps={{
                             maxLength: 100,
                         }}
-                        // change font size of input
                         onChange={(event) => {
                             setCourseTitle(event.target.value);
                             courseStateRef.current.courseTitle = event.target.value;
@@ -142,15 +130,13 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                                 ...courseStateRef.current
                             });
                         }}
+                        fullWidth
+                        variant="outlined"
                         sx={{
-                            p: 0,
                             "& .MuiInputBase-input": {
-                                fontSize: isMobileScreens ? "1rem" : "1.6rem",
+                                fontSize: isMobileScreens ? "1rem" : "1.2rem",
                                 fontWeight: "600",
-                                lineHeight:  isMobileScreens ? "1.5rem" : "2rem",
-                                color: (theme) => theme.palette.grey.grey600,
-                            },
-                            width: "100%",
+                            }
                         }}
                     />
                 </Box>
@@ -168,10 +154,13 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                 >
                     <InputLabel htmlFor="description">
                         <Typography
-                            variant="h6"
+                            variant="subtitle2"
                             sx={{
-                                fontWeight: "600",
-                                color: (theme) => theme.palette.grey.grey600,
+                                fontWeight: 700,
+                                letterSpacing: 1,
+                                color: 'text.secondary',
+                                fontSize: '0.75rem',
+                                textTransform: 'uppercase'
                             }}
                         >
                             Course Description
@@ -184,24 +173,21 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                     }}
                 >
                     <Typography
-                        variant="body2"
+                        variant="caption"
+                        display="block"
                         sx={{
-                            color: (theme) => theme.palette.grey.grey400,
-                            mt: "1rem",
-                            mb: "0.2rem",
-                            fontSize: "0.8rem",
+                            color: "text.secondary",
+                            mb: "1rem",
                         }}
                     >
                         Write a short description about your course. You may
                         include:
                     </Typography>
-                    {/* make a bulleted list */}
                     <Box
                         sx={{
                             marginLeft: isMobileScreens ? "0rem" : "2rem",
                             mb: "1rem",
-
-                            color: (theme) => theme.palette.grey.grey400,
+                            color: "text.secondary",
                         }}
                     >
                         <ul
@@ -215,16 +201,15 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                             <li>How students will benefit from it?</li>
                         </ul>
                     </Box>
-                    <StyledTextField1
+                    <TextField
                         placeholder="Write description here..."
                         multiline
-                        minRows={15}
+                        minRows={6}
                         maxRows={Infinity}
                         id="description"
                         inputProps={{
                             maxLength: 2500,
                         }}
-                        // change font size of input
                         onChange={(event) => {
                             setCourseDescription(event.target.value);
                             courseStateRef.current.courseDescription = event.target.value;
@@ -235,18 +220,8 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                                 ...courseStateRef.current
                             });
                         }}
-                        sx={{
-                            p: 0,
-                            "& .MuiInputBase-input": {
-                                fontSize: "0.9rem",
-                                letterSpacing: "0.01rem",
-                                lineHeight: "1.5rem",
-                                fontWeight: "400",
-
-                                color: (theme) => theme.palette.grey.grey600,
-                            },
-                            width: "100%",
-                        }}
+                        fullWidth
+                        variant="outlined"
                     />
                 </Box>
             </Box>
