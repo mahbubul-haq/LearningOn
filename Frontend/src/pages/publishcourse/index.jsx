@@ -13,6 +13,9 @@ import PublishStepper from "./PublishStepper";
 import { alpha, Button, IconButton, Container, useTheme } from '@mui/material';
 import { Moon, Sun, ChevronLeft } from 'lucide-react';
 import { setMode } from "../../state/reduxStore/authSlice";
+import { StyledButton } from "../../components/StyledButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const PublishCourse = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
@@ -36,6 +39,7 @@ const PublishCourse = () => {
     editMode,
     setDeleteCourseStatus,
     setMobileDrawerOpen,
+    isCourseValid,
   } = useContext(CreateCourseContext);
   const { getUsers, getCategories, getUser } = useContext(GlobalContext);
   const navigate = useNavigate();
@@ -128,22 +132,95 @@ const PublishCourse = () => {
             onClick={() => navigate(-1)}
             sx={{ color: 'text.secondary', fontWeight: 600 }}
           >
-            Back to Dashboard
+            Back
           </Button>
-          <IconButton
-            onClick={() => dispatch(setMode())} // Dispatch global toggle
-            sx={{
-              bgcolor: mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.8)',
-              backdropFilter: 'blur(8px)',
-              boxShadow: 2
-            }}
-          >
-            {mode === 'dark' ? <Sun size={20} color="#fbbf24" /> : <Moon size={20} color="#4522ba" />}
-          </IconButton>
+
+          <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            {/* Delete Button */}
+            {isNonMobileScreens ? (
+              <Button
+                onClick={() => setDeleteCourseStatus("initiated")}
+                sx={{
+                  textTransform: "capitalize",
+                  fontWeight: "600",
+                  color: (theme) => theme.palette.error.main,
+                  bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
+                  "&:hover": {
+                    bgcolor: (theme) => alpha(theme.palette.error.main, 0.2),
+                  },
+                }}
+              >
+                Delete
+              </Button>
+            ) : (
+              <IconButton
+                onClick={() => setDeleteCourseStatus("initiated")}
+                sx={{
+                  color: (theme) => theme.palette.error.main,
+                  bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
+                  "&:hover": {
+                    bgcolor: (theme) => alpha(theme.palette.error.main, 0.2),
+                  },
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
+
+            {/* Publish Button */}
+            {isNonMobileScreens ? (
+              <StyledButton
+                variant="contained"
+                disabled={!isCourseValid()}
+                onClick={() => setUploadStatus("publishing")}
+                sx={{
+                  textTransform: "capitalize",
+                  fontWeight: "600",
+                  background: (theme) => !isCourseValid() ? theme.palette.action.disabledBackground : theme.palette.success.main,
+                  color: colorTokens.white.pure,
+                  boxShadow: (theme) => !isCourseValid() ? "none" : "0 4px 14px 0 rgba(16, 185, 129, 0.4)",
+                  "&:hover": {
+                    background: (theme) => theme.palette.success.dark,
+                    boxShadow: "0 6px 20px rgba(16, 185, 129, 0.6)",
+                  },
+                }}
+              >
+                Publish
+              </StyledButton>
+            ) : (
+              <IconButton
+                disabled={!isCourseValid()}
+                onClick={() => setUploadStatus("publishing")}
+                sx={{
+                  color: colorTokens.white.pure,
+                  background: (theme) => !isCourseValid() ? theme.palette.action.disabledBackground : theme.palette.success.main,
+                  "&:hover": {
+                    background: (theme) => theme.palette.success.dark,
+                  },
+                  padding: "8px",
+                  borderRadius: "50%",
+                  boxShadow: (theme) => !isCourseValid() ? "none" : "0 4px 14px 0 rgba(16, 185, 129, 0.4)",
+                }}
+              >
+                <CloudUploadIcon />
+              </IconButton>
+            )}
+
+            <IconButton
+              onClick={() => dispatch(setMode())}
+              sx={{
+                bgcolor: mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.8)',
+                backdropFilter: 'blur(8px)',
+                boxShadow: 2,
+                ml: 1
+              }}
+            >
+              {mode === 'dark' ? <Sun size={20} color="#fbbf24" /> : <Moon size={20} color="#4522ba" />}
+            </IconButton>
+          </Box>
         </Box>
 
         <Container maxWidth="md">
-
           {/* --- Stepper --- */}
           {/* Passing brand/mode props for compatibility, or update Stepper to use theme internally */}
           <Box sx={{ mb: 6, px: 2 }}>
@@ -160,22 +237,8 @@ const PublishCourse = () => {
               gap: "2rem"
             }}
           >
-            {/* Delete Button */}
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Box
-                onClick={() => setDeleteCourseStatus("initiated")}
-                sx={{
-                  color: "error.main",
-                  cursor: "pointer",
-                  fontWeight: "600",
-                  opacity: 0.7,
-                  "&:hover": { opacity: 1, textDecoration: "underline" },
-                  display: editMode ? "block" : "none"
-                }}
-              >
-                Delete Course
-              </Box>
-            </Box>
+            {/* Delete Button Removed (Moved to Header) */}
+
 
             {/* RightPanel now acts as the Glass Card Wrapper */}
             <RightPanel mode={mode} brand={colorTokens} />

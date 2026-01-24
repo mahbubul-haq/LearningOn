@@ -7,11 +7,12 @@ import { useContext } from 'react';
 import { StyledButton } from '../../components/StyledButton';
 import { CreateCourseContext } from '../../state/CreateCourse';
 import useTheme from '@mui/material/styles/useTheme';
+import { alpha } from "@mui/material/styles";
 
 const RightPanelBottom = () => {
     const theme = useTheme();
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const { inputSection, setInputSection, editMode, setUpdating, setUploadStatus, isCourseValid } = useContext(CreateCourseContext);
+    const { inputSection, setInputSection, editMode, setUpdating } = useContext(CreateCourseContext);
 
     const handleNext = () => {
         if (inputSection === "basic info") {
@@ -60,7 +61,7 @@ const RightPanelBottom = () => {
                             cursor: "pointer",
                             padding: "0.5rem 1rem",
                             borderRadius: "2rem",
-                            backgroundColor: (theme) => theme.palette.background.paper,
+                            backgroundColor: "transparent",
                             border: `1px solid ${theme.palette.divider}`,
                             boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
                             transition: "all 0.2s ease",
@@ -104,7 +105,7 @@ const RightPanelBottom = () => {
                 )}
 
                 {/* NEXT BUTTON (Outlined/Subtle) */}
-                {inputSection != "course content" ? (
+                {inputSection !== "course content" && (
                     <StyledButton
                         variant="outlined"
                         sx={{
@@ -115,7 +116,7 @@ const RightPanelBottom = () => {
                                 cursor: "pointer",
                                 padding: "0.5rem 1rem",
                                 borderRadius: "2rem",
-                                backgroundColor: (theme) => theme.palette.background.paper,
+                                backgroundColor: "transparent",
                                 border: `1px solid ${theme.palette.divider}`,
                                 boxShadow: "0px 2px 4px rgba(0,0,0,0.05)",
                                 transition: "all 0.2s ease",
@@ -134,26 +135,6 @@ const RightPanelBottom = () => {
                     >
                         <Typography sx={{ fontWeight: "600", pr: "0.5rem", color: theme.palette.text.primary }}>Next</Typography>
                         <KeyboardDoubleArrowRightIcon className="next-icon" sx={{ fontSize: "1.2rem", color: theme.palette.text.secondary }} />
-                    </StyledButton>
-                ) : (
-                    // PUBLISH BUTTON (Final Step)
-                    <StyledButton
-                        variant="contained"
-                        disabled={!isCourseValid()}
-                        onClick={() => {
-                            setUploadStatus("publishing");
-                        }}
-                        sx={{
-                            textTransform: "capitalize",
-                            fontWeight: "600",
-                            background: (theme) => !isCourseValid() ? theme.palette.action.disabledBackground : theme.palette.success.main,
-                            color: colorTokens.white.pure,
-                            "&:hover": {
-                                background: (theme) => theme.palette.success.dark,
-                            },
-                        }}
-                    >
-                        <Typography sx={{ fontWeight: "600" }}>Publish Course</Typography>
                     </StyledButton>
                 )}
             </Box >

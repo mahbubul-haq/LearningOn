@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
+import { Box, Typography } from '@mui/material';
 import { colorTokens } from '../../theme';
 
 interface VideoProgressIndicatorProps {
@@ -16,7 +17,6 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
   const theme = useTheme();
   const strokeWidth = 4;
   const center = size / 2;
-  // RESTORED ORIGINAL RADIUS: No size changes
   const radius = (size / 2) - (strokeWidth / 2);
   const circumference = 2 * Math.PI * radius;
 
@@ -24,19 +24,44 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
   const offset = circumference - (validatedPercentage / 100) * circumference;
 
   const isComplete = validatedPercentage >= 100;
-  const isStarted = validatedPercentage > 0;
+
+  // Premium Gradient IDs
+  const gradientId = "progressGradient";
+  const glowId = "glowFilter";
 
   return (
-    <div style={styles.container(size, opacity)}>
+    <Box
+      sx={{
+        position: 'relative',
+        width: size,
+        height: size,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: opacity,
+        transition: 'opacity 0.5s ease',
+        // Glassmorphic Background
+        background: 'rgba(20, 20, 35, 0.4)', // Darker semi-transparent bg
+        backdropFilter: 'blur(8px)',
+        borderRadius: '50%',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+      }}
+    >
       <svg
         width={size}
         height={size}
         viewBox={`0 0 ${size} ${size}`}
-        style={{ overflow: 'visible' }}
+        style={{ overflow: 'visible', transform: 'rotate(-90deg)' }}
       >
         <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor={colorTokens.primary.main} />
+            <stop offset="100%" stopColor={colorTokens.secondary.main} />
+          </linearGradient>
+
+          <filter id={glowId} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
             <feMerge>
               <feMergeNode in="coloredBlur" />
               <feMergeNode in="SourceGraphic" />
@@ -50,7 +75,7 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
           cy={center}
           r={radius}
           fill="none"
-          stroke={theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}
+          stroke="rgba(255, 255, 255, 0.1)"
           strokeWidth={strokeWidth}
         />
 
@@ -60,72 +85,67 @@ const VideoProgressIndicator: React.FC<VideoProgressIndicatorProps> = ({
           cy={center}
           r={radius}
           fill="none"
-          stroke={theme.palette.primary.light} // "Outer circle some version of primary"
+          stroke={`url(#${gradientId})`}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          filter={isComplete ? "url(#glow)" : "none"} // Glow when complete
+          filter={isComplete ? `url(#${glowId})` : "none"}
           style={{
             transition: 'stroke-dashoffset 0.5s ease',
-            transform: 'rotate(-90deg)',
-            transformOrigin: 'center',
           }}
         />
       </svg>
 
-      {/* 3. Status Overlay */}
-      <div style={styles.iconOverlay}>
+      {/* 3. Center Content (Text or Icon) */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         {isComplete ? (
           <svg
             width={size * 0.4}
             height={size * 0.4}
             viewBox="0 0 24 24"
             fill="none"
-            stroke={colorTokens.secondary.lighter} // "Inner color light version of secondary"
+            stroke={colorTokens.secondary.lighter}
             strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
-            style={{ overflow: 'visible', filter: 'drop-shadow(0 0 8px rgba(217, 77, 133, 0.6))' }} // Glow for icon
+            style={{
+              filter: 'drop-shadow(0 0 5px rgba(255, 255, 255, 0.5))'
+            }}
           >
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         ) : (
-          <span style={styles.text(size, theme)}>
-            {Math.round(validatedPercentage)}<span style={{ fontSize: '0.6em' }}>%</span>
-          </span>
+          <Typography
+            variant="caption"
+            sx={{
+              color: '#fff',
+              fontSize: `${size * 0.25}px`,
+              fontWeight: 700,
+              fontFamily: '"Outfit", sans-serif', // Ensure we use the premium font if available
+              textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            {Math.round(validatedPercentage)}
+            <span style={{ fontSize: '0.7em', marginLeft: '1px', opacity: 0.8 }}>%</span>
+          </Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
-};
-
-const styles = {
-  container: (size: number, opacity: number): React.CSSProperties => ({
-    position: 'relative',
-    width: `${size}px`,
-    height: `${size}px`,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'visible',
-    opacity: opacity,
-    transition: 'opacity 0.5s ease',
-  }),
-  iconOverlay: {
-    position: 'absolute' as 'absolute',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 2,
-  },
-  text: (size: number, theme: any): React.CSSProperties => ({
-    color: theme.palette.secondary.light, // "Inner color light version of secondary"
-    fontSize: `${size * 0.22}px`,
-    fontWeight: 'bold',
-    fontFamily: 'sans-serif',
-    textShadow: '0 0 10px rgba(194, 33, 95, 0.4)', // Glowing text
-  })
 };
 
 export default VideoProgressIndicator;

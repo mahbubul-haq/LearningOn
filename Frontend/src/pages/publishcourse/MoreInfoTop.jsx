@@ -26,18 +26,82 @@ const MoreInfoTop = ({
 
     return (
         <>
-            <Box sx={{
-                display: "grid",
-                gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-                gap: "1.5rem",
-                width: "100%"
-            }}>
+            <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {/* 1. COURSE PRICE */}
                 <Box>
-                    <Box
-                        sx={{
-                            mb: "0.5rem",
-                        }}
-                    >
+                    <Box sx={{ mb: "0.5rem" }}>
+                        <InputLabel htmlFor="course-price">
+                            <Typography
+                                variant="subtitle2"
+                                sx={{
+                                    fontWeight: 700,
+                                    letterSpacing: 1,
+                                    color: 'text.secondary',
+                                    fontSize: '0.75rem',
+                                    textTransform: 'uppercase'
+                                }}
+                            >
+                                Course Price in USD
+                            </Typography>
+                        </InputLabel>
+                    </Box>
+                    <Box sx={{ width: "100%" }}>
+                        <TextField
+                            placeholder="$50"
+                            id="course-price"
+                            inputProps={{ maxLength: 6 }}
+                            InputProps={{
+                                endAdornment: (
+                                    <AttachMoneyIcon
+                                        sx={{
+                                            color: "text.secondary",
+                                            fontSize: "1.5rem",
+                                        }}
+                                        position="end"
+                                    />
+                                ),
+                            }}
+                            onChange={(event) => {
+                                setCoursePrice(event.target.value && event.target.value > 0 && !(event.target.value == "0") ? event.target.value.toString() : "");
+                                courseStateRef.current.coursePrice = event.target.value && event.target.value > 0 && !(event.target.value == "0") ? event.target.value.toString() : "";
+                            }}
+                            onBlur={(event) => {
+                                setCourseState({
+                                    ...courseStateRef.current
+                                });
+
+                                if (event.target.value === "" || event.target.value <= 0 || event.target.value == "0") {
+                                    setErrors({
+                                        ...errors,
+                                        coursePrice: "",
+                                    });
+                                }
+                            }}
+                            value={coursePrice ? coursePrice.toString() : ""}
+                            fullWidth
+                            variant="outlined"
+                            sx={{
+                                "& .MuiInputBase-input": {
+                                    fontSize: "1.5rem",
+                                    fontWeight: "600",
+                                    color: "text.primary",
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                    minHeight: "3rem",
+                                }
+                            }}
+                        />
+                        {errors.coursePrice && (
+                            <Typography sx={{ color: "error.main" }}>
+                                {errors.coursePrice}
+                            </Typography>
+                        )}
+                    </Box>
+                </Box>
+
+                {/* 2. COURSE LANGUAGE */}
+                <Box>
+                    <Box sx={{ mb: "0.5rem" }}>
                         <InputLabel htmlFor="course-language">
                             <Typography
                                 variant="subtitle2"
@@ -72,9 +136,7 @@ const MoreInfoTop = ({
                             }
                             id="course-language"
                             options={languages ? languages : [{ label: "No data" }]}
-                            sx={{
-                                width: "100%",
-                            }}
+                            sx={{ width: "100%" }}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -82,19 +144,21 @@ const MoreInfoTop = ({
                                     size="small"
                                     fullWidth
                                     variant="outlined"
+                                    sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                            minHeight: "3rem",
+                                        }
+                                    }}
                                 />
                             )}
                         />
                     </Box>
                 </Box>
 
+                {/* 3. APPROX TIME TO COMPLETE */}
                 <Box>
-                    <Box
-                        sx={{
-                            mb: "0.5rem",
-                        }}
-                    >
-                        <InputLabel htmlFor="course-price">
+                    <Box sx={{ mb: "0.5rem" }}>
+                        <InputLabel htmlFor="approx-time">
                             <Typography
                                 variant="subtitle2"
                                 sx={{
@@ -105,72 +169,48 @@ const MoreInfoTop = ({
                                     textTransform: 'uppercase'
                                 }}
                             >
-                                Course Price in USD
+                                Approx Time to Complete
                             </Typography>
                         </InputLabel>
                     </Box>
-                    <Box
-                        sx={{
-                            width: "100%",
-                        }}
-                    >
-                        <TextField
-                            placeholder="$50"
-                            id="course-price"
-                            inputProps={{
-                                maxLength: 6,
-                            }}
-                            InputProps={{
-                                endAdornment: (
-                                    <AttachMoneyIcon
-                                        sx={{
-                                            color: "text.secondary",
-                                            fontSize: "1.5rem",
-                                        }}
-                                        position="end"
-                                    />
-                                ),
-                            }}
-                            onChange={(event) => {
-                                setCoursePrice(event.target.value && event.target.value > 0 && !(event.target.value == "0") ? event.target.value.toString() : "");
-                                courseStateRef.current.coursePrice = event.target.value && event.target.value > 0 && !(event.target.value == "0") ? event.target.value.toString() : "";
-                            }}
-                            onBlur={(event) => {
+                    <Box>
+                        <Autocomplete
+                            disablePortal
+                            onChange={(event, value) => {
                                 setCourseState({
-                                    ...courseStateRef.current
+                                    ...courseState,
+                                    approxTimeToComplete: value ? value.value : "",
                                 });
-
-                                if (event.target.value === "" || event.target.value <= 0 || event.target.value == "0") {
-                                    setErrors({
-                                        ...errors,
-                                        coursePrice: "",
-                                    });
-                                }
                             }}
-
                             value={
-                                coursePrice ? coursePrice.toString() : ""
+                                courseState.approxTimeToComplete === ""
+                                    ? null
+                                    : {
+                                        label: `${parseInt(courseState.approxTimeToComplete)} week${parseInt(courseState.approxTimeToComplete) > 1 ? "s" : ""}`,
+                                        value: courseState.approxTimeToComplete,
+                                    }
                             }
-                            fullWidth
-                            variant="outlined"
-                            sx={{
-                                "& .MuiInputBase-input": {
-                                    fontSize: "1.5rem",
-                                    fontWeight: "600",
-                                    color: "text.primary",
-                                },
-                            }}
+                            id="approx-time"
+                            options={Array.from({ length: 100 }, (_, i) => ({
+                                label: `${i + 1} week${i + 1 > 1 ? "s" : ""}`,
+                                value: `${i + 1}`,
+                            }))}
+                            sx={{ width: "100%" }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    placeholder="Select duration"
+                                    size="small"
+                                    fullWidth
+                                    variant="outlined"
+                                    sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                            minHeight: "3rem",
+                                        }
+                                    }}
+                                />
+                            )}
                         />
-
-                        {errors.coursePrice && (
-                            <Typography
-                                sx={{
-                                    color: "error.main",
-                                }}
-                            >
-                                {errors.coursePrice}
-                            </Typography>
-                        )}
                     </Box>
                 </Box>
             </Box>

@@ -7,6 +7,8 @@ import { CreateCourseContext } from "../../state/CreateCourse.jsx";
 import { GlobalContext } from "../../state/GlobalContext.jsx";
 import CourseContentCourseAccordion from "./CourseContentCourseAccordion.jsx";
 import RightPanelBottom from "./RightPanelBottom.jsx";
+import { colorTokens } from "../../theme.js";
+import { alpha } from "@mui/material/styles";
 
 const CourseContent = () => {
   const { courseState, setCourseState, updateCallback } =
@@ -222,11 +224,14 @@ const CourseContent = () => {
           size="medium"
           sx={{
             mt: "1rem",
-            backgroundColor: (theme) => theme.palette.background.buttonBgPink,
+            backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
+            color: (theme) => theme.palette.primary.main,
+            border: "1px solid",
+            borderColor: (theme) => alpha(theme.palette.primary.main, 0.2),
             boxShadow: "none",
             "&:hover": {
-              backgroundColor: (theme) =>
-                theme.palette.background.buttonBgPinkDark,
+              backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.2),
+              borderColor: (theme) => theme.palette.primary.main,
             },
           }}
           onClick={() => {
@@ -268,7 +273,7 @@ const CourseContent = () => {
           <Typography
             sx={{
               fontWeight: "600",
-              color: (theme) => theme.palette.text.primary,
+              color: "inherit",
               textTransform: "capitalize",
             }}
           >

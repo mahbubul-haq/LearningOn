@@ -19,6 +19,7 @@ import QuestionForm from "./QuestionForm";
 import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { colorTokens } from "../../theme";
+import { alpha } from "@mui/material/styles";
 
 const CourseContentCourseAccordion = ({
   lesson,
@@ -48,7 +49,22 @@ const CourseContentCourseAccordion = ({
   return (
     <Accordion
       sx={{
-        backgroundColor: colorTokens.white.main,
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark"
+            ? "rgba(255, 255, 255, 0.05)"
+            : "#FFFFFF",
+        color: (theme) => theme.palette.text.primary,
+        backgroundImage: "none",
+        boxShadow: (theme) => theme.palette.mode === "light" ? "0 2px 8px rgba(0,0,0,0.05)" : "none",
+        border: (theme) => theme.palette.mode === "light"
+          ? `1px solid ${alpha(theme.palette.divider, 0.5)}`
+          : `1px solid rgba(255, 255, 255, 0.1)`,
+        borderRadius: "12px",
+        overflow: "hidden", // Ensure child content respects curvature
+        "&:before": {
+          display: "none",
+        },
+        mb: "1.5rem",
       }}
       expanded={expanded === `panel${index}`}
     >
@@ -56,7 +72,7 @@ const CourseContentCourseAccordion = ({
         expandIcon={
           <ExpandMoreIcon
             sx={{
-              color: theme.palette.grey.grey800,
+              color: (theme) => theme.palette.text.secondary,
               fontSize: "2rem",
               p: 0,
               m: 0,
@@ -69,7 +85,11 @@ const CourseContentCourseAccordion = ({
         aria-controls="panel1a-content"
         id="panel1a-header"
         sx={{
-          backgroundColor: (theme) => theme.palette.grey.grey50,
+          backgroundColor: "transparent",
+          borderRadius: "12px",
+          "&.Mui-expanded": {
+            borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          }
         }}
         onClick={(event) => {
           handleExpand(event, index);
@@ -78,13 +98,13 @@ const CourseContentCourseAccordion = ({
         <Typography
           sx={{
             fontSize: "1.2rem",
-            color: theme.palette.grey.grey800,
+            color: (theme) => theme.palette.text.primary,
           }}
         >
           <span
             style={{
-              color: theme.palette.grey.grey800,
               fontWeight: "600",
+              color: "inherit",
             }}
           >
             Lesson {index + 1}
@@ -97,11 +117,16 @@ const CourseContentCourseAccordion = ({
           sx={{
             ml: "auto",
             mr: "1rem",
-            color: (theme) => theme.palette.grey.grey600,
-            borderColor: (theme) => theme.palette.grey.grey600,
+            color: (theme) => theme.palette.text.secondary,
+            borderColor: "transparent",
             "&&": {
               padding: "0.3rem 1rem",
             },
+            "&:hover": {
+              borderColor: (theme) => theme.palette.text.primary,
+              backgroundColor: "transparent",
+              color: (theme) => theme.palette.text.primary,
+            }
           }}
           onClick={async (event) => {
             event.stopPropagation();
@@ -202,6 +227,7 @@ const CourseContentCourseAccordion = ({
           variant="outlined"
           sx={{
             width: "100%",
+            mb: "1.5rem",
           }}
         />
 
@@ -221,11 +247,14 @@ const CourseContentCourseAccordion = ({
           size="medium"
           sx={{
             mt: "1rem",
-            backgroundColor: (theme) => theme.palette.background.buttonBgPink,
+            backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
+            color: (theme) => theme.palette.primary.main,
+            border: "1px solid",
+            borderColor: (theme) => alpha(theme.palette.primary.main, 0.2),
             boxShadow: "none",
             "&:hover": {
-              backgroundColor: (theme) =>
-                theme.palette.background.buttonBgPinkDark,
+              backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.2),
+              borderColor: (theme) => theme.palette.primary.main,
             },
           }}
           onClick={() => {
@@ -306,7 +335,7 @@ const CourseContentCourseAccordion = ({
         </Box>
       </AccordionDetails>
       <AccordionActions></AccordionActions>
-    </Accordion>
+    </Accordion >
   );
 };
 

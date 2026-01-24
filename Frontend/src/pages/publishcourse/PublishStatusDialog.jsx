@@ -7,6 +7,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton";
+import { alpha, useTheme } from "@mui/material/styles";
 
 
 const PublishStatusDialog = ({
@@ -18,6 +19,7 @@ const PublishStatusDialog = ({
 }) => {
 
     const navigate = useNavigate();
+    const theme = useTheme();
 
 
     return (
@@ -28,10 +30,21 @@ const PublishStatusDialog = ({
                     setUploadStatus("");
                 }
             }}
+            PaperProps={{
+                sx: {
+                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? "rgba(30, 30, 35, 0.8)" : "rgba(255, 255, 255, 0.8)",
+                    backdropFilter: "blur(20px)",
+                    borderRadius: "16px",
+                    border: (theme) => theme.palette.mode === 'dark' ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(255, 255, 255, 0.5)",
+                    boxShadow: (theme) => theme.palette.mode === 'dark' ? "0 8px 32px rgba(0, 0, 0, 0.4)" : "0 8px 32px rgba(31, 38, 135, 0.15)",
+                }
+            }}
             aria-labelledby="responsive-dialog-title"
             disableEscapeKeyDown
         >
-            <DialogTitle id="responsive-dialog-title">Course Publish Status</DialogTitle>
+            <DialogTitle id="responsive-dialog-title" sx={{ textAlign: 'center', fontWeight: 700, pt: 3 }}>
+                Course Publish Status
+            </DialogTitle>
             <DialogContent>
                 {uploadStatus === "publishing" && (
                     <Box>
@@ -42,21 +55,21 @@ const PublishStatusDialog = ({
                 {uploadStatus === "unpublished" && <>There was an error publishing your course.</>}
                 {uploadStatus === "published" && <>Successfully Published - Waiting for Admin Approval.</>}
             </DialogContent>
-            <DialogActions>
+            <DialogActions sx={{ p: 2 }}>
                 <StyledButton
                     sx={{
-                        textTransform: "capitalize",
-                        fontWeight: "600",
-
-                        cursor: "pointer",
                         "&&": {
-                            padding: "0.4rem 0.8rem",
+                            padding: "0.5rem 1.2rem",
+                            borderRadius: "8px",
                             fontWeight: "600",
                             background: "transparent",
-                            color: (theme) => theme.palette.primary.dark,
+                            color: (theme) => theme.palette.primary.main,
+                            border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.5)}`,
                             "&:hover": {
-                                color: (theme) => theme.palette.primary.darker,
-                                background: (theme) => theme.palette.background.alt,
+                                color: (theme) => theme.palette.primary.main,
+                                background: (theme) => alpha(theme.palette.primary.main, 0.1),
+                                border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                                boxShadow: "none",
                             },
                         },
                     }}
@@ -75,8 +88,9 @@ const PublishStatusDialog = ({
                     <Typography
                         sx={{
                             fontWeight: "600",
-                            pl: "0.5rem",
+                            px: "0.5rem",
                             textTransform: "uppercase",
+                            fontSize: "0.9rem",
                         }}
                     >
                         {uploadStatus === "published" ? "Go to dashboard" : "Close"}

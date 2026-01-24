@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Typography, useMediaQuery } from "@mui/material";
+import { Autocomplete, Box, Typography, useMediaQuery, TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import GlassTextField from "../../components/GlassTextField";
 import { useContext, useRef } from "react";
@@ -82,7 +82,7 @@ const QuestionFormDetails = ({
               Option {index + 1}
             </Typography>
 
-            <GlassTextField
+            <TextField
               placeholder={"Option " + (index + 1)}
               multiline
               minRows={1}
@@ -97,13 +97,18 @@ const QuestionFormDetails = ({
                 }
               }}
               onBlur={(e) => changeOption(e, index)}
+              fullWidth
+              variant="outlined"
               sx={{
                 width: "100%",
                 "&&": {
                   marginBottom: "0",
                 },
+                "& .MuiOutlinedInput-root": {
+                  minHeight: "3rem",
+                }
               }}
-            ></GlassTextField>
+            ></TextField>
           </Box>
         );
       })}
@@ -166,15 +171,20 @@ const QuestionFormDetails = ({
             maxWidth: "100%",
           }}
           renderInput={(params) => (
-            <GlassTextField
+            <TextField
               placeholder="Choose correct option"
               {...params}
               size="small"
+              fullWidth
+              variant="outlined"
               sx={{
                 width: "100%",
                 "&&": {
                   marginBottom: "0",
                 },
+                "& .MuiOutlinedInput-root": {
+                  minHeight: "3rem",
+                }
               }}
             />
           )}

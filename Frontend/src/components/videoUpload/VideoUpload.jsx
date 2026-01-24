@@ -190,6 +190,7 @@ const VideoUpload = ({
         }}
         sx={{
           zIndex: 10000,
+          position: "fixed",
         }}
       >
         <Alert

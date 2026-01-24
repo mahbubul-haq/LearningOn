@@ -7,6 +7,8 @@ import { colorTokens } from "../../theme";
 import Fade from "@mui/material/Fade";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Button from "@mui/material/Button";
+import useTheme from "@mui/material/styles/useTheme";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const VideoUploadDropzone = ({
     setPreview,
@@ -20,112 +22,71 @@ const VideoUploadDropzone = ({
     setUploadStatus,
     uploadStatusRef,
 }) => {
+    const theme = useTheme();
+    const isMobileScreen = useMediaQuery(theme.breakpoints.down("sm"));
     return (
-        <Dropzone
-            onDrop={(acceptedFiles) => {
-                let types;
-                if (isImage) {
-                    types = [
-                        "image/png",
-                        "image/jpeg",
-                        "image/jpg",
-                        "image/webp",
-                    ];
-                } else {
-                    types = ["video/mp4", "video/mkv", "video/avi"];
-                }
+        <Box sx={{ display: "flex", justifyContent: "center", width: "100%", alignItems: "center", aspectRatio: isMobileScreen ? "auto" : "16/9" }}>
+            <Dropzone
+                onDrop={(acceptedFiles) => {
+                    let types;
+                    if (isImage) {
+                        types = [
+                            "image/png",
+                            "image/jpeg",
+                            "image/jpg",
+                            "image/webp",
+                        ];
+                    } else {
+                        types = ["video/mp4", "video/mkv", "video/avi"];
+                    }
 
-                if (
-                    types.every(
-                        (type) => acceptedFiles[0].type !== type
-                    )
-                ) {
-                    setOpenSnackbar(true);
-                    setSnackbarMessage("Invalid file type");
-                    setSnackbarSeverity("error");
-                } else if (isImage && acceptedFiles[0].size > 1000000) {
-                    setOpenSnackbar(true);
-                    setSnackbarMessage("File size must be less than 1MB");
-                    setSnackbarSeverity("error");
-                }
-                else if (!isImage && acceptedFiles[0].size > 500000000) {
-                    setOpenSnackbar(true);
-                    setSnackbarMessage("File size must be less than 500MB");
-                    setSnackbarSeverity("error");
-                }
-                else {
-                    setPreview(URL.createObjectURL(acceptedFiles[0]));
-                    uploadStatusRef.current = "uploading";
-                    setUploadStatus("uploading");
-                    uploadVideo(acceptedFiles[0]);
-                }
-            }}
-            multiple={false}
-        >
-            {({ getRootProps, getInputProps }) => (
-                <Box
-                    {...getRootProps()}
-                    sx={{
-                        display: "flex",
-                        backgroundColor: "transparent",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "100%",
-                        height: "100%",
-                        aspectRatio: "16/9",
-                        cursor: "pointer",
-                        padding: "2rem",
-                        gap: "1.5rem",
-                        borderRadius: "0.25rem",
-                        border: `2px dashed ${colorTokens.grey.ccc}`,
-                        "&:hover": {
-                            border: `2px dashed ${colorTokens.grey.aaa}`,
-                        },
-                    }}
-                >
-                    <input {...getInputProps()} />
-                    {/* <Box
-                        sx={{
-                            width: '100%',
-                            minHeight: '600px', // Adjust as needed
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            // The Dark Void Background
-                            backgroundColor: colorTokens.primary.darker,
-                            // The Floating Mesh Orbs
-                            backgroundImage: `
-          radial-gradient(at 10% 10%, ${colorTokens.primary.main} 0px, transparent 50%),
-          radial-gradient(at 90% 10%, ${colorTokens.secondary.main} 0px, transparent 40%),
-          radial-gradient(at 90% 90%, ${colorTokens.primary.dark} 0px, transparent 50%)
-        `,
-                        }}
-                    > */}
+                    if (
+                        types.every(
+                            (type) => acceptedFiles[0].type !== type
+                        )
+                    ) {
+                        setOpenSnackbar(true);
+                        setSnackbarMessage("Invalid file type");
+                        setSnackbarSeverity("error");
+                    } else if (isImage && acceptedFiles[0].size > 1000000) {
+                        setOpenSnackbar(true);
+                        setSnackbarMessage("File size must be less than 1MB");
+                        setSnackbarSeverity("error");
+                    }
+                    else if (!isImage && acceptedFiles[0].size > 500000000) {
+                        setOpenSnackbar(true);
+                        setSnackbarMessage("File size must be less than 500MB");
+                        setSnackbarSeverity("error");
+                    }
+                    else {
+                        setPreview(URL.createObjectURL(acceptedFiles[0]));
+                        uploadStatusRef.current = "uploading";
+                        setUploadStatus("uploading");
+                        uploadVideo(acceptedFiles[0]);
+                    }
+                }}
+                multiple={false}
+            >
+                {({ getRootProps, getInputProps }) => (
 
-                    {/* --- 4. The Glass Card --- */}
                     <Box
+                        {...getRootProps()}
                         sx={{
-                            width: '100%',
+                            width: "100%",
                             maxWidth: '500px',
-                            minHeight: '320px',
-                            p: 4,
-                            borderRadius: '24px',
-                            position: 'relative',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
+                            p: "2rem 1rem",
                             // Glassmorphism Styles
-                            background: 'rgba(31, 15, 85, 0.4)', // Semi-transparent dark
-                            backdropFilter: 'blur(16px)',
-                            border: `1px solid rgba(145, 120, 230, 0.3)`, // Subtle border
-                            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+
                             transition: 'all 0.5s ease',
+                            ...theme.palette.glassCard,
+                            cursor: 'pointer',
                         }}
                     >
+                        <input {...getInputProps()} />
                         <Fade in={true}>
                             <Box sx={{ textAlign: 'center', width: '100%' }}>
                                 {/* Glowing Icon */}
@@ -141,7 +102,7 @@ const VideoUploadDropzone = ({
                                     }}
                                 />
 
-                                <Typography variant="h5" sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>
+                                <Typography variant="h5" sx={{ color: "text.primary", fontWeight: 'bold', mb: 1 }}>
                                     Drag & Drop your video
                                 </Typography>
                                 <Typography variant="body2" sx={{ color: colorTokens.primary.lighter, mb: 4 }}>
@@ -169,10 +130,10 @@ const VideoUploadDropzone = ({
                             </Box>
                         </Fade>
                     </Box>
-                </Box>
-                // </Box>
-            )}
-        </Dropzone>
+
+                )}
+            </Dropzone>
+        </Box>
     )
 }
 

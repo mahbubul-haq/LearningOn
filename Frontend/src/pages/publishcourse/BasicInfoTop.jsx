@@ -75,6 +75,11 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                                 size="small"
                                 fullWidth
                                 variant="outlined"
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        minHeight: "3rem",
+                                    }
+                                }}
                             />
                         )}
                     />
@@ -136,6 +141,9 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
                             "& .MuiInputBase-input": {
                                 fontSize: isMobileScreens ? "1rem" : "1.2rem",
                                 fontWeight: "600",
+                            },
+                            "& .MuiOutlinedInput-root": {
+                                minHeight: "3rem",
                             }
                         }}
                     />

@@ -1,3 +1,4 @@
+import { alpha } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
@@ -75,14 +76,26 @@ const MoreInfoBottom = ({
                                 }}
                                 sx={{
                                     position: "absolute",
-                                    top: 0,
-                                    right: 0,
-                                    fontSize: "1rem",
+                                    top: "0.5rem",
+                                    right: "0.5rem",
+                                    zIndex: 10,
+                                    width: "2rem",
+                                    height: "2rem",
+                                    bgcolor: (theme) => alpha(theme.palette.background.paper, 0.6),
+                                    backdropFilter: "blur(4px)",
+                                    boxShadow: 1,
                                     color: (theme) => theme.palette.text.secondary,
+                                    transition: "all 0.2s",
+                                    "&:hover": {
+                                        bgcolor: (theme) => theme.palette.error.main,
+                                        color: "white",
+                                        transform: "scale(1.1)"
+                                    }
                                 }}
+                                size="small"
+                                title="Remove Instructor"
                             >
-                                {/* <PersonRemoveIcon /> */}
-                                <CloseIcon />
+                                <CloseIcon fontSize="small" />
                             </IconButton>
                             <InstructorProfile instructorId={id} />
                         </Box>
@@ -121,8 +134,7 @@ const MoreInfoBottom = ({
                                 : [{ label: "No data" }]
                         }
                         sx={{
-                            width: isMobileScreens ? "100%" : "350px",
-                            maxWidth: "100%",
+                            width: "100%",
                             p: 0,
                             m: 0,
                         }}
@@ -173,6 +185,9 @@ const MoreInfoBottom = ({
                                         fontSize: "1rem",
                                         fontWeight: "600",
                                     },
+                                    "& .MuiOutlinedInput-root": {
+                                        minHeight: "3rem",
+                                    }
                                 }}
                             />
                         )}

@@ -5,6 +5,7 @@ import {
   AccordionSummary,
   Box,
   Typography,
+  TextField,
 } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -17,6 +18,7 @@ import QuestionFormDetails from "./QuestionFormDetails";
 import { useContext, useRef, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { colorTokens } from "../../theme";
+import { alpha } from "@mui/material/styles";
 
 const QuestionForm = ({
   question,
@@ -92,7 +94,12 @@ const QuestionForm = ({
   return (
     <Accordion
       sx={{
-        backgroundColor: colorTokens.white.main,
+        backgroundColor: "transparent",
+        backgroundImage: "none",
+        boxShadow: "none",
+        "&:before": {
+          display: "none",
+        },
       }}
       expanded={isExpanded}
     //onChange={() => setIsExpanded(!isExpanded)}
@@ -213,20 +220,16 @@ const QuestionForm = ({
               sx={{
                 ml: "auto",
                 //mr: "1rem",
-                color: (theme) => theme.palette.grey.grey600,
-
-                borderColor: (theme) => theme.palette.grey.grey600,
-                border: "none",
+                color: colorTokens.white.main,
                 "&&": {
                   padding: "0.1rem 0.5rem",
                   borderRadius: "1000px",
-                  color: theme.palette.grey.grey700,
-                  // backgroundColor: theme.palette.error.light,
                   fontSize: "0.9rem",
                   fontWeight: "400",
                 },
                 "&:hover": {
-                  border: "none",
+                  backgroundColor: "transparent",
+                  color: colorTokens.white.pure,
                 },
               }}
               onClick={async (event) => {
@@ -241,7 +244,7 @@ const QuestionForm = ({
           </Box>
 
           <Box>
-            <GlassTextField
+            <TextField
               placeholder="Write question here"
               multiline
               minRows={1}
@@ -258,8 +261,13 @@ const QuestionForm = ({
               }}
               value={currQuestion}
               onBlur={setQuestion}
+              fullWidth
+              variant="outlined"
               sx={{
                 width: "100%",
+                "& .MuiOutlinedInput-root": {
+                  minHeight: "3rem",
+                }
               }}
             />
           </Box>

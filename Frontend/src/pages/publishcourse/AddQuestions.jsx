@@ -1,4 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
+import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
@@ -46,10 +47,14 @@ const AddQuestions = ({
         size="medium"
         sx={{
           mt: "0rem",
-          backgroundColor: (theme) => theme.palette.grey.grey200,
+          backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
+          color: (theme) => theme.palette.primary.main,
+          border: "1px solid",
+          borderColor: (theme) => alpha(theme.palette.primary.main, 0.2),
           boxShadow: "none",
           "&:hover": {
-            backgroundColor: (theme) => theme.palette.grey.grey300,
+            backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.2),
+            borderColor: (theme) => theme.palette.primary.main,
           },
         }}
         onClick={() => {

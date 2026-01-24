@@ -12,6 +12,7 @@ import { CreateCourseContext } from "../../state/CreateCourse";
 import { colorTokens } from "../../theme";
 import { useContext, useState, useEffect, useCallback } from "react";
 import SubLessonVideoUploader from "./SubLessonVideoUploader";
+import { alpha } from "@mui/material/styles";
 
 
 const CourseContentSublesson = ({
@@ -41,12 +42,22 @@ const CourseContentSublesson = ({
         <Accordion
           key={index + " " + subIndex}
           expanded={subExpanded === `subPanel${index}${subIndex}`}
+          sx={{
+            backgroundColor: "transparent",
+            backgroundImage: "none",
+            color: (theme) => theme.palette.text.primary,
+            boxShadow: "none",
+            "&:before": {
+              display: "none",
+            },
+            mb: "1rem",
+          }}
         >
           <AccordionSummary
             expandIcon={
               <ExpandMoreIcon
                 sx={{
-                  color: theme.palette.grey.grey800,
+                  color: (theme) => theme.palette.text.secondary,
                   fontSize: "1.5rem",
                 }}
                 onClick={(event) => {
@@ -57,7 +68,13 @@ const CourseContentSublesson = ({
             aria-controls="panel1a-content"
             id="panel1a-header"
             sx={{
-              backgroundColor: theme.palette.grey.grey10,
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255, 255, 255, 0.05)"
+                  : "#FFFFFF",
+              border: (theme) => theme.palette.mode === "light" ? `1px solid ${alpha(theme.palette.divider, 0.5)}` : "none",
+              boxShadow: (theme) => theme.palette.mode === "light" ? "0 2px 6px rgba(0,0,0,0.04)" : "none",
+              borderRadius: "12px",
             }}
             onClick={(event) => {
               handleExpand(event, index, subIndex);
@@ -66,12 +83,12 @@ const CourseContentSublesson = ({
             <Typography
               sx={{
                 fontSize: "1rem",
-                color: theme.palette.grey.grey800,
+                color: (theme) => theme.palette.text.primary,
               }}
             >
               <span
                 style={{
-                  color: theme.palette.grey.grey800,
+                  color: "inherit",
                   fontWeight: "600",
                 }}
               >
@@ -87,11 +104,20 @@ const CourseContentSublesson = ({
                 ml: "auto",
                 mr: "1rem",
 
-                color: (theme) => theme.palette.grey.grey600,
-                borderColor: (theme) => theme.palette.grey.grey600,
+                color: (theme) => theme.palette.text.secondary,
+                borderColor: "transparent",
                 "&&": {
                   padding: "0.3rem 1rem",
                 },
+                "&:hover": {
+                  borderColor: (theme) => theme.palette.text.primary,
+                  backgroundColor: "transparent",
+                  color: (theme) => theme.palette.text.primary,
+                },
+                "&.Mui-disabled": {
+                  borderColor: "transparent",
+                  color: (theme) => theme.palette.text.disabled,
+                }
               }}
               onClick={async (event) => {
                 event.stopPropagation();

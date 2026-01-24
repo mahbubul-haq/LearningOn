@@ -13,7 +13,9 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useState, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { alpha } from "@mui/material/styles";
-import { X } from 'lucide-react'; // Using Lucide X icon like in Playground
+import { X, Plus } from 'lucide-react'; // Using Lucide X icon like in Playground
+import { colorTokens } from "../../theme";
+import { useTheme } from "@mui/material/styles";
 
 const BasicInfoBottom = ({
     courseState,
@@ -26,7 +28,7 @@ const BasicInfoBottom = ({
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
     const { courseStateRef } = useContext(CreateCourseContext);
     const [studentRequirements, setStudentRequirements] = useState(courseState.studentRequirements);
-
+    const theme = useTheme();
 
     useEffect(() => {
         if (!studentRequirements) {
@@ -87,6 +89,11 @@ const BasicInfoBottom = ({
                         }}
                         fullWidth
                         variant="outlined"
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                minHeight: "3rem",
+                            }
+                        }}
                     />
                 </Box>
             </Box>
@@ -151,7 +158,7 @@ const BasicInfoBottom = ({
                             }}
                             sx={{
                                 backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
-                                color: (theme) => theme.palette.primary.main,
+                                color: (theme) => theme.palette.primary.light,
                                 fontWeight: 600,
                                 border: "1px solid",
                                 borderColor: (theme) => alpha(theme.palette.primary.main, 0.2)
@@ -159,77 +166,39 @@ const BasicInfoBottom = ({
                         />
                     ))}
 
-                    {!addSkill && (
+                    <Box sx={{ display: 'flex', gap: 1, width: "100%" }}>
+                        <TextField
+                            size="small"
+                            placeholder="Type a skill..."
+                            value={skillName}
+                            onChange={(e) => setSkillName(e.target.value)}
+                            sx={{ flexGrow: 1 }}
+                        />
                         <Button
                             variant="outlined"
-                            startIcon={<AddIcon />}
-                            onClick={() => {
-                                setAddSkill(true);
-                                setSkillName("");
-                            }}
+                            startIcon={<Plus size={18} />}
                             sx={{
-                                borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.2)',
+                                borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.2)',
                                 color: 'text.primary',
-                                borderRadius: "50px", // Match typical rounded button style or keep standard
-                                textTransform: "none",
-                                '&:hover': {
-                                    borderColor: (theme) => theme.palette.primary.main,
-                                    color: (theme) => theme.palette.primary.main
+                                '&:hover': { borderColor: colorTokens.primary.main, color: colorTokens.primary.main }
+                            }}
+                            onClick={() => {
+                                if (skillName !== "") {
+                                    setCourseState({
+                                        ...courseState,
+                                        skillTags: [...courseState.skillTags, skillName],
+                                    });
+                                    setSkillName("");
                                 }
                             }}
                         >
-                            Add Skill
+                            Add
                         </Button>
-                    )}
-                    {addSkill && (
-                        <Box sx={{ display: "flex", gap: 1, alignItems: "center", flexGrow: 1, maxWidth: "300px" }}>
-                            <TextField
-                                size="small"
-                                placeholder="Add skill name"
-                                value={skillName}
-                                onChange={(event) => setSkillName(event.target.value)}
-                                autoFocus
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        if (skillName !== "") {
-                                            setCourseState({
-                                                ...courseState,
-                                                skillTags: [...courseState.skillTags, skillName],
-                                            });
-                                            setAddSkill(false);
-                                            setSkillName("");
-                                        }
-                                    }
-                                }}
-                                sx={{ flexGrow: 1 }}
-                            />
-                            <Button
-                                variant="contained"
-                                onClick={() => {
-                                    if (skillName !== "") {
-                                        setCourseState({
-                                            ...courseState,
-                                            skillTags: [...courseState.skillTags, skillName],
-                                        });
-                                        setAddSkill(false);
-                                        setSkillName("");
-                                    }
-                                }}
-                                sx={{ minWidth: "auto", px: 2 }}
-                            >
-                                Add
-                            </Button>
-                            <Button
-                                variant="text"
-                                color="inherit"
-                                onClick={() => setAddSkill(false)}
-                                sx={{ minWidth: "auto" }}
-                            >
-                                <X size={18} />
-                            </Button>
-                        </Box>
-                    )}
+
+                    </Box>
+
+
+
                 </Box>
             </Box>
         </>

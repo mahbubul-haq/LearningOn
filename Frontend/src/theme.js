@@ -254,6 +254,19 @@ export const themeSettings = ({ mode }) => {
                 borderBottom: "1px solid rgba(0, 0, 0, 0.05)",
                 boxShadow: "0 4px 30px rgba(0, 0, 0, 0.03)",
             },
+            glassCard: mode === "dark" ? {
+                background: "rgba(20, 20, 25, 0.3)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                borderRadius: "24px",
+            } : {
+                background: "rgba(225, 225, 235, 0.7)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(0, 0, 0, 0.05)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.03)",
+                borderRadius: "24px",
+            },
             glassSheet: mode === "dark" ? {
                 background: "rgba(30, 30, 35, 0.6)", // Semi-transparent dark
                 backdropFilter: "blur(20px)",         // Strong blur
