@@ -65,6 +65,7 @@ const CourseContentCourseAccordion = ({
           display: "none",
         },
         mb: "1.5rem",
+        // p: isMobileScreens ? "1rem" : "2rem",
       }}
       expanded={expanded === `panel${index}`}
     >
@@ -117,6 +118,9 @@ const CourseContentCourseAccordion = ({
           sx={{
             ml: "auto",
             mr: "1rem",
+            flexShrink: 0,
+
+            alignSelf: "center",
             color: (theme) => theme.palette.text.secondary,
             borderColor: "transparent",
             "&&": {
@@ -139,7 +143,7 @@ const CourseContentCourseAccordion = ({
       </AccordionSummary>
       <AccordionDetails
         sx={{
-          padding: "1.5rem",
+          padding: isMobileScreens ? "1rem" : "2rem",
         }}
       >
         <InputLabel htmlFor="title">

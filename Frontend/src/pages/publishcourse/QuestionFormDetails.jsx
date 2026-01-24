@@ -54,7 +54,7 @@ const QuestionFormDetails = ({
   return (
     <Box
       sx={{
-        padding: "0.5rem",
+        padding: "0rem",
         display: "flex",
         flexDirection: "column",
         gap: "1rem",

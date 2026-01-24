@@ -97,6 +97,8 @@ const QuestionForm = ({
         backgroundColor: "transparent",
         backgroundImage: "none",
         boxShadow: "none",
+        // border: "2px solid red",
+        // p: isMobileScreens ? 0 : "0 1rem",
         "&:before": {
           display: "none",
         },
@@ -124,7 +126,7 @@ const QuestionForm = ({
         id="panel1a-header"
         sx={{
           // backgroundColor: (theme) => theme.palette.grey.grey50,
-          padding: "0rem 0.5rem 0 1rem",
+          padding: "0rem 0rem 0 0rem",
           margin: 0,
           backgroundColor: "transparent",
           display: "flex",
@@ -251,7 +253,7 @@ const QuestionForm = ({
               maxRows={Infinity}
               id="question"
               inputProps={{
-                maxLength: 500,
+                // maxLength: 500,
               }}
               onChange={(e) => {
                 setCurrQuestion(e.target.value);
@@ -273,7 +275,7 @@ const QuestionForm = ({
           </Box>
         </Box>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails sx={{ p: 0 }}>
         <QuestionFormDetails
           question={question}
           courseState={courseState}

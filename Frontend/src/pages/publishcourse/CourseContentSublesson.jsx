@@ -103,7 +103,8 @@ const CourseContentSublesson = ({
               sx={{
                 ml: "auto",
                 mr: "1rem",
-
+                flexShrink: 0,
+                alignSelf: "center",
                 color: (theme) => theme.palette.text.secondary,
                 borderColor: "transparent",
                 "&&": {
@@ -130,7 +131,8 @@ const CourseContentSublesson = ({
           </AccordionSummary>
           <AccordionDetails
             sx={{
-              padding: "1.5rem",
+              padding: "0",
+              // border: "2px solid red",
             }}
           >
             <InputLabel htmlFor="sublesson-title">

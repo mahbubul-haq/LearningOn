@@ -43,7 +43,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
         backdropFilter: coursePage ? theme.palette.glassNavbar.backdropFilter : theme.palette.courseExplorer.backdropFilter,
         borderBottom: coursePage ? theme.palette.glassNavbar.borderBottom : `1px solid ${theme.palette.courseExplorer.border}`,
         boxShadow: coursePage ? theme.palette.glassNavbar.boxShadow : "none",
-        zIndex: "5000",
+        zIndex: "5",
       }}
     >
       {!coursePage && (

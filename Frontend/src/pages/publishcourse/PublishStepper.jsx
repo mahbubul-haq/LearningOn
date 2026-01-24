@@ -9,11 +9,33 @@ const steps = [
     { label: "Curriculum", value: "course content" },
 ];
 
+
+
 const PublishStepper = ({ mode, brand }) => {
-    const { inputSection, setInputSection } = useContext(CreateCourseContext);
+    const { inputSection, setInputSection, courseState,
+        isBasicInfoValid,
+        isCourseMediaValid,
+        isCourseMoreInfoValid,
+        isCourseContentValid,
+    } = useContext(CreateCourseContext);
     const isMobile = useMediaQuery("(max-width: 900px)");
 
     const activeIndex = steps.findIndex(step => step.value === inputSection);
+
+    const isCompletedCurrent = (step) => {
+        if (step == "basic info") {
+            return isBasicInfoValid();
+        }
+        if (step == "course media") {
+            return isCourseMediaValid();
+        }
+        if (step == "more info") {
+            return isCourseMoreInfoValid();
+        }
+        if (step == "course content") {
+            return isCourseContentValid();
+        }
+    }
 
     // Custom Styles for Stepper
     const stepStyles = (isActive, isCompleted) => ({
@@ -55,8 +77,8 @@ const PublishStepper = ({ mode, brand }) => {
                     return (
                         <Step
                             key={step.label}
-                            completed={isCompleted}
-                            sx={stepStyles(isActive, isCompleted)}
+                            completed={isCompletedCurrent(step.value)}
+                            sx={stepStyles(isActive, isCompletedCurrent(step.value))}
                             onClick={() => setInputSection(step.value)} // Enable clicking on steps
                         >
                             <StepLabel>{step.label}</StepLabel>

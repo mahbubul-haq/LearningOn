@@ -98,40 +98,49 @@ export const CreateCourseState = (props) => {
   //     return "";
   // };
 
-  const isCourseValid = () => {
-    if (
-      courseState.category.trim()?.length === 0 ||
-      courseState.courseTitle.trim()?.length === 0 ||
-      courseState.courseDescription.trim()?.length === 0 ||
-      courseState.studentRequirements.trim()?.length === 0 ||
-      courseState.skillTags?.length === 0 ||
-      courseState.courseThumbnail?.length === 0 ||
-      courseState.introVideo?.length === 0 ||
-      courseState.courseLanguage.trim()?.length === 0 ||
-      courseState.coursePrice.trim()?.length === 0 ||
-      courseState.approxTimeToComplete.trim()?.length === 0 ||
-      courseState.courseInstructors?.length === 0 ||
-      courseState.lessons?.length === 0
-    )
-      return false;
+  const isBasicInfoValid = () => {
+    if (!courseState) return false;
+    // upto skill tags
+    return courseState.category.trim() && courseState.courseTitle.trim() && courseState.courseDescription.trim() && courseState.studentRequirements.trim() && courseState.skillTags?.length > 0;
+  }
 
+  const isCourseMediaValid = () => {
+    if (!courseState) return false;
+    // upto skill tags
+    return courseState.courseThumbnail.trim() && courseState.introVideo.trim();
+  }
+
+  const isCourseMoreInfoValid = () => {
+    if (!courseState) return false;
+    // language to instructors
+    return courseState.courseLanguage.trim() && courseState.coursePrice.trim() && courseState.approxTimeToComplete.trim() && courseState.courseInstructors?.length > 0;
+  }
+
+  const isCourseContentValid = () => {
+    if (!courseState) return false;
+    // lessons
+    if (courseState.lessons?.length === 0) return false;
     for (let lesson of courseState.lessons) {
-      if (!lesson.title) return false;
+      if (!lesson.title?.trim()) return false;
       for (let subLesson of lesson.subLessons) {
-        if (!subLesson.title || !(subLesson.videoLink || subLesson.lectureNote))
+        if (!subLesson.title?.trim() || !(subLesson.videoLink?.trim() || subLesson.lectureNote?.trim()))
           return false;
       }
     }
     let flag = true;
     courseState.lessons?.forEach((lesson) => {
       lesson.questions?.questions?.forEach((question) => {
-        if (!question.question || !question.answer) flag = false;
+        if (!question.question?.trim() || !question.answer?.trim()) flag = false;
         question.options?.forEach((option) => {
-          if (!option) flag = false;
+          if (!option?.trim()) flag = false;
         });
       });
     });
     return flag;
+  }
+
+  const isCourseValid = () => {
+    return isBasicInfoValid() && isCourseMediaValid() && isCourseMoreInfoValid() && isCourseContentValid();
   };
 
   const deleteCourse = async (courseId) => {
@@ -403,6 +412,10 @@ export const CreateCourseState = (props) => {
         mobileDrawerOpen,
         setMobileDrawerOpen,
         courseStateRef,
+        isBasicInfoValid,
+        isCourseMediaValid,
+        isCourseMoreInfoValid,
+        isCourseContentValid,
       }}
     >
       {props.children}
