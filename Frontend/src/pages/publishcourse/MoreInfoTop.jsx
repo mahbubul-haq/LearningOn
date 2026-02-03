@@ -21,7 +21,7 @@ const MoreInfoTop = ({
     const [coursePrice, setCoursePrice] = useState(courseState.coursePrice);
 
     useEffect(() => {
-        if (!coursePrice) setCoursePrice(courseState.coursePrice);
+        setCoursePrice(courseState.coursePrice);
     }, [courseState]);
 
     return (

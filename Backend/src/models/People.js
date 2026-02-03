@@ -84,29 +84,8 @@ const PeopleSchema = new mongoose.Schema(
             default: "",
         },
         enrolledCourses: {
-
-            type: [{
-                courseId: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "Course",
-                    required: true,
-                },
-                enrollmentDate: {
-                    type: Date,
-                    required: true,
-                },
-                status: {
-                    type: String,
-                    enum: ["active", "postponed", "completed"],
-                    default: "active",
-                },
-                progress: {
-                    type: Number,
-                    default: 0,
-                },
-
-            }],
-            required: false,
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "Enrollment",
             default: [],
         },
         likes: {
@@ -120,9 +99,9 @@ const PeopleSchema = new mongoose.Schema(
             default: [],
         },
         wallet: {
-            type: String,
+            type: Number,
             required: false,
-            default: "",
+            default: 0,
         },
     },
     {

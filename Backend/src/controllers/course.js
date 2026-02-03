@@ -67,10 +67,13 @@ const getDraftCourses = async (req, res) => {
         });
         //console.log(courses);
         if (!courses || courses.length === 0) {
-            // status 200 because it is ok to not draft course
+            let course = await Course.create({
+                owner: req.userId,
+                courseStatus: "draft",
+            });
             return res.status(200).json({
-                success: false,
-                message: "No courses found",
+                success: true,
+                courseInfo: course,
             });
         }
         res.status(200).json({
@@ -96,7 +99,7 @@ const updateCourse = async (req, res) => {
             message: "Course ID is required",
         });
     }
-    else if (req.body?.id && req.body.id != courseId) {
+    else if (req.body?._id && req.body._id != courseId) {
         return res.status(400).json({
             success: false,
             message: "Course ID does not match",
@@ -227,11 +230,19 @@ const getCourseByIdWithOutPopulate = async (req, res) => {
     const courseId = req.params.courseId;
 
     try {
+
         const course = await Course.findById(courseId);
         if (!course) {
             return res.status(404).json({
                 success: false,
                 message: "No course found",
+            });
+        }
+
+        if (req.userId != course.owner) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized",
             });
         }
 
@@ -320,9 +331,7 @@ const getMyCourses = async (req, res) => {
         // find courses with owner as req.userId or there is an entry req.userId inside courseInstructors
         const courses = await Course.find({
             $or: [{ owner: req.userId }, { courseInstructors: req.userId }],
-        }).populate(
-            "courseInstructors owner enrolledStudents ratings.ratings.userId"
-        );
+        });
         if (!courses) {
             return res.status(404).json({
                 success: false,

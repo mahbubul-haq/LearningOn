@@ -4,10 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 192.168.1.11",
+    "dev": "vite --host 192.168.31.40",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@cloudinary/react": "^1.13.0",
@@ -23,6 +27,7 @@
     "bootstrap": "^5.3.1",
     "cloudinary-react": "^1.8.1",
     "formik": "^2.4.3",
+    "lucide-react": "^0.563.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-dom": "^18.2.0",
@@ -31,6 +36,7 @@
     "react-material-ui-carousel": "^3.4.2",
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.14.2",
+    "recharts": "^3.7.0",
     "redux-persist": "^6.0.0",
     "socket.io-client": "^4.7.2",
     "web-vitals": "^3.4.0",
@@ -40,11 +46,16 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/preset-react": "^7.24.7",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^8.50.1",
     "@typescript-eslint/parser": "^8.50.1",
     "@vitejs/plugin-react-swc": "^3.3.2",
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
     "esbuild": "^0.23.0",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.5",
@@ -53,9 +64,10 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
     "jest-environment-jsdom": "^27.5.1",
-    "lucide-react": "^0.562.0",
+    "jsdom": "^27.4.0",
     "typescript": "^5.9.3",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vitest": "^4.0.18"
   },
   "jest": {
     "preset": "ts-jest",

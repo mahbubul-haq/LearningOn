@@ -1,197 +1,80 @@
-import Box from "@mui/material/Box";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useContext, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { DashboardContext } from "../../state/DashboardContext";
-import { GlobalContext } from "../../state/GlobalContext";
-import DashboardLeft from "./DashboardLeft";
-import DashboardMiddle from "./DashboardMiddle";
-import DashboardRight from "./DashboardRight";
-import DashboardTop from "./DashboardTop";
-
-const Dashboard = () => {
+import React from 'react';
+import { Box, Grid, useTheme } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import DashboardHeader from './components/DashboardHeader';
+import CourseSelector from './components/CourseSelector';
+import AnalyticsSection from './components/AnalyticsSection';
+import useDashboardData from './hooks/useDashboardData';
+import { useSelector } from 'react-redux';
+export default function Dashboard() {
+    const navigate = useNavigate();
     const theme = useTheme();
     const user = useSelector((state) => state.auth.user);
-    const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
-    const params = useParams();
-    const { setOpenedItem } = useContext(GlobalContext);
-    const { selectedCourse, setSelectedCourse, recentEnrollments, setRecentEnrollments } = useContext(DashboardContext);
 
-    useEffect(() => {
-        if (!user) {
-            window.location.href = "/";
-        }
-        setOpenedItem("dashboard");
+    // Custom hook handles all data logic
+    const {
+        myCourses,
+        selectedCourse,
+        setSelectedCourse,
+        recentEnrollments,
+        minYear,
+        maxYear,
+        setMinYear,
+        setMaxYear,
+        drawerOpen,
+        setDrawerOpen,
+        totalRevenue,
+        totalStudents,
+        chartData,
+        getStatusKey,
+        firstYear,
+        lastYear,
+    } = useDashboardData();
 
-    }, []);
-
-    useEffect(() => {
-        if (params.courseId) {
-            setSelectedCourse(user?.courses.find((course) => course._id == params.courseId));
-        } else {
-            setSelectedCourse(null);
-        }
-    }, [params]);
-
-    useEffect(() => {
-        // console.log(selectedCourse);
-        //add selectecCourse._id to url
-
-        window.history.pushState({}, "", `/dashboard/${selectedCourse?._id}`);
-
-        let element = document.querySelector(".dashboard");
-        if (element) {
-            element.scrollTop = 0;
-        }
-    }, [selectedCourse]);
-
-    useEffect(() => {
-        if (selectedCourse) {
-            const enrollments = selectedCourse.enrolledStudents?.map((enrollment) => {
-                return {
-                    enrolledOn: enrollment.enrolledOn,
-                    userId: enrollment.userId,
-                    userName: enrollment.userName,
-                    paidAmount: enrollment.paidAmount,
-                };
-            });
-
-            enrollments?.sort((a, b) => {
-                return new Date(b.enrolledOn) - new Date(a.enrolledOn);
-            });
-
-            setRecentEnrollments(enrollments);
-        } else {
-            const enrollments = [];
-            user?.courses?.forEach((course) => {
-                course.enrolledStudents?.forEach((enrollment) => {
-                    enrollments.push({
-                        enrolledOn: enrollment.enrolledOn,
-                        userId: enrollment.userId,
-                        userName: enrollment.userName,
-                        paidAmount: enrollment.paidAmount,
-                        courseTitle: course.courseTitle,
-                    });
-                });
-            });
-
-            enrollments?.sort((a, b) => {
-                return new Date(b.enrolledOn) - new Date(a.enrolledOn);
-            });
-            setRecentEnrollments(enrollments);
-        }
-    }, [selectedCourse]);
-
-    useEffect(() => {
-        console.log(recentEnrollments);
-    }, [recentEnrollments]);
+    const glassSx = {
+        ...theme.palette.glassCard,
+        overflow: 'hidden'
+    };
 
     return (
-        <Box
-            className="dashboard"
-            sx={{
-                // height: "100%",
-                width: "100%",
+        <Box sx={{ p: { xs: "1rem", md: "2rem" }, height: '100vh', background: 'transparent', overflow: 'auto' }}>
+            <DashboardHeader
+                minYear={minYear}
+                maxYear={maxYear}
+                setMinYear={setMinYear}
+                setMaxYear={setMaxYear}
+                onBack={() => navigate("/")}
+                glassSx={glassSx}
+                theme={theme}
+                firstYear={firstYear}
+                lastYear={lastYear}
+            />
 
-            }}
-        >
-            <Box
-                sx={{
-                    minHeight: "600px",
-                    // height: "100%",
-                    width: "100%",
-                    //overflow: "auto",
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={4} lg={3}>
+                    <CourseSelector
+                        myCourses={myCourses}
+                        selectedCourse={selectedCourse}
+                        onSelect={setSelectedCourse}
+                        drawerOpen={drawerOpen}
+                        setDrawerOpen={setDrawerOpen}
+                        getStatusKey={getStatusKey}
+                    />
+                </Grid>
 
-                }}
-            >
-                {/* <Box>
-                    <Navbar />
-                </Box> */}
-                <Box
-                    className="dashboard-top"
-                    sx={{
-                        position: "sticky",
-                        top: isNonMobileScreens ? "-1rem" : "0",
-                        zIndex: "10",
-                    }}
-                >
-                    <DashboardTop />
-                </Box>
-                <Box
-                    sx={{
-                        px: isNonMobileScreens ? "5rem" : "1rem",
-                        display: "flex",
-                        gap: "2rem",
-                        py: "3rem",
-                    }}
-                >
-                    {isNonMobileScreens && (
-                        <Box
-                            sx={{
-                                width: "20%",
-                                ...theme.palette.glassMorphismCard,
-                                p: "1rem",
-                            }}
-                        >
-                            <DashboardLeft />
-                        </Box>
-                    )}
-                    <Box
-                        sx={{
-                            width: isNonMobileScreens ? "55%" : "100%",
-                            ...theme.palette.glassMorphismCard,
-                            p: "1rem",
-                            pb: "3rem",
-                        }}
-                    >
-                        <DashboardMiddle />
-                    </Box>
-                    {isNonMobileScreens && (
-                        <Box
-                            sx={{
-                                width: "25%",
-                                ...theme.palette.glassMorphismCard,
-                                p: "1rem",
-                                maxHeight: "1500px",
-                                overflow: "auto",
-                                "&::-webkit-scrollbar": {
-                                    width: "0.5rem",
-                                },
-                                "&::-webkit-scrollbar-track": {
-                                    background: "transparent",
-                                    borderRadius: "0.25rem",
-                                },
-                                "&::-webkit-scrollbar-thumb": {
-                                    background: theme.palette.grey.grey300,
-
-                                    borderRadius: "0.25rem",
-                                    //change the length of scroll bar thumb
-                                    height: "5px",
-                                },
-
-                                "&::-webkit-scrollbar-thumb:hover": {
-                                    background: theme.palette.grey.grey400,
-                                },
-
-                                "&::-webkit-scrollbar-thumb:active": {
-                                    background: theme.palette.grey.grey400,
-                                },
-
-                                //change the buttons of scroll bar
-                                "&::-webkit-scrollbar-button": {
-                                    display: "none",
-                                },
-                            }}
-                        >
-                            <DashboardRight />
-                        </Box>
-                    )}
-                </Box>
-            </Box>
+                <Grid item xs={12} md={8} lg={9}>
+                    <AnalyticsSection
+                        selectedCourse={selectedCourse}
+                        totalRevenue={totalRevenue}
+                        totalStudents={totalStudents}
+                        chartData={chartData}
+                        recentEnrollments={recentEnrollments}
+                        glassSx={glassSx}
+                        theme={theme}
+                        user={user}
+                    />
+                </Grid>
+            </Grid>
         </Box>
     );
-};
-
-export default Dashboard;
+}

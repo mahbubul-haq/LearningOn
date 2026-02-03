@@ -24,20 +24,7 @@ export const initialCourseState = {
 export const CreateCourseState = (props) => {
   const token = useSelector((state) => state.auth.token);
 
-  const [courseState, setCourseState] = React.useState({
-    category: "",
-    courseTitle: "",
-    courseDescription: "",
-    studentRequirements: "",
-    skillTags: [],
-    courseThumbnail: "",
-    introVideo: "",
-    courseLanguage: "",
-    coursePrice: "",
-    approxTimeToComplete: "",
-    courseInstructors: [],
-    lessons: [],
-  });
+  const [courseState, setCourseState] = React.useState({ ...initialCourseState });
 
   const courseStateRef = useRef(courseState);
 
@@ -101,33 +88,35 @@ export const CreateCourseState = (props) => {
   const isBasicInfoValid = () => {
     if (!courseState) return false;
     // upto skill tags
-    return courseState.category.trim() && courseState.courseTitle.trim() && courseState.courseDescription.trim() && courseState.studentRequirements.trim() && courseState.skillTags?.length > 0;
+    return courseState.category?.trim() && courseState.courseTitle?.trim() && courseState.courseDescription?.trim() && courseState.studentRequirements?.trim() && courseState.skillTags?.length > 0;
   }
 
   const isCourseMediaValid = () => {
     if (!courseState) return false;
     // upto skill tags
-    return courseState.courseThumbnail.trim() && courseState.introVideo.trim();
+    return courseState.courseThumbnail?.trim() && courseState.introVideo?.trim();
   }
 
   const isCourseMoreInfoValid = () => {
     if (!courseState) return false;
     // language to instructors
-    return courseState.courseLanguage.trim() && courseState.coursePrice.trim() && courseState.approxTimeToComplete.trim() && courseState.courseInstructors?.length > 0;
+    return courseState.courseLanguage?.trim() && courseState.coursePrice?.trim() && courseState.approxTimeToComplete?.trim() && courseState.courseInstructors?.length > 0;
   }
 
   const isCourseContentValid = () => {
     if (!courseState) return false;
     // lessons
-    if (courseState.lessons?.length === 0) return false;
-    for (let lesson of courseState.lessons) {
-      if (!lesson.title?.trim()) return false;
-      for (let subLesson of lesson.subLessons) {
-        if (!subLesson.title?.trim() || !(subLesson.videoLink?.trim() || subLesson.lectureNote?.trim()))
-          return false;
-      }
-    }
+    if (courseState.lessons?.length == 0) return false;
+    console.log("lessons, ", courseState.lessons)
     let flag = true;
+    courseState.lessons?.forEach((lesson) => {
+      if (!lesson.title?.trim()) flag = false;
+      lesson.subLessons?.forEach((subLesson) => {
+        if (!subLesson.title?.trim() || !(subLesson.videoLink?.trim() || subLesson.lectureNote?.trim()))
+          flag = false;
+      });
+    });
+
     courseState.lessons?.forEach((lesson) => {
       lesson.questions?.questions?.forEach((question) => {
         if (!question.question?.trim() || !question.answer?.trim()) flag = false;
@@ -177,7 +166,7 @@ export const CreateCourseState = (props) => {
 
       return { success: false };
     } else {
-      if (editMode == "edit") {
+      if (editMode == "edit" && courseState.courseStatus != "draft") {
         await updateCourse("unpublished");
       } else {
         await updateCourse("draft");
@@ -187,48 +176,70 @@ export const CreateCourseState = (props) => {
   }, [newDraft, editMode]);
 
   const getDraftCourse = async () => {
-    if (isAnyError()) return;
+    try {
+      if (isAnyError()) return;
 
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/course/draft`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/course/draft`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      // console.log(data);
+
+      if (data.success) {
+        courseStateRef.current = { ...data.courseInfo };
+        setCourseState({ ...data.courseInfo });
       }
-    );
-
-    const data = await response.json();
-
-    // console.log(data);
-
-    if (data.success) {
-      setCourseState(data.courseInfo);
+      else {
+        courseStateRef.current = { ...initialCourseState };
+        setCourseState({ ...initialCourseState });
+      }
+    } catch (error) {
+      console.log(error);
+      courseStateRef.current = { ...initialCourseState };
+      setCourseState({ ...initialCourseState });
     }
   };
 
   const getCoursePlainById = async (courseId) => {
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/course/get/plain/${courseId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/course/get/plain/${courseId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      //console.log(data);
+
+      if (data.success) {
+        console.log("getCoursePlainById", data.courseInfo);
+        //courseStateRef.current = data.courseInfo;
+        courseStateRef.current = data.courseInfo;
+        setCourseState({ ...data.courseInfo });
       }
-    );
-
-    const data = await response.json();
-
-    //console.log(data);
-
-    if (data.success) {
-      console.log("getCoursePlainById", data.courseInfo);
-      //courseStateRef.current = data.courseInfo;
-      setCourseState({ ...data.courseInfo });
+      else {
+        courseStateRef.current = { ...initialCourseState };
+        setCourseState({ ...initialCourseState });
+      }
+    } catch (error) {
+      console.log(error);
+      courseStateRef.current = { ...initialCourseState };
+      setCourseState({ ...initialCourseState });
     }
   };
 

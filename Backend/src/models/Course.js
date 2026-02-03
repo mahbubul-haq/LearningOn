@@ -97,23 +97,8 @@ const CourseSchema = new mongoose.Schema(
             default: [],
         },
         enrolledStudents: {
-            type: [
-                {
-                    userId: {
-                        type: mongoose.Schema.Types.ObjectId,
-                        ref: "People",
-                    },
-                    userName: String,
-                    enrolledOn: Date,
-                    status: {
-                        type: String,
-                        enum: ["active", "postponed", "completed"],
-                        default: "active",
-                    },
-                    paidAmount: Number,
-                },
-            ],
-            required: false,
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "Enrollment",
             default: [],
         },
         ratings: {

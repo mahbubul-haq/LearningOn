@@ -82,6 +82,7 @@ const PublishCourse = () => {
       getUsers();
       getCategories();
     } else {
+      console.log("not edit mode")
       getDraftCourse();
       getUsers();
       getCategories();
@@ -129,7 +130,13 @@ const PublishCourse = () => {
         <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Button
             startIcon={<ChevronLeft />}
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              if (editMode == "edit") {
+                navigate(`/dashboard/${id}`);
+              } else {
+                navigate("/");
+              }
+            }}
             sx={{ color: 'text.secondary', fontWeight: 600 }}
           >
             Back

@@ -103,7 +103,7 @@ const VideoUploadDropzone = ({
                                 />
 
                                 <Typography variant="h5" sx={{ color: "text.primary", fontWeight: 'bold', mb: 1 }}>
-                                    Drag & Drop your video
+                                    Drag & Drop your {isImage ? "image" : "video"}
                                 </Typography>
                                 <Typography variant="body2" sx={{ color: colorTokens.primary.lighter, mb: 4 }}>
                                     or browse files from your computer

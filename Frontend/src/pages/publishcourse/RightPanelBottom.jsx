@@ -12,7 +12,7 @@ import { alpha } from "@mui/material/styles";
 const RightPanelBottom = () => {
     const theme = useTheme();
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const { inputSection, setInputSection, editMode, setUpdating } = useContext(CreateCourseContext);
+    const { inputSection, setInputSection, editMode, setUpdating, courseState } = useContext(CreateCourseContext);
 
     const handleNext = () => {
         if (inputSection === "basic info") {
@@ -85,7 +85,7 @@ const RightPanelBottom = () => {
                 )}
 
                 {/* SAVE PROGRESS BUTTON (Distinct) */}
-                {!editMode && (
+                {(!editMode || courseState.courseStatus === "draft") && (
                     <StyledButton
                         variant="contained"
                         sx={{

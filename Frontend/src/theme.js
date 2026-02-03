@@ -255,26 +255,26 @@ export const themeSettings = ({ mode }) => {
                 boxShadow: "0 4px 30px rgba(0, 0, 0, 0.03)",
             },
             glassCard: mode === "dark" ? {
-                background: "rgba(20, 20, 25, 0.3)",
-                backdropFilter: "blur(12px)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                background: "rgba(20, 20, 25, 0.85)", // High opacity for maximum focus
+                backdropFilter: "blur(20px)",         // Stronger blur
+                border: "1px solid rgba(255, 255, 255, 0.15)", // Brighter border for definition
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.5)",    // Deep shadow
                 borderRadius: "24px",
             } : {
-                background: "rgba(225, 225, 235, 0.7)",
+                background: "rgba(255, 255, 255, 0.6)",
                 backdropFilter: "blur(12px)",
-                border: "1px solid rgba(0, 0, 0, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.4)",
                 boxShadow: "0 4px 30px rgba(0, 0, 0, 0.03)",
                 borderRadius: "24px",
             },
             glassSheet: mode === "dark" ? {
-                background: "rgba(30, 30, 35, 0.6)", // Semi-transparent dark
-                backdropFilter: "blur(20px)",         // Strong blur
+                background: "rgba(30, 30, 35, 0.9)", // Near solid for sheet interactions
+                backdropFilter: "blur(24px)",
                 borderRadius: "16px",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
+                border: "1px solid rgba(255, 255, 255, 0.15)", // Brighter border
+                boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.6)",  // Heavy shadow
             } : {
-                background: "rgba(255, 255, 255, 0.7)", // Semi-transparent white
+                background: "rgba(255, 255, 255, 0.7)",
                 backdropFilter: "blur(20px)",
                 borderRadius: "16px",
                 border: "1px solid rgba(255, 255, 255, 0.4)",
@@ -299,7 +299,7 @@ export const themeSettings = ({ mode }) => {
                         elevated: colorTokens.black.lighter,
                     },
                     text: {
-                        primary: colorTokens.white.pure,
+                        primary: colorTokens.grey[100], // Softened from pure white for better focus
                         secondary: colorTokens.grey[400],
                         disabled: colorTokens.grey[600],
                     },

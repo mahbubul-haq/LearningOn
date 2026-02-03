@@ -34,7 +34,7 @@ const QuestionForm = ({
   const { courseStateRef } = useContext(CreateCourseContext);
 
   useEffect(() => {
-    if (!currQuestion) setCurrQuestion(question?.question || "");
+    setCurrQuestion(question?.question || "");
   }, [question]);
 
   const setQuestion = (event) => {

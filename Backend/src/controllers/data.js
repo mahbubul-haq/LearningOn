@@ -2,6 +2,8 @@ import Category from "../models/Category.js";
 import People from "../models/People.js";
 import Course from "../models/Course.js";
 import Notification from "../models/Notification.js";
+import Payment from "../models/Payment.js";
+import Enrollment from "../models/Enrollment.js";
 import Stripe from "stripe";
 let stripe;
 //console.log(process.env.STRIPE_PRIVATE_KEY);
@@ -13,7 +15,7 @@ export const initializeStripe = () => {
 const addCategory = async (req, res) => {
     try {
         let category = await Category.findOne({
-            name: req.body.name,
+            name: rleq.body.name,
         });
 
         if (!category) {
@@ -172,7 +174,7 @@ const stripeWebHook = async (req, res) => {
 
     if (endpointSecret) {
         let event;
-        // console.log("event triggered");
+        console.log("event triggered");
 
         try {
             event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
@@ -196,6 +198,12 @@ const stripeWebHook = async (req, res) => {
     if (eventType === "payment_intent.succeeded") {
         // console.log("succeded", data);
     } else if (eventType === "checkout.session.completed") {
+        let session = data;
+        if (session.payment_status !== "paid") {
+            return res.status(200).send("Payment failed");
+        }
+
+        const paymentIntentId = session.payment_intent;
         stripe.customers.retrieve(data.customer, async (err, customer) => {
             if (err) {
                 console.log(err);
@@ -208,88 +216,111 @@ const stripeWebHook = async (req, res) => {
 
                 cart?.forEach(async (item) => {
                     //console.log("item", item);
-                    let courseOwner = await People.findOne({
-                        _id: item.owner,
-                    });
 
-                    if (courseOwner) {
-                        let wallet = courseOwner.wallet === "" ? 0 : parseFloat(courseOwner.wallet);
-                        wallet += parseFloat(item.coursePrice);
-                        courseOwner.wallet = wallet.toString();
+                    // Check if payment already exists with this paymentIntentId
+                    let payment = await Payment.findOne({ paymentIntentId });
 
-                        await courseOwner.save();
+                    if (!payment) {
+                        // Create new payment entry
+                        payment = new Payment({
+                            userId: user._id,
+                            courseId: item.courseId,
+                            paymentIntentId: paymentIntentId,
+                            paidAmount: parseFloat(item.coursePrice),
+                            currency: "usd",
+                            paymentStatus: "paid",
+                        });
+                        await payment.save();
                     }
 
-                    let course = await Course.findOne({
-                        _id: item.courseId,
+                    // Check if enrollment already exists with this courseId and paymentId
+                    let enrollment = await Enrollment.findOne({
+                        courseId: item.courseId,
+                        userId: user._id,
                     });
 
-                    if (course) {
-                        course.enrolledStudents.push({
+                    if (!enrollment) {
+                        // Create new enrollment entry
+                        enrollment = new Enrollment({
                             userId: user._id,
+                            courseId: item.courseId,
                             enrolledOn: Date.now(),
                             status: "active",
-                            paidAmount: parseFloat(item.coursePrice),
-                            userName: user.name,
+                            paymentId: payment._id,
+                        });
+                        await enrollment.save();
+
+                        // Add enrollment reference to course.enrolledStudents
+                        let course = await Course.findOne({
+                            _id: item.courseId,
                         });
 
-                        await course.save();
-                    }
-
-                    user.enrolledCourses.push({
-                        courseId: item.courseId,
-                        enrollmentDate: Date.now(),
-                        status: "active",
-                        progress: 0,
-                    });
-
-                    await user.save();
-
-                    const targetIds = [];
-                    // targetIds.push(item.owner.toString());
-                    // if item.owner is an ObjectId, convert it to string
-                    // if (typeof item.owner === "object") {
-                    //     targetIds.push(item.owner.toString());
-                    // find the string of the objectid
-                    //console.log("item.owner", item.owner.toString(), item.owner);
-                    targetIds.push(item.owner.toString());
-
-                    course.courseInstructors.forEach((instructor) => {
-                        const instructorId = instructor.toString();
-                        if (!targetIds.includes(instructorId)) {
-                            targetIds.push(instructorId);
+                        if (course) {
+                            if (!course.enrolledStudents.includes(enrollment._id)) {
+                                course.enrolledStudents.push(enrollment._id);
+                                await course.save();
+                            }
                         }
-                    });
 
-                    targetIds.forEach(async (targetId) => {
-                        const curUser = await People.findOne({
-                            _id: targetId,
+                        // Add enrollment reference to user.enrolledCourses
+                        if (!user.enrolledCourses.includes(enrollment._id)) {
+                            user.enrolledCourses.push(enrollment._id);
+                            await user.save();
+                        }
+
+                        // Update course owner's wallet
+                        let courseOwner = await People.findOne({
+                            _id: item.owner,
                         });
 
-                        console.log("targetId", targetId);
+                        if (courseOwner) {
+                            let wallet = courseOwner.wallet;
+                            wallet += parseFloat(item.coursePrice);
+                            courseOwner.wallet = wallet;
+                            await courseOwner.save();
+                        }
 
-                        // delete the oldest notification if the number of notifications is greater than 50
-                        const notifications = await Notification.find({
-                            userId: curUser._id,
+                        // Everything after this is for notifications (kept as is)
+                        const targetIds = [];
+                        targetIds.push(item.owner.toString());
+
+                        course.courseInstructors.forEach((instructor) => {
+                            const instructorId = instructor.toString();
+                            if (!targetIds.includes(instructorId)) {
+                                targetIds.push(instructorId);
+                            }
                         });
 
-                        if (notifications?.length >= 50) {
-                            await Notification.deleteOne({
-                                _id: notifications[0]._id,
+                        targetIds.forEach(async (targetId) => {
+                            const curUser = await People.findOne({
+                                _id: targetId,
                             });
-                        }
 
-                        const notification = new Notification({
-                            userId: curUser._id,
-                            message: `<b>${user.name}</b> enrolled in your course <b>${course.courseTitle} </b>`,
-                            link: `dashboard/${course._id}`,
-                            status: "new",
-                            imageLink: user.picturePath,
-                            userFrom: user._id,
+                            console.log("targetId", targetId);
+
+                            // delete the oldest notification if the number of notifications is greater than 50
+                            const notifications = await Notification.find({
+                                userId: curUser._id,
+                            });
+
+                            if (notifications?.length >= 50) {
+                                await Notification.deleteOne({
+                                    _id: notifications[0]._id,
+                                });
+                            }
+
+                            const notification = new Notification({
+                                userId: curUser._id,
+                                message: `<b>${user.name}</b> enrolled in your course <b>${course.courseTitle} </b>`,
+                                link: `dashboard/${course._id}`,
+                                status: "new",
+                                imageLink: user.picturePath,
+                                userFrom: user._id,
+                            });
+
+                            await notification.save();
                         });
-
-                        await notification.save();
-                    });
+                    }
                 });
             }
         });

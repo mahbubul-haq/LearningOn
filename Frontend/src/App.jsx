@@ -36,7 +36,7 @@ const Dashboard = lazy(() => import("./pages/dashboard"));
 const Admin = lazy(() => import("./pages/admin"));
 const Quiz = lazy(() => import("./pages/learningpage/Quiz"));
 const QuizContainer = lazy(() => import("./pages/learningpage/QuizContainer"));
-const PlayGround = lazy(() => import("./playground"));
+const PlayGround = lazy(() => import("./playground/Dashboard"));
 function App() {
   const mode = useSelector((state) => state.auth.mode);
   const theme = useMemo(() => createTheme(themeSettings({ mode })), [mode]);
@@ -129,7 +129,7 @@ function App() {
                               path="/dashboard/:courseId"
                               element={
                                 <Suspense fallback={<AppFallback />}>
-                                  <WithNav showNav={true} component={<Dashboard />} />
+                                  <Dashboard />
                                 </Suspense>
                               }
                             />
@@ -137,7 +137,7 @@ function App() {
                               path="/dashboard/"
                               element={
                                 <Suspense fallback={<AppFallback />}>
-                                  <WithNav showNav={true} component={<Dashboard />} />
+                                  <Dashboard />
                                 </Suspense>
                               }
                             />

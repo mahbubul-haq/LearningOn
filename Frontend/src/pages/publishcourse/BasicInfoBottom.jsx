@@ -31,9 +31,7 @@ const BasicInfoBottom = ({
     const theme = useTheme();
 
     useEffect(() => {
-        if (!studentRequirements) {
-            setStudentRequirements(courseState.studentRequirements);
-        }
+        setStudentRequirements(courseState.studentRequirements);
     }, [courseState]);
 
     return (

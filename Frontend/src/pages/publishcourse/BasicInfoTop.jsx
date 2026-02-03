@@ -13,11 +13,11 @@ const BasicInfoTop = ({ categoriesWithLabel, courseState, setCourseState }) => {
     const [courseDescription, setCourseDescription] = useState(courseState.courseDescription);
     const { courseStateRef } = useContext(CreateCourseContext);
 
+
     useEffect(() => {
-        if (!courseTitle || !courseDescription) {
-            setCourseTitle(courseState.courseTitle);
-            setCourseDescription(courseState.courseDescription);
-        }
+
+        setCourseTitle(courseState.courseTitle);
+        setCourseDescription(courseState.courseDescription);
     }, [courseState]);
     return (
         <>
