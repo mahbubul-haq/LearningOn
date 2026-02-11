@@ -238,7 +238,8 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                   "&:hover": {
                     background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
                     transform: "scale(1.02)",
-                    boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+                    boxShadow: "0 4px 15px rgba(0,0,0,0.21)",
+
                   },
                   borderRadius: "0.7rem",
                   p: "0.5rem 1rem",
