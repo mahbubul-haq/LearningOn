@@ -253,6 +253,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                   opacity: getLessonProgress(lesson._id?.toString()) > 99 ? 1 : 0.5,
                 }}>
                 <QuizIcon sx={{ color: colorTokens.white.pure }} />
+                {/*  */}
                 {`TAKE MODULE ${(index + 1).toString().padStart(2, "0")} QUIZ`}
 
               </Button>
