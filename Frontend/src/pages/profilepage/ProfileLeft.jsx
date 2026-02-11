@@ -4,7 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
@@ -22,13 +22,12 @@ const ProfileLeft = ({ userInfo }) => {
     return (
         <Box
             sx={{
-                // backgroundColor: theme.palette
                 width: "100%",
             }}
         >
             <Box
                 sx={{
-                    padding: "0.5rem 0", // Removed h-padding as parent has it, or keep minimal
+                    padding: "0.5rem 0",
                 }}
             >
                 <MenuList
@@ -36,8 +35,8 @@ const ProfileLeft = ({ userInfo }) => {
                         "& .MuiMenuItem-root": {
                             color: theme.palette.text.secondary,
                             fontSize: "1rem",
-                            borderRadius: "8px", // Add radius
-                            margin: "0.2rem 1rem", // Add spacing
+                            borderRadius: "8px",
+                            margin: "0.2rem 1rem",
                             padding: "0.7em 1rem",
                             transition: "all 0.2s ease",
                             "&:hover": {
@@ -48,40 +47,43 @@ const ProfileLeft = ({ userInfo }) => {
                     }}
                 >
                     {userInfo?._id == user?._id && (
-                        <MenuItem
-                            component="a"
-                            href="#profile-wallet"
-                            onClick={() => {
-                                setOpenedTab("wallet");
-                            }}
-                            sx={{
-                                backgroundColor: openedTab === "wallet" ? "rgba(69, 34, 186, 0.1)" : "transparent",
-                                color: openedTab === "wallet" ? theme.palette.primary.main : "inherit",
-                            }}
-                        >
-                            <FlexBetween
+                        <>
+                            <MenuItem
+                                component="a"
+                                href="#profile-wallet"
+                                onClick={() => {
+                                    setOpenedTab("wallet");
+                                }}
                                 sx={{
-                                    width: "100%",
+                                    backgroundColor: openedTab === "wallet" ? "rgba(69, 34, 186, 0.1)" : "transparent",
+                                    color: openedTab === "wallet" ? theme.palette.primary.main : "inherit",
                                 }}
                             >
-                                <Typography
+                                <FlexBetween
                                     sx={{
-                                        fontSize: "1rem",
-                                        fontWeight: openedTab === "wallet" ? "600" : "400",
+                                        width: "100%",
                                     }}
                                 >
-                                    Wallet
-                                </Typography>
-                                <Typography
-                                    sx={{
-                                        fontSize: "1rem",
-                                        fontWeight: "600",
-                                    }}
-                                >
-                                    $ {userInfo?.wallet || "0"}
-                                </Typography>
-                            </FlexBetween>
-                        </MenuItem>
+                                    <Typography
+                                        sx={{
+                                            fontSize: "1rem",
+                                            fontWeight: openedTab === "wallet" ? "600" : "400",
+                                        }}
+                                    >
+                                        Wallet
+                                    </Typography>
+                                    <Typography
+                                        sx={{
+                                            fontSize: "1rem",
+                                            fontWeight: "600",
+                                        }}
+                                    >
+                                        $ {userInfo?.wallet || "0"}
+                                    </Typography>
+                                </FlexBetween>
+                            </MenuItem>
+
+                        </>
                     )}
 
                     <MenuItem

@@ -29,6 +29,7 @@ const TopSection = ({
 
     const enrollCourse = async () => {
         try {
+            console.log("Enrolling in course:", courseInfo._id);
             const response = await fetch(
                 `${import.meta.env.VITE_SERVER_URL}/data/create-payment-sesson`,
                 {
@@ -43,30 +44,36 @@ const TopSection = ({
                 }
             );
             const data = await response.json();
+            console.log("Payment session response:", data);
+
             if (data.success) {
+                console.log("Redirecting to Stripe checkout:", data.url);
                 window.location = data.url;
+            } else {
+                // Show error message to user
+                console.error("Payment session creation failed:", data.message);
+                alert(data.message || "Unable to process payment. Please try again later.");
             }
-            console.log(data);
         } catch (e) {
-            //console.log(e);
-            console.log(e);
+            console.error("Error enrolling in course:", e);
+            alert("An error occurred while processing your enrollment. Please try again.");
         }
     };
 
 
-  return (
-    <>
-        {isNonMobileScreens ? <TopSectionLarge
-            courseInfo={courseInfo}
-            purchased={purchased}
-            enrollCourse={enrollCourse}
-        /> : <TopSectionSmall
-            courseInfo={courseInfo}
-            purchased={purchased}
-            enrollCourse={enrollCourse}
-        />}
-    </>
-  )
+    return (
+        <>
+            {isNonMobileScreens ? <TopSectionLarge
+                courseInfo={courseInfo}
+                purchased={purchased}
+                enrollCourse={enrollCourse}
+            /> : <TopSectionSmall
+                courseInfo={courseInfo}
+                purchased={purchased}
+                enrollCourse={enrollCourse}
+            />}
+        </>
+    )
 }
 
 export default TopSection

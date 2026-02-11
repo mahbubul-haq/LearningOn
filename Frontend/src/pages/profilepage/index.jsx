@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import ProfileTop from "./ProfileTop";
 import { useContext } from "react";
@@ -13,6 +13,8 @@ import { ProfilePageContext } from "../../state/ProfilePageContext";
 import FlexBetween from "../../components/FlexBetween";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const ProfilePage = () => {
     const { userId } = useParams();
@@ -66,6 +68,41 @@ const ProfilePage = () => {
         setEditProfileStatus("");
 
     }, []);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success"
+    });
+
+    useEffect(() => {
+        const query = new URLSearchParams(location.search);
+        const stripeConnect = query.get("stripe_connect");
+        const error = query.get("error");
+
+        if (stripeConnect === "success") {
+            setSnackbar({
+                open: true,
+                message: "Stripe account connected successfully!",
+                severity: "success"
+            });
+            // Clear params
+            navigate(location.pathname, { replace: true });
+        } else if (stripeConnect === "failed") {
+            setSnackbar({
+                open: true,
+                message: error || "Failed to connect Stripe account.",
+                severity: "error"
+            });
+            navigate(location.pathname, { replace: true });
+        }
+    }, [location.search, navigate]);
+
+    const handleCloseSnackbar = () => {
+        setSnackbar({ ...snackbar, open: false });
+    };
 
     return (
         <Box
@@ -136,6 +173,17 @@ const ProfilePage = () => {
                     </Box>
                 </Box>
             </Box>
+
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

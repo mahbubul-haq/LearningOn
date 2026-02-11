@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 // internal imports
 import http from "http";
 import { upload } from "./configs/multer.config.js";
-import { initializeStripe } from "./controllers/data.js";
+import { initializeStripe, stripeWebHook } from "./controllers/data.js";
 import { deleteFile, uploadFile } from "./controllers/uploads.js";
 import verifyToken from "./middlewares/auth.js";
 import adminRoutes from "./routes/admin.js";
@@ -33,7 +33,7 @@ console.log("dirname", __dirname);
 
 const app = express();
 
-
+app.post('/data/stripe/webhook', express.raw({ type: 'application/json' }), stripeWebHook);
 
 
 

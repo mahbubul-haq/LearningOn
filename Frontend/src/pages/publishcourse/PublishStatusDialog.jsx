@@ -8,6 +8,9 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton";
 import { alpha, useTheme } from "@mui/material/styles";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import StripeConnectModal from "../../components/StripeConnectModal";
 
 
 const PublishStatusDialog = ({
@@ -20,6 +23,8 @@ const PublishStatusDialog = ({
 
     const navigate = useNavigate();
     const theme = useTheme();
+    const user = useSelector((state) => state.auth.user);
+    const [stripeModalOpen, setStripeModalOpen] = useState(false);
 
 
     return (
@@ -53,7 +58,42 @@ const PublishStatusDialog = ({
                     </Box>
                 )}
                 {uploadStatus === "unpublished" && <>There was an error publishing your course.</>}
-                {uploadStatus === "published" && <>Successfully Published - Waiting for Admin Approval.</>}
+                {uploadStatus === "published" && (
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
+                        <Typography>Successfully Published - Waiting for Admin Approval.</Typography>
+                        {!user?.stripeAccountId && (
+                            <Box sx={{
+                                p: 2,
+                                border: `1px solid ${theme.palette.divider}`,
+                                borderRadius: 2,
+                                bgcolor: alpha(theme.palette.primary.main, 0.05),
+                                width: '100%'
+                            }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                                    Start Earning
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                    Connect your Stripe account to receive payments from this course.
+                                </Typography>
+                                <StyledButton
+                                    onClick={() => setStripeModalOpen(true)}
+                                    sx={{
+                                        width: '100%',
+                                        "&&": {
+                                            background: theme.palette.primary.main,
+                                            color: "white",
+                                            "&:hover": {
+                                                background: theme.palette.primary.dark,
+                                            }
+                                        }
+                                    }}
+                                >
+                                    Connect Stripe
+                                </StyledButton>
+                            </Box>
+                        )}
+                    </Box>
+                )}
             </DialogContent>
             <DialogActions sx={{ p: 2 }}>
                 <StyledButton
@@ -97,6 +137,11 @@ const PublishStatusDialog = ({
                     </Typography>
                 </StyledButton>
             </DialogActions>
+
+            <StripeConnectModal
+                open={stripeModalOpen}
+                onClose={() => setStripeModalOpen(false)}
+            />
         </Dialog>
     )
 }

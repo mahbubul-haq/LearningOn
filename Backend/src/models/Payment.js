@@ -29,6 +29,16 @@ const PaymentSchema = new mongoose.Schema({
         enum: ["paid", "failed", "pending"],
         default: "pending",
     },
+    platformFee: {
+        type: Number,
+        required: false,
+        default: 0,
+    },
+    ownerAmount: {
+        type: Number,
+        required: false,
+        default: 0,
+    },
     createdAt: {
         type: Date,
         required: true,
