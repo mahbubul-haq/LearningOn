@@ -30,6 +30,8 @@ export default function useDashboardData() {
     // Calculate/Filter enrollments when selection changes or courses load
     useEffect(() => {
         let allEnrollments = [];
+        console.log("selectedCourse", selectedCourse);
+        console.log("myCourses", myCourses);
         if (selectedCourse) {
             // For a specific course
             if (selectedCourse.enrolledStudents) {
@@ -62,7 +64,7 @@ export default function useDashboardData() {
     // Calculate aggregated stats
     const totalRevenue = useMemo(() => {
         // Use the calculated recentEnrollments which is already filtered/aggregated
-        return recentEnrollments.reduce((acc, curr) => acc + (curr.paidAmount || 0), 0);
+        return recentEnrollments.reduce((acc, curr) => acc + (curr.paymentId?.paidAmount || 0), 0);
     }, [recentEnrollments]);
 
     const totalStudents = useMemo(() => {

@@ -331,7 +331,21 @@ const getMyCourses = async (req, res) => {
         // find courses with owner as req.userId or there is an entry req.userId inside courseInstructors
         const courses = await Course.find({
             $or: [{ owner: req.userId }, { courseInstructors: req.userId }],
-        });
+        })
+            .populate({
+                path: "enrolledStudents",
+                select: "enrolledOn",
+                populate: [{
+                    path: "userId",
+                    select: "name picturePath",
+                }
+                    ,
+                {
+                    path: "paymentId",
+                    select: "paidAmount",
+                }
+                ],
+            })
         if (!courses) {
             return res.status(404).json({
                 success: false,

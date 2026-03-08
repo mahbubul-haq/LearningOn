@@ -9,25 +9,35 @@ export default function RecentEnrollments({ recentEnrollments, glassSx, theme })
                 <Button size="small" sx={{ textTransform: 'none', fontWeight: 700 }}>View All</Button>
             </Box>
             <Stack spacing={2}>
-                {recentEnrollments.slice(0, 10).map((student, i) => (
-                    <Box key={student.userId || i} sx={{
-                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                        p: 2, borderRadius: 3, bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.4)',
-                        transition: '0.2s', '&:hover': { bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'white' }
-                    }}>
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <Avatar src={student.userImage || `https://i.pravatar.cc/150?u=${i}`} sx={{ border: `2px solid ${theme.palette.primary.lighter}` }} />
-                            <Box>
-                                <Typography variant="subtitle2" fontWeight="800" color="text.primary">{student.userName || "Not Found"}</Typography>
-                                <Typography variant="caption" color="text.secondary">Enrolled in: {student.courseTitle || 'Title Not Available'}</Typography>
+                {recentEnrollments.slice(0, 10).map((student, i) => {
+                    const userName = student.userId?.name || 'Unknown';
+                    const picturePath = student.userId?.picturePath;
+                    const avatarSrc = picturePath
+                        ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${picturePath}`
+                        : `https://i.pravatar.cc/150?u=${i}`;
+                    const paidAmount = student.paymentId?.paidAmount || 0;
+                    const enrolledOn = student.enrolledOn ? new Date(student.enrolledOn).toLocaleDateString() : 'N/A';
+
+                    return (
+                        <Box key={student._id || i} sx={{
+                            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                            p: 2, borderRadius: 3, bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.4)',
+                            transition: '0.2s', '&:hover': { bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'white' }
+                        }}>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                                <Avatar src={avatarSrc} sx={{ border: `2px solid ${theme.palette.primary.lighter}` }} />
+                                <Box>
+                                    <Typography variant="subtitle2" fontWeight="800" color="text.primary">{userName}</Typography>
+                                    <Typography variant="caption" color="text.secondary">Enrolled in: {student.courseTitle || 'Title Not Available'}</Typography>
+                                </Box>
+                            </Stack>
+                            <Box sx={{ textAlign: 'right' }}>
+                                <Typography variant="subtitle2" fontWeight="800" color="text.primary">${paidAmount}</Typography>
+                                <Typography variant="caption" color="text.secondary">{enrolledOn}</Typography>
                             </Box>
-                        </Stack>
-                        <Box sx={{ textAlign: 'right' }}>
-                            <Typography variant="subtitle2" fontWeight="800" color="text.primary">${student.paidAmount || 0}</Typography>
-                            <Typography variant="caption" color="text.secondary">{new Date(student.enrolledOn).toLocaleDateString()}</Typography>
                         </Box>
-                    </Box>
-                ))}
+                    );
+                })}
                 {(!recentEnrollments || recentEnrollments.length === 0) && (
                     <Typography variant="body2" color="text.secondary" textAlign="center">No enrollments yet.</Typography>
                 )}
