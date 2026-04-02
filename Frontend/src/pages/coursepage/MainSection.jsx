@@ -55,7 +55,7 @@ const MainSection = ({ courseInfo }) => {
                     mt: "0rem", // No gap
                     mb: "4rem",
                     borderTop: "none", // Remove top border to blend
-                    borderRadius: "0 0 16px 16px", // Bottom corners only
+                    borderRadius: "0 0 4px 4px", // Bottom corners only
 
                     overflow: "hidden" // Ensure rounded corners work
                 }}

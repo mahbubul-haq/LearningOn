@@ -1,14 +1,14 @@
 import { Router } from "express";
 
-import { deleteCourse, getAllCourses, getCourseById, getCourseByIdWithOutPopulate, getDraftCourses, getMyCourses, newCourse, updateCourse } from "../controllers/course.js";
-import { getCourseLessons, getFilteredCourses, getPopularCourses } from "../controllers/course.search.js";
+import { deleteCourse, getAllCourses, getCourseById, getCourseByIdWithOutPopulate, getDraftCourses, getMyCourses, newCourse, updateCourse } from "../controllers/courses/course.controller.js";
+import { getCourseLessons, getFilteredCourses, getPopularCourses } from "../controllers/courses/course.query.controller.js";
 import verifyToken, { verifyTokenLight } from "../middlewares/auth.js";
-import { getCourseProgress, updateProgress, updateWatchTime } from "../controllers/course.learning.js";
+import { getCourseProgress, updateProgress, updateWatchTime } from "../controllers/courses/course.progress.controller.js";
 
 
 const router = Router();
 
-
+// old api
 router.post("/new", verifyToken, newCourse);
 router.get("/draft", verifyToken, getDraftCourses);
 router.put("/update/:courseId/:status", verifyToken, updateCourse);

@@ -19,6 +19,7 @@ import authRoutes from "./routes/auth.js";
 import quizRoutes from "./routes/quiz.js";
 
 import courseRoutes from "./routes/course.js";
+import courseRoutesV1 from "./routes/courseRoutesV1.js";
 // import courseProgressRoutes from "./routes/courseProgress.js";
 import dataRoutes from "./routes/data.js";
 import notificationRoutes from "./routes/notification.js";
@@ -61,6 +62,7 @@ app.use("/images", express.static(path.join(__dirname, "../assets/images")));
 
 app.use("/auth", authRoutes);
 app.use("/course", courseRoutes);
+app.use("/api/v1/courses", courseRoutesV1); // NEW (RESTful)
 app.use("/data", dataRoutes);
 app.use("/users", userRoutes);
 app.use("/notification", notificationRoutes);

@@ -12,21 +12,17 @@ const RelatedCourses = ({ courseInfo }) => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const [title, setTitle] = useState("Related Courses");
 
     useEffect(() => {
         const fetchRelatedCourses = async () => {
-            // Initial check to avoid unnecessary fetch if courseInfo isn't ready, 
-            // but we want to allow fallback even if courseInfo is missing category properties (though unlikely for a valid course).
-            // if (!courseInfo?.category) return; 
 
             setLoading(true);
-            const categoryToFetch = courseInfo?.subCategory || courseInfo?.category || "";
+            const categoryToFetch = courseInfo?.category || "";
             let encodedCategory = encodeURIComponent(categoryToFetch);
 
             try {
                 let response = await fetch(
-                    `${import.meta.env.VITE_SERVER_URL}/course/getfiltered?page=1&coursePerPage=8&category=${encodedCategory}`,
+                    `${import.meta.env.VITE_SERVER_URL}/api/v1/courses?category=${encodedCategory}&courseId=${courseInfo?._id}`,
                     {
                         method: "GET",
                         headers: {
@@ -37,37 +33,17 @@ const RelatedCourses = ({ courseInfo }) => {
                 );
 
                 let data = await response.json();
-                let filtered = [];
 
                 if (data.success) {
-                    filtered = data.courses.filter(course => course._id !== courseInfo?._id);
+                    setCourses([...data.courses]);
                 }
-
-                // Fallback: If no courses found (or only the current one was found), fetch generic courses
-                if (filtered.length === 0) {
-                    setTitle("More Courses You Might Like");
-                    response = await fetch(
-                        `${import.meta.env.VITE_SERVER_URL}/course/getfiltered?page=1&coursePerPage=8&category=`,
-                        {
-                            method: "GET",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "auth-token": token,
-                            },
-                        }
-                    );
-                    data = await response.json();
-                    if (data.success) {
-                        filtered = data.courses.filter(course => course._id !== courseInfo?._id);
-                    }
-                } else {
-                    setTitle("Related Courses");
+                else {
+                    setCourses([]);
                 }
-
-                setCourses(filtered.slice(0, 4));
 
             } catch (err) {
                 console.error("Failed to fetch related courses:", err);
+                setCourses([]);
             } finally {
                 setLoading(false);
             }
@@ -92,13 +68,13 @@ const RelatedCourses = ({ courseInfo }) => {
             }}
         >
             <HeaderTypography2 sx={{ marginBottom: "1.5rem" }}>
-                {title}
+                More Courses You Might Like
             </HeaderTypography2>
 
             <Box
                 sx={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
                     /// all have same height
                     gridAutoRows: "1fr",
                     gap: "1.5rem",
@@ -112,7 +88,7 @@ const RelatedCourses = ({ courseInfo }) => {
                         </Box>
                     ))
                 ) : (
-                    courses.map((course, index) => (
+                    courses.slice(0, 4).map((course, index) => (
                         <Box key={index} sx={{ height: "100%" }}>
                             <CourseWidget courseInfo={course} />
                         </Box>
