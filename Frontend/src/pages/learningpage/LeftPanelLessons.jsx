@@ -17,6 +17,7 @@ import { MdOutlineSpeakerNotes } from "react-icons/md";
 import QuizIcon from '@mui/icons-material/Quiz';
 import { Button } from "@mui/material";
 import QuizAttemptDialog from "./QuizAttemptDialog";
+import QuizButton from "./QuizButton";
 
 const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
 
@@ -221,43 +222,14 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                 </Box>
               </FlexBetween>
             ))}
-            {lesson.questions?.questions?.length > 0 && (<>
-              <Button
-                onClick={() => {
-                  setQuizStatus({
-                    lessonNo: index + 1,
-                    status: "attempting",
-                  });
-                }}
-                title={getLessonProgress(lesson._id?.toString()) > 99 ? "" : "Lesson not completed"}
-                sx={{
-                  mx: "auto",
-                  width: `calc(100% - 6.2rem)`,
-                  // Gradient Background
-                  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-                  "&:hover": {
-                    background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
-                    transform: "scale(1.02)",
-                    boxShadow: "0 4px 15px rgba(0,0,0,0.21)",
-
-                  },
-                  borderRadius: "0.7rem",
-                  p: "0.5rem 1rem",
-                  color: colorTokens.white.pure,
-                  fontSize: "0.9rem",
-                  fontWeight: "bold",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  my: "1rem",
-                  cursor: getLessonProgress(lesson._id?.toString()) > 99 ? "pointer" : "not-allowed",
-                  opacity: getLessonProgress(lesson._id?.toString()) > 99 ? 1 : 0.5,
-                }}>
-                <QuizIcon sx={{ color: colorTokens.white.pure }} />
-                {/*  */}
-                {`TAKE MODULE ${(index + 1).toString().padStart(2, "0")} QUIZ`}
-
-              </Button>
+            {lesson.quiz?.metadata?.numberOfQuestions > 0 && (<>
+              <QuizButton
+                metadata={{ ...lesson.quiz.metadata }}
+                setQuizStatus={setQuizStatus}
+                getLessonProgress={getLessonProgress}
+                lessonNo={index + 1}
+                lesson={lesson}
+              />
 
               <QuizAttemptDialog />
             </>

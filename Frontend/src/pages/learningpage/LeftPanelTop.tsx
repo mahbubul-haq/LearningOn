@@ -9,8 +9,9 @@ import useTheme from "@mui/material/styles/useTheme";
 type Props = {
     courseInfo: any;// not typed due to courseInfo is not typed in parent component
     courseProgress: any;
+    aggregatedProgress: number;
 }
-const LeftPanelTop = ({ courseInfo, courseProgress }: Props) => {
+const LeftPanelTop = ({ courseInfo, courseProgress, aggregatedProgress }: Props) => {
     const theme = useTheme();
     const navigate = useNavigate();
     return <Box
@@ -69,10 +70,10 @@ const LeftPanelTop = ({ courseInfo, courseProgress }: Props) => {
                     Course Progress
                 </Typography>
                 <Typography variant='body2' sx={{ color: (theme) => theme.palette.learningPage.textPrimary, fontWeight: 700 }}>
-                    {Math.round(courseProgress?.progressPercentage)}%
+                    {Math.round(aggregatedProgress)}%
                 </Typography>
             </FlexBetween>
-            <LinearProgress color="secondary" variant="determinate" value={Math.round(courseProgress?.progressPercentage)} sx={{
+            <LinearProgress color="secondary" variant="determinate" value={Math.round(aggregatedProgress)} sx={{
                 borderRadius: "1000px",
                 backgroundColor: (theme) => theme.palette.learningPage.divider,
                 height: "8px",

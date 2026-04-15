@@ -77,7 +77,7 @@ export const fetchProgress = createAsyncThunk(
 export const fetchLessons = createAsyncThunk(
   "/course/fetchLessons",
   async ({ courseId, token }) => {
-    // console.log("In fetchLessons", courseId, token);
+    console.log("In fetchLessons", courseId, token);
     try {
       const res = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/course/getlessons/${courseId}`,

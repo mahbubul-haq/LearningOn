@@ -37,6 +37,8 @@ const LearningPage = () => {
   const dispatch = useAppDispatch();
   const [learningPageWidth, setLearningPageWidth] = useState(0);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [aggregatedProgress, setAggregatedProgress] = useState(0);
+  const [subLessonCount, setSubLessonCount] = useState(0);
 
   useEffect(() => {
     let lessonId = openedLesson?.lesson > 0 && courseInfo?.lessons?.length > 0 ? courseInfo?.lessons[openedLesson.lesson - 1]?._id?.toString() || "" : "";
@@ -78,6 +80,32 @@ const LearningPage = () => {
   useEffect(() => {
     console.log(theme.palette.mode);
     console.log("courseId + info", courseInfo, courseProgress);
+    let totalSubLessons = 0;
+    if (subLessonCount === 0) {
+      courseInfo?.lessons?.forEach((lesson) => {
+        totalSubLessons += lesson?.subLessons?.length;
+      });
+      setSubLessonCount(totalSubLessons);
+    } else totalSubLessons = subLessonCount;
+
+
+    let quizCount = 0, completedQuizCount = 0;
+    courseInfo?.lessons?.forEach((lesson) => {
+      if (lesson.quiz) quizCount++;
+      if (lesson.quiz?.metadata) {
+        if (lesson.quiz.metadata.status === "completed" || lesson.quiz.metadata.status == "completed_can_improve") {
+          completedQuizCount++;
+        }
+      }
+    });
+
+    console.log(totalSubLessons, completedQuizCount, quizCount);
+
+    let progress = courseProgress?.progressPercentage || 0;
+    let realProgress = (totalSubLessons + completedQuizCount) * progress / (totalSubLessons + quizCount);
+    setAggregatedProgress(realProgress);
+
+
   }, [courseInfo, courseProgress]);
 
   const scrollTop = () => {
@@ -152,6 +180,7 @@ const LearningPage = () => {
               courseInfo={courseInfo}
               scrollTop={scrollTop}
               courseProgress={courseProgress}
+              aggregatedProgress={aggregatedProgress}
             />
           </Box>
         </Drawer>
@@ -188,6 +217,7 @@ const LearningPage = () => {
                 courseInfo={courseInfo}
                 scrollTop={scrollTop}
                 courseProgress={courseProgress}
+                aggregatedProgress={aggregatedProgress}
               />
 
             </Box>

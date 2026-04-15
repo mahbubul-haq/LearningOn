@@ -14,7 +14,8 @@ type quizAttempt = {
     score: number;
     quizStartTime: Date;
     quizEndTime: Date;
-    status: "active" | "completed";
+    progress: Number;
+    status: "not_started" | "active" | "completed" | "completed_can_improve";
 
 }
 
@@ -77,10 +78,16 @@ const quizAttemptSchema = new Schema<quizAttempt>({
         default: () => Date.now() + 99 * 60 * 60 * 1000,
     },
 
+    progress: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+
     status: {
         type: String,
         required: true,
-        default: "active",
+        default: "not_started",
     },
 
 });

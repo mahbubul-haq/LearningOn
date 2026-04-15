@@ -1,5 +1,6 @@
 import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
+import QuizAttempt from "../../models/QuizAttempt.js";
 import { getRelatedCourses } from "./course.query.service.js";
 
 // ================================== NEW CONTROLLERS =================================
@@ -225,8 +226,8 @@ const getCourseLessons = async (req, res) => {
             owner: 1,
             courseTitle: 1,
             enrolledStudents: 1, ///improvement -> just select the ids instead of whole objects
-        });
-        ///console.log(course, userId);
+        }).populate("enrolledStudents", "userId")
+        // console.log(course, userId);
 
         if (
             course?.owner == userId ||
@@ -246,16 +247,30 @@ const getCourseLessons = async (req, res) => {
             };
 
             //console.log(courseInfo);
+            const lessonIds = courseInfo.lessons?.map((lesson) => lesson._id);
+            let quizInfo = await QuizAttempt.find({
+                lessonId: { $in: lessonIds },
+                userId: userId,
+                courseId: courseId,
+            }).select("score progress lessonId status").lean();
+            // console.log(quizInfo);
 
             courseInfo.lessons = courseInfo.lessons?.map((lesson) => {
-                if (lesson.questions) {
-                    lesson.questions.questions = lesson.questions.questions?.map((q) => {
-                        return {
-                            options: q.options,
-                            question: q.question,
-                        };
-                    });
-                    return lesson;
+                if (lesson.questions && lesson.questions?.questions?.length > 0) {
+                    lesson.quiz ??= {};
+                    lesson.quiz.metadata = {
+                        numberOfQuestions: lesson.questions.questions?.length,
+                        examDuration: lesson.questions.examDuration,
+                        ...quizInfo.find((quiz) => quiz.lessonId.toString() == lesson._id.toString()),
+                    }
+
+                    return {
+                        description: lesson.description,
+                        subLessons: lesson.subLessons,
+                        title: lesson.title,
+                        _id: lesson._id,
+                        quiz: lesson.quiz,
+                    }
                 } else return lesson;
             });
             // console.log(courseInfo);
@@ -265,7 +280,7 @@ const getCourseLessons = async (req, res) => {
                 courseInfo: courseInfo,
             });
         } else {
-            res.status(401).json({
+            res.status(403).json({
                 success: false,
             });
         }
