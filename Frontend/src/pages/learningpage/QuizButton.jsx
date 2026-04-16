@@ -30,6 +30,9 @@ const QuizButton = ({
         else if (metadata?.status === "not_started") {
             return `TAKE LESSON ${lessonNo.toString().padStart(2, "0")} QUIZ`
         }
+        else {
+            return `TAKE LESSON ${lessonNo.toString().padStart(2, "0")} QUIZ`
+        }
 
     }
 

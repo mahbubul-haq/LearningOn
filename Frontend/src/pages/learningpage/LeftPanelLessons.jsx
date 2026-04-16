@@ -231,7 +231,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                 lesson={lesson}
               />
 
-              <QuizAttemptDialog />
+              <QuizAttemptDialog metadata={{ ...lesson.quiz.metadata }} />
             </>
             )}
           </AccordionDetails>

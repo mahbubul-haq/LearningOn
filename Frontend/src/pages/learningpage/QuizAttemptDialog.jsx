@@ -6,14 +6,14 @@ import { LearningCourseContext } from '../../state/LearningCourseContex'
 import useTheme from "@mui/material/styles/useTheme"
 import { StyledButton } from '../../components/StyledButton'
 import { useSelector } from 'react-redux'
-import { getHourMinutes } from '../../utils/dateTime'
+import { getHourMinutes, getMinutesSeconds } from '../../utils/dateTime'
 import { useNavigate } from 'react-router-dom'
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import QuizIcon from '@mui/icons-material/Quiz';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-const QuizAttemptDialog = () => {
+const QuizAttemptDialog = ({ metadata }) => {
     const theme = useTheme();
     const { quizStatus, setQuizStatus, getQuizAttempt } = useContext(LearningCourseContext);
     const { courseInfo } = useSelector((state) => state.course);
@@ -22,9 +22,9 @@ const QuizAttemptDialog = () => {
 
     const [quizDialogState, setQuizDialogState] = useState({
         lessonNo: "",
-        numberOfQuestions: "",
+        numberOfQuestions: metadata?.numberOfQuestions || 0,
         questionType: "Multiple Choice",
-        totalTime: { hours: 0, minutes: 0 },
+        totalTime: { minutes: 0, seconds: 0 },
         instructions: "For each question, 1st attempt success: 1pt, 2nd attempt success: 0.75pt, 2nd attempt fail: -0.5pt. Once started, you cannot skip any question or leave the quiz.",
     });
 
@@ -36,8 +36,8 @@ const QuizAttemptDialog = () => {
                 setQuizDialogState(prev => ({
                     ...prev,
                     lessonNo: lessonNo,
-                    numberOfQuestions: lesson?.questions?.questions?.length,
-                    totalTime: lesson?.questions?.examDuration ? getHourMinutes(lesson?.questions?.examDuration) : { hours: 100, minutes: 0 },
+                    numberOfQuestions: metadata?.numberOfQuestions || 0,
+                    totalTime: metadata?.examDuration ? getMinutesSeconds(metadata?.examDuration) : getMinutesSeconds(Math.max(5 * 60, lesson?.questions?.questions?.length * 90)),
                 }));
             }
         }
@@ -146,7 +146,7 @@ const QuizAttemptDialog = () => {
                     <StatCard
                         icon={<AccessTimeIcon />}
                         label="Duration"
-                        value={`${Math.min(quizDialogState.totalTime.hours, 100)}h ${quizDialogState.totalTime.minutes}m`}
+                        value={`${quizDialogState.totalTime.minutes}m ${quizDialogState.totalTime.seconds}s`}
                     />
                     <StatCard
                         icon={<QuizIcon />}

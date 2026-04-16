@@ -260,7 +260,7 @@ const getCourseLessons = async (req, res) => {
                     lesson.quiz ??= {};
                     lesson.quiz.metadata = {
                         numberOfQuestions: lesson.questions.questions?.length,
-                        examDuration: lesson.questions.examDuration,
+                        examDuration: lesson.questions.examDuration == Number.MAX_SAFE_INTEGER ? Math.max(5 * 60, lesson.questions.questions?.length * 90) : lesson.questions.examDuration,
                         ...quizInfo.find((quiz) => quiz.lessonId.toString() == lesson._id.toString()),
                     }
 

@@ -29,7 +29,7 @@ const LearningPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
-  const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons } =
+  const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons, quizAttempt } =
     useContext(LearningCourseContext);
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.auth);

@@ -19,6 +19,7 @@ export const LearningCourseState = ({ children }) => {
             status: "",//"attempting", "active",
         }
     );
+    const [questions, setQuestions] = useState([]);
 
     useEffect(() => {
         localStorage.setItem("quizStatus", JSON.stringify(quizStatus));
@@ -60,6 +61,30 @@ export const LearningCourseState = ({ children }) => {
         }
     }
 
+    async function getQuestions(courseId, lessonId, authToken) {
+        console.log("getQuestions", courseId, lessonId, authToken);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseId}/lessons/${lessonId}/quiz`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    'auth-token': authToken
+                },
+            });
+            const data = await response.json();
+            if (data.success) {
+                console.log("Questions", data.questions);
+                setQuestions(data.questions);
+            }
+            else {
+                setQuestions([]);
+            }
+        } catch (error) {
+            console.log("Failed to get questions", error);
+            setQuestions([]);
+        }
+    }
+
     return (
         <LearningCourseContext.Provider
             value={{
@@ -74,6 +99,9 @@ export const LearningCourseState = ({ children }) => {
                 getQuizAttempt,
                 quizAttempt,
                 setQuizAttempt,
+                questions,
+                setQuestions,
+                getQuestions
             }}
         >
             {children}

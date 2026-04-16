@@ -33,3 +33,9 @@ export const getHourMinutes = (seconds) => {
     const minutes = Math.floor((seconds % 3600) / 60);
     return { hours: hours, minutes: minutes };
 }
+
+export const getMinutesSeconds = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const seconds1 = seconds % 60;
+    return { minutes: minutes, seconds: seconds1 };
+}

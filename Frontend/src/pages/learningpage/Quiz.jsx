@@ -23,7 +23,7 @@ const quizTracker = {
 
 const Quiz = () => {
     const theme = useTheme();
-    const { quizAttempt, getQuizAttempt, setQuizStatus } = useContext(LearningCourseContext);
+    const { quizAttempt, getQuizAttempt, setQuizStatus, getQuestions } = useContext(LearningCourseContext);
     const { token } = useSelector((state) => state.auth);
     const { courseInfo } = useSelector((state) => state.course);
     const { courseId, lessonId } = useParams();
@@ -77,7 +77,41 @@ const Quiz = () => {
 
     useEffect(() => {
         if (token) getQuizAttempt(courseId, lessonId, token);
+        if (courseId && lessonId && token) {
+            getQuestions(courseId, lessonId, token);
+        }
     }, [courseId, lessonId, token]);
+
+    useEffect(() => {
+        if (quizAttempt?.lessonId == lessonId) {
+            courseInfo?.lessons?.map((lesson) => {
+                if (lesson._id == lessonId) {
+                    let curLesson = {
+                        ...lesson,
+                        quiz: {
+                            ...lesson.quiz,
+                            metadata: {
+                                ...lesson.quiz.metadata,
+                                status: quizAttempt?.status,
+                                score: quizAttempt?.score,
+                                progress: quizAttempt?.progress,
+                                lessonId: quizAttempt?.lessonId,
+                                remainingTime: Math.max(0, new Date(quizAttempt?.quizEndTime).getTime() - Date.now()) / 1000,
+
+                            }
+                        }
+                    };
+                    // };
+                    // console.log("curlesson", curLesson);
+
+                    return curLesson;
+                    // }
+
+                }
+                else return lesson;
+            })
+        }
+    }, [quizAttempt]);
 
     useEffect(() => {
         const interval = setInterval(() => setTimer(t => (t > 0 ? t - 1 : 0)), 1000);
