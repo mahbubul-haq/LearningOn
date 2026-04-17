@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, React } from "react";
 
 export const LearningCourseContext = createContext(null);
 
@@ -37,16 +37,13 @@ export const LearningCourseState = ({ children }) => {
     async function getQuizAttempt(courseId, lessonId, authToken) {
         console.log("getQuizAttempt", courseId, lessonId, authToken);
         try {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/quiz/attempt`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quiz/${courseId}/${lessonId}/attempt`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     'auth-token': authToken
                 },
-                body: JSON.stringify({
-                    courseId,
-                    lessonId
-                }),
+
             });
             const data = await response.json();
             if (data.success) {
@@ -85,6 +82,33 @@ export const LearningCourseState = ({ children }) => {
         }
     }
 
+    async function submitAnswer(courseId, lessonId, questionId, answer, quizAttemptId, authToken) {
+        // console.log("submitAnswer", courseId, lessonId, questionId, answer, authToken);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quiz/${courseId}/${lessonId}/attempt/${quizAttemptId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    'auth-token': authToken
+                },
+                body: JSON.stringify({
+                    questionId,
+                    answer
+                }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                console.log("Answer Submitted", data.quizAttempt);
+                // setQuizAttempt(data.quizAttempt);
+            }
+            else {
+
+            }
+        } catch (error) {
+            console.log("Failed to submit answer", error);
+        }
+    }
+
     return (
         <LearningCourseContext.Provider
             value={{
@@ -101,7 +125,8 @@ export const LearningCourseState = ({ children }) => {
                 setQuizAttempt,
                 questions,
                 setQuestions,
-                getQuestions
+                getQuestions,
+                submitAnswer
             }}
         >
             {children}

@@ -92,6 +92,9 @@ const quizAttemptSchema = new Schema<quizAttempt>({
 
 });
 
+// add index on userId, courseId, lessonId
+quizAttemptSchema.index({ userId: 1, courseId: 1, lessonId: 1 }, { unique: true });
+
 const QuizAttempt = mongoose.model("QuizAttempt", quizAttemptSchema);
 
 export default QuizAttempt;

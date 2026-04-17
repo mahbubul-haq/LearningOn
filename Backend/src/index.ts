@@ -68,7 +68,7 @@ app.use("/users", userRoutes);
 app.use("/notification", notificationRoutes);
 app.use("/cloudinary", cloudinaryRoutes);
 app.use("/admin", adminRoutes);
-app.use("/quiz", quizRoutes);
+app.use("/api/v1/quiz", quizRoutes);
 // app.use("/learning", courseProgressRoutes);
 
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);

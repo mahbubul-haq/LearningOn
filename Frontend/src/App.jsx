@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { themeSettings } from "./theme";
 
+
 // Contexts
 import { AdminState } from "./state/AdminContext";
 import { CourseExplorerState } from "./state/CourseExplorerContext";
@@ -35,7 +36,7 @@ const ProfilePage = lazy(() => import("./pages/profilepage"));
 const Dashboard = lazy(() => import("./pages/dashboard"));
 const Admin = lazy(() => import("./pages/admin"));
 const Quiz = lazy(() => import("./pages/learningpage/Quiz"));
-const QuizContainer = lazy(() => import("./pages/learningpage/QuizContainer"));
+const QuizContainer = lazy(() => import("./pages/learningpage/QuizContainer_Playground"));
 const PlayGround = lazy(() => import("./playground/Dashboard"));
 function App() {
   const mode = useSelector((state) => state.auth.mode);

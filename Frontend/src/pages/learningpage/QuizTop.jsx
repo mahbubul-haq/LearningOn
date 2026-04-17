@@ -79,7 +79,7 @@ const QuizTop = ({ score, timer, progress }) => {
 
                         <CircularProgress
                             variant="determinate"
-                            value={timer / 60 * 100}
+                            value={(timer.remainingTime / timer.totalTime) * 100}
                             size={56}
                             thickness={3}
                             sx={{
@@ -105,10 +105,7 @@ const QuizTop = ({ score, timer, progress }) => {
                                 fontFamily: 'monospace',
                                 transition: 'font-size 0.3s ease'
                             }}>
-                                {timer >= 3600
-                                    ? `${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`
-                                    : `${Math.floor(timer / 60)}:${(timer % 60).toString().padStart(2, '0')}`
-                                }
+                                {`${Math.floor(timer.remainingTime / 60)}:${(Math.floor(timer.remainingTime) % 60).toString().padStart(2, '0')}`}
                             </Typography>
                         </Box>
                     </Box>

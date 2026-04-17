@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 const getQuizAttempt = async (req, res) => {
     try {
         const userId = req.userId;
-        const { courseId, lessonId } = req.body;
+        const { courseId, lessonId } = req.params;
         //duration in seconds
         // console.log("getQuizAttempt", courseId, lessonId);
 
@@ -76,6 +76,99 @@ const getQuizAttempt = async (req, res) => {
     }
 };
 
+const processAnswer = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { courseId, lessonId, attemptId } = req.params;
+        const { questionId, answer } = req.body;
+
+        const quizAttempt = await QuizAttempt.findById(attemptId);
+        if (!quizAttempt) {
+            return res.status(404).json({
+                success: false,
+                quizAttempt: null,
+                message: "Quiz Attempt Not Found",
+            });
+        }
+
+        //find course lesson having courseId: courseId and lessons[lessondId]in one query, only find the spceficint lesson
+        const course = await Course.findOne({
+            _id: courseId,
+            "lessons._id": lessonId
+        }, {
+            "lessons.$": 1
+        }).lean();
+        const lesson = course?.lessons[0];
+        console.log("course, lesson", course, lesson);
+        const question = lesson?.questions?.questions?.find((question) => question?._id?.toString() == questionId);
+        if (!question) {
+            return res.status(404).json({
+                success: false,
+                quizAttempt: null,
+                message: "Question Not Found",
+            });
+        }
+
+        let prevAnswer = quizAttempt.answers.find((answer) => answer?.questionId?.toString() == questionId);
+
+        if (Date.now() > new Date(quizAttempt.quizEndTime).getTime()) {
+            quizAttempt.status = "completed";
+            await quizAttempt.save();
+            return res.status(200).json({
+                success: true,
+                quizAttempt: quizAttempt,
+                message: "Quiz Attempt Time Expired",
+            });
+        }
+
+        if (prevAnswer?.attemptNumber >= 2 || prevAnswer?.isCorrect) {
+            return res.status(400).json({
+                success: false,
+                quizAttempt: quizAttempt,
+                message: "Quiz Attempt Already Completed",
+            });
+        }
+
+        if (prevAnswer) {
+            prevAnswer.attemptNumber = 2;
+            prevAnswer.answer = String(answer);
+            prevAnswer.isCorrect = parseInt(question.answer) == answer;
+            prevAnswer.correctAnswer = question.answer;
+
+        } else {
+            quizAttempt.answers.push({
+                questionId: questionId,
+                answer: String(answer),
+                isCorrect: parseInt(question.answer) == answer,
+                attemptNumber: 1,
+            });
+
+            quizAttempt.progress = (quizAttempt.answers.length / lesson?.questions?.questions?.length) * 100;
+        }
+
+        if (prevAnswer?.isCorrect) {
+            quizAttempt.score += 1;
+        }
+
+        if (quizAttempt.progress === 100) {
+            quizAttempt.status = "completed_can_improve";
+        }
+
+        await quizAttempt.save();
+
+        res.status(200).json({
+            success: true,
+            quizAttempt: quizAttempt,
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message,
+        });
+    }
+}
+
 export {
     getQuizAttempt,
+    processAnswer
 };
