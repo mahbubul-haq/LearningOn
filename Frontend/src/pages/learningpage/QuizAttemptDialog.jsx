@@ -235,7 +235,7 @@ const QuizAttemptDialog = ({ metadata }) => {
                             navigate(`/quiz/${courseInfo?._id}/${courseInfo?.lessons?.[quizStatus.lessonNo - 1]?._id}`);
                         }}
                     >
-                        Start Quiz
+                        {metadata?.status === "completed" ? "Review Quiz" : metadata?.status === "completed_can_improve" || metadata?.status === "active" ? "Continue Quiz" : "Start Quiz"}
                     </StyledButton>
                 </DialogActions>
             </DialogContent>

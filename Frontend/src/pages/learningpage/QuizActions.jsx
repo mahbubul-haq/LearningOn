@@ -13,16 +13,42 @@ const QuizActions = ({
     attemptCount,
     handleBack,
     handleNext,
-    isSubmitted,
     handleSubmit,
     currentIdx,
     quizHistory,
     setQuizHistory,
     curQuestionState,
-    setCurQuestionState
+    setCurQuestionState,
+    timer
 }) => {
     const theme = useTheme();
-    const { questions } = useContext(LearningCourseContext);
+    const { questions, quizAttempt } = useContext(LearningCourseContext);
+
+    const getPoints = () => {
+        if (curQuestionState.attemptNumber === 0) {
+            return "+1";
+        }
+        else if (curQuestionState.attemptNumber === 1) {
+            if (curQuestionState.isCorrect) {
+                return "+1";
+            }
+            else {
+                return "+0.75";
+            }
+        }
+        else if (curQuestionState.attemptNumber === 2) {
+            if (curQuestionState.isCorrect) {
+                return "+0.75";
+            }
+            else {
+                return "-0.5";
+            }
+        }
+        else {
+            return "0";
+        }
+    }
+
     return (
         <Box sx={{
             display: 'flex',
@@ -34,10 +60,10 @@ const QuizActions = ({
             {/* Left Side: Stats */}
             <Box>
                 <Typography variant="caption" sx={{ color: (theme) => theme.palette.learningPage.textSecondary, display: 'block', letterSpacing: 1, fontWeight: "bold" }}>
-                    AVAILABLE PTS
+                    {curQuestionState?.isCorrect || curQuestionState?.attemptNumber >= 2 ? "PTS ACHIEVED" : "AVAILABLE PTS"}
                 </Typography>
                 <Typography variant="h6" sx={{ color: (theme) => attemptCount === 1 ? theme.palette.secondary.main : theme.palette.error.main, fontWeight: 'bold' }}>
-                    +{attemptCount === 1 ? 1 : 0.75} {attemptCount === 2 ? '/ -0.5' : ""}
+                    {getPoints()}
                 </Typography>
             </Box>
 
@@ -72,35 +98,34 @@ const QuizActions = ({
                         '&:hover': { color: theme.palette.text.primary }
                     }}
                 >
-                    {isSubmitted ? "Next" : "Skip"}
+                    {curQuestionState?.attemptNumber > 0 ? "Next" : "Skip"}
                 </Button>
 
-                {!isSubmitted && (
-                    <Button
-                        onClick={handleSubmit}
-                        // disabled={selectedOption === null}
-                        variant="contained"
-                        sx={{
-                            backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
-                            "&:hover": {
-                                backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
-                            },
-                            color: colorTokens.white.pure,
-                            fontWeight: 'bold',
-                            borderRadius: '30px',
-                            px: { xs: 4, sm: 6 }, py: 1.5,
-                            textTransform: 'none',
-                            fontSize: '1rem',
-                            '&.Mui-disabled': {
-                                backgroundColor: (theme) => theme.palette.learningPage.divider,
-                                color: (theme) => theme.palette.learningPage.textSecondary,
-                                opacity: 0.5
-                            }
-                        }}
-                    >
-                        Submit Answer
-                    </Button>
-                )}
+                <Button
+                    onClick={handleSubmit}
+                    // disabled={selectedOption === null}
+                    variant="contained"
+                    disabled={curQuestionState?.attemptNumber >= 2 || curQuestionState?.isCorrect || timer?.remainingTime <= 0}
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
+                        "&:hover": {
+                            backgroundColor: (theme) => theme.palette.homepage.buttonPrimaryHover,
+                        },
+                        color: colorTokens.white.pure,
+                        fontWeight: 'bold',
+                        borderRadius: '30px',
+                        px: { xs: 4, sm: 6 }, py: 1.5,
+                        textTransform: 'none',
+                        fontSize: '1rem',
+                        '&.Mui-disabled': {
+                            backgroundColor: (theme) => theme.palette.learningPage.divider,
+                            color: (theme) => theme.palette.learningPage.textSecondary,
+                            opacity: 0.5
+                        }
+                    }}
+                >
+                    Submit Answer
+                </Button>
             </Box>
         </Box>
     )

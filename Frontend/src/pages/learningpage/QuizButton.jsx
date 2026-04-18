@@ -70,7 +70,7 @@ const QuizButton = ({
                 opacity: getLessonProgress(lesson._id?.toString()) > 99 ? 1 : 0.6,
             }}>
             <QuizIcon sx={{ color: colorTokens.white.pure }} />
-            {getLessonProgress(lesson._id?.toString()) > 99 ? getQuizButtonText() : `LESSON ${lessonNo.toString().padStart(2, "0")} QUIZ`}
+            {getLessonProgress(lesson._id?.toString()) > 99.95 ? getQuizButtonText() : `LESSON ${lessonNo.toString().padStart(2, "0")} QUIZ`}
             {/* {`TAKE MODULE ${(lessonNo).toString().padStart(2, "0")} QUIZ`} */}
 
         </Button>

@@ -11,7 +11,7 @@ import { LearningCourseContext } from '../../state/LearningCourseContex';
 import QuizTop from './QuizTop';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useAppDispatch } from '../../state/reduxStore/hooks';
-import { fetchLessons } from '../../state/reduxStore/learningPageSlice';
+import { fetchLessons, updateCourseInfo } from '../../state/reduxStore/learningPageSlice';
 import { colorTokens } from '../../theme';
 import QuizQuestion from './QuizQuestion';
 import QuizActions from './QuizActions';
@@ -25,7 +25,7 @@ const quizTracker = {
 
 const Quiz = () => {
     const theme = useTheme();
-    const { quizAttempt, getQuizAttempt, setQuizStatus, getQuestions, questions, submitAnswer } = useContext(LearningCourseContext);
+    const { quizAttempt, getQuizAttempt, setQuizStatus, getQuestions, questions, submitAnswer, setQuizAttempt } = useContext(LearningCourseContext);
     const { token } = useSelector((state) => state.auth);
     const { courseInfo } = useSelector((state) => state.course);
     const { courseId, lessonId } = useParams();
@@ -43,10 +43,8 @@ const Quiz = () => {
         remainingTime: 0,
         totalTime: 0,
     });
-    const [isSubmitted, setIsSubmitted] = useState(false);
     const [visible, setVisible] = useState(true);
     const [quizHistory, setQuizHistory] = useState({});
-    const [previousAttempt, setPreviousAttempt] = useState(null);
     const [progressValue, setProgressValue] = useState(0);
     const [curQuestionState, setCurQuestionState] = useState({
         previousAnswer: "",
@@ -54,7 +52,7 @@ const Quiz = () => {
 
     });
     const getQuestionState = () => {
-        const answer = quizAttempt?.answers?.find((answer) => answer.questionId == questions[currentIdx]._id);
+        const answer = quizAttempt?.answers?.find((answer) => answer.questionId == questions[currentIdx]?._id);
         if (answer) {
             setCurQuestionState({
                 previousAnswer: parseInt(answer.answer),
@@ -63,19 +61,22 @@ const Quiz = () => {
                 correctAnswer: answer.correctAnswer ? parseInt(answer.correctAnswer) : null,
             })
         }
+        else {
+            setCurQuestionState({
+                previousAnswer: "",
+                attemptNumber: 0,
+                isCorrect: false,
+                correctAnswer: null,
+            })
+        }
     }
     useEffect(() => {
-        getQuestionState();
+        if (questions?.length > 0 && quizAttempt?._id) getQuestionState();
     }, [currentIdx, quizAttempt]);
 
 
     useEffect(() => {
         console.log(courseId, token);
-        setQuizStatus(prev =>
-            localStorage.getItem("quizStatus") ? JSON.parse(localStorage.getItem("quizStatus")) : {
-                ...prev,
-                status: "active",
-            })
         if (!token) {
             navigate("/login", {
                 state: {
@@ -107,7 +108,8 @@ const Quiz = () => {
 
     useEffect(() => {
         if (quizAttempt?.lessonId == lessonId) {
-            courseInfo?.lessons?.map((lesson) => {
+
+            const updatedLessons = courseInfo?.lessons?.map((lesson) => {
                 if (lesson._id == lessonId) {
                     let curLesson = {
                         ...lesson,
@@ -131,6 +133,9 @@ const Quiz = () => {
                         totalTime: (new Date(quizAttempt?.quizEndTime).getTime() - new Date(quizAttempt?.quizStartTime).getTime()) / 1000
                     });
                     setProgressValue(quizAttempt?.progress)
+                    if (new Date(quizAttempt?.quizEndTime).getTime() - Date.now() <= 0) {
+                        curLesson.quiz.metadata.status = "completed";
+                    }
 
                     return curLesson;
                     // }
@@ -138,6 +143,8 @@ const Quiz = () => {
                 }
                 else return lesson;
             })
+
+            dispatch(updateCourseInfo({ courseInfo: { ...courseInfo, lessons: updatedLessons } }))
         }
     }, [quizAttempt]);
 
@@ -146,31 +153,41 @@ const Quiz = () => {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        // console.log(timer.remainingTime);
+        if (timer.remainingTime <= 0) {
+
+            const updatedLessons = courseInfo?.lessons?.map((lesson) => {
+                if (lesson._id == lessonId) {
+                    let curLesson = {
+                        ...lesson,
+                        quiz: {
+                            ...lesson.quiz,
+                            metadata: {
+                                ...lesson.quiz.metadata,
+                                status: "completed",
+                            }
+                        }
+                    };
+                    return curLesson;
+                }
+                else return lesson;
+            })
+
+            dispatch(updateCourseInfo({ courseInfo: { ...courseInfo, lessons: updatedLessons } }))
+
+        }
+    }, [timer]);
+
     // const progressValue = ((currentIdx + 1) / questionObj?.questions?.length) * 50;
 
     const handleSubmit = () => {
-        // const isCorrect = selectedOption === questions[currentIdx].correct;
-        // questions[currentIdx].previousAnswer = selectedOption;
+
         submitAnswer(courseId, lessonId, questions[currentIdx]._id, quizHistory[currentIdx], quizAttempt._id, token);
-        // if (isCorrect) {
-        //     alert("Perfect! +10 XP earned.");
-        //     setIsSubmitted(true);
-        // } else if (attemptCount < 2) {
-        //     alert("Incorrect. Try one more time!");
-        //     setAttemptCount(2);
-        // } else {
-        //     alert("Question complete. 0 XP.");
-        //     setIsSubmitted(true);
-        // }
+
     };
 
     const handleNext = () => {
-        // Save state for current question
-        // Save state for current question
-        // setQuizHistory(prev => ({
-        //     ...prev,
-        //     [currentIdx]: { selectedOption }
-        // }));
 
         if (currentIdx < questions?.length - 1) {
             setVisible(false);
@@ -182,12 +199,8 @@ const Quiz = () => {
                 const nextState = quizHistory[nextIdx];
                 if (nextState) {
                     setAttemptCount(nextState.attemptCount);
-                    setIsSubmitted(nextState.isSubmitted);
-                    setPreviousAttempt(nextState.previousAttempt || null);
                 } else {
                     setAttemptCount(1);
-                    setIsSubmitted(false);
-                    setPreviousAttempt(null);
                 }
                 setVisible(true);
             }, 300);
@@ -215,8 +228,6 @@ const Quiz = () => {
                 const prevState = quizHistory[prevIdx];
                 if (prevState) {
                     setAttemptCount(prevState.attemptCount);
-                    setIsSubmitted(prevState.isSubmitted);
-                    setPreviousAttempt(prevState.previousAttempt || null);
                 }
                 setVisible(true);
             }, 300);
@@ -255,11 +266,11 @@ const Quiz = () => {
                         visible={visible}
                         currentIdx={currentIdx}
                         attemptCount={attemptCount}
-                        isSubmitted={isSubmitted}
                         quizHistory={quizHistory}
                         setQuizHistory={setQuizHistory}
                         curQuestionState={curQuestionState}
                         setCurQuestionState={setCurQuestionState}
+                        timer={timer}
                     />
 
 
@@ -269,13 +280,13 @@ const Quiz = () => {
                         attemptCount={attemptCount}
                         handleBack={handleBack}
                         handleNext={handleNext}
-                        isSubmitted={isSubmitted}
                         handleSubmit={handleSubmit}
                         currentIdx={currentIdx}
                         quizHistory={quizHistory}
                         setQuizHistory={setQuizHistory}
                         curQuestionState={curQuestionState}
                         setCurQuestionState={setCurQuestionState}
+                        timer={timer}
                     />
                 </Paper>
 

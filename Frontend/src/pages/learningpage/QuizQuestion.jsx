@@ -17,12 +17,11 @@ const QuizQuestion = ({
     visible,
     currentIdx,
     attemptCount,
-
-    isSubmitted,
     quizHistory,
     setQuizHistory,
     curQuestionState,
-    setCurQuestionState
+    setCurQuestionState,
+    timer
 }) => {
     const theme = useTheme();
     const maxWidth400 = useMediaQuery("(max-width:400px)");
@@ -42,10 +41,30 @@ const QuizQuestion = ({
                         {maxWidth400 ? "" : "QUESTION "}{currentIdx + 1} OF {questions?.length}
                     </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Replay sx={{ fontSize: '1rem', color: (theme) => curQuestionState.attemptNumber === 0 ? theme.palette.secondary.main : theme.palette.error.main }} />
-                        <Typography sx={{ color: (theme) => curQuestionState.attemptNumber === 0 ? theme.palette.secondary.main : theme.palette.error.main, fontSize: '0.75rem', fontWeight: 'bold' }}>
-                            ATTEMPT {curQuestionState.attemptNumber + 1} / 2
-                        </Typography>
+
+                        {curQuestionState?.isCorrect ? (
+                            <Typography sx={{ color: (theme) => theme.palette.success.main, fontSize: '0.75rem', fontWeight: 'bold' }}>
+                                🎉 Correct!
+                            </Typography>
+                        ) : <>
+                            {curQuestionState.attemptNumber == 2 || (curQuestionState.attemptNumber > 0 && timer.remainingTime <= 0) ? (
+                                <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                    <Cancel sx={{ fontSize: '1rem' }} /> Incorrect!
+                                </Typography>
+                            ) : (
+                                <> {timer.remainingTime <= 0 ? <Typography sx={{ color: (theme) => theme.palette.error.main, fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                    ⏰ Time’s up</Typography> : <>
+                                    <Replay sx={{ fontSize: '1rem', color: (theme) => curQuestionState.attemptNumber === 0 ? theme.palette.secondary.main : theme.palette.error.main }} />
+                                    <Typography sx={{ color: (theme) => curQuestionState.attemptNumber === 0 ? theme.palette.secondary.main : theme.palette.error.main, fontSize: '0.75rem', fontWeight: 'bold' }}>
+
+                                        {curQuestionState.attemptNumber == 0 ? "Attempts left: 2" : `Attempts left: 1`}
+                                    </Typography>
+                                </>
+                                }
+                                </>
+                            )}
+                        </>
+                        }
                     </Box>
                 </Box>
 
@@ -57,43 +76,40 @@ const QuizQuestion = ({
                     {questions[currentIdx]?.options?.map((opt, i) => {
                         // const isSelected = selectedOption === i;
                         const isSelected = quizHistory[currentIdx] === i + 1;
-                        const isCorrectOption = (curQuestionState.attemptNumber > 0) && (i + 1 === curQuestionState.previousAnswer);
+                        const isPreviousAnswer = i + 1 == curQuestionState.previousAnswer;
+                        const isCorrectOption = curQuestionState.isCorrect && (i + 1 == curQuestionState.previousAnswer);
 
                         // Determine styles based on submission state and theme mode
                         const isDark = theme.palette.mode === 'dark';
 
-                        let borderColor = isSelected
-                            ? (theme) => theme.palette.secondary.main
-                            : (theme) => theme.palette.learningPage.divider;
+                        let borderColor = isCorrectOption ?
+                            theme.palette.success.main :
+                            isPreviousAnswer ?
+                                theme.palette.error.main :
+                                isSelected ?
+                                    theme.palette.secondary.main :
+                                    theme.palette.learningPage.divider;
 
-                        let textColor = isSelected
-                            ? (theme) => theme.palette.secondary.main
-                            : (theme) => theme.palette.learningPage.textPrimary;
+                        let textColor = isCorrectOption ?
+                            theme.palette.success.main :
+                            isPreviousAnswer ?
+                                theme.palette.error.main :
+                                isSelected ?
+                                    theme.palette.secondary.main :
+                                    theme.palette.learningPage.textPrimary;
 
-                        let bgcolor = isSelected
-                            ? (theme) => theme.palette.learningPage.lessonActive
-                            : 'transparent';
-
-                        if (curQuestionState.attemptNumber > 0) {
-                            if (isCorrectOption) {
-                                borderColor = (theme) => theme.palette.success.main;
-                                textColor = (theme) => theme.palette.success.main;
-                                bgcolor = `rgba(16, 185, 129, 0.15)`;
-                            } else if (isSelected && !isCorrectOption) {
-                                borderColor = (theme) => theme.palette.error.main;
-                                textColor = (theme) => theme.palette.error.main;
-                                bgcolor = `rgba(239, 68, 68, 0.15)`;
-                            } else {
-                                borderColor = (theme) => theme.palette.learningPage.divider;
-                                textColor = (theme) => theme.palette.learningPage.textSecondary;
-                                bgcolor = 'transparent';
-                            }
-                        }
+                        let bgcolor = isCorrectOption ?
+                            `   rgba(16, 185, 129, 0.15)` :
+                            isPreviousAnswer ?
+                                `rgba(239, 68, 68, 0.15)` :
+                                isSelected ?
+                                    theme.palette.learningPage.lessonActive
+                                    : 'transparent';
 
 
                         return (
                             <Button key={i} variant="outlined" onClick={() => {
-                                if (curQuestionState.attemptNumber < 2) {
+                                if (curQuestionState.attemptNumber < 2 && timer.remainingTime > 0 && !isPreviousAnswer) {
                                     setQuizHistory(prev => ({
                                         ...prev,
                                         [currentIdx]: i + 1
@@ -108,14 +124,15 @@ const QuizQuestion = ({
                                     color: textColor,
                                     borderWidth: "1px",
                                     textTransform: 'none', transition: '0.3s',
-                                    opacity: isSubmitted && !isCorrectOption && !isSelected ? 0.4 : 1,
+                                    // opacity: !isCorrectOption && !isSelected ? 0.4 : 1,
                                     '&:hover': {
-                                        borderColor: isSubmitted ? borderColor : (theme) => theme.palette.secondary.main,
-                                        bgcolor: isSubmitted ? bgcolor : (theme) => theme.palette.learningPage.lessonHover,
+                                        borderColor: theme.palette.secondary.main,
+                                        bgcolor: theme.palette.learningPage.lessonHover,
                                         // borderWidth: "2px",
                                         // outline: `4px solid ${theme.palette.secondary.main} inset`
                                     }
                                 }}
+                                disabled={curQuestionState.attemptNumber >= 2 || timer.remainingTime <= 0 || isPreviousAnswer || curQuestionState.isCorrect}
                             >
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Box sx={{
@@ -128,9 +145,9 @@ const QuizQuestion = ({
                                 </Box>
 
                                 {/* Feedback Icon */}
-                                {(isSubmitted || attemptCount == 2) && (
+                                {(attemptCount == 2) && (
                                     <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
-                                        {isCorrectOption && isSubmitted && <CheckCircle sx={{ color: theme.palette.success.main }} />}
+                                        {isCorrectOption && <CheckCircle sx={{ color: theme.palette.success.main }} />}
                                         {questions[currentIdx].previousAnswer == i && !isCorrectOption && <Cancel sx={{ color: theme.palette.error.main }} />}
                                     </Box>
                                 )}

@@ -100,6 +100,7 @@ export const LearningCourseState = ({ children }) => {
             if (data.success) {
                 console.log("Answer Submitted", data.quizAttempt);
                 // setQuizAttempt(data.quizAttempt);
+                setQuizAttempt(data.quizAttempt);
             }
             else {
 

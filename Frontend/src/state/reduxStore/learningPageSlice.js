@@ -190,6 +190,10 @@ const learningPageSlice = createSlice({
         return lesson;
       });
 
+    },
+    updateCourseInfo: (state, action) => {
+      const { courseInfo } = action.payload;
+      state.courseInfo = courseInfo;
     }
   },
   extraReducers: (builder) => {
@@ -238,6 +242,6 @@ const learningPageSlice = createSlice({
   },
 });
 
-export const { setCourseId, setAnswer, syncCourseProgress } = learningPageSlice.actions;
+export const { setCourseId, setAnswer, syncCourseProgress, updateCourseInfo } = learningPageSlice.actions;
 
 export default learningPageSlice.reducer;

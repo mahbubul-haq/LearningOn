@@ -52,11 +52,8 @@ const getQuizAttempt = async (req, res) => {
             });
         }
 
-        let curTime = Date.now();
-        let timeDiff = quizAttempt.quizEndTime - curTime;
-        // console.log("I got the atttempt");
 
-        if (timeDiff <= 0 && quizAttempt.status !== "completed") {
+        if (new Date(quizAttempt.quizEndTime).getTime() < Date.now() && quizAttempt.status !== "completed") {
 
             quizAttempt.status = "completed";
 
@@ -91,6 +88,16 @@ const processAnswer = async (req, res) => {
             });
         }
 
+        if (Date.now() > new Date(quizAttempt.quizEndTime).getTime() || quizAttempt.status === "completed") {
+            quizAttempt.status = "completed";
+            await quizAttempt.save();
+            return res.status(200).json({
+                success: true,
+                quizAttempt: quizAttempt,
+                message: "Quiz Attempt Time Expired",
+            });
+        }
+
         //find course lesson having courseId: courseId and lessons[lessondId]in one query, only find the spceficint lesson
         const course = await Course.findOne({
             _id: courseId,
@@ -99,7 +106,7 @@ const processAnswer = async (req, res) => {
             "lessons.$": 1
         }).lean();
         const lesson = course?.lessons[0];
-        console.log("course, lesson", course, lesson);
+        // console.log("course, lesson", course, lesson);
         const question = lesson?.questions?.questions?.find((question) => question?._id?.toString() == questionId);
         if (!question) {
             return res.status(404).json({
@@ -111,15 +118,6 @@ const processAnswer = async (req, res) => {
 
         let prevAnswer = quizAttempt.answers.find((answer) => answer?.questionId?.toString() == questionId);
 
-        if (Date.now() > new Date(quizAttempt.quizEndTime).getTime()) {
-            quizAttempt.status = "completed";
-            await quizAttempt.save();
-            return res.status(200).json({
-                success: true,
-                quizAttempt: quizAttempt,
-                message: "Quiz Attempt Time Expired",
-            });
-        }
 
         if (prevAnswer?.attemptNumber >= 2 || prevAnswer?.isCorrect) {
             return res.status(400).json({
@@ -134,6 +132,11 @@ const processAnswer = async (req, res) => {
             prevAnswer.answer = String(answer);
             prevAnswer.isCorrect = parseInt(question.answer) == answer;
             prevAnswer.correctAnswer = question.answer;
+            if (parseInt(question.answer) == answer) {
+                quizAttempt.score += 0.75;
+            } else {
+                quizAttempt.score -= 0.5;
+            }
 
         } else {
             quizAttempt.answers.push({
@@ -143,15 +146,25 @@ const processAnswer = async (req, res) => {
                 attemptNumber: 1,
             });
 
+            if (parseInt(question.answer) == answer) {
+                quizAttempt.score += 1;
+            }
+
             quizAttempt.progress = (quizAttempt.answers.length / lesson?.questions?.questions?.length) * 100;
         }
 
-        if (prevAnswer?.isCorrect) {
-            quizAttempt.score += 1;
-        }
+        // if (prevAnswer?.isCorrect) {
+        //     quizAttempt.score += 1;
+        // }
 
         if (quizAttempt.progress === 100) {
             quizAttempt.status = "completed_can_improve";
+        }
+
+        let finishedAnswerCount = quizAttempt.answers.filter((answer) => answer?.attemptNumber >= 2 || answer?.isCorrect).length;
+
+        if (quizAttempt.progress === 100 && finishedAnswerCount == lesson?.questions?.questions?.length) {
+            quizAttempt.status = "completed";
         }
 
         await quizAttempt.save();

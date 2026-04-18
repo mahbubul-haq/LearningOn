@@ -53,7 +53,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
   } = useContext(LearningCourseContext);
   return (
     <React.Fragment key={courseInfo.lessons?.length}>
-      {courseInfo.lessons.map((lesson, index) => (
+      {courseInfo?.lessons.map((lesson, index) => (
 
         <Accordion key={index}
           expanded={expandedLessons.includes(index)}

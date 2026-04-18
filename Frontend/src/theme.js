@@ -385,7 +385,7 @@ export const themeSettings = ({ mode }) => {
                         navBg: colorTokens.glass.dark.bg,
                         lessonActive: `rgba(107, 79, 217, 0.3)`, // primary.light with more opacity
                         lessonHover: "rgba(255, 255, 255, 0.05)",
-                        textPrimary: colorTokens.white.pure,
+                        textPrimary: colorTokens.white.light,
                         textSecondary: colorTokens.grey[400],
                         divider: colorTokens.glass.dark.borderSubtle,
                         cardBg: colorTokens.glass.dark.bgStrong,
