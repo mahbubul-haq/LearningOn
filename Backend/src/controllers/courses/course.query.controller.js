@@ -252,16 +252,26 @@ const getCourseLessons = async (req, res) => {
                 lessonId: { $in: lessonIds },
                 userId: userId,
                 courseId: courseId,
-            }).select("score progress lessonId status").lean();
-            // console.log(quizInfo);
+            }).select("score progress lessonId status quizEndTime").lean();
+            // console.log(quizInfo);//score, progress,  lessonId, status needed
+            let quizMap = new Map(
+                quizInfo.map((quiz) => [quiz.lessonId.toString(), quiz])
+            );
+
 
             courseInfo.lessons = courseInfo.lessons?.map((lesson) => {
                 if (lesson.questions && lesson.questions?.questions?.length > 0) {
                     lesson.quiz ??= {};
+                    let quiz = quizMap.get(lesson._id.toString());
                     lesson.quiz.metadata = {
                         numberOfQuestions: lesson.questions.questions?.length,
                         examDuration: lesson.questions.examDuration == Number.MAX_SAFE_INTEGER ? Math.max(5 * 60, lesson.questions.questions?.length * 90) : lesson.questions.examDuration,
-                        ...quizInfo.find((quiz) => quiz.lessonId.toString() == lesson._id.toString()),
+                    }
+                    if (quiz) {
+                        lesson.quiz.metadata.score = quiz.score;
+                        lesson.quiz.metadata.progress = quiz.progress;
+                        lesson.quiz.metadata.status = quiz.quizEndTime < new Date() ? "completed" : quiz.status;
+                        lesson.quiz.metadata.remainingTime = Math.max(0, new Date(quiz.quizEndTime).getTime() - new Date().getTime()) / 1000;
                     }
 
                     return {

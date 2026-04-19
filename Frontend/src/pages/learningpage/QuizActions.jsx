@@ -105,7 +105,7 @@ const QuizActions = ({
                     onClick={handleSubmit}
                     // disabled={selectedOption === null}
                     variant="contained"
-                    disabled={curQuestionState?.attemptNumber >= 2 || curQuestionState?.isCorrect || timer?.remainingTime <= 0}
+                    disabled={curQuestionState?.attemptNumber >= 2 || curQuestionState?.isCorrect || timer?.remainingTime <= 0 || !quizHistory[currentIdx]}
                     sx={{
                         backgroundColor: (theme) => theme.palette.homepage.buttonPrimary,
                         "&:hover": {

@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import useTheme from "@mui/material/styles/useTheme"
 import { colorTokens } from '../../theme'
-import { Button } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import QuizIcon from '@mui/icons-material/Quiz';
+import TimerIcon from '@mui/icons-material/Timer';
+import { updateCourseInfo } from '../../state/reduxStore/learningPageSlice';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../state/reduxStore/hooks';
 
 const QuizButton = ({
     metadata,
@@ -13,16 +17,62 @@ const QuizButton = ({
 }) => {
 
     const theme = useTheme();
+    const [timeLeft, setTimeLeft] = useState(() => metadata?.remainingTime);
+    const courseInfo = useSelector((state) => state.course);
+    const dispatch = useAppDispatch();
+
     useEffect(() => {
-        console.log(metadata);
+        if (timeLeft <= 0 && (metadata?.status !== "completed" || metadata?.remainingTime > 0)) {
+            const updatedLessons = courseInfo?.lessons?.map((lesson1) => {
+                if (lesson1._id == lesson._id) {
+                    let curLesson = {
+                        ...lesson1,
+                        quiz: {
+                            ...lesson1.quiz,
+                            metadata: {
+                                ...lesson1.quiz.metadata,
+                                status: "completed",
+                                remainingTime: 0,
+                            }
+                        }
+                    };
+                    return curLesson;
+                }
+                else return lesson1;
+            })
+
+            dispatch(updateCourseInfo({ courseInfo: { ...courseInfo, lessons: updatedLessons } }))
+        }
+
+    }, [timeLeft])
+
+    useEffect(() => {
+        if (metadata?.remainingTime) {
+            setTimeLeft(metadata.remainingTime);
+        }
+
+        let interval;
+        if (metadata?.status === "active" || metadata?.status === "completed_can_improve") {
+            interval = setInterval(() => {
+                setTimeLeft(prev => Math.max(prev - 1, 0));
+            }, 1000);
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        }
     }, [metadata])
+
+    const formatTimer = (timeInSeconds) => {
+        if (isNaN(timeInSeconds) || timeInSeconds < 0) return "00:00";
+        return `${Math.floor(timeInSeconds / 60).toString().padStart(2, '0')}:${(Math.floor(timeInSeconds) % 60).toString().padStart(2, '0')}`;
+    };
 
     const getQuizButtonText = () => {
         if (metadata?.status === "completed_can_improve") {
             return `IMPROVE SCORE (${metadata?.score}/${metadata?.numberOfQuestions})`
         }
         else if (metadata?.status === "completed") {
-            return `QUIZ COMPLETED (${metadata?.score}/${metadata?.numberOfQuestions})`
+            return `QUIZ ${lessonNo.toString().padStart(2, "0")} COMPLETED (${metadata?.score}/${metadata?.numberOfQuestions})`
         }
         else if (metadata?.status === "active") {
             return `CONTINUE QUIZ (${metadata.progress || 0}%)`
@@ -35,6 +85,8 @@ const QuizButton = ({
         }
 
     }
+
+    const showTimer = (metadata?.status === "active" || metadata?.status === "completed_can_improve") && timeLeft > 0;
 
     return (
         <Button
@@ -64,14 +116,31 @@ const QuizButton = ({
                 fontWeight: "bold",
                 display: "flex",
                 alignItems: "center",
+                justifyContent: metadata?.status === "active" || metadata?.status === "completed_can_improve" ? "space-between" : "center",
                 gap: "0.5rem",
                 my: "2rem",
                 cursor: getLessonProgress(lesson._id?.toString()) > 99 ? "pointer" : "not-allowed",
                 opacity: getLessonProgress(lesson._id?.toString()) > 99 ? 1 : 0.6,
             }}>
+
             <QuizIcon sx={{ color: colorTokens.white.pure }} />
-            {getLessonProgress(lesson._id?.toString()) > 99.95 ? getQuizButtonText() : `LESSON ${lessonNo.toString().padStart(2, "0")} QUIZ`}
-            {/* {`TAKE MODULE ${(lessonNo).toString().padStart(2, "0")} QUIZ`} */}
+            <Box sx={{ textAlign: "left" }}>
+                {getLessonProgress(lesson._id?.toString()) > 99.95 ? getQuizButtonText() : `LESSON ${lessonNo.toString().padStart(2, "0")} QUIZ`}
+            </Box>
+
+            {getLessonProgress(lesson._id?.toString()) > 99.95 && showTimer && (
+                <Box sx={{
+                    display: 'flex', alignItems: 'center', gap: '0.3rem',
+                    backgroundColor: 'rgba(255,255,255,0.15)',
+                    padding: '0.2rem 0.6rem', borderRadius: '4px',
+                    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)'
+                }}>
+                    <TimerIcon sx={{ fontSize: '1.2rem', color: colorTokens.white.pure }} />
+                    <Typography sx={{ fontSize: '0.9rem', fontFamily: 'monospace', fontWeight: 'bold', color: colorTokens.white.pure, letterSpacing: '1px' }}>
+                        {formatTimer(timeLeft)}
+                    </Typography>
+                </Box>
+            )}
 
         </Button>
     )

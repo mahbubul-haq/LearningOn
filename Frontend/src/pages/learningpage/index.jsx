@@ -29,7 +29,7 @@ const LearningPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
-  const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons, quizAttempt } =
+  const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons, quizAttempt, backFromQuiz, setBackFromQuiz } =
     useContext(LearningCourseContext);
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.auth);
@@ -70,6 +70,10 @@ const LearningPage = () => {
   useEffect(() => {
     ///console.log("courseId", courseId);
     console.log(courseId, token);
+    if (backFromQuiz) {
+      setBackFromQuiz(false);
+      return;
+    }
     if (courseId) {
       dispatch(setCourseId({ courseId: courseId }));
       dispatch(fetchLessons({ courseId: courseId, token: token }));

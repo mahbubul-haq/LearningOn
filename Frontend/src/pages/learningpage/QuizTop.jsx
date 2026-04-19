@@ -3,17 +3,20 @@ import { Box, Button, LinearProgress, Typography, CircularProgress, IconButton }
 import { ArrowBackIosNew, WorkspacePremium } from '@mui/icons-material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import useTheme from '@mui/material/styles/useTheme';
+import { LearningCourseContext } from '../../state/LearningCourseContex';
+import { useContext } from 'react';
 import { colorTokens } from '../../theme';
-const QuizTop = ({ score, timer, progress }) => {
+const QuizTop = ({ score, timer, progress, quizAttempt }) => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const isMobileScreens = useMediaQuery("(max-width:600px)");
+    const { setBackFromQuiz } = useContext(LearningCourseContext);
     const theme = useTheme();
     return (
         <Box sx={{ mb: 4 }}>
             {/* Global Progress Bar */}
             <LinearProgress
                 variant="determinate"
-                value={progress}
+                value={timer?.remainingTime <= 0 ? 100 : quizAttempt?.status === "completed" || quizAttempt?.status === "completed_can_improve" ? 100 : progress}
                 sx={{
                     height: 8, borderRadius: 4, mb: 3,
                     backgroundColor: (theme) => theme.palette.learningPage.divider,
@@ -34,7 +37,10 @@ const QuizTop = ({ score, timer, progress }) => {
                 <Box sx={{ flex: { xs: '1 1 auto', sm: '1 1 0' }, display: 'flex', justifyContent: 'flex-start' }}>
                     <Button
                         startIcon={<ArrowBackIosNew sx={{ fontSize: '0.8rem !important' }} />}
-                        onClick={() => window.history.back()}
+                        onClick={() => {
+                            setBackFromQuiz(true);
+                            window.history.back()
+                        }}
                         sx={{ color: (theme) => theme.palette.learningPage.textSecondary, textTransform: 'none', letterSpacing: 1 }}
                     >
                         EXIT

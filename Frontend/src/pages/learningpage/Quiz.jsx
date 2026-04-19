@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import {
     Box, Container, Typography, Button, Stack,
     CircularProgress, IconButton, Paper, Divider, LinearProgress, Fade
@@ -15,6 +15,7 @@ import { fetchLessons, updateCourseInfo } from '../../state/reduxStore/learningP
 import { colorTokens } from '../../theme';
 import QuizQuestion from './QuizQuestion';
 import QuizActions from './QuizActions';
+import QuizCompletionDialog from './QuizCompletionDialog';
 
 const quizTracker = {
     attemptCount: 1,
@@ -43,6 +44,8 @@ const Quiz = () => {
         remainingTime: 0,
         totalTime: 0,
     });
+    const [completionDialogOpen, setCompletionDialogOpen] = useState(false);
+    const [isTimeUp, setIsTimeUp] = useState(false);
     const [visible, setVisible] = useState(true);
     const [quizHistory, setQuizHistory] = useState({});
     const [progressValue, setProgressValue] = useState(0);
@@ -51,6 +54,8 @@ const Quiz = () => {
         attemptNumber: 0,
 
     });
+    const previousAnswerCount = useRef(0);
+    const isSubmitted = useRef(false);
     const getQuestionState = () => {
         const answer = quizAttempt?.answers?.find((answer) => answer.questionId == questions[currentIdx]?._id);
         if (answer) {
@@ -73,6 +78,10 @@ const Quiz = () => {
     useEffect(() => {
         if (questions?.length > 0 && quizAttempt?._id) getQuestionState();
     }, [currentIdx, quizAttempt]);
+
+    useEffect(() => {
+        console.log("courseInfo updated", courseInfo);
+    }, [courseInfo]);
 
 
     useEffect(() => {
@@ -107,6 +116,12 @@ const Quiz = () => {
 
 
     useEffect(() => {
+        if (quizAttempt?._id && (quizAttempt?.status === "completed" || quizAttempt?.status === "completed_can_improve")) {
+            // console.log("quiz open dialog");
+            if (quizAttempt?.answers?.length > previousAnswerCount.current && isSubmitted.current) setCompletionDialogOpen(true);
+        }
+        previousAnswerCount.current = quizAttempt?.answers?.length;
+        isSubmitted.current = false;
         if (quizAttempt?.lessonId == lessonId) {
 
             const updatedLessons = courseInfo?.lessons?.map((lesson) => {
@@ -155,7 +170,12 @@ const Quiz = () => {
 
     useEffect(() => {
         // console.log(timer.remainingTime);
-        if (timer.remainingTime <= 0) {
+        if (timer.remainingTime <= 0 && timer.totalTime > 0) {
+            let difference = Date.now() - new Date(quizAttempt?.quizEndTime).getTime();
+            if (difference < 2000) {// So that it doesn't trigger when the user refreshes the page
+                setIsTimeUp(true);
+                setCompletionDialogOpen(true);
+            }
 
             const updatedLessons = courseInfo?.lessons?.map((lesson) => {
                 if (lesson._id == lessonId) {
@@ -166,6 +186,7 @@ const Quiz = () => {
                             metadata: {
                                 ...lesson.quiz.metadata,
                                 status: "completed",
+                                remainingTime: 0,
                             }
                         }
                     };
@@ -177,13 +198,22 @@ const Quiz = () => {
             dispatch(updateCourseInfo({ courseInfo: { ...courseInfo, lessons: updatedLessons } }))
 
         }
+        else if (timer?.remainingTime > 0 && isTimeUp) {
+            setIsTimeUp(false);
+            setCompletionDialogOpen(false);
+        }
     }, [timer]);
 
     // const progressValue = ((currentIdx + 1) / questionObj?.questions?.length) * 50;
 
     const handleSubmit = () => {
 
+        isSubmitted.current = true;
         submitAnswer(courseId, lessonId, questions[currentIdx]._id, quizHistory[currentIdx], quizAttempt._id, token);
+        setQuizHistory(prev => ({
+            ...prev,
+            [currentIdx]: ""
+        }));
 
     };
 
@@ -205,9 +235,9 @@ const Quiz = () => {
                 setVisible(true);
             }, 300);
         } else {
-            // End of quiz logic here (e.g., navigate to results)
-            alert("Quiz Completed!");
-            navigate(-1);
+            // End of quiz logic here
+            // setIsTimeUp(false);
+            // setCompletionDialogOpen(true);
         }
     };
 
@@ -251,6 +281,7 @@ const Quiz = () => {
                     score={quizAttempt?.score || 0}
                     timer={timer}
                     progress={progressValue}
+                    quizAttempt={quizAttempt}
                 />
 
                 <Paper sx={{
@@ -289,6 +320,15 @@ const Quiz = () => {
                         timer={timer}
                     />
                 </Paper>
+
+                <QuizCompletionDialog
+                    open={completionDialogOpen}
+                    onClose={() => setCompletionDialogOpen(false)}
+                    isTimeUp={isTimeUp}
+                    answeredQuestionsCount={quizAttempt?.answers?.length || 0}
+                    totalQuestionsCount={questions?.length || 0}
+                    score={quizAttempt?.score || 0}
+                />
 
             </Container>
         </Box >

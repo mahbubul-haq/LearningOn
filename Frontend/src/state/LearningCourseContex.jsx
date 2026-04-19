@@ -13,6 +13,7 @@ export const LearningCourseState = ({ children }) => {
     const [expandedLessons, setExpandedLessons] = useState([]);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [quizAttempt, setQuizAttempt] = useState(null);
+    const [backFromQuiz, setBackFromQuiz] = useState(false);
     const [quizStatus, setQuizStatus] = useState(
         localStorage.getItem("quizStatus") ? JSON.parse(localStorage.getItem("quizStatus")) : {
             lessonNo: 0,
@@ -127,7 +128,9 @@ export const LearningCourseState = ({ children }) => {
                 questions,
                 setQuestions,
                 getQuestions,
-                submitAnswer
+                submitAnswer,
+                backFromQuiz,
+                setBackFromQuiz
             }}
         >
             {children}

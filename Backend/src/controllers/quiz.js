@@ -30,9 +30,9 @@ const getQuizAttempt = async (req, res) => {
             // console.log("lessonId", lessonId, courseId);
             course = await Course.findById(courseId);
             lesson = course?.lessons?.find((lesson) => lesson?._id?.toString() === lessonId);
-            let duration = lesson?.questions?.examDuration == Number.MAX_SAFE_INTEGER ? Math.max(5 * 60, lesson?.questions?.questions?.length * 90) : lesson?.questions?.examDuration;
+            let duration = lesson?.questions?.examDuration == Number.MAX_SAFE_INTEGER ? Math.max(1 * 60, lesson?.questions?.questions?.length * 90) : lesson?.questions?.examDuration;
             if (!duration || duration === 0) {
-                duration = Math.max(5 * 60, lesson?.questions?.questions?.length * 90);
+                duration = Math.max(1 * 60, lesson?.questions?.questions?.length * 90);
             }
             console.log("duration", duration);
             quizAttempt = await QuizAttempt.create({
