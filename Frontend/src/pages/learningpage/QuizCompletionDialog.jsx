@@ -10,6 +10,7 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { LearningCourseContext } from '../../state/LearningCourseContex';
 import { useContext } from 'react';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const QuizCompletionDialog = ({
     open,
@@ -21,7 +22,8 @@ const QuizCompletionDialog = ({
 }) => {
     const theme = useTheme();
     const navigate = useNavigate();
-    const { setBackFromQuiz } = useContext(LearningCourseContext);
+    const { setBackFromQuiz, quizAttempt } = useContext(LearningCourseContext);
+    const isMobileScreens = useMediaQuery(theme.breakpoints.down("sm"));
 
     const StatCard = ({ icon, label, value, color }) => (
         <Box sx={{
@@ -78,7 +80,7 @@ const QuizCompletionDialog = ({
                     borderRadius: "2rem",
                     border: `1px solid ${theme.palette.divider}`,
                     boxShadow: "0 10px 40px rgba(0,0,0,0.2)",
-                    p: "1rem"
+                    p: isMobileScreens ? "0.5rem" : "1rem"
                 },
             }}
         >
@@ -87,8 +89,9 @@ const QuizCompletionDialog = ({
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "2rem",
-                p: "2rem",
-                textAlign: "center"
+                p: isMobileScreens ? "1rem" : "2rem",
+                textAlign: "center",
+                // border: "1px solid red"
             }}>
                 {/* Header Section */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
@@ -117,7 +120,7 @@ const QuizCompletionDialog = ({
                 </Box>
 
                 {/* Statistics Grid */}
-                <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: isMobileScreens ? "1fr" : "1fr 1fr", gap: "1rem" }}>
                     <StatCard
                         icon={<TaskAltIcon />}
                         label="Answered"
@@ -136,15 +139,21 @@ const QuizCompletionDialog = ({
                 <DialogActions sx={{
                     width: "100%",
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent: isMobileScreens ? "center" : "space-between",
+                    alignItems: "center",
+                    flexDirection: isMobileScreens ? "column" : "row",
+                    gap: isMobileScreens ? "1rem" : "0",
                     p: 0,
-                    mt: 2
+                    // mt: 2,
+
+
                 }}>
                     <StyledButton
                         sx={{
                             textTransform: "capitalize",
                             fontWeight: "600",
                             color: theme.palette.text.secondary,
+
                             "&:hover": {
                                 color: theme.palette.text.primary,
                                 backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
@@ -156,7 +165,7 @@ const QuizCompletionDialog = ({
                             onClose();
                         }}
                     >
-                        Review Quiz
+                        {quizAttempt?.status == "completed_can_improve" && !isTimeUp ? "Improve Score" : "Review Quiz"}
                     </StyledButton>
 
                     <StyledButton
@@ -169,11 +178,17 @@ const QuizCompletionDialog = ({
                             background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
                             color: colorTokens.white.pure,
                             boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+                            boxSizing: "border-box",
+                            "&&": {
+                                m: 0
+                            },
+
                             "&:hover": {
                                 background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
                                 transform: "scale(1.02)",
                                 boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
                             },
+                            // border: "2px solid green"
                         }}
                         onClick={() => {
                             // Navigate back to course page

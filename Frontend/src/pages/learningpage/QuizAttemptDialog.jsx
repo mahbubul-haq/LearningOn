@@ -12,6 +12,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import QuizIcon from '@mui/icons-material/Quiz';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const QuizAttemptDialog = ({ metadata }) => {
     const theme = useTheme();
@@ -19,6 +20,8 @@ const QuizAttemptDialog = ({ metadata }) => {
     const { courseInfo } = useSelector((state) => state.course);
     const { token } = useSelector((state) => state.auth);
     const navigate = useNavigate();
+    const isMobileScreens = useMediaQuery(theme.breakpoints.down("sm"));
+    const maxWidth450 = useMediaQuery("(max-width:450px)");
 
     const [quizDialogState, setQuizDialogState] = useState({
         lessonNo: "",
@@ -103,7 +106,7 @@ const QuizAttemptDialog = ({ metadata }) => {
                     borderRadius: "2rem",
                     border: (theme) => `1px solid ${theme.palette.learningPage.divider}`,
                     boxShadow: (theme) => theme.palette.homepage.cardShadow,
-                    p: "1rem"
+                    p: isMobileScreens ? "0.5rem" : "1rem"
                 },
             }}
         >
@@ -112,7 +115,7 @@ const QuizAttemptDialog = ({ metadata }) => {
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "2rem",
-                p: "2rem",
+                p: isMobileScreens ? "1rem" : "2rem",
             }}>
                 {/* Hero Header */}
                 <Box sx={{ textAlign: "center" }}>
@@ -185,7 +188,10 @@ const QuizAttemptDialog = ({ metadata }) => {
                 <DialogActions sx={{
                     width: "100%",
                     display: "flex",
-                    justifyContent: "space-between",
+                    flexDirection: maxWidth450 ? "column" : "row",
+                    alignItems: "center",
+                    gap: maxWidth450 ? "1rem" : "0",
+                    justifyContent: maxWidth450 ? "center" : "space-between",
                     p: 0,
                     mt: 1
                 }}>

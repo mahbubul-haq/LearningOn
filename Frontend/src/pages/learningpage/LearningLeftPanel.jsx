@@ -6,7 +6,7 @@ import "./LearningPage.css";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import LeftPanelLessons from "./LeftPanelLessons";
 
-export const LearningLeftPanel = ({ courseInfo, scrollTop, courseProgress, aggregatedProgress }) => {
+export const LearningLeftPanel = ({ courseInfo, scrollTop, courseProgress, aggregatedProgress, setIsCompletionDialogOpen }) => {
 
 
   const theme = useTheme();
@@ -31,7 +31,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop, courseProgress, aggre
         gridTemplateRows: "auto auto 1fr",
         gap: "0",
       }}>
-      <LeftPanelTop courseInfo={courseInfo} courseProgress={courseProgress} aggregatedProgress={aggregatedProgress} />
+      <LeftPanelTop courseInfo={courseInfo} courseProgress={courseProgress} aggregatedProgress={aggregatedProgress} setIsCompletionDialogOpen={setIsCompletionDialogOpen} />
       <Divider sx={{ backgroundColor: (theme) => theme.palette.learningPage.divider }} />
 
 

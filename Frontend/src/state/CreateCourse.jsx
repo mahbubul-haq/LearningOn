@@ -107,7 +107,7 @@ export const CreateCourseState = (props) => {
     if (!courseState) return false;
     // lessons
     if (courseState.lessons?.length == 0) return false;
-    console.log("lessons, ", courseState.lessons)
+    // console.log("lessons, ", courseState.lessons)
     let flag = true;
     courseState.lessons?.forEach((lesson) => {
       if (!lesson.title?.trim()) flag = false;

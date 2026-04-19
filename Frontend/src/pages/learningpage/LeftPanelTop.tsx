@@ -3,6 +3,7 @@ import { colorTokens } from '../../theme';
 import { Box, Typography } from '@mui/material'
 import FlexBetween from '../../components/FlexBetween'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useNavigate } from 'react-router-dom';
 import useTheme from "@mui/material/styles/useTheme";
@@ -10,8 +11,9 @@ type Props = {
     courseInfo: any;// not typed due to courseInfo is not typed in parent component
     courseProgress: any;
     aggregatedProgress: number;
+    setIsCompletionDialogOpen?: (open: boolean) => void;
 }
-const LeftPanelTop = ({ courseInfo, courseProgress, aggregatedProgress }: Props) => {
+const LeftPanelTop = ({ courseInfo, courseProgress, aggregatedProgress, setIsCompletionDialogOpen }: Props) => {
     const theme = useTheme();
     const navigate = useNavigate();
     return <Box
@@ -82,6 +84,34 @@ const LeftPanelTop = ({ courseInfo, courseProgress, aggregatedProgress }: Props)
                     background: (theme) => `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`
                 }
             }} />
+            {Math.round(aggregatedProgress) >= 100 && setIsCompletionDialogOpen && (
+                <Box
+                    onClick={() => setIsCompletionDialogOpen(true)}
+                    sx={{
+                        mt: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "0.5rem",
+                        padding: "0.5rem",
+                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(46, 125, 50, 0.1)',
+                        border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? theme.palette.success.light : theme.palette.success.main}`,
+                        color: (theme) => theme.palette.mode === 'dark' ? theme.palette.success.light : theme.palette.success.main,
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        "&:hover": {
+                            backgroundColor: (theme) => theme.palette.success.main,
+                            color: "#fff"
+                        }
+                    }}
+                >
+                    <WorkspacePremiumIcon fontSize="small" />
+                    <Typography variant="body2" fontWeight="bold">
+                        View Certificate
+                    </Typography>
+                </Box>
+            )}
         </Box>
 
     </Box>

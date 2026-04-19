@@ -22,6 +22,7 @@ import NextPrevButtons from "./NextPrevButtons";
 import { useAppDispatch } from "../../state/reduxStore/hooks";
 import "./LearningPage.css"
 import { BsBox } from "react-icons/bs";
+import CourseCompletionDialog from './CourseCompletionDialog';
 
 const LearningPage = () => {
   const { courseId } = useParams();
@@ -39,6 +40,7 @@ const LearningPage = () => {
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [aggregatedProgress, setAggregatedProgress] = useState(0);
   const [subLessonCount, setSubLessonCount] = useState(0);
+  const [isCompletionDialogOpen, setIsCompletionDialogOpen] = useState(false);
 
   useEffect(() => {
     let lessonId = openedLesson?.lesson > 0 && courseInfo?.lessons?.length > 0 ? courseInfo?.lessons[openedLesson.lesson - 1]?._id?.toString() || "" : "";
@@ -106,9 +108,18 @@ const LearningPage = () => {
     console.log(totalSubLessons, completedQuizCount, quizCount);
 
     let progress = courseProgress?.progressPercentage || 0;
-    let realProgress = (totalSubLessons + completedQuizCount) * progress / (totalSubLessons + quizCount);
+    let totalItems = totalSubLessons + quizCount;
+    let realProgress = totalItems > 0 ? ((totalSubLessons + completedQuizCount) * progress) / totalItems : 0;
     setAggregatedProgress(realProgress);
 
+    if (realProgress >= 99.9 && !localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
+      // Small timeout so user sees it hit 100% first
+      setTimeout(() => setIsCompletionDialogOpen(true), 1000);
+      localStorage.setItem(`course_completed_${courseInfo?._id}`, 'true');
+    }
+    else if (realProgress < 99.9 && localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
+      localStorage.removeItem(`course_completed_${courseInfo?._id}`);
+    }
 
   }, [courseInfo, courseProgress]);
 
@@ -185,6 +196,7 @@ const LearningPage = () => {
               scrollTop={scrollTop}
               courseProgress={courseProgress}
               aggregatedProgress={aggregatedProgress}
+              setIsCompletionDialogOpen={setIsCompletionDialogOpen}
             />
           </Box>
         </Drawer>
@@ -222,6 +234,7 @@ const LearningPage = () => {
                 scrollTop={scrollTop}
                 courseProgress={courseProgress}
                 aggregatedProgress={aggregatedProgress}
+                setIsCompletionDialogOpen={setIsCompletionDialogOpen}
               />
 
             </Box>
@@ -270,6 +283,14 @@ const LearningPage = () => {
             />
           </Box>
         </Box>
+
+        <CourseCompletionDialog
+          open={isCompletionDialogOpen}
+          onClose={() => setIsCompletionDialogOpen(false)}
+          courseInfo={courseInfo}
+          courseProgress={courseProgress}
+          user={user}
+        />
 
       </Box >
     </>
