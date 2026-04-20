@@ -223,6 +223,7 @@ const getCourseLessons = async (req, res) => {
         let course = await Course.findById(courseId, {
             lessons: 1,
             courseInstructors: 1,
+            courseThumbnail: 1,
             owner: 1,
             courseTitle: 1,
             enrolledStudents: 1, ///improvement -> just select the ids instead of whole objects
@@ -244,6 +245,7 @@ const getCourseLessons = async (req, res) => {
                 _id: course._doc?._id,
                 lessons: course._doc?.lessons,
                 courseTitle: course._doc?.courseTitle,
+                courseThumbnail: course._doc?.courseThumbnail,
             };
 
             //console.log(courseInfo);

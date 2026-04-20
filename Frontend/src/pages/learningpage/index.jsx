@@ -29,6 +29,7 @@ const LearningPage = () => {
   const { setOpenedItem } = useContext(GlobalContext);
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
+  const maxWidth400 = useMediaQuery("(max-width: 400px)");
   const theme = useTheme();
   const { openedLesson, setOpenedLesson, expandedLessons, setExpandedLessons, quizAttempt, backFromQuiz, setBackFromQuiz } =
     useContext(LearningCourseContext);
@@ -72,7 +73,7 @@ const LearningPage = () => {
   useEffect(() => {
     ///console.log("courseId", courseId);
     console.log(courseId, token);
-    if (backFromQuiz) {
+    if (backFromQuiz && courseInfo?.lessons?.length > 0) {
       setBackFromQuiz(false);
       return;
     }
@@ -171,8 +172,8 @@ const LearningPage = () => {
           onClose={() => setIsMobileDrawerOpen(false)}
           PaperProps={{
             sx: {
-              width: "85%",
-              maxWidth: "360px",
+              width: maxWidth400 ? "100%" : "85%",
+              maxWidth: maxWidth400 ? "100%" : "360px",
               backgroundColor: "transparent",
               boxShadow: "none",
             }

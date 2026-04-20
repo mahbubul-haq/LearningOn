@@ -102,28 +102,15 @@ const CourseSchema = new mongoose.Schema(
             default: [],
         },
         ratings: {
-            type: {
-                totalRating: Number,
-                numberOfRatings: Number,
-                ratings: [
-                    {
-                        userId: {
-                            type: mongoose.Schema.Types.ObjectId,
-                            ref: "People",
-                        },
-
-                        rating: Number,
-                        review: String,
-                    },
-                ],
+            totalRating: {
+                type: Number,
+                default: 0,
             },
-            ref: "People",
-
-            default: {
-                totalRating: 0,
-                numberOfRatings: 0,
-                ratings: [],
+            numberOfRatings: {
+                type: Number,
+                default: 0,
             },
+
         },
 
         lessons: { type: [lessonSchema], default: [] },

@@ -48,9 +48,20 @@
 
 /* Animations for Course Completion Experience */
 @keyframes popIn {
-    0% { transform: scale(0.8); opacity: 0; }
-    40% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    40% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .animate-pop {
@@ -58,8 +69,15 @@
 }
 
 @keyframes floatConfetti {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(150px) rotate(360deg); opacity: 0; }
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(350px) rotate(360deg);
+        opacity: 0;
+    }
 }
 
 .confetti-piece {

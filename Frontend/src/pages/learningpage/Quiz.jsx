@@ -33,6 +33,7 @@ const Quiz = () => {
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const isMobileScreens = useMediaQuery("(max-width:600px)");
+    const maxWidth350 = useMediaQuery("(max-width:350px)");
     const maxWidth400 = useMediaQuery("(max-width:400px)");
     const dispatch = useAppDispatch();
 
@@ -269,7 +270,8 @@ const Quiz = () => {
             height: '100vh',
             width: "100%",
             position: "relative",
-            overflow: "hidden",
+            overflow: "auto",
+            pb: "2rem"
         }}>
             <Container sx={{
                 width: isMobileScreens ? "100%" : `min(700px, 100%)`,
@@ -285,7 +287,7 @@ const Quiz = () => {
                 />
 
                 <Paper sx={{
-                    p: 4,
+                    p: maxWidth350 ? "1rem" : isMobileScreens ? "1.5rem" : "2rem",
                     backgroundColor: (theme) => theme.palette.learningPage.leftPanelBg,
                     backdropFilter: "blur(20px)",
                     boxShadow: (theme) => theme.palette.homepage.cardShadow,

@@ -271,7 +271,7 @@ const getCourseById = async (req, res) => {
                 path: "courseInstructors",
                 select: "_id name",
             })
-            .populate("enrolledStudents ratings.ratings.userId");
+            .populate("enrolledStudents");
         if (!course) {
             return res.status(404).json({
                 success: false,
@@ -299,6 +299,7 @@ const getCourseById = async (req, res) => {
             courseInfo: course,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             success: false,
             message: error.message,

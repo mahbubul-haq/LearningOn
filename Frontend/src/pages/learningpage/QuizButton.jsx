@@ -112,20 +112,23 @@ const QuizButton = ({
                 borderRadius: "0.7rem",
                 p: "0.5rem 1rem",
                 color: colorTokens.white.light,
-                fontSize: "0.9rem",
+                fontSize: { xs: "0.75rem", sm: "0.9rem" },
                 fontWeight: "bold",
                 display: "flex",
+                flexWrap: "wrap",
                 alignItems: "center",
-                justifyContent: metadata?.status === "active" || metadata?.status === "completed_can_improve" ? "space-between" : "center",
+                justifyContent: "center",
                 gap: "0.5rem",
-                my: "2rem",
+                my: "1.5rem",
                 cursor: getLessonProgress(lesson._id?.toString()) > 99 ? "pointer" : "not-allowed",
                 opacity: getLessonProgress(lesson._id?.toString()) > 99 ? 1 : 0.6,
             }}>
 
-            <QuizIcon sx={{ color: colorTokens.white.pure }} />
-            <Box sx={{ textAlign: "left" }}>
-                {getLessonProgress(lesson._id?.toString()) > 99.95 ? getQuizButtonText() : `LESSON ${lessonNo.toString().padStart(2, "0")} QUIZ`}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: '1 1 auto', justifyContent: { xs: 'center', sm: 'flex-start' } }}>
+                <QuizIcon sx={{ color: colorTokens.white.pure, fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
+                <Box sx={{ textAlign: { xs: "center", sm: "left" }, whiteSpace: "normal", lineHeight: 1.2 }}>
+                    {getLessonProgress(lesson._id?.toString()) > 99.95 ? getQuizButtonText() : `LESSON ${lessonNo.toString().padStart(2, "0")} QUIZ`}
+                </Box>
             </Box>
 
             {getLessonProgress(lesson._id?.toString()) > 99.95 && showTimer && (
@@ -133,10 +136,12 @@ const QuizButton = ({
                     display: 'flex', alignItems: 'center', gap: '0.3rem',
                     backgroundColor: 'rgba(255,255,255,0.15)',
                     padding: '0.2rem 0.6rem', borderRadius: '4px',
-                    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)'
+                    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
+                    flex: { xs: '1 1 100%', sm: '0 0 auto' },
+                    justifyContent: 'center'
                 }}>
-                    <TimerIcon sx={{ fontSize: '1.2rem', color: colorTokens.white.pure }} />
-                    <Typography sx={{ fontSize: '0.9rem', fontFamily: 'monospace', fontWeight: 'bold', color: colorTokens.white.pure, letterSpacing: '1px' }}>
+                    <TimerIcon sx={{ fontSize: { xs: '1rem', sm: '1.2rem' }, color: colorTokens.white.pure }} />
+                    <Typography sx={{ fontSize: { xs: '0.8rem', sm: '0.9rem' }, fontFamily: 'monospace', fontWeight: 'bold', color: colorTokens.white.pure, letterSpacing: '1px' }}>
                         {formatTimer(timeLeft)}
                     </Typography>
                 </Box>
