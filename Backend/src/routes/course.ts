@@ -27,4 +27,8 @@ router.get("/learning/progress/:courseId", verifyToken, getCourseProgress);
 router.put("/learning/updateprogress/:courseId", verifyToken, updateProgress);
 router.put("/learning/updatetime/:courseId", verifyTokenLight, updateWatchTime);
 
+// RESTful routes
+
+
+
 export default router;

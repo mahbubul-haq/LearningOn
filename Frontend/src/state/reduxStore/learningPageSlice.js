@@ -162,6 +162,30 @@ export const updateProgress = createAsyncThunk(
   }
 );
 
+export const updateCompletionDate = createAsyncThunk(
+  "/api/v1/course-progress/",
+  async (/** @type {{ courseId: string; token: string; }} */ { courseId, token }) => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/course-progress/${courseId}/complete`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+        }
+      );
+      const data = await res.json();
+      if (data.success) {
+        return data.courseProgress;
+      }
+    } catch (err) {
+      //
+    }
+  }
+);
+
 const learningPageSlice = createSlice({
   name: "course",
   initialState,
@@ -236,6 +260,16 @@ const learningPageSlice = createSlice({
     }).addCase(updateProgress.fulfilled, (state, action) => {
       state.courseProgress = action.payload;
     }).addCase(updateProgress.rejected, () => {
+
+    });
+
+    builder.addCase(updateCompletionDate.pending, () => {
+
+    }).addCase(updateCompletionDate.fulfilled, (state, action) => {
+      if (state.courseProgress && action.payload?.completionDate) {
+        state.courseProgress.completionDate = action.payload.completionDate;
+      }
+    }).addCase(updateCompletionDate.rejected, () => {
 
     });
 

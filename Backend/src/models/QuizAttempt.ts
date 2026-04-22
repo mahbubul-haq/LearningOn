@@ -90,7 +90,8 @@ const quizAttemptSchema = new Schema<quizAttempt>({
         default: "not_started",
     },
 
-});
+}, { timestamps: true }
+);
 
 // add index on userId, courseId, lessonId
 quizAttemptSchema.index({ userId: 1, courseId: 1, lessonId: 1 }, { unique: true });

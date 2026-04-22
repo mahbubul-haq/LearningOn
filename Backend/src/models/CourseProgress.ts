@@ -20,6 +20,7 @@ export interface CourseProgressDocument extends Document {
     }[];
     completed: boolean;
     progressPercentage: number;
+    completionDate: Date;
 }
 
 const subLessonProgressSchema = new Schema<SubLessonProgress>(
@@ -48,6 +49,7 @@ const courseProgressSchema = new Schema<CourseProgressDocument>(
         ],
         completed: { type: Boolean, default: false },
         progressPercentage: { type: Number, default: 0 },
+        completionDate: { type: Date, default: null }
     },
     { timestamps: true }
 );

@@ -20,7 +20,7 @@ import quizRoutes from "./routes/quiz.js";
 
 import courseRoutes from "./routes/course.js";
 import courseRoutesV1 from "./routes/courseRoutesV1.js";
-// import courseProgressRoutes from "./routes/courseProgress.js";
+import courseProgressRoutes from "./routes/courseProgress.js";
 import dataRoutes from "./routes/data.js";
 import notificationRoutes from "./routes/notification.js";
 import userRoutes from "./routes/user.js";
@@ -69,6 +69,7 @@ app.use("/notification", notificationRoutes);
 app.use("/cloudinary", cloudinaryRoutes);
 app.use("/admin", adminRoutes);
 app.use("/api/v1/quiz", quizRoutes);
+app.use("/api/v1/course-progress", courseProgressRoutes);
 // app.use("/learning", courseProgressRoutes);
 
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);

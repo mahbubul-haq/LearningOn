@@ -1,5 +1,6 @@
 import CourseProgress from "../../models/CourseProgress.js";
 import Course from "../../models/Course.js";
+import QuizAttempt from "../../models/QuizAttempt.js";
 
 const getCourseProgress = async (req: any, res: any) => {
     try {
@@ -250,4 +251,80 @@ const updateProgress = async (req: any, res: any) => {
     }
 }
 
-export { getCourseProgress, updateProgress, updateWatchTime };
+const updateCompletionDate = async (req: any, res: any) => {
+    try {
+        const { courseId } = req.params;
+        const userId = req.userId;
+
+        // 1. Fetch the 3 Pillars of Truth in Parallel
+        const [course, quizAttempts, courseProgress] = await Promise.all([
+            // Only select the lesson array to count quizzes
+            Course.findById(courseId).select("lessons.questions.questions").lean(),
+            // Only select status and updated time for quizzes
+            QuizAttempt.find({ courseId, userId }).select("status quizEndTime updatedAt").lean(),
+            // Get existing progress record
+            CourseProgress.findOne({ courseId, userId })
+        ]);
+
+        if (!course || !courseProgress) {
+            return res.status(404).json({ success: false, message: "Course records not found" });
+        }
+
+        if (courseProgress.completionDate) {
+            return res.status(200).json({
+                success: true,
+                message: "Course is already completed.",
+                courseProgress: courseProgress
+            });
+        }
+
+        // 2. Pillar 1: Sub-lesson Progress Check
+        // We rely on the 'completed' flag your existing logic already sets
+        if (!courseProgress.completed) {
+            return res.status(400).json({
+                success: false,
+                message: "Sub-lessons (video/content) not yet finished."
+            });
+        }
+
+        // 3. Pillar 2: Quiz Requirement Check
+        const requiredQuizCount = course.lessons?.filter((l: any) => l.questions?.questions?.length > 0).length || 0;
+        const completedQuizAttempts = quizAttempts.filter((q: any) =>
+            q.status === "completed" || q.status === "completed_can_improve" || q.quizEndTime < new Date()
+        );
+
+        if (completedQuizAttempts.length < requiredQuizCount) {
+            return res.status(400).json({
+                success: false,
+                message: `Quiz missing. Completed ${completedQuizAttempts.length} of ${requiredQuizCount}.`
+            });
+        }
+
+        // 4. Pillar 3: Determine the "True" Completion Time
+        // Find the latest timestamp between the last quiz and the sub-lesson finish
+        const lastQuizTime = completedQuizAttempts.reduce((latest: any, current: any) =>
+            Math.max(latest, new Date(current.quizEndTime).getTime())
+            , new Date(0).getTime());
+
+        const progressTime = courseProgress?.updatedAt ? new Date(courseProgress.updatedAt).getTime() : 0;
+
+        const finalCompletionDate = requiredQuizCount > 0 ? new Date(Math.max(progressTime, lastQuizTime)) : new Date(progressTime);
+
+        // 5. Apply the Seal
+        console.log(finalCompletionDate, 'finalCompletionDate');
+        courseProgress.completionDate = finalCompletionDate;
+        await courseProgress.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Course officially completed.",
+            courseProgress: courseProgress
+        });
+
+    } catch (error) {
+        console.error("Completion Update Error:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+export { getCourseProgress, updateProgress, updateWatchTime, updateCompletionDate };

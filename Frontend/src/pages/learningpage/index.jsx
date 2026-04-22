@@ -14,6 +14,7 @@ import {
   fetchProgress,
   setCourseId,
   updateProgress,
+  updateCompletionDate,
 } from "../../state/reduxStore/learningPageSlice";
 import { LearningLeftPanel } from "./LearningLeftPanel";
 import LearningPageTop from "./LearningPageTop";
@@ -114,6 +115,9 @@ const LearningPage = () => {
     setAggregatedProgress(realProgress);
 
     if (realProgress >= 99.9 && !localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
+
+      if (!courseProgress?.completionDate) dispatch(updateCompletionDate({ courseId: courseInfo?._id, token: token }));
+
       // Small timeout so user sees it hit 100% first
       setTimeout(() => setIsCompletionDialogOpen(true), 1000);
       localStorage.setItem(`course_completed_${courseInfo?._id}`, 'true');
