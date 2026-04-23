@@ -27,6 +27,7 @@ import userRoutes from "./routes/user.js";
 import { connectSocket } from "./socket.io.js";
 import "./utils/cloudinary.js";
 import cloudinaryRoutes from "./routes/cloudinary.js";
+import certificateRoutes from "./routes/certificate.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,6 +71,7 @@ app.use("/cloudinary", cloudinaryRoutes);
 app.use("/admin", adminRoutes);
 app.use("/api/v1/quiz", quizRoutes);
 app.use("/api/v1/course-progress", courseProgressRoutes);
+app.use("/api/v1/certificates", certificateRoutes);
 // app.use("/learning", courseProgressRoutes);
 
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);

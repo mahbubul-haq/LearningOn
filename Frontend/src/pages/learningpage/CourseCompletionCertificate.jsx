@@ -1,17 +1,113 @@
-import React from 'react';
-import { Box, Typography, Grid } from '@mui/material';
+import React, { useState, useRef, useEffect } from 'react';
+import { Box, Typography, Grid, Snackbar, Alert, CircularProgress, Link } from '@mui/material';
+import html2pdf from 'html2pdf.js';
 import { useTheme } from '@mui/material/styles';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { StyledButton } from '../../components/StyledButton';
 import { colorTokens } from '../../theme';
+import { useSelector } from 'react-redux';
+import CertificatePDFTemplate from './CertificatePDFTemplate';
+import CertificatePreviewTemplate from './CertificatePreviewTemplate';
 
-const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId }) => {
+const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificateId }) => {
     const theme = useTheme();
+    const { token } = useSelector((state) => state.auth);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
+    const certificateRef = useRef();
+    const [latestCertId, setLatestCertId] = useState("");
+    const pdfCertificateRef = useRef();
+    const cooldownTimerRef = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            if (cooldownTimerRef.current) {
+                clearTimeout(cooldownTimerRef.current);
+            }
+        };
+    }, []);
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setSnackbar({ ...snackbar, open: false });
+    };
+
+    const handleDownload = async () => {
+        if (isDownloading) return;
+        setIsDownloading(true);
+        setSnackbar({ open: true, message: 'Generating your certificate... Please wait.', severity: 'info' });
+
+        try {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": token
+                },
+                body: JSON.stringify({
+                    courseId: courseInfo._id,
+                    certificateId: certificateId ? certificateId : dummyCertId
+                })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.message || "Failed to initialize certificate on server");
+            }
+
+            const data = await res.json();
+            const finalCertId = data?.certificate?.certificateId || certificateId || dummyCertId;
+            setLatestCertId(finalCertId);
+
+            // Wait for React to re-render with the new certificate ID before generating PDF
+            setTimeout(() => {
+                createCertificate();
+            }, 150);
+
+        } catch (error) {
+            console.log(error);
+            setIsDownloading(false);
+            setSnackbar({ open: true, message: error.message || 'Failed to download certificate.', severity: 'error' });
+        }
+    }
+
+    async function createCertificate() {
+        try {
+            const element = pdfCertificateRef.current;
+            const opt = {
+                margin: 0,
+                filename: `certificate-${courseInfo?._id || 'course'}.pdf`,
+                image: { type: 'jpeg', quality: 1.0 },
+                html2canvas: { scale: 2, useCORS: true, logging: false },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                enableLinks: true
+            };
+
+            await html2pdf().set(opt).from(element).save();
+            setSnackbar({ open: true, message: 'Certificate downloaded successfully!', severity: 'success' });
+
+        } catch (error) {
+            console.log(error);
+            setSnackbar({ open: true, message: error.message || 'Failed to download certificate.', severity: 'error' });
+        } finally {
+            // Add a 20-second cooldown timer before activating the download button again
+            cooldownTimerRef.current = setTimeout(() => {
+                setIsDownloading(false);
+            }, 20000);
+        }
+    }
 
     return (
         <Grid item xs={12} md={7}>
+            <CertificatePDFTemplate 
+                ref={pdfCertificateRef}
+                courseInfo={courseInfo}
+                user={user}
+                certificateId={latestCertId || certificateId || dummyCertId}
+            />
+
             <Box sx={{
-                p: 3, 
+                p: 3,
                 borderRadius: '1rem',
                 backgroundColor: theme.palette.background.paper,
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
@@ -20,81 +116,40 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId }) => {
                 flexDirection: 'column',
                 alignItems: 'center',
             }}>
-                {/* Certificate Rendering Box */}
-                <Box sx={{
-                    border: `8px solid ${theme.palette.divider}`,
-                    borderRadius: '8px',
-                    p: 0.5,
-                    width: '100%',
-                    mb: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    overflowX: 'auto',
-                    '&::-webkit-scrollbar': { height: '6px' },
-                    '&::-webkit-scrollbar-thumb': { backgroundColor: theme.palette.divider, borderRadius: '4px' }
-                }}>
-                    <Box sx={{
-                        border: `1px solid ${theme.palette.divider}`,
-                        position: 'relative',
-                        height: '100%',
-                        minWidth: '400px', // Forces scrolling on very small devices
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundImage: `linear-gradient(to right bottom, ${theme.palette.background.paper}, ${theme.palette.background.default})`
-                    }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, opacity: 0.7 }}>
-                            <div style={{ width: 16, height: 16, background: theme.palette.primary.main, borderRadius: '50%' }} />
-                            <Typography variant="caption" fontWeight="bold">LearningOn</Typography>
-                        </Box>
-                        
-                        <Typography variant="overline" color="text.secondary">Mini Certificate</Typography>
-                        
-                        <Typography variant="subtitle1" fontWeight="bold" textAlign="center" sx={{ maxWidth: '90%', lineHeight: 1.2, mb: 2 }}>
-                            {courseInfo?.courseTitle || 'Mastering React Architecture'}
-                        </Typography>
+                <CertificatePreviewTemplate 
+                    ref={certificateRef}
+                    courseInfo={courseInfo}
+                    user={user}
+                    certificateId={latestCertId || certificateId || dummyCertId}
+                    theme={theme}
+                />
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'flex-end', mt: 'auto', px: 2 }}>
-                            <Box textAlign="left">
-                                <Typography sx={{ fontFamily: '"Great Vibes", cursive, "Times New Roman"', fontSize: '1.2rem', color: theme.palette.text.primary, borderBottom: `1px solid ${theme.palette.divider}`, paddingBottom: '2px', opacity: 0.8 }}>
-                                    {user?.name || 'Instructor Signature'}
-                                </Typography>
-                                <Typography variant="caption" sx={{ fontSize: '0.5rem', color: 'text.secondary' }}>
-                                    Verification ID:<br/>{dummyCertId}
-                                </Typography>
-                            </Box>
-                            
-                            <WorkspacePremiumIcon sx={{ fontSize: 40, color: '#FFD700' }} />
-                            
-                            <Box textAlign="right">
-                                <Typography sx={{ fontFamily: '"Great Vibes", cursive, "Times New Roman"', fontSize: '1.2rem', color: theme.palette.text.primary, borderBottom: `1px solid ${theme.palette.divider}`, paddingBottom: '2px', opacity: 0.8 }}>
-                                    LearningOn
-                                </Typography>
-                                <Typography variant="caption" sx={{ fontSize: '0.5rem', color: 'text.secondary' }}>
-                                    Verify at: learningon.com/verify
-                                </Typography>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
-
-                <StyledButton 
-                    variant="contained" 
+                <StyledButton
+                    variant="contained"
                     fullWidth
-                    sx={{ 
-                        py: 1.5, 
-                        background: theme.palette.primary.main, 
-                        color: colorTokens.white.pure,
+                    disabled={isDownloading}
+                    sx={{
+                        py: 1.5,
+                        background: isDownloading ? theme.palette.action.disabledBackground : theme.palette.primary.main,
+                        color: isDownloading ? theme.palette.text.disabled : colorTokens.white.pure,
                         borderRadius: '0.5rem',
                         textTransform: 'none',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        display: 'flex',
+                        gap: 1
                     }}
+                    onClick={handleDownload}
                 >
-                    Download Certificate (PDF)
+                    {isDownloading && <CircularProgress size={20} color="inherit" />}
+                    {isDownloading ? 'Downloading...' : 'Download Certificate (PDF)'}
                 </StyledButton>
             </Box>
+
+            <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }} variant="filled">
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Grid>
     );
 };

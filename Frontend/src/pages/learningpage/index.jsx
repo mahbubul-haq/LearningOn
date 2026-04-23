@@ -122,7 +122,7 @@ const LearningPage = () => {
       setTimeout(() => setIsCompletionDialogOpen(true), 1000);
       localStorage.setItem(`course_completed_${courseInfo?._id}`, 'true');
     }
-    else if (realProgress < 99.9 && localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
+    else if (realProgress < 99.9 && !courseProgress?.completionDate && courseInfo?._id && localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
       localStorage.removeItem(`course_completed_${courseInfo?._id}`);
     }
 

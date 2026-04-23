@@ -10,10 +10,12 @@ import CourseCompletionStats from './CourseCompletionStats';
 import CourseCompletionCertificate from './CourseCompletionCertificate';
 import CourseCompletionReview from './CourseCompletionReview';
 import CourseCompletionNextSteps from './CourseCompletionNextSteps';
+import { useSelector } from 'react-redux';
 
 const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, user }) => {
     const theme = useTheme();
     const navigate = useNavigate();
+    const token = useSelector((state) => state.auth.token);
 
     // UI States
     const [displayScore, setDisplayScore] = useState(0);
@@ -21,6 +23,7 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [certificateId, setCertificateId] = useState("");
 
     // Calculate Metrics
     const totalScore = React.useMemo(() => {
@@ -43,7 +46,35 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
         return `${days} days`;
     }, [courseProgress]);
 
+
+
     const dummyCertId = `LC-CERT-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+
+    const getCertificateId = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/${courseInfo?._id}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        'auth-token': token
+                    }
+                }
+            );
+            const data = await res.json();
+            if (data?.success) {
+                setCertificateId(data.certificate.certificateId);
+            }
+        } catch (error) {
+            // console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        if (open) {
+            getCertificateId();
+        }
+    }, [open])
 
     // Score Animation
     useEffect(() => {
@@ -125,6 +156,7 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
                         courseInfo={courseInfo}
                         user={user}
                         dummyCertId={dummyCertId}
+                        certificateId={certificateId}
                     />
                 </Grid>
 
