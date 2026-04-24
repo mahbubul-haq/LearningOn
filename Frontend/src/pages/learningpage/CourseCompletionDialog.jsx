@@ -24,6 +24,7 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     const [reviewText, setReviewText] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [certificateId, setCertificateId] = useState("");
+    const getCertificateIdCallCount = React.useRef(0);
 
     // Calculate Metrics
     const totalScore = React.useMemo(() => {
@@ -35,14 +36,21 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
                 possible += lesson.quiz.metadata.numberOfQuestions || 0;
             }
         });
-        return possible > 0 ? Math.round((score / possible) * 100) : 100;
+        if (!possible && !score) {
+            setDisplayScore("--");
+        }
+        return possible > 0 ? Math.round((score / possible) * 100) : "";
     }, [courseInfo]);
 
     const timeTaken = React.useMemo(() => {
         if (!courseProgress?.createdAt) return "Few days";
-        const ms = Date.now() - new Date(courseProgress.createdAt).getTime();
+        let lastDate = courseProgress?.completionDate ? courseProgress.completionDate : courseProgress.updatedAt ? courseProgress.updatedAt : "";
+        if (!lastDate) return "Few days";
+        lastDate = new Date(lastDate).getTime();
+        const ms = lastDate - new Date(courseProgress?.createdAt).getTime();
+        if (ms < (1000 * 60 * 60 * 24)) return "1 day";
+        if (ms < (2 * 1000 * 60 * 60 * 24)) return "2 days";
         const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-        if (days === 0) return "1 day";
         return `${days} days`;
     }, [courseProgress]);
 
@@ -50,34 +58,53 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
 
     const dummyCertId = `LC-CERT-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
 
-    const getCertificateId = async () => {
+    const getCertificateId = async (attempt) => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/${courseInfo?._id}`,
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         'auth-token': token
-                    }
+                    },
+                    body: JSON.stringify({
+                        courseId: courseInfo?._id,
+                        certificateId: dummyCertId
+                    })
                 }
             );
             const data = await res.json();
             if (data?.success) {
                 setCertificateId(data.certificate.certificateId);
             }
+            else if (attempt < 2) {
+                setTimeout(() => {
+                    getCertificateId(attempt + 1);
+                }, 2000);
+            }
         } catch (error) {
             // console.log(error);
+            if (attempt < 2) {
+                setTimeout(() => {
+                    getCertificateId(attempt + 1);
+                }, 2000);
+            }
         }
     }
 
+
     useEffect(() => {
-        if (open) {
-            getCertificateId();
+        if (open && courseProgress?.completionDate && !certificateId) {
+            getCertificateId(1);
         }
-    }, [open])
+    }, [open, courseProgress?.completionDate])
 
     // Score Animation
     useEffect(() => {
+        if (displayScore === "--" && totalScore == "") {
+            setShowScore(true);
+            return;
+        }
         if (open) {
             // Delay before starting animation
             const timer = setTimeout(() => {

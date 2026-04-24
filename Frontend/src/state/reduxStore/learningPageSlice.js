@@ -41,9 +41,11 @@ export const submitQuiz = createAsyncThunk(
         dispatch(setAnswer(newObj));
         return data.progressData;
       }
+      else return null;
     }
     catch (err) {
       //
+      return null;
     }
   }
 );
@@ -68,8 +70,10 @@ export const fetchProgress = createAsyncThunk(
       if (data.success) {
         return data.courseProgress;
       }
+      else return null;
     } catch (err) {
       //
+      return null;
     }
   }
 );
@@ -93,10 +97,13 @@ export const fetchLessons = createAsyncThunk(
 
       const data = await res.json();
 
-      console.log("lessons", data);
-      return data.courseInfo;
+      if (data.success) {
+        return data.courseInfo;
+      }
+      else return null;
     } catch (err) {
       //
+      return null;
     }
   }
 );
@@ -156,8 +163,10 @@ export const updateProgress = createAsyncThunk(
       if (data.success) {
         return data.courseProgress;
       }
+      else return null;
     } catch (err) {
       //
+      return null;
     }
   }
 );
@@ -180,8 +189,10 @@ export const updateCompletionDate = createAsyncThunk(
       if (data.success) {
         return data.courseProgress;
       }
+      else return null;
     } catch (err) {
       //
+      return null;
     }
   }
 );
@@ -227,14 +238,18 @@ const learningPageSlice = createSlice({
       })
       .addCase(fetchLessons.fulfilled, (state, action) => {
         //console.log("extra fulfilled");
-        state.courseInfo = action.payload;
+        if (action.payload) {
+          state.courseInfo = action.payload;
+        }
       })
       .addCase(fetchLessons.rejected, () => { });
 
     builder.addCase(fetchProgress.pending, () => {
 
     }).addCase(fetchProgress.fulfilled, (state, action) => {
-      state.courseProgress = action.payload;
+      if (action.payload) {
+        state.courseProgress = action.payload;
+      }
     }).addCase(fetchProgress.rejected, () => {
 
     });
@@ -242,7 +257,9 @@ const learningPageSlice = createSlice({
     builder.addCase(submitQuiz.pending, () => {
 
     }).addCase(submitQuiz.fulfilled, (state, action) => {
-      state.progressData = action.payload;
+      if (action.payload) {
+        state.courseProgress = action.payload;
+      }
     }).addCase(submitQuiz.rejected, () => {
 
     });
@@ -258,7 +275,9 @@ const learningPageSlice = createSlice({
     builder.addCase(updateProgress.pending, () => {
 
     }).addCase(updateProgress.fulfilled, (state, action) => {
-      state.courseProgress = action.payload;
+      if (action.payload) {
+        state.courseProgress = action.payload;
+      }
     }).addCase(updateProgress.rejected, () => {
 
     });
@@ -267,6 +286,7 @@ const learningPageSlice = createSlice({
 
     }).addCase(updateCompletionDate.fulfilled, (state, action) => {
       if (state.courseProgress && action.payload?.completionDate) {
+
         state.courseProgress.completionDate = action.payload.completionDate;
       }
     }).addCase(updateCompletionDate.rejected, () => {

@@ -95,7 +95,7 @@ const CertificatePDFTemplate = forwardRef(({ courseInfo, user, certificateId }, 
 
                     <Box sx={{ width: '100%', textAlign: 'center', mt: 3 }}>
                         <Typography variant="caption" sx={{ color: '#888', fontSize: '0.9rem', letterSpacing: '1px' }}>
-                            Verification ID: {certificateId} &nbsp;|&nbsp; Verify at: <a href={`https://learningon.com/verify/${certificateId}`} style={{ color: '#888', textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">learningon.com/verify/{certificateId}</a>
+                            Verification ID: {certificateId} &nbsp;|&nbsp; Verify at: <a href={`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/verify/${certificateId}`} style={{ color: '#888', textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">{import.meta.env.VITE_SERVER_URL ? import.meta.env.VITE_SERVER_URL.replace(/^https?:\/\//, '') : ''}/api/v1/certificates/verify/{certificateId}</a>
                         </Typography>
                     </Box>
                 </Box>

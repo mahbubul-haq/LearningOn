@@ -61,7 +61,7 @@ const CourseCompletionStats = ({ courseInfo, displayScore, showScore, timeTaken 
                     opacity: showScore ? 1 : 0
                 }}>
                     <Typography variant="h3" fontWeight={800} color="primary.main">
-                        {displayScore}%
+                        {displayScore == "--" ? "Ungraded" : displayScore + " %"}
                     </Typography>
                 </Box>
 

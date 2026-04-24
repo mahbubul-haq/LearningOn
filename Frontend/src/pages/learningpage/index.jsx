@@ -86,7 +86,7 @@ const LearningPage = () => {
   }, [courseId]);
 
   useEffect(() => {
-    console.log(theme.palette.mode);
+    // console.log(theme.palette.mode);
     console.log("courseId + info", courseInfo, courseProgress);
     let totalSubLessons = 0;
     if (subLessonCount === 0) {
@@ -113,14 +113,16 @@ const LearningPage = () => {
     let totalItems = totalSubLessons + quizCount;
     let realProgress = totalItems > 0 ? ((totalSubLessons + completedQuizCount) * progress) / totalItems : 0;
     setAggregatedProgress(realProgress);
+    if (realProgress > 99.9 && !courseProgress?.completionDate) {
+      dispatch(updateCompletionDate({ courseId: courseInfo?._id, token: token }));
+    }
 
     if (realProgress >= 99.9 && !localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
-
-      if (!courseProgress?.completionDate) dispatch(updateCompletionDate({ courseId: courseInfo?._id, token: token }));
-
       // Small timeout so user sees it hit 100% first
-      setTimeout(() => setIsCompletionDialogOpen(true), 1000);
-      localStorage.setItem(`course_completed_${courseInfo?._id}`, 'true');
+      if (courseProgress?.completionDate) {
+        setTimeout(() => setIsCompletionDialogOpen(true), 1000);
+        localStorage.setItem(`course_completed_${courseInfo?._id}`, 'true');
+      }
     }
     else if (realProgress < 99.9 && !courseProgress?.completionDate && courseInfo?._id && localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
       localStorage.removeItem(`course_completed_${courseInfo?._id}`);

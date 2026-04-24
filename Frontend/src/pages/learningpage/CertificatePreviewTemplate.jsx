@@ -58,7 +58,7 @@ const CertificatePreviewTemplate = forwardRef(({ courseInfo, user, certificateId
                             LearningOn
                         </Typography>
                         <Typography variant="caption" sx={{ fontSize: '0.5rem', color: 'text.secondary' }}>
-                            Verify at: <Link href={`https://learningon.com/verify/${certificateId}`} underline="hover" color="inherit" target="_blank" rel="noopener noreferrer">learningon.com/verify/{certificateId}</Link>
+                            Verify at: <Link href={`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/verify/${certificateId}`} underline="hover" color="inherit" target="_blank" rel="noopener noreferrer">{import.meta.env.VITE_SERVER_URL ? import.meta.env.VITE_SERVER_URL.replace(/^https?:\/\//, '') : ''}/api/v1/certificates/verify/{certificateId}</Link>
                         </Typography>
                     </Box>
                 </Box>

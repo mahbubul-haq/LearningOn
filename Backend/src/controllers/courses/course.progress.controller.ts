@@ -18,7 +18,7 @@ const getCourseProgress = async (req: any, res: any) => {
                 userId: userId,
             });
         }
-        const course = await Course.findById(courseId);
+        const course = await Course.findById(courseId).lean();
 
         if (course) {
             let lessonProgressMap = new Map();
@@ -27,6 +27,7 @@ const getCourseProgress = async (req: any, res: any) => {
             });
             let totalSubLessons = 0, totalCompletedSubLessons = 0;
             let lessonsMap = new Map();
+
 
             for (let i = 0; i < course.lessons?.length; i++) {
                 lessonsMap.set(course.lessons[i]._id?.toString(), course.lessons[i]);
@@ -59,23 +60,24 @@ const getCourseProgress = async (req: any, res: any) => {
                             videoDuration: course.lessons[i].subLessons[j].videoDuration,
                         });
                     } else {
-                        totalThisLessonCompletedSubLessons += subLessonMap.get(course.lessons[i].subLessons[j]._id?.toString())?.completed ? 1 : 0;
-                        totalCompletedSubLessons += subLessonMap.get(course.lessons[i].subLessons[j]._id?.toString())?.completed ? 1 : 0;
+                        let addCompletedSublessons = subLessonMap.get(course.lessons[i].subLessons[j]._id?.toString())?.completed ? 1 : 0;
+                        totalThisLessonCompletedSubLessons += addCompletedSublessons
+                        totalCompletedSubLessons += addCompletedSublessons;
                     }
-                    totalSubLessons++;
-
                 }
+                totalSubLessons += course.lessons[i].subLessons?.length;
 
                 // handles deleted sublessons
                 if (availableSubLessonSet.size < subLessonMap.size) {
                     for (let [key] of subLessonMap) {
                         if (!availableSubLessonSet.has(key)) {
+
                             subLessonMap.delete(key);
                         }
                     }
                 }
 
-                lessonProgress.progressPercentage = (totalThisLessonCompletedSubLessons / course.lessons[i].subLessons?.length) * 100;
+                lessonProgress.progressPercentage = (totalThisLessonCompletedSubLessons / (course.lessons[i].subLessons?.length || 1)) * 100;
                 lessonProgress.completed = totalThisLessonCompletedSubLessons == course.lessons[i].subLessons?.length;
                 lessonProgress.subLessonsProgress = Array.from(subLessonMap.values());
             }
@@ -89,7 +91,7 @@ const getCourseProgress = async (req: any, res: any) => {
             }
 
             courseProgress.lessonsProgress = Array.from(lessonProgressMap.values());
-            courseProgress.progressPercentage = (totalCompletedSubLessons / totalSubLessons) * 100;
+            courseProgress.progressPercentage = (totalCompletedSubLessons / (totalSubLessons || 1)) * 100;
             courseProgress.completed = totalCompletedSubLessons == totalSubLessons;
             await courseProgress.save();
 
@@ -164,6 +166,9 @@ const updateProgress = async (req: any, res: any) => {
             userId: userId,
         });
 
+
+        // console.log("courseProgress", courseProgress);
+
         if (!courseProgress) {
             return res.status(404).json({
                 success: false,
@@ -177,9 +182,12 @@ const updateProgress = async (req: any, res: any) => {
         let totalSubLessons = 0;
         let totalCompletedSubLessons = 0;
         courseProgress.lessonsProgress.forEach((lesson: any) => {
-            if (lesson.lessonId.toString() === lessonId) {
+            // console.log(lesson.lessonId.toString(), lessonId, "match", lesson._id);
+            if (lesson.lessonId.toString() == lessonId) {
+
                 totalSubLessons += lesson.subLessonsProgress.length;
                 lesson.subLessonsProgress.forEach((subLesson: any) => {
+                    // console.log(subLesson.subLessonId.toString(), subLessonId, "match");
                     if (subLesson.subLessonId.toString() != subLessonId && !subLesson.completed) {
                         isCurLessonComplete = false;
                         return;
@@ -188,8 +196,8 @@ const updateProgress = async (req: any, res: any) => {
                         totalCompletedSubLessons++;
                         curLessonCompletedSubLessons++;
                     }
-                    curLessonTotalSubLessons++;
                 });
+                curLessonTotalSubLessons = lesson.subLessonsProgress.length;
             } else if (lesson.lessonId.toString() != lessonId && !lesson.completed) {
                 isOtherLessonsComplete = false;
                 totalSubLessons += lesson.subLessonsProgress.length;
@@ -215,8 +223,18 @@ const updateProgress = async (req: any, res: any) => {
             update["completed"] = true;
         }
 
-        update["lessonsProgress.$[l].progressPercentage"] = (curLessonCompletedSubLessons / curLessonTotalSubLessons) * 100;
-        update["progressPercentage"] = (totalCompletedSubLessons / totalSubLessons) * 100;
+        // console.log(curLessonTotalSubLessons, curLessonCompletedSubLessons);
+        // console.log(totalSubLessons, totalCompletedSubLessons);
+
+        // if (curLessonTotalSubLessons == 0 || totalSubLessons == 0) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: "Invalid course data",
+        //     });
+        // }
+
+        if (curLessonTotalSubLessons > 0) update["lessonsProgress.$[l].progressPercentage"] = (curLessonCompletedSubLessons / curLessonTotalSubLessons) * 100;
+        if (totalSubLessons > 0) update["progressPercentage"] = (totalCompletedSubLessons / totalSubLessons) * 100;
 
         const updatedCourseProgress = await CourseProgress.findOneAndUpdate(
             {

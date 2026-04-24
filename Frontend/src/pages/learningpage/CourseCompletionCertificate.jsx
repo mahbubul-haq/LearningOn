@@ -15,7 +15,7 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
     const [isDownloading, setIsDownloading] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
     const certificateRef = useRef();
-    const [latestCertId, setLatestCertId] = useState("");
+    const [latestCertId, setLatestCertId] = useState(certificateId || "");
     const pdfCertificateRef = useRef();
     const cooldownTimerRef = useRef(null);
 
@@ -38,31 +38,7 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
         setSnackbar({ open: true, message: 'Generating your certificate... Please wait.', severity: 'info' });
 
         try {
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "auth-token": token
-                },
-                body: JSON.stringify({
-                    courseId: courseInfo._id,
-                    certificateId: certificateId ? certificateId : dummyCertId
-                })
-            });
-
-            if (!res.ok) {
-                const err = await res.json();
-                throw new Error(err.message || "Failed to initialize certificate on server");
-            }
-
-            const data = await res.json();
-            const finalCertId = data?.certificate?.certificateId || certificateId || dummyCertId;
-            setLatestCertId(finalCertId);
-
-            // Wait for React to re-render with the new certificate ID before generating PDF
-            setTimeout(() => {
-                createCertificate();
-            }, 150);
+            createCertificate();
 
         } catch (error) {
             console.log(error);
@@ -99,7 +75,7 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
 
     return (
         <Grid item xs={12} md={7}>
-            <CertificatePDFTemplate 
+            <CertificatePDFTemplate
                 ref={pdfCertificateRef}
                 courseInfo={courseInfo}
                 user={user}
@@ -116,7 +92,7 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
                 flexDirection: 'column',
                 alignItems: 'center',
             }}>
-                <CertificatePreviewTemplate 
+                <CertificatePreviewTemplate
                     ref={certificateRef}
                     courseInfo={courseInfo}
                     user={user}

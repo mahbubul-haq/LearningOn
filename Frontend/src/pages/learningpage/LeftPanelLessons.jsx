@@ -24,7 +24,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
   const theme = useTheme();
 
   const getSubLessonProgress = (lessonId, subLessonId) => {
-    let subLesson = courseProgress?.lessonsProgress?.find((lesson) => lesson.lessonId === lessonId)?.subLessonsProgress?.find((subLesson) => subLesson.subLessonId === subLessonId);
+    let subLesson = courseProgress?.lessonsProgress?.find((lesson) => lesson.lessonId == lessonId)?.subLessonsProgress?.find((subLesson) => subLesson.subLessonId == subLessonId);
     if (subLesson?.completed) {
       return 100;
     }
