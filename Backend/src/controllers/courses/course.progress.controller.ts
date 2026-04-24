@@ -306,12 +306,12 @@ const updateCompletionDate = async (req: any, res: any) => {
             Math.max(latest, new Date(current.quizEndTime).getTime())
             , new Date(0).getTime());
 
-        const progressTime = courseProgress?.updatedAt ? new Date(courseProgress.updatedAt).getTime() : 0;
+        const progressTime = (courseProgress as any)?.updatedAt ? new Date((courseProgress as any).updatedAt).getTime() : 0;
 
         const finalCompletionDate = requiredQuizCount > 0 ? new Date(Math.max(progressTime, lastQuizTime)) : new Date(progressTime);
 
         // 5. Apply the Seal
-        console.log(finalCompletionDate, 'finalCompletionDate');
+        // console.log(finalCompletionDate, 'finalCompletionDate');
         courseProgress.completionDate = finalCompletionDate;
         await courseProgress.save();
 
