@@ -10,7 +10,7 @@ import LandingView from "./LandingView";
 const HomePage = () => {
 
     const user = useSelector((state) => state.auth.user);
-    console.log(user);
+    console.log("homepage loaded", user);
     const { setOpenedItem } = useContext(GlobalContext);
     const { getNotifications } = useContext(NotificationContext);
 

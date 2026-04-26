@@ -113,7 +113,8 @@ const LearningPage = () => {
     let totalItems = totalSubLessons + quizCount;
     let realProgress = totalItems > 0 ? ((totalSubLessons + completedQuizCount) * progress) / totalItems : 0;
     setAggregatedProgress(realProgress);
-    if (realProgress > 99.9 && !courseProgress?.completionDate) {
+    if (realProgress > 99.9 && courseProgress && !courseProgress?.completionDate) {
+      // console.log("disptching update date");
       dispatch(updateCompletionDate({ courseId: courseInfo?._id, token: token }));
     }
 
@@ -124,7 +125,7 @@ const LearningPage = () => {
         localStorage.setItem(`course_completed_${courseInfo?._id}`, 'true');
       }
     }
-    else if (realProgress < 99.9 && !courseProgress?.completionDate && courseInfo?._id && localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
+    else if (realProgress < 99.9 && courseProgress && !courseProgress?.completionDate && courseInfo?._id && localStorage.getItem(`course_completed_${courseInfo?._id}`)) {
       localStorage.removeItem(`course_completed_${courseInfo?._id}`);
     }
 

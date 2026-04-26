@@ -1,6 +1,6 @@
 import { Router } from "express";
 import verifyToken from "../middlewares/auth.js";
-import { generateCertificate, getCertificateDocument, verifyCertificatePublic } from "../controllers/certificate.controller.js";
+import { generateCertificate, getCertificateDocument, verifyCertificatePublic } from "../controllers/certificate/certificate.controller.js";
 const router = Router();
 
 // Public route to verify certificate via HTML response

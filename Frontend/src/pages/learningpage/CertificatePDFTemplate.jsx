@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
-const CertificatePDFTemplate = forwardRef(({ courseInfo, user, certificateId }, ref) => {
+const CertificatePDFTemplate = forwardRef(({ courseInfo, user, certificateId, certificate }, ref) => {
     return (
         <Box
             sx={{
@@ -49,27 +49,39 @@ const CertificatePDFTemplate = forwardRef(({ courseInfo, user, certificateId }, 
                     <Box sx={{ position: 'absolute', bottom: 25, left: 25, width: 60, height: 60, borderBottom: '6px solid #b8860b', borderLeft: '6px solid #b8860b' }} />
                     <Box sx={{ position: 'absolute', bottom: 25, right: 25, width: 60, height: 60, borderBottom: '6px solid #b8860b', borderRight: '6px solid #b8860b' }} />
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
                         <div style={{ width: 50, height: 50, background: '#1a237e', borderRadius: '50%' }} />
                         <Typography variant="h3" fontWeight="bold" sx={{ color: '#1a237e', letterSpacing: '2px' }}>LearningOn</Typography>
                     </Box>
 
-                    <Typography variant="h1" sx={{ fontFamily: '"Georgia", serif', color: '#1a237e', mb: 3, fontWeight: 'normal', textTransform: 'uppercase', letterSpacing: '4px', fontSize: '3rem', whiteSpace: 'nowrap' }}>
+                    <Typography variant="h1" sx={{ fontFamily: '"Georgia", serif', color: '#1a237e', mb: 2, fontWeight: 'normal', textTransform: 'uppercase', letterSpacing: '4px', fontSize: '3rem', whiteSpace: 'nowrap' }}>
                         Certificate of Completion
                     </Typography>
 
-                    <Typography variant="h5" sx={{ color: '#555', mb: 5, fontStyle: 'italic' }}>
+                    <Typography variant="h5" sx={{ color: '#555', mb: 3, fontStyle: 'italic' }}>
                         This is to certify that
                     </Typography>
 
-                    <Typography variant="h2" sx={{ fontFamily: '"Great Vibes", cursive, "Times New Roman", serif', color: '#b8860b', mb: 5, fontWeight: 'bold', borderBottom: '3px solid #ddd', paddingBottom: '10px', minWidth: '600px', textAlign: 'center', fontSize: '4rem' }}>
+                    <Typography variant="h2" sx={{ fontFamily: '"Great Vibes", cursive, "Times New Roman", serif', color: '#b8860b', mb: 3, fontWeight: 'bold', borderBottom: '3px solid #ddd', paddingBottom: '10px', minWidth: '600px', textAlign: 'center', fontSize: '4rem' }}>
                         {user?.name || 'UserName'}
                     </Typography>
 
-                    <Typography variant="h5" sx={{ color: '#555', mb: 5, maxWidth: '80%', textAlign: 'center', lineHeight: 1.6 }}>
+                    <Typography variant="h5" sx={{ color: '#555', mb: 3, maxWidth: '80%', textAlign: 'center', lineHeight: 1.6 }}>
                         has successfully completed the course<br />
                         <strong style={{ color: '#222', fontSize: '1.4em', display: 'block', marginTop: '15px' }}>{courseInfo?.courseTitle || 'Course Title'}</strong>
                     </Typography>
+
+                    {certificate?.isGraded ? (
+                        <Box sx={{ mb: 2, display: 'inline-block', border: '2px solid #b8860b', padding: '10px 30px', borderRadius: '50px', backgroundColor: '#fff', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
+                            <Typography variant="h5" sx={{ color: '#1a237e', fontWeight: 'bold', margin: 0 }}>
+                                Achieved Score: {certificate.scorePercentage}%
+                            </Typography>
+                        </Box>
+                    ) : (
+                        <Typography variant="subtitle1" sx={{ color: '#777', mb: 2, fontStyle: 'italic' }}>
+                            Only ungraded course (No achieved Score)
+                        </Typography>
+                    )}
 
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', mt: 'auto', px: 10, alignItems: 'center' }}>
                         <Box textAlign="center" sx={{ width: '250px' }}>
@@ -93,9 +105,9 @@ const CertificatePDFTemplate = forwardRef(({ courseInfo, user, certificateId }, 
                         </Box>
                     </Box>
 
-                    <Box sx={{ width: '100%', textAlign: 'center', mt: 3 }}>
+                    <Box sx={{ width: '100%', textAlign: 'center', mt: 2, zIndex: 10 }}>
                         <Typography variant="caption" sx={{ color: '#888', fontSize: '0.9rem', letterSpacing: '1px' }}>
-                            Verification ID: {certificateId} &nbsp;|&nbsp; Verify at: <a href={`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/verify/${certificateId}`} style={{ color: '#888', textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">{import.meta.env.VITE_SERVER_URL ? import.meta.env.VITE_SERVER_URL.replace(/^https?:\/\//, '') : ''}/api/v1/certificates/verify/{certificateId}</a>
+                            Verification ID: {certificateId} &nbsp;|&nbsp; Verify at: <a href={`${window.location.origin}/verify-certificate/${certificateId}`} style={{ color: '#888', textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">{window.location.host}/verify-certificate/{certificateId}</a>
                         </Typography>
                     </Box>
                 </Box>

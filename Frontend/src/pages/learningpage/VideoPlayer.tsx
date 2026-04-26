@@ -166,7 +166,7 @@ const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerPr
             if (isPausedRef.current) return;
 
             let delta = video.currentTime - currentTimeRef.current;
-            console.log("delta", delta, video.currentTime, currentTimeRef.current);
+            // console.log("delta", delta, video.currentTime, currentTimeRef.current);
 
             if (delta < 0 || delta > 3) return;
 
@@ -191,7 +191,7 @@ const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerPr
                 lastWatchTimeRef.current = watchTimeRef.current;
             }
 
-            console.log("video.duration", video.duration, watchTimeRef.current);
+            // console.log("video.duration", video.duration, watchTimeRef.current);
             if ((watchTimeRef.current + 5 >= video.duration * 0.9) && !completedRef.current) {
                 //console.log("90% reached", watchTimeRef.current, video.duration);
                 // 5 seconds considered for extra small videos

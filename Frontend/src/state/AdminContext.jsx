@@ -17,11 +17,11 @@ export const AdminState = (props) => {
     else localStorage.removeItem("adminToken");
   }, [adminToken]);
 
-  useEffect(() => {
-    if (loading && query === "unpublished-courses") {
-      getUnpublishedCourses();
-    }
-  }, [loading, query]);
+  // useEffect(() => {
+  //   if (loading && query === "unpublished-courses") {
+  //     getUnpublishedCourses();
+  //   }
+  // }, [loading, query]);
 
   useEffect(() => {
     console.log(data);

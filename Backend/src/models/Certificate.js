@@ -19,7 +19,17 @@ const certificateSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    isGraded: {
+        type: Boolean,
+        default: false,
+    },
+    scorePercentage: {
+        type: Number,
+        default: 0,
+    },
 });
+
+certificateSchema.index({ courseId: 1, userId: 1 }, { unique: true });
 
 const Certificate = mongoose.model("Certificate", certificateSchema);
 

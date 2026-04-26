@@ -9,13 +9,13 @@ import { useSelector } from 'react-redux';
 import CertificatePDFTemplate from './CertificatePDFTemplate';
 import CertificatePreviewTemplate from './CertificatePreviewTemplate';
 
-const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificateId }) => {
+const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificate }) => {
     const theme = useTheme();
     const { token } = useSelector((state) => state.auth);
     const [isDownloading, setIsDownloading] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
     const certificateRef = useRef();
-    const [latestCertId, setLatestCertId] = useState(certificateId || "");
+    const [latestCertId, setLatestCertId] = useState(certificate?.certificateId || "");
     const pdfCertificateRef = useRef();
     const cooldownTimerRef = useRef(null);
 
@@ -79,7 +79,8 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
                 ref={pdfCertificateRef}
                 courseInfo={courseInfo}
                 user={user}
-                certificateId={latestCertId || certificateId || dummyCertId}
+                certificateId={latestCertId || certificate?.certificateId || dummyCertId}
+                certificate={certificate}
             />
 
             <Box sx={{
@@ -96,8 +97,9 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
                     ref={certificateRef}
                     courseInfo={courseInfo}
                     user={user}
-                    certificateId={latestCertId || certificateId || dummyCertId}
+                    certificateId={latestCertId || certificate?.certificateId || dummyCertId}
                     theme={theme}
+                    certificate={certificate}
                 />
 
                 <StyledButton

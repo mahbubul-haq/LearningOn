@@ -3,7 +3,7 @@ import { Box, Typography, Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
-const CourseCompletionStats = ({ courseInfo, displayScore, showScore, timeTaken }) => {
+const CourseCompletionStats = ({ courseInfo, displayScore, showScore, timeTaken, certificate }) => {
     const theme = useTheme();
 
     return (
@@ -61,7 +61,7 @@ const CourseCompletionStats = ({ courseInfo, displayScore, showScore, timeTaken 
                     opacity: showScore ? 1 : 0
                 }}>
                     <Typography variant="h3" fontWeight={800} color="primary.main">
-                        {displayScore == "--" ? "Ungraded" : displayScore + " %"}
+                        {certificate?.isGraded ? (displayScore + " %") : "Ungraded"}
                     </Typography>
                 </Box>
 

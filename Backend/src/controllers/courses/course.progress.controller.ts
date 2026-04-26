@@ -1,6 +1,7 @@
 import CourseProgress from "../../models/CourseProgress.js";
 import Course from "../../models/Course.js";
 import QuizAttempt from "../../models/QuizAttempt.js";
+import { createCertificate } from "../certificate/certificate.service.js";
 
 const getCourseProgress = async (req: any, res: any) => {
     try {
@@ -279,7 +280,7 @@ const updateCompletionDate = async (req: any, res: any) => {
             // Only select the lesson array to count quizzes
             Course.findById(courseId).select("lessons.questions.questions").lean(),
             // Only select status and updated time for quizzes
-            QuizAttempt.find({ courseId, userId }).select("status quizEndTime updatedAt").lean(),
+            QuizAttempt.find({ courseId, userId }).select("status quizEndTime updatedAt score").lean(),
             // Get existing progress record
             CourseProgress.findOne({ courseId, userId })
         ]);
@@ -306,16 +307,35 @@ const updateCompletionDate = async (req: any, res: any) => {
         }
 
         // 3. Pillar 2: Quiz Requirement Check
-        const requiredQuizCount = course.lessons?.filter((l: any) => l.questions?.questions?.length > 0).length || 0;
-        const completedQuizAttempts = quizAttempts.filter((q: any) =>
-            q.status === "completed" || q.status === "completed_can_improve" || q.quizEndTime < new Date()
-        );
+        let totalQuestionsCount = 0;
+        let totalScore = 0;
+        const requiredQuizCount = course.lessons?.filter((l: any) => {
+            totalQuestionsCount += l.questions?.questions?.length;
+            return l.questions?.questions?.length > 0;
+        }).length || 0;
+        const completedQuizAttempts = quizAttempts.filter((q: any) => {
+            totalScore += q.score || 0;
+            return q.status === "completed" || q.status === "completed_can_improve" || q.quizEndTime < new Date()
+        });
+
+        const scorePercentage = totalQuestionsCount > 0 ? (totalScore / totalQuestionsCount) * 100 : 0;
+
+
+
 
         if (completedQuizAttempts.length < requiredQuizCount) {
             return res.status(400).json({
                 success: false,
                 message: `Quiz missing. Completed ${completedQuizAttempts.length} of ${requiredQuizCount}.`
             });
+        }
+
+        // create certificate
+
+        const certificate = await createCertificate(courseId, userId, scorePercentage, totalQuestionsCount > 0);
+
+        if (!certificate) {
+            return res.status(500).json({ success: false, message: "Failed to create certificate" });
         }
 
         // 4. Pillar 3: Determine the "True" Completion Time

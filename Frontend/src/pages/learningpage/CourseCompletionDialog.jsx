@@ -23,24 +23,11 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [certificateId, setCertificateId] = useState("");
-    const getCertificateIdCallCount = React.useRef(0);
+    const [certificate, setCertificate] = useState(null);
+    // const [totalScore, setTotalScore] = useState(0);
 
     // Calculate Metrics
-    const totalScore = React.useMemo(() => {
-        let score = 0;
-        let possible = 0;
-        courseInfo?.lessons?.forEach(lesson => {
-            if (lesson.quiz?.metadata) {
-                score += lesson.quiz.metadata.score || 0;
-                possible += lesson.quiz.metadata.numberOfQuestions || 0;
-            }
-        });
-        if (!possible && !score) {
-            setDisplayScore("--");
-        }
-        return possible > 0 ? Math.round((score / possible) * 100) : "";
-    }, [courseInfo]);
+
 
     const timeTaken = React.useMemo(() => {
         if (!courseProgress?.createdAt) return "Few days";
@@ -58,35 +45,32 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
 
     const dummyCertId = `LC-CERT-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
 
-    const getCertificateId = async (attempt) => {
+    const getCertificate = async (attempt) => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/`,
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/${courseInfo?._id}`,
                 {
-                    method: "POST",
+                    method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                         'auth-token': token
                     },
-                    body: JSON.stringify({
-                        courseId: courseInfo?._id,
-                        certificateId: dummyCertId
-                    })
+
                 }
             );
             const data = await res.json();
             if (data?.success) {
-                setCertificateId(data.certificate.certificateId);
+                setCertificate(data.certificate);
             }
             else if (attempt < 2) {
                 setTimeout(() => {
-                    getCertificateId(attempt + 1);
+                    getCertificate(attempt + 1);
                 }, 2000);
             }
         } catch (error) {
             // console.log(error);
             if (attempt < 2) {
                 setTimeout(() => {
-                    getCertificateId(attempt + 1);
+                    getCertificate(attempt + 1);
                 }, 2000);
             }
         }
@@ -94,43 +78,11 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
 
 
     useEffect(() => {
-        if (open && courseProgress?.completionDate && !certificateId) {
-            getCertificateId(1);
+        if (open && courseProgress?.completionDate && !certificate) {
+            getCertificate(1);
         }
-    }, [open, courseProgress?.completionDate])
+    }, [open, courseProgress?.completionDate, certificate])
 
-    // Score Animation
-    useEffect(() => {
-        if (displayScore === "--" && totalScore == "") {
-            setShowScore(true);
-            return;
-        }
-        if (open) {
-            // Delay before starting animation
-            const timer = setTimeout(() => {
-                setShowScore(true);
-                let current = 0;
-                const interval = setInterval(() => {
-                    current += 2;
-                    if (current >= totalScore) {
-                        current = totalScore;
-                        setDisplayScore(totalScore);
-                        clearInterval(interval);
-                    } else {
-                        setDisplayScore(current);
-                    }
-                }, 20);
-                return () => clearInterval(interval);
-            }, 500);
-            return () => clearTimeout(timer);
-        } else {
-            setDisplayScore(0);
-            setShowScore(false);
-            setRating(0);
-            setReviewText("");
-            setSnackbarOpen(false);
-        }
-    }, [open, totalScore]);
 
     const handleRatingChange = (event, newValue) => {
         setRating(newValue);
@@ -140,6 +92,32 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
         // Here you would dispatch to backend
         setSnackbarOpen(true);
     };
+
+    useEffect(() => {
+        let intervalId;
+        if (open && certificate) {
+            setDisplayScore(0);
+            if (certificate?.isGraded) {
+                setShowScore(true);
+
+                intervalId = setInterval(() => {
+                    setDisplayScore(prev => {
+                        if (prev >= certificate?.scorePercentage) {
+                            clearInterval(intervalId);
+                            return certificate?.scorePercentage;
+                        } else {
+                            return Math.min(prev + 5, certificate?.scorePercentage);
+                        }
+                    });
+                }, 25);
+
+            } else {
+                setShowScore(false);
+            }
+
+        }
+        return () => clearInterval(intervalId);
+    }, [certificate, open]);
 
     return (
         <Dialog
@@ -177,13 +155,14 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
                         displayScore={displayScore}
                         showScore={showScore}
                         timeTaken={timeTaken}
+                        certificate={certificate}
                     />
 
                     <CourseCompletionCertificate
                         courseInfo={courseInfo}
                         user={user}
                         dummyCertId={dummyCertId}
-                        certificateId={certificateId}
+                        certificate={certificate}
                     />
                 </Grid>
 
