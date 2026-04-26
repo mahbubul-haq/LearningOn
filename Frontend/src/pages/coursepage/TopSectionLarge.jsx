@@ -103,7 +103,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     }}>
                         <Rating
                             rating={{
-                                rating: courseInfo?.ratings?.totalRating,
+                                rating: courseInfo?.ratings?.numberOfRatings > 0 ? courseInfo?.ratings?.totalRating / courseInfo?.ratings?.numberOfRatings : 0,
                                 count: courseInfo?.ratings?.numberOfRatings,
                                 showText: true,
                             }}

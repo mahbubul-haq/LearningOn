@@ -22,6 +22,9 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     const [showScore, setShowScore] = useState(false);
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState("");
+    const [initialRating, setInitialRating] = useState(0);
+    const [initialReviewText, setInitialReviewText] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [certificate, setCertificate] = useState(null);
     // const [totalScore, setTotalScore] = useState(0);
@@ -83,14 +86,57 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
         }
     }, [open, courseProgress?.completionDate, certificate])
 
+    useEffect(() => {
+        const fetchReview = async () => {
+            if (!open || !courseInfo?._id) return;
+            try {
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseInfo._id}/reviews/me`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        'auth-token': token
+                    }
+                });
+                const data = await res.json();
+                if (data?.success && data?.courseRating) {
+                    setRating(data.courseRating.rating || 0);
+                    setReviewText(data.courseRating.review || "");
+                    setInitialRating(data.courseRating.rating || 0);
+                    setInitialReviewText(data.courseRating.review || "");
+                }
+            } catch (error) {
+                console.error("Failed to fetch review", error);
+            }
+        };
+        if (!initialRating) fetchReview();
+    }, [open, courseInfo?._id, token]);
 
-    const handleRatingChange = (event, newValue) => {
-        setRating(newValue);
-    };
 
-    const handleSubmitReview = () => {
-        // Here you would dispatch to backend
-        setSnackbarOpen(true);
+    const isSubmitDisabled = rating === 0 || (rating === initialRating && reviewText === initialReviewText);
+
+    const handleSubmitReview = async () => {
+        if (isSubmitDisabled) return;
+        setIsSubmitting(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseInfo._id}/reviews`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'auth-token': token
+                },
+                body: JSON.stringify({ rating, review: reviewText })
+            });
+            const data = await res.json();
+            if (data?.success) {
+                setInitialRating(rating);
+                setInitialReviewText(reviewText);
+                setSnackbarOpen(true);
+            }
+        } catch (error) {
+            console.error("Failed to submit review", error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     useEffect(() => {
@@ -168,10 +214,12 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
 
                 <CourseCompletionReview
                     rating={rating}
-                    handleRatingChange={handleRatingChange}
+                    setRating={setRating}
                     reviewText={reviewText}
                     setReviewText={setReviewText}
                     handleSubmitReview={handleSubmitReview}
+                    isSubmitDisabled={isSubmitDisabled}
+                    isSubmitting={isSubmitting}
                 />
 
                 <CourseCompletionNextSteps onClose={onClose} />

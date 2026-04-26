@@ -19,7 +19,7 @@ const createCertificate = async (courseId, userId, scorePercentage, isGraded) =>
             return await Certificate.findOne({ courseId, userId });
         }
 
-        throw err;
+        return null;
     }
 };
 
