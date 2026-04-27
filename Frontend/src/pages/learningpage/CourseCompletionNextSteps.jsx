@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Box, Typography, Grid, Avatar, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import SpeedIcon from '@mui/icons-material/Speed';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useNavigate } from 'react-router-dom';
+import { CoursePageContext } from '../../state/CoursePageContext';
 
-const CourseCompletionNextSteps = ({ onClose }) => {
+
+const CourseCompletionNextSteps = ({ onClose, courseInfo, token }) => {
     const theme = useTheme();
+    const navigate = useNavigate();
+    const { relatedCourses, fetchRelatedCourses } = useContext(CoursePageContext);
+
+    useEffect(() => {
+        if (!relatedCourses && token && courseInfo?._id) {
+            fetchRelatedCourses(courseInfo?.category, courseInfo?._id, token);
+        }
+    }, [courseInfo]);
 
     return (
         <Grid container spacing={3}>
@@ -27,12 +38,12 @@ const CourseCompletionNextSteps = ({ onClose }) => {
                     </Box>
                 </Box>
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" fontWeight="bold" mb={2}>Next Steps</Typography>
-                <Box sx={{ 
-                    p: 2, 
-                    borderRadius: '0.5rem', 
+                <Box sx={{
+                    p: 2,
+                    borderRadius: '0.5rem',
                     border: `1px solid ${theme.palette.divider}`,
                     display: 'flex',
                     alignItems: 'center',
@@ -41,22 +52,38 @@ const CourseCompletionNextSteps = ({ onClose }) => {
                     mb: 2
                 }}>
                     <Box sx={{ width: 40, height: 40, borderRadius: '4px', backgroundColor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <AutoAwesomeIcon sx={{ fontSize: 20, color: '#888' }} />
+                        {relatedCourses.length > 0 ? (
+                            <Box>
+                                <img src={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                                    }/image/upload/${relatedCourses[0]?.courseThumbnail}`} alt={relatedCourses[0].title} style={{ width: 40, height: 40, borderRadius: '4px' }} />
+                            </Box>
+                        ) : (
+                            <AutoAwesomeIcon sx={{ fontSize: 20, color: '#888' }} />
+                        )}
                     </Box>
-                    <Box flexGrow={1}>
+                    <Box flexGrow={1} onClick={() => {
+                        if (relatedCourses.length > 0) {
+                            onClose();
+                            navigate(`/course/${relatedCourses[0]?._id}`)
+                        }
+                    }}>
                         <Typography variant="caption" color="text.secondary">Recommended Next Course</Typography>
-                        <Typography variant="body2" fontWeight="bold">Advanced Course Materials</Typography>
+                        {relatedCourses.length > 0 ? (
+                            <Typography variant="body2" fontWeight="bold">{relatedCourses[0].courseTitle}</Typography>
+                        ) : (
+                            <Typography variant="body2" fontWeight="bold">No Related Courses Found</Typography>
+                        )}
                     </Box>
                 </Box>
-                
-                <Button 
-                    fullWidth 
-                    variant="text" 
-                    color="inherit" 
-                    onClick={onClose}
+
+                <Button
+                    fullWidth
+                    variant="text"
+                    color="inherit"
                     sx={{ justifyContent: 'flex-start', color: 'text.secondary' }}
+                    onClick={onClose}
                 >
-                    → Back to Course Page
+                    → Back to Lessons
                 </Button>
             </Grid>
         </Grid>

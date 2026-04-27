@@ -222,7 +222,7 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
                     isSubmitting={isSubmitting}
                 />
 
-                <CourseCompletionNextSteps onClose={onClose} />
+                <CourseCompletionNextSteps onClose={onClose} courseInfo={courseInfo} token={token} />
 
             </DialogContent>
 
