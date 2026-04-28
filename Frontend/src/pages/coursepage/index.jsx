@@ -7,6 +7,7 @@ import TopSection from "./TopSection";
 import Navbar from "../../components/navbar";
 import RelatedCourses from "./RelatedCourses";
 import CourseExplorer from "../../components/courseExplorer";
+import { colorTokens } from "../../theme";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -56,9 +57,19 @@ const CoursePage = () => {
     // }, []);
 
     return (
-        <Box sx={{
+        <Box className="custom-scrollbar app-container" sx={{
             position: "relative",
             scrollBehavior: "smooth",
+            height: "100%",
+            overflow: "auto",
+            "@media (hover: none) and (pointer: coarse)": {
+                "&::-webkit-scrollbar": {
+                    display: "none",
+                },
+            },
+            "&::-webkit-scrollbar": {
+                width: { xs: "6px", sm: "10px", md: "12px" },
+            },
         }}>
             <CourseExplorer />
             <Box>
@@ -70,9 +81,12 @@ const CoursePage = () => {
                 sx={{
                     marginTop: "0",
                     width: "100%",
-                    maxWidth: "1700px",
+                    maxWidth: "2000px",
                     mx: "auto",
                     paddingBottom: "4rem",
+                    background: (theme) => theme.palette.mode === 'dark'
+                        ? `${colorTokens.glassMorphism.backgroundImageDark}, ${colorTokens.glassMorphism.backgroundColorDark}`
+                        : `${colorTokens.glassMorphism.backgroundImageLight}, #ffffff`,
                 }}
             >
 
@@ -103,6 +117,7 @@ const CoursePage = () => {
 
                 <RelatedCourses courseInfo={courseInfo} />
             </Box>
+
         </Box>
     );
 };

@@ -25,9 +25,9 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
 
             // New Gradient Background
             background: (theme) => theme.palette.mode === 'dark'
-                ? "linear-gradient(135deg, rgba(47, 24, 128, 0.5) 0%, rgba(143, 24, 68, 0.5) 100%)" // Deep Purple -> Deep Pink
-                : "linear-gradient(135deg, rgba(69, 34, 186, 0.08) 0%, rgba(194, 33, 95, 0.08) 100%)", // Primary Light -> Secondary Light (faint tint)
-
+                ? `linear-gradient(135deg, rgba(47, 24, 128, 0.5) 0%, rgba(143, 24, 68, 0.5) 100%), ${colorTokens.glassMorphism.backgroundImageDark}, #050505`
+                : `linear-gradient(135deg, rgba(69, 34, 186, 0.08) 0%, rgba(194, 33, 95, 0.08) 100%), ${colorTokens.glassMorphism.backgroundImageLight}, #e8eaf6`,
+            
             color: (theme) => theme.palette.homepage.textPrimary,
         }}>
             <Box sx={{

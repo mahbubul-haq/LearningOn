@@ -110,6 +110,10 @@ const CourseSchema = new mongoose.Schema(
                 type: Number,
                 default: 0,
             },
+            reviewCountWithText: {
+                type: Number,
+                default: 0,
+            }
 
         },
 

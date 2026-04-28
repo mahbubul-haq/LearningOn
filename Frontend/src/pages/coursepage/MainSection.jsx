@@ -26,12 +26,12 @@ const MainSection = ({ courseInfo }) => {
                     width: "100%",
                     padding: isNonMobileScreens ? "0.1rem 5rem" : "0rem 1rem",
                     ...theme.palette.glassNavbar, // Apply glass navbar styles
-                    
+
                     // Override glass background to be solid to hide original nav when sticky
                     background: theme.palette.mode === 'dark'
-                        ? 'linear-gradient(180deg, #0f0f13 60%, rgba(15, 15, 19, 0.95) 100%)'
-                        : 'linear-gradient(180deg, #F0F4F8 60%, rgba(240, 244, 248, 0.95) 100%)',
-                    backdropFilter: 'none', // Remove blur since it's solid
+                        ? 'linear-gradient(180deg, #0f0f13 60%, rgba(15, 15, 19, 1) 100%)'
+                        : 'rgba(235, 235, 235, 0.5)',
+                    backdropFilter: 'blur(8px)',
 
                     // Unified Look Adjustments
                     borderRadius: "0 0 0 0", // Top corners only

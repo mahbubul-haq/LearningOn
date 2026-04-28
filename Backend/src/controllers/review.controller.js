@@ -19,12 +19,21 @@ const createOrUpdateReview = async (req, res) => {
             userId,
         });
 
-        let deltaRating = 0, deltaRatingCount = 0;
+        let deltaRating = 0, deltaRatingCount = 0, deltaReviewCountWithText = 0;
         if (previousRating) {
             deltaRating = rating - previousRating.rating;
+            if (review && !previousRating.review) {
+                deltaReviewCountWithText = 1;
+            }
+            else if (!review && previousRating.review) {
+                deltaReviewCountWithText = -1;
+            }
         } else {
             deltaRatingCount = 1;
             deltaRating = rating;
+            if (review) {
+                deltaReviewCountWithText = 1;
+            }
         }
 
         const courseRating = await CourseRating.findOneAndUpdate({
@@ -42,6 +51,7 @@ const createOrUpdateReview = async (req, res) => {
             $inc: {
                 'ratings.totalRating': deltaRating,
                 'ratings.numberOfRatings': deltaRatingCount,
+                'ratings.reviewCountWithText': deltaReviewCountWithText,
             }
         }, {
             new: true,
@@ -87,25 +97,29 @@ const getUserCourseReview = async (req, res) => {
 const getCourseReviews = async (req, res) => {
     try {
         const courseId = req.params.courseId;
+        const userId = req.userId;
+        const includeUserReview = req.query.includeUserReview === "true";
+
+        const userReview = includeUserReview ? await CourseRating.findOne({
+            courseId,
+            userId,
+        }).populate("userId", "name picturePath") : null;
+
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 5;
 
         const skip = (page - 1) * limit;
 
-        const reviews = await CourseRating.find({ courseId, review: { $exists: true, $ne: "" } })
+        const reviews = await CourseRating.find({ courseId, userId: { $ne: userId }, review: { $exists: true, $ne: "" } })
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .populate("userId", "name picturePath");
 
-        const totalReviews = await CourseRating.countDocuments({ courseId, review: { $exists: true, $ne: "" } });
-
         return res.status(200).json({
             success: true,
             reviews,
-            totalReviews,
-            currentPage: page,
-            totalPages: Math.ceil(totalReviews / limit),
+            userReview,
         });
     } catch (err) {
         console.log(err);

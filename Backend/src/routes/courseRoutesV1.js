@@ -10,6 +10,6 @@ router.get("/", getCourses);
 router.get("/:courseId/lessons/:lessonId/quiz", verifyToken, getQuestions);
 router.post("/:courseId/reviews", verifyToken, createOrUpdateReview);
 router.get("/:courseId/reviews/me", verifyToken, getUserCourseReview);
-router.get("/:courseId/reviews", getCourseReviews);
+router.get("/:courseId/reviews", verifyToken, getCourseReviews);
 
 export default router;

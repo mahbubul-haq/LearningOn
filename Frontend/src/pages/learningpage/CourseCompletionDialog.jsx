@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Dialog, DialogContent, Box, IconButton, Grid, Snackbar, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTheme } from '@mui/material/styles';
@@ -10,6 +10,7 @@ import CourseCompletionStats from './CourseCompletionStats';
 import CourseCompletionCertificate from './CourseCompletionCertificate';
 import CourseCompletionReview from './CourseCompletionReview';
 import CourseCompletionNextSteps from './CourseCompletionNextSteps';
+import { CoursePageContext } from '../../state/CoursePageContext';
 import { useSelector } from 'react-redux';
 
 const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, user }) => {
@@ -24,10 +25,12 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     const [reviewText, setReviewText] = useState("");
     const [initialRating, setInitialRating] = useState(0);
     const [initialReviewText, setInitialReviewText] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [certificate, setCertificate] = useState(null);
+    const [reviewSubmitted, setReviewSubmitted] = useState(false);
     // const [totalScore, setTotalScore] = useState(0);
+
+    const { myReview, isReviewSubmitting, fetchMyReview, handleSubmitReview } = useContext(CoursePageContext);
 
     // Calculate Metrics
 
@@ -87,57 +90,33 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     }, [open, courseProgress?.completionDate, certificate])
 
     useEffect(() => {
-        const fetchReview = async () => {
-            if (!open || !courseInfo?._id) return;
-            try {
-                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseInfo._id}/reviews/me`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        'auth-token': token
-                    }
-                });
-                const data = await res.json();
-                if (data?.success && data?.courseRating) {
-                    setRating(data.courseRating.rating || 0);
-                    setReviewText(data.courseRating.review || "");
-                    setInitialRating(data.courseRating.rating || 0);
-                    setInitialReviewText(data.courseRating.review || "");
-                }
-            } catch (error) {
-                console.error("Failed to fetch review", error);
-            }
-        };
-        if (!initialRating) fetchReview();
+        fetchMyReview(courseInfo?._id, token);
     }, [open, courseInfo?._id, token]);
+
+    useEffect(() => {
+        if (myReview) {
+            setRating(myReview.rating);
+            setReviewText(myReview.review);
+            setInitialRating(myReview.rating);
+            setInitialReviewText(myReview.review);
+        }
+        if (myReview && reviewSubmitted) {
+            setSnackbarOpen(true);
+            setTimeout(() => {
+                setSnackbarOpen(false);
+            }, 2000);
+            setReviewSubmitted(false);
+        }
+    }, [myReview]);
+
+    useEffect(() => {
+        if (isReviewSubmitting) {
+            setReviewSubmitted(true);
+        }
+    }, [isReviewSubmitting]);
 
 
     const isSubmitDisabled = rating === 0 || (rating === initialRating && reviewText === initialReviewText);
-
-    const handleSubmitReview = async () => {
-        if (isSubmitDisabled) return;
-        setIsSubmitting(true);
-        try {
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseInfo._id}/reviews`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    'auth-token': token
-                },
-                body: JSON.stringify({ rating, review: reviewText })
-            });
-            const data = await res.json();
-            if (data?.success) {
-                setInitialRating(rating);
-                setInitialReviewText(reviewText);
-                setSnackbarOpen(true);
-            }
-        } catch (error) {
-            console.error("Failed to submit review", error);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     useEffect(() => {
         let intervalId;
@@ -217,27 +196,19 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
                     setRating={setRating}
                     reviewText={reviewText}
                     setReviewText={setReviewText}
-                    handleSubmitReview={handleSubmitReview}
+                    handleSubmitReview={() => handleSubmitReview(courseInfo?._id, rating, reviewText, token)}
                     isSubmitDisabled={isSubmitDisabled}
-                    isSubmitting={isSubmitting}
+                    isSubmitting={isReviewSubmitting}
                     buttonText={initialRating ? "Update Review" : "Submit Review"}
                     title={initialRating ? "Update your review" : "Rate this course"}
+                    isCertificatePage={true}
                 />
 
                 <CourseCompletionNextSteps onClose={onClose} courseInfo={courseInfo} token={token} />
 
             </DialogContent>
 
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={4000}
-                onClose={() => setSnackbarOpen(false)}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-            >
-                <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: '100%', borderRadius: '0.5rem', fontWeight: 'bold' }}>
-                    Review added successfully!
-                </Alert>
-            </Snackbar>
+
 
         </Dialog>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Rating, TextField, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { colorTokens } from '../../theme';
 
 const CourseCompletionReview = ({
     rating,
@@ -12,6 +13,7 @@ const CourseCompletionReview = ({
     isSubmitting,
     title = "Rate this course",
     buttonText = "Submit Review",
+    isCertificatePage = false,
 
 }) => {
     const theme = useTheme();
@@ -20,7 +22,7 @@ const CourseCompletionReview = ({
         <Box sx={{
             p: 3,
             borderRadius: '1rem',
-            backgroundColor: theme.palette.background.paper,
+            ...(isCertificatePage ? { backgroundColor: theme.palette.background.paper } : theme.palette.glassSheet),
             mb: 4,
             display: 'flex',
             flexDirection: 'column',
@@ -38,7 +40,7 @@ const CourseCompletionReview = ({
                         value={rating}
                         onChange={(event, newValue) => setRating(newValue)}
                         size="large"
-                        sx={{ mt: 1 }}
+                        sx={{ mt: 1, color: colorTokens.secondary.lighter }}
                     />
                 </Box>
 
