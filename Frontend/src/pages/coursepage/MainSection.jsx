@@ -18,7 +18,7 @@ const MainSection = ({ courseInfo }) => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const isMobileScreens = useMediaQuery("(max-width:600px)");
     return (
-        <Box>
+        <>
             <Box
                 sx={{
                     height: isNonMobileScreens ? "5rem" : "auto",
@@ -26,6 +26,12 @@ const MainSection = ({ courseInfo }) => {
                     width: "100%",
                     padding: isNonMobileScreens ? "0.1rem 5rem" : "0rem 1rem",
                     ...theme.palette.glassNavbar, // Apply glass navbar styles
+                    
+                    // Override glass background to be solid to hide original nav when sticky
+                    background: theme.palette.mode === 'dark'
+                        ? 'linear-gradient(180deg, #0f0f13 60%, rgba(15, 15, 19, 0.95) 100%)'
+                        : 'linear-gradient(180deg, #F0F4F8 60%, rgba(240, 244, 248, 0.95) 100%)',
+                    backdropFilter: 'none', // Remove blur since it's solid
 
                     // Unified Look Adjustments
                     borderRadius: "0 0 0 0", // Top corners only
@@ -49,15 +55,10 @@ const MainSection = ({ courseInfo }) => {
                 data-bs-duration="800"
                 tabIndex="0"
                 sx={{
-                    ...theme.palette.glassSheet,
                     maxWidth: "2000px",
                     mx: "auto",
                     mt: "0rem", // No gap
                     mb: "4rem",
-                    borderTop: "none", // Remove top border to blend
-                    borderRadius: "0 0 4px 4px", // Bottom corners only
-
-                    overflow: "hidden" // Ensure rounded corners work
                 }}
             >
                 <Box
@@ -234,7 +235,7 @@ const MainSection = ({ courseInfo }) => {
                     <CoursePageReviews courseInfo={courseInfo} />
                 </Box>
             </Box>
-        </Box >
+        </>
     );
 };
 

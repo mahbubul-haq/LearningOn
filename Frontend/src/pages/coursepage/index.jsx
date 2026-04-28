@@ -57,18 +57,8 @@ const CoursePage = () => {
 
     return (
         <Box sx={{
-            height: "100%",
-            overflow: "auto",
             position: "relative",
             scrollBehavior: "smooth",
-            "@media (hover: none) and (pointer: coarse)": {
-                "&::-webkit-scrollbar": {
-                    display: "none",
-                },
-            },
-            "&::-webkit-scrollbar": {
-                width: { xs: "6px", sm: "10px", md: "12px" },
-            },
         }}>
             <CourseExplorer />
             <Box>
@@ -80,7 +70,7 @@ const CoursePage = () => {
                 sx={{
                     marginTop: "0",
                     width: "100%",
-                    maxWidth: "2000px",
+                    maxWidth: "1700px",
                     mx: "auto",
                     paddingBottom: "4rem",
                 }}

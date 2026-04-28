@@ -2,7 +2,18 @@ import React from 'react';
 import { Box, Typography, Rating, TextField, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-const CourseCompletionReview = ({ rating, setRating, reviewText, setReviewText, handleSubmitReview, isSubmitDisabled, isSubmitting }) => {
+const CourseCompletionReview = ({
+    rating,
+    setRating,
+    reviewText,
+    setReviewText,
+    handleSubmitReview,
+    isSubmitDisabled,
+    isSubmitting,
+    title = "Rate this course",
+    buttonText = "Submit Review",
+
+}) => {
     const theme = useTheme();
 
     return (
@@ -22,7 +33,7 @@ const CourseCompletionReview = ({ rating, setRating, reviewText, setReviewText, 
                 alignItems: 'flex-start'
             }}>
                 <Box sx={{ minWidth: 200 }}>
-                    <Typography variant="subtitle1" fontWeight="bold">Rate this course</Typography>
+                    <Typography variant="subtitle1" fontWeight="bold">{title}</Typography>
                     <Rating
                         value={rating}
                         onChange={(event, newValue) => setRating(newValue)}
@@ -55,7 +66,7 @@ const CourseCompletionReview = ({ rating, setRating, reviewText, setReviewText, 
                     disabled={isSubmitDisabled || isSubmitting}
                     sx={{ borderRadius: '0.5rem', fontWeight: 'bold', px: 4, py: 1 }}
                 >
-                    {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                    {isSubmitting ? 'Submitting...' : buttonText}
                 </Button>
             </Box>
         </Box>

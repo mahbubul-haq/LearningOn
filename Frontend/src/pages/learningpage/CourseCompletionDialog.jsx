@@ -220,6 +220,8 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
                     handleSubmitReview={handleSubmitReview}
                     isSubmitDisabled={isSubmitDisabled}
                     isSubmitting={isSubmitting}
+                    buttonText={initialRating ? "Update Review" : "Submit Review"}
+                    title={initialRating ? "Update your review" : "Rate this course"}
                 />
 
                 <CourseCompletionNextSteps onClose={onClose} courseInfo={courseInfo} token={token} />

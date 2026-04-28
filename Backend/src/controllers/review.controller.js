@@ -84,4 +84,36 @@ const getUserCourseReview = async (req, res) => {
     }
 }
 
-export { createOrUpdateReview, getUserCourseReview };
+const getCourseReviews = async (req, res) => {
+    try {
+        const courseId = req.params.courseId;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+
+        const skip = (page - 1) * limit;
+
+        const reviews = await CourseRating.find({ courseId, review: { $exists: true, $ne: "" } })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate("userId", "name picturePath");
+
+        const totalReviews = await CourseRating.countDocuments({ courseId, review: { $exists: true, $ne: "" } });
+
+        return res.status(200).json({
+            success: true,
+            reviews,
+            totalReviews,
+            currentPage: page,
+            totalPages: Math.ceil(totalReviews / limit),
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+}
+
+export { createOrUpdateReview, getUserCourseReview, getCourseReviews };

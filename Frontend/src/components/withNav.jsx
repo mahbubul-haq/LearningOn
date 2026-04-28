@@ -27,6 +27,7 @@ const WithNav = ({ component, showNav }) => {
       sx={{
         height: "100%",
         overflow: "auto",
+        position: "relative",
         scrollBehavior: "smooth",
         "@media (hover: none) and (pointer: coarse)": {
           "&::-webkit-scrollbar": {
