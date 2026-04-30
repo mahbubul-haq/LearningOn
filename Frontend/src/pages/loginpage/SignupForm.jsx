@@ -106,7 +106,10 @@ const SignUpForm = ({ redirect }) => {
                 handleBlur,
                 handleSubmit,
                 setFieldValue,
-            }) => (
+                isValid,
+            }) => {
+                const isSubmitDisabled = !isValid || !values.name || !values.email || !values.password || emailExists !== "";
+                return (
                 <form
                     style={{
                         width: "100%",
@@ -173,15 +176,13 @@ const SignUpForm = ({ redirect }) => {
                                         marginInline: "auto",
                                         cursor: "pointer",
                                         borderRadius: "50%",
-                                        width: isNonMobileScreens
-                                            ? "100px"
-                                            : "80px",
-                                        height: isNonMobileScreens
-                                            ? "100px"
-                                            : "80px",
+                                        width: isNonMobileScreens ? "100px" : "80px",
+                                        height: isNonMobileScreens ? "100px" : "80px",
                                         overflow: "hidden",
-                                        mb: "1rem",
-                                        backgroundColor: colorTokens.white.main,
+                                        mb: "1.5rem",
+                                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.07)' : colorTokens.white.main,
+                                        border: (theme) => theme.palette.mode === 'dark' ? '1px solid rgba(138, 43, 226, 0.3)' : '1px solid transparent',
+                                        boxShadow: (theme) => theme.palette.mode === 'dark' ? '0 0 20px rgba(138, 43, 226, 0.3)' : '0 2px 10px rgba(0,0,0,0.1)',
                                     }}
                                 >
                                     <input {...getInputProps()} />
@@ -256,6 +257,7 @@ const SignUpForm = ({ redirect }) => {
                         >
                             <StyledButton
                                 type="submit"
+                                disabled={isSubmitDisabled}
                                 sx={{
                                     mt: isNonMobileScreens ? "1rem" : "1rem",
                                     fontSize: isNonMobileScreens
@@ -263,32 +265,22 @@ const SignUpForm = ({ redirect }) => {
                                         : "1rem",
                                     fontWeight: "600",
                                     "&&": {
-                                        padding: isNonMobileScreens
-                                            ? "0.5rem 2rem"
-                                            : "0.5rem 1rem",
-                                        backgroundColor: isNonMobileScreens
-                                            ? (theme) =>
-                                                theme.palette.primary.main
-                                            : (theme) =>
-                                                theme.palette.primary.main,
-                                        color: isNonMobileScreens
-                                            ? (theme) =>
-                                                theme.palette.text.primary
-                                            : (theme) =>
-                                                theme.palette.text.primary,
+                                        padding: isNonMobileScreens ? "0.5rem 2rem" : "0.5rem 1rem",
+                                        backgroundColor: (theme) => theme.palette.primary.main,
+                                        color: "#ffffff",
+                                        boxShadow: '0 0 15px rgba(107, 76, 221, 0.4)',
                                         "&:hover": {
-                                            backgroundColor: isNonMobileScreens
-                                                ? (theme) =>
-                                                    theme.palette.primary.dark
-                                                : (theme) =>
-                                                    theme.palette.primary
-                                                        .dark,
+                                            backgroundColor: (theme) => theme.palette.primary.dark,
+                                            boxShadow: '0 0 25px rgba(107, 76, 221, 0.7)',
                                         },
+                                        "&:disabled": {
+                                            backgroundColor: (theme) => theme.palette.primary.main,
+                                            color: "#ffffff",
+                                            opacity: 0.5,
+                                        }
                                     },
-                                    width: isNonMobileScreens ? "auto" : "100%",
-                                    borderRadius: isNonMobileScreens
-                                        ? "2rem"
-                                        : "0.1rem",
+                                    width: "100%",
+                                    borderRadius: isNonMobileScreens ? "2rem" : "0.1rem",
                                 }}
                             >
                                 Sign Up
@@ -337,7 +329,8 @@ const SignUpForm = ({ redirect }) => {
                         </Box>
                     </Box>
                 </form>
-            )}
+                );
+            }}
         </Formik>
     );
 };

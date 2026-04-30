@@ -3,9 +3,11 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignupForm";
+import useTheme from "@mui/material/styles/useTheme"
 
 const LoginSignUp = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
+    const theme = useTheme();
     const isLogin = useLocation().state?.isLogin;
     const redirect = useLocation().state?.redirect;
     const navigate = useNavigate();
@@ -20,9 +22,49 @@ const LoginSignUp = () => {
                 justifyContent: "center",
                 overflow: "auto",
                 position: "relative",
-                // border: "2px solid red",
             }}
         >
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: isNonMobileScreens ? "2rem" : "1.5rem",
+                    left: isNonMobileScreens ? "3rem" : "1.5rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    zIndex: 10,
+                }}
+            >
+                {!isNonMobileScreens && (
+                    <ArrowBackIcon
+                        sx={{
+                            fontSize: "1.5rem",
+                            cursor: "pointer",
+                            color: (theme) => theme.palette.text.primary,
+                            "&:hover": { opacity: 0.8 },
+                        }}
+                        onClick={() => navigate("/")}
+                    />
+                )}
+                <Typography
+                    variant="h2"
+                    sx={{
+                        fontWeight: "600",
+                        fontSize: isNonMobileScreens ? "2rem" : "1.5rem",
+                        cursor: "pointer",
+                    }}
+                    onClick={() => navigate("/")}
+                >
+                    Learning
+                    <Box
+                        component="span"
+                        sx={{ color: (theme) => theme.palette.text.primary }}
+                    >
+                        On
+                    </Box>
+                </Typography>
+            </Box>
+
             <Box
                 sx={{
                     borderRadius: "0.2rem",
@@ -31,6 +73,7 @@ const LoginSignUp = () => {
                     minHeight: "600px",
                     minWidth: "85%",
                     maxWidth: isNonMobileScreens ? "90%" : "100%",
+                    pr: isNonMobileScreens ? "5rem" : "0",
                     // border: "1px solid rgba(134, 143, 143, 0.3)",
 
                     // boxShadow: isNonMobileScreens
@@ -39,8 +82,9 @@ const LoginSignUp = () => {
                     position: "relative",
                     display: "flex",
                     justifyContent: isNonMobileScreens
-                        ? "space-between"
+                        ? "center"
                         : "center",
+                    gap: "3rem",
                     // alignItems: isNonMobileScreens ? "flex-start" : "center",
                     flexDirection: isNonMobileScreens ? "row" : "column",
                     backgroundColor: isNonMobileScreens
@@ -53,40 +97,22 @@ const LoginSignUp = () => {
                         sx={{
                             width: "50%",
                             padding: "3rem ",
+                            display: "flex",
+                            alignItems: "center",
                         }}
                     >
-                        <Typography
-                            variant="h2"
-                            sx={{
-                                fontWeight: "600",
-                                fontSize: "2rem",
-                                cursor: "pointer",
-                            }}
-                            onClick={() => navigate("/")}
-                        >
-                            Learning
-                            <Box
-                                sx={{
-                                    display: "inline-block",
-                                    color: (theme) =>
-                                        theme.palette.text.primary,
-                                }}
-                            >
-                                On
-                            </Box>
-                        </Typography>
                         <Box
                             sx={{
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                height: "100%",
+                                width: "100%",
                                 overflow: "hidden",
                                 opacity: "0.7",
                             }}
                         >
                             <img
-                                src="/images/login_light.svg"
+                                src={theme.palette.mode === "dark" ? "/images/login_img_dark.svg" : "/images/login_img_light.svg"}
                                 width="100%"
                                 height="auto"
                                 alt="client svg"
@@ -94,33 +120,11 @@ const LoginSignUp = () => {
                         </Box>
                     </Box>
                 )}
-                {!isNonMobileScreens && (
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            left: "0",
-                            top: "3rem",
-                            ///justifySelf: "flex-start",
-                        }}
-                    >
-                        <ArrowBackIcon
-                            sx={{
-                                fontSize: "2rem",
-                                cursor: "pointer",
-                                color: (theme) => theme.palette.grey.grey500,
-                                "&:hover": {
-                                    color: (theme) =>
-                                        theme.palette.grey.grey800,
-                                },
-                            }}
-                            onClick={() => navigate("/")}
-                        />
-                    </Box>
-                )}
 
                 <Box
                     sx={{
                         width: isNonMobileScreens ? "50%" : "100%",
+                        maxWidth: isNonMobileScreens ? "500px" : "100%",
                         padding: isNonMobileScreens ? "3rem" : "0",
                         display: "flex",
                         alignItems: "center",
@@ -129,7 +133,7 @@ const LoginSignUp = () => {
                     {isLogin ? (
                         <LoginForm redirect={redirect} />
                     ) : (
-                        <SignUpForm redirect={redirect}/>
+                        <SignUpForm redirect={redirect} />
                     )}
                 </Box>
             </Box>

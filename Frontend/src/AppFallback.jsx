@@ -41,40 +41,40 @@ const AppFallback = () => {
         <Box sx={{
             height: "100vh", width: "100vw", display: "flex", flexDirection: "column",
             justifyContent: "center", alignItems: "center",
-            background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.main} 100%)`,
-            backdropFilter: "blur(20px)",
+            bgcolor: theme.palette.background.default,
+            backgroundImage: theme.palette.mode === 'dark' 
+                ? `radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.15), transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 0, 128, 0.1), transparent 40%)`
+                : `radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.05), transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 0, 128, 0.05), transparent 40%)`,
         }}>
             {/* Three Orbitals + Inner Circle */}
             <Box sx={{ position: "relative", width: { xs: 80, md: 110 }, height: { xs: 80, md: 110 }, mb: 5 }}>
                 {[1.4, 2, 2.6].map((speed, i) => (
                     <Box key={i} sx={{
                         position: "absolute", inset: i * 10, borderRadius: "50%",
-                        border: "2px solid transparent",
-                        // Distinct Primary (Purple) vs Secondary (Pink)
-                        borderTopColor: i % 2 === 0 ? colorTokens.secondary.light : colorTokens.primary.lighter,
+                        border: "1px solid rgba(255, 255, 255, 0.05)",
+                        borderTopColor: i % 2 === 0 ? colorTokens.primary.main : colorTokens.secondary.main,
                         animation: `${rotate} ${speed}s linear infinite ${i % 2 === 0 ? "" : "reverse"}`,
-                        filter: "drop-shadow(0 0 2px rgba(255,255,255,0.3))"
+                        boxShadow: `0 0 10px ${i % 2 === 0 ? 'rgba(138, 43, 226, 0.2)' : 'rgba(255, 0, 128, 0.2)'}`
                     }} />
                 ))}
                 {/* THE INNER CIRCLE */}
                 <Box sx={{
                     position: "absolute", inset: "35%", borderRadius: "50%",
-                    bgcolor: colorTokens.primary.lighter, // Center is Purple to balance
+                    background: `linear-gradient(135deg, ${colorTokens.primary.main}, ${colorTokens.secondary.main})`,
                     animation: `${pulse} 2s infinite ease-in-out`,
-                    boxShadow: `0 0 25px ${colorTokens.primary.main}`,
                 }} />
             </Box>
 
             {/* Dynamic Text */}
             <Box sx={{ textAlign: "center" }}>
                 <Typography sx={{
-                    color: colorTokens.white.pure, // Keep white for max readability against gradient
+                    color: theme.palette.text.primary,
                     letterSpacing: 4,
                     fontWeight: 700,
                     fontSize: "0.9rem",
                     mb: 2,
                     textTransform: "uppercase",
-                    textShadow: "0 2px 10px rgba(0,0,0,0.5)"
+                    opacity: 0.9
                 }}>
                     {getStatusText()}
                 </Typography>
@@ -82,8 +82,8 @@ const AppFallback = () => {
                 {/* Scan Bar */}
                 <Box sx={{
                     width: "200px",
-                    height: "3px", // Thicker for visibility
-                    bgcolor: "rgba(255, 255, 255, 0.15)",
+                    height: "2px",
+                    bgcolor: theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
                     mx: "auto",
                     position: "relative",
                     overflow: "hidden",
@@ -92,11 +92,10 @@ const AppFallback = () => {
                     <Box sx={{
                         width: "40%",
                         height: "100%",
-                        bgcolor: colorTokens.pink.neon, // Neon Pink Scan
+                        background: `linear-gradient(90deg, transparent, ${colorTokens.primary.main}, transparent)`,
                         position: "absolute",
-                        animation: "scan 1.5s infinite linear",
+                        animation: "scan 1.5s infinite ease-in-out",
                         "@keyframes scan": { "0%": { left: "-40%" }, "100%": { left: "100%" } },
-                        boxShadow: `0 0 10px ${colorTokens.pink.neon}`
                     }} />
                 </Box>
             </Box>

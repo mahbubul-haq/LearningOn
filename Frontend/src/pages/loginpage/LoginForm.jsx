@@ -78,7 +78,9 @@ const LoginForm = ({ redirect }) => {
 
     return (
         <Formik initialValues={initialValuesLogin} validationSchema={loginSchema} onSubmit={handleFormSubmit}>
-            {({ values, errors, touched, handleChange, handleBlur, handleSubmit}) => (
+            {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isValid }) => {
+                const isSubmitDisabled = !isValid || !values.email || !values.password || emailError !== "" || passwordError !== "";
+                return (
                 <form
                     style={{
                         width: "100%",
@@ -134,23 +136,27 @@ const LoginForm = ({ redirect }) => {
                         >
                             <StyledButton
                                 type="submit"
+                                disabled={isSubmitDisabled}
                                 sx={{
                                     mt: isNonMobileScreens ? "1rem" : "1rem",
                                     fontSize: isNonMobileScreens ? "1rem" : "1rem",
                                     fontWeight: "600",
                                     "&&": {
                                         padding: isNonMobileScreens ? "0.5rem 2rem" : "0.5rem 1rem",
-                                        backgroundColor: isNonMobileScreens
-                                            ? (theme) => theme.palette.primary.main
-                                            : (theme) => theme.palette.primary.main,
-                                        color: isNonMobileScreens ? (theme) => theme.palette.text.primary : (theme) => theme.palette.text.primary,
+                                        backgroundColor: (theme) => theme.palette.primary.main,
+                                        color: "#ffffff",
+                                        boxShadow: '0 0 15px rgba(107, 76, 221, 0.4)',
                                         "&:hover": {
-                                            backgroundColor: isNonMobileScreens
-                                                ? (theme) => theme.palette.primary.dark
-                                                : (theme) => theme.palette.primary.dark,
+                                            backgroundColor: (theme) => theme.palette.primary.dark,
+                                            boxShadow: '0 0 25px rgba(107, 76, 221, 0.7)',
                                         },
+                                        "&:disabled": {
+                                            backgroundColor: (theme) => theme.palette.primary.main,
+                                            color: "#ffffff",
+                                            opacity: 0.5,
+                                        }
                                     },
-                                    width: isNonMobileScreens ? "auto" : "100%",
+                                    width: "100%",
                                     borderRadius: isNonMobileScreens ? "2rem" : "0.1rem",
                                 }}
                             >
@@ -194,7 +200,8 @@ const LoginForm = ({ redirect }) => {
                         </Box>
                     </Box>
                 </form>
-            )}
+                );
+            }}
         </Formik>
     );
 };
