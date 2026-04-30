@@ -27,7 +27,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
             background: (theme) => theme.palette.mode === 'dark'
                 ? `linear-gradient(135deg, rgba(47, 24, 128, 0.5) 0%, rgba(143, 24, 68, 0.5) 100%), ${colorTokens.glassMorphism.backgroundImageDark}, #050505`
                 : `linear-gradient(135deg, rgba(69, 34, 186, 0.08) 0%, rgba(194, 33, 95, 0.08) 100%), ${colorTokens.glassMorphism.backgroundImageLight}, #e8eaf6`,
-            
+
             color: (theme) => theme.palette.homepage.textPrimary,
         }}>
             <Box sx={{
@@ -103,7 +103,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     }}>
                         <Rating
                             rating={{
-                                rating: courseInfo?.ratings?.numberOfRatings > 0 ? courseInfo?.ratings?.totalRating / courseInfo?.ratings?.numberOfRatings : 0,
+                                rating: courseInfo?.ratings?.numberOfRatings > 0 ? Math.round((courseInfo?.ratings?.totalRating || 0) / courseInfo?.ratings?.numberOfRatings * 10) / 10 : 0,
                                 count: courseInfo?.ratings?.numberOfRatings,
                                 showText: true,
                             }}

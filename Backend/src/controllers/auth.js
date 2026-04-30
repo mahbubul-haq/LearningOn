@@ -9,14 +9,18 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
         if (req.body.picture) {
-            const res = await uploadImage(req.body.picture);
-            if (res.success) {
-                req.body.picturePath = res.uploadResponse.public_id;
+            try {
+                const res = await uploadImage(req.body.picture);
+                if (res.success) {
+                    req.body.picturePath = res.uploadResponse.public_id;
+                }
+            } catch (err) {
+                console.log(err);
             }
         }
 
         //remove picture from req.body
-        delete req.body.picture;
+        if (req.body.picture) delete req.body.picture;
         //console.log(req.body);
 
         const newUser = new People({

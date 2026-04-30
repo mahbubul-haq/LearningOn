@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../state/GlobalContext";
+import { batch } from "react-redux";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
 import {
   fetchLessons,
@@ -24,6 +25,7 @@ import { useAppDispatch } from "../../state/reduxStore/hooks";
 import "./LearningPage.css"
 import { BsBox } from "react-icons/bs";
 import CourseCompletionDialog from './CourseCompletionDialog';
+import AppFallback from "../../AppFallback";
 
 const LearningPage = () => {
   const { courseId } = useParams();
@@ -79,9 +81,11 @@ const LearningPage = () => {
       return;
     }
     if (courseId) {
-      dispatch(setCourseId({ courseId: courseId }));
-      dispatch(fetchLessons({ courseId: courseId, token: token }));
-      dispatch(fetchProgress({ courseId: courseId, token: token }));
+      batch(() => {
+        dispatch(setCourseId({ courseId: courseId }));
+        dispatch(fetchLessons({ courseId: courseId, token: token }));
+        dispatch(fetchProgress({ courseId: courseId, token: token }));
+      });
     }
   }, [courseId]);
 
@@ -135,108 +139,74 @@ const LearningPage = () => {
     document.querySelector(".learning-page-main").scrollTop = 0;
   };
 
+  const isReady = courseInfo && courseInfo?.lessons?.length > 0 ? true : false;
+
   return (
     <>
-
-      <Box
-        className="learning-page-main"
-        sx={{
-          height: "100vh",
-          overflow: "auto",
-          width: "100%",
-          position: "relative",
-          zIndex: 0,
-        }}
-      >
-        {!isNonMobileScreens && (
-          <Box sx={{
-            position: "fixed",
-            top: "1rem",
-            left: "1rem",
-            zIndex: 100,
-          }}>
-            <IconButton
-              onClick={() => setIsMobileDrawerOpen(true)}
-              sx={{
-                backgroundColor: (theme) => theme.palette.glassSheet.background,
-                backdropFilter: "blur(10px)",
-                border: (theme) => theme.palette.glassSheet.border,
-                color: (theme) => theme.palette.text.primary,
-                "&:hover": {
-                  backgroundColor: (theme) => theme.palette.primary.main,
-                  color: "white"
-                }
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Box>
-        )}
-
-        <Drawer
-          anchor="left"
-          open={isMobileDrawerOpen}
-          onClose={() => setIsMobileDrawerOpen(false)}
-          PaperProps={{
-            sx: {
-              width: maxWidth400 ? "100%" : "85%",
-              maxWidth: maxWidth400 ? "100%" : "360px",
-              backgroundColor: "transparent",
-              boxShadow: "none",
-            }
+      {!isReady ? <AppFallback /> : (
+        <Box
+          className="learning-page-main"
+          sx={{
+            height: "100vh",
+            overflow: "auto",
+            width: "100%",
+            position: "relative",
+            zIndex: 0,
+            // opacity: isReady ? 1 : 0,
+            // transition: "opacity 1s ease-in-out",
           }}
         >
-          <Box sx={{
-            height: "100%",
-            backgroundColor: (theme) => theme.palette.glassSheet.background,
-            backdropFilter: "blur(20px)",
-            p: "1rem",
-            display: "flex",
-            flexDirection: "column"
-          }}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: "1rem" }}>
-              <IconButton onClick={() => setIsMobileDrawerOpen(false)}>
-                <CloseIcon sx={{ color: (theme) => theme.palette.text.primary }} />
+          {!isNonMobileScreens && (
+            <Box sx={{
+              position: "fixed",
+              top: "1rem",
+              left: "1rem",
+              zIndex: 100,
+            }}>
+              <IconButton
+                onClick={() => setIsMobileDrawerOpen(true)}
+                sx={{
+                  backgroundColor: (theme) => theme.palette.glassSheet.background,
+                  backdropFilter: "blur(10px)",
+                  border: (theme) => theme.palette.glassSheet.border,
+                  color: (theme) => theme.palette.text.primary,
+                  "&:hover": {
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    color: "white"
+                  }
+                }}
+              >
+                <MenuIcon />
               </IconButton>
             </Box>
-            <LearningLeftPanel
-              courseInfo={courseInfo}
-              scrollTop={scrollTop}
-              courseProgress={courseProgress}
-              aggregatedProgress={aggregatedProgress}
-              setIsCompletionDialogOpen={setIsCompletionDialogOpen}
-            />
-          </Box>
-        </Drawer>
+          )}
 
-        <Box className="learning-page-container"
-          sx={{
-            width: "100%",
-            maxWidth: "2000px",
-            mx: "auto",
-            px: { xs: "1rem", md: "2rem" },
-
-
-            display: "grid",
-            gridTemplateColumns: isNonMobileScreens ? "35% 1fr" : "1fr",
-            gap: "2rem",
-            gridTemplateRows: "1fr",
-            // overflowY: "hidden",
-            position: "sticky",
-            top: 0,
-            // border: "2px solid red",
-
-          }}
-        >
-          {isNonMobileScreens && (
-            <Box className="sidebar-container"
-              sx={{
-                width: "100%",
-                height: "100vh",
-                position: "sticky",
-                top: "0",
-              }}>
-
+          <Drawer
+            anchor="left"
+            open={isMobileDrawerOpen}
+            onClose={() => setIsMobileDrawerOpen(false)}
+            PaperProps={{
+              sx: {
+                width: maxWidth400 ? "100%" : "85%",
+                maxWidth: maxWidth400 ? "100%" : "360px",
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              }
+            }}
+          >
+            <Box sx={{
+              height: "100%",
+              backgroundColor: (theme) => theme.palette.glassSheet.background,
+              backdropFilter: "blur(20px)",
+              p: "1rem",
+              display: "flex",
+              flexDirection: "column"
+            }}>
+              <Box sx={{ display: "flex", justifyContent: "flex-end", mb: "1rem" }}>
+                <IconButton onClick={() => setIsMobileDrawerOpen(false)}>
+                  <CloseIcon sx={{ color: (theme) => theme.palette.text.primary }} />
+                </IconButton>
+              </Box>
               <LearningLeftPanel
                 courseInfo={courseInfo}
                 scrollTop={scrollTop}
@@ -244,29 +214,67 @@ const LearningPage = () => {
                 aggregatedProgress={aggregatedProgress}
                 setIsCompletionDialogOpen={setIsCompletionDialogOpen}
               />
-
             </Box>
-          )}
+          </Drawer>
 
-          <Box className="rightpanel-container"
+          <Box className="learning-page-container"
             sx={{
-              // height: `calc(100vh)`,
               width: "100%",
-              py: isNonMobileScreens ? "1.9rem" : "2rem",
-              pb: "5rem",
+              maxWidth: "2000px",
+              mx: "auto",
+              px: { xs: "1rem", md: "2rem" },
 
-              display: "flex",
-              flexDirection: "column",
+
+              display: "grid",
+              gridTemplateColumns: isNonMobileScreens ? "35% 1fr" : "1fr",
               gap: "2rem",
-              // overflow: "auto",
-              scrollBehavior: "smooth",
-              zIndex: 1,
+              gridTemplateRows: "1fr",
+              // overflowY: "hidden",
               position: "sticky",
-
               top: 0,
+              // border: "2px solid red",
+
             }}
           >
-            {/* <NextPrevButtons
+            {isNonMobileScreens && (
+              <Box className="sidebar-container"
+                sx={{
+                  width: "100%",
+                  height: "100vh",
+                  position: "sticky",
+                  top: "0",
+                }}>
+
+                <LearningLeftPanel
+                  courseInfo={courseInfo}
+                  scrollTop={scrollTop}
+                  courseProgress={courseProgress}
+                  aggregatedProgress={aggregatedProgress}
+                  setIsCompletionDialogOpen={setIsCompletionDialogOpen}
+                />
+
+              </Box>
+            )}
+
+            <Box className="rightpanel-container"
+              sx={{
+                // height: `calc(100vh)`,
+                width: "100%",
+                py: isNonMobileScreens ? "1.9rem" : "2rem",
+                pb: "5rem",
+
+                display: "flex",
+                flexDirection: "column",
+                gap: "2rem",
+                // overflow: "auto",
+                scrollBehavior: "smooth",
+                zIndex: 1,
+                position: "sticky",
+
+                top: 0,
+              }}
+            >
+              {/* <NextPrevButtons
                 openedLesson={openedLesson}
                 setOpenedLesson={setOpenedLesson}
                 scrollTop={scrollTop}
@@ -275,32 +283,33 @@ const LearningPage = () => {
                 setExpandedLessons={setExpandedLessons}
                 topButtons={true}
               /> */}
-            <LearningRightPanel
-              courseInfo={courseInfo}
-              courseProgress={courseProgress}
+              <LearningRightPanel
+                courseInfo={courseInfo}
+                courseProgress={courseProgress}
 
-            />
-            <NextPrevButtons
-              openedLesson={openedLesson}
-              setOpenedLesson={setOpenedLesson}
-              scrollTop={scrollTop}
-              courseInfo={courseInfo}
-              expandedLessons={expandedLessons}
-              setExpandedLessons={setExpandedLessons}
-              topButtons={false}
-            />
+              />
+              <NextPrevButtons
+                openedLesson={openedLesson}
+                setOpenedLesson={setOpenedLesson}
+                scrollTop={scrollTop}
+                courseInfo={courseInfo}
+                expandedLessons={expandedLessons}
+                setExpandedLessons={setExpandedLessons}
+                topButtons={false}
+              />
+            </Box>
           </Box>
-        </Box>
 
-        <CourseCompletionDialog
-          open={isCompletionDialogOpen}
-          onClose={() => setIsCompletionDialogOpen(false)}
-          courseInfo={courseInfo}
-          courseProgress={courseProgress}
-          user={user}
-        />
+          <CourseCompletionDialog
+            open={isCompletionDialogOpen}
+            onClose={() => setIsCompletionDialogOpen(false)}
+            courseInfo={courseInfo}
+            courseProgress={courseProgress}
+            user={user}
+          />
 
-      </Box >
+        </Box >
+      )}
     </>
   );
 };

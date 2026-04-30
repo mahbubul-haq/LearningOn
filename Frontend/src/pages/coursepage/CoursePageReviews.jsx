@@ -9,7 +9,7 @@ import { Snackbar, Alert } from "@mui/material";
 const CoursePageReviews = ({ courseInfo }) => {
     const theme = useTheme();
     const { token, user } = useSelector((state) => state.auth);
-    const { myReview, myReviewLoading, allReviews, allReviewsLoading, fetchAllReviews, isReviewSubmitting, handleSubmitReview } = useContext(CoursePageContext);
+    const { myReview, myReviewLoading, allReviews, allReviewsLoading, fetchAllReviews, isReviewSubmitting, handleSubmitReview, isLearningCompleted, isMyReviewNew } = useContext(CoursePageContext);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
     const [myRating, setMyRating] = useState(0);
@@ -90,22 +90,22 @@ const CoursePageReviews = ({ courseInfo }) => {
                         />
                         <Typography variant="h6" fontWeight="bold">
                             {courseInfo?.ratings?.numberOfRatings > 0
-                                ? (courseInfo.ratings.totalRating / courseInfo.ratings.numberOfRatings).toFixed(1)
+                                ? ((courseInfo.ratings.totalRating || 0) / courseInfo.ratings.numberOfRatings).toFixed(1)
                                 : "0.0"
                             }
                         </Typography>
                         <Typography variant="body1" color="text.secondary">
-                            ({courseInfo?.ratings?.numberOfRatings || 0} ratings)
+                            ({(courseInfo?.ratings?.numberOfRatings || 0) + (isMyReviewNew ? 1 : 0)} ratings)
                         </Typography>
                     </Box>
                 </Box>
                 <Typography variant="body1" color="text.secondary">
-                    {courseInfo?.ratings?.reviewCountWithText || 0} reviews
+                    {(courseInfo?.ratings?.reviewCountWithText || 0) + (isMyReviewNew && myReview?.review ? 1 : 0)} reviews
                 </Typography>
             </Box>
 
             {/* My Review */}
-            {myReview && (
+            {(myReview || isLearningCompleted) && (
                 <Box sx={{ mb: 4 }}>
                     <CourseCompletionReview
                         title={myReview ? "Update your review" : "Rate this course"}
@@ -164,15 +164,15 @@ const CoursePageReviews = ({ courseInfo }) => {
             </Box>
 
             {/* View All Button */}
-            {((myReview && courseInfo?.reviewCountWithText > 6) || (!myReview && courseInfo?.reviewCountWithText > 5)) && (
+            {((myReview && courseInfo?.ratings?.reviewCountWithText > 6) || (!myReview && courseInfo?.ratings?.reviewCountWithText > 5)) && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                     <Button
                         variant="contained"
                         sx={{
-                            backgroundColor: theme.palette.secondary.light,
-                            color: theme.palette.white.pure,
+                            backgroundColor: theme.palette.mode === 'dark' ? theme.palette.secondary.main : theme.palette.secondary.light,
+                            color: colorTokens.white.main,
                             '&:hover': {
-                                backgroundColor: theme.palette.secondary.main,
+                                backgroundColor: theme.palette.mode === 'dark' ? theme.palette.secondary.dark : theme.palette.secondary.main,
                             },
                             textTransform: 'none',
                             px: 4,

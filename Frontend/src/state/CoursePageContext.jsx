@@ -10,6 +10,8 @@ export const CoursePageState = (props) => {
     const [myReview, setMyReview] = useState(null);
     const [myReviewLoading, setMyReviewLoading] = useState(false);
     const [isReviewSubmitting, setIsReviewSubmitting] = useState(false);
+    const [isLearningCompleted, setIsLearningCompleted] = useState(false);
+    const [isMyReviewNew, setIsMyReviewNew] = useState(false);
 
     const fetchRelatedCourses = async (category, courseId, token) => {
 
@@ -46,6 +48,7 @@ export const CoursePageState = (props) => {
     };
 
     const fetchMyReview = async (courseId, token) => {
+        console.log("fetch my review called")
         setMyReviewLoading(true);
         try {
             let response = await fetch(
@@ -78,6 +81,7 @@ export const CoursePageState = (props) => {
 
     const fetchAllReviews = async (courseId, token) => {
         setAllReviewsLoading(true);
+        setIsLearningCompleted(false);
         try {
             let response = await fetch(
                 `${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseId}/reviews?page=1&limit=5&includeUserReview=true`,
@@ -95,18 +99,22 @@ export const CoursePageState = (props) => {
             if (data.success) {
                 setAllReviews(data.reviews);
                 setMyReview(data.userReview);
+                setIsLearningCompleted(data.isLearningCompleted);
             }
             else {
                 setAllReviews([]);
                 setMyReview(null);
+                setIsLearningCompleted(false);
             }
 
         } catch (err) {
             // console.error("Failed to fetch all reviews:", err);
             setAllReviews([]);
             setMyReview(null);
+            setIsLearningCompleted(false);
         } finally {
             setAllReviewsLoading(false);
+            setIsMyReviewNew(false);
         }
     };
 
@@ -131,7 +139,11 @@ export const CoursePageState = (props) => {
             let data = await response.json();
 
             if (data.success) {
+                if (!myReview) {
+                    setIsMyReviewNew(true);
+                }
                 setMyReview(data.courseRating);
+
             }
             else {
                 setMyReview(null);
@@ -159,7 +171,9 @@ export const CoursePageState = (props) => {
             myReviewLoading,
             fetchMyReview,
             handleSubmitReview,
-            isReviewSubmitting
+            isReviewSubmitting,
+            isLearningCompleted,
+            isMyReviewNew
         }}>
             {props.children}
         </CoursePageContext.Provider>

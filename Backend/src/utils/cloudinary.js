@@ -27,7 +27,7 @@ const cloudinaryConfig = () => {
 
 const uploadImage = async (file, isVideo) => {
     cloudinary.config(getConfig());
-    console.log("uploadImage", file, isVideo);
+    // console.log("uploadImage", file, isVideo);
 
     try {
 
@@ -65,7 +65,7 @@ const uploadImage = async (file, isVideo) => {
 
 const deleteImage = async (id, resource_type) => {
     cloudinary.config(getConfig());
-    console.log("deleteImage", id, resource_type);
+    // console.log("deleteImage", id, resource_type);
 
     try {
 

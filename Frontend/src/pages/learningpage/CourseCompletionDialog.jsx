@@ -90,7 +90,7 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     }, [open, courseProgress?.completionDate, certificate])
 
     useEffect(() => {
-        fetchMyReview(courseInfo?._id, token);
+        if (courseInfo?._id && open && token) fetchMyReview(courseInfo?._id, token);
     }, [open, courseInfo?._id, token]);
 
     useEffect(() => {

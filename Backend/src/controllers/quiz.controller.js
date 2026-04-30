@@ -1,6 +1,7 @@
 import QuizAttempt from "../models/QuizAttempt.js";
 import Course from "../models/Course.js";
 import mongoose from "mongoose";
+import CourseProgress from "../models/CourseProgress.js";
 
 const getQuizAttempt = async (req, res) => {
     try {
@@ -77,6 +78,7 @@ const processAnswer = async (req, res) => {
     try {
         const userId = req.userId;
         const { courseId, lessonId, attemptId } = req.params;
+
         const { questionId, answer } = req.body;
 
         const quizAttempt = await QuizAttempt.findById(attemptId);
@@ -117,6 +119,7 @@ const processAnswer = async (req, res) => {
         }
 
         let prevAnswer = quizAttempt.answers.find((answer) => answer?.questionId?.toString() == questionId);
+        let deltaScore = 0;
 
 
         if (prevAnswer?.attemptNumber >= 2 || prevAnswer?.isCorrect) {
@@ -133,9 +136,9 @@ const processAnswer = async (req, res) => {
             prevAnswer.isCorrect = parseInt(question.answer) == answer;
             prevAnswer.correctAnswer = question.answer;
             if (parseInt(question.answer) == answer) {
-                quizAttempt.score += 0.75;
+                deltaScore = 0.75;
             } else {
-                quizAttempt.score -= 0.5;
+                deltaScore = -0.5;
             }
 
         } else {
@@ -147,11 +150,14 @@ const processAnswer = async (req, res) => {
             });
 
             if (parseInt(question.answer) == answer) {
-                quizAttempt.score += 1;
+
+                deltaScore = 1;
             }
 
             quizAttempt.progress = (quizAttempt.answers.length / lesson?.questions?.questions?.length) * 100;
         }
+
+        quizAttempt.score += deltaScore;
 
         // if (prevAnswer?.isCorrect) {
         //     quizAttempt.score += 1;
@@ -166,6 +172,8 @@ const processAnswer = async (req, res) => {
         if (quizAttempt.progress === 100 && finishedAnswerCount == lesson?.questions?.questions?.length) {
             quizAttempt.status = "completed";
         }
+
+
 
         await quizAttempt.save();
 

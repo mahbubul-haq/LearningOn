@@ -16,7 +16,7 @@ import { deleteFile, uploadFile } from "./controllers/uploads.js";
 import verifyToken from "./middlewares/auth.js";
 import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.js";
-import quizRoutes from "./routes/quiz.js";
+import quizRoutes from "./routes/quiz.routes.js";
 
 import courseRoutes from "./routes/course.js";
 import courseRoutesV1 from "./routes/courseRoutesV1.js";

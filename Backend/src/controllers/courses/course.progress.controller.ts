@@ -332,7 +332,7 @@ const updateCompletionDate = async (req: any, res: any) => {
 
         // create certificate
 
-        const certificate = await createCertificate(courseId, userId, scorePercentage, totalQuestionsCount > 0);
+        const certificate = await createCertificate(courseId, userId, totalScore, totalQuestionsCount);
 
         if (!certificate) {
             return res.status(500).json({ success: false, message: "Failed to create certificate" });

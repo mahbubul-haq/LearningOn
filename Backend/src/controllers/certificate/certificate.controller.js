@@ -2,6 +2,7 @@ import Certificate from "../../models/Certificate.js";
 import CourseProgress from "../../models/CourseProgress.js";
 import Course from "../../models/Course.js";
 import People from "../../models/People.js";
+import { finalizeCertificate } from "./certificate.service.js";
 
 // not used
 const generateCertificate = async (req, res) => {
@@ -55,7 +56,7 @@ const getCertificateDocument = async (req, res) => {
         const { courseId } = req.params;
         const userId = req.userId;
 
-        const certificate = await Certificate.findOne({ courseId, userId }).lean();
+        let certificate = await Certificate.findOne({ courseId, userId }).lean();
         if (!certificate) {
             return res.status(404).json({
                 success: false,
@@ -63,9 +64,18 @@ const getCertificateDocument = async (req, res) => {
             });
         }
 
+        if (!certificate.isFinal) {
+            const cert = await finalizeCertificate(certificate);
+            if (cert) certificate = cert;
+        }
+
         return res.status(200).json({
             success: true,
-            certificate: certificate
+            certificate: {
+                ...certificate,
+                isGraded: certificate.maxScore > 0 ? true : false,
+                scorePercentage: certificate.maxScore > 0 ? Math.max(0, Math.round((certificate.achievedScore || 0) / certificate.maxScore * 10000) / 100) : 0
+            }
         });
     } catch (err) {
         console.log(err);
@@ -77,10 +87,11 @@ const verifyCertificatePublic = async (req, res) => {
     try {
         const { certificateId } = req.params;
 
-        const certificate = await Certificate.findOne({ certificateId })
+        let certificate = await Certificate.findOne({ certificateId })
             .populate("courseId", "courseTitle")
             .populate("userId", "name")
             .lean();
+
 
         if (!certificate) {
             return res.status(404).json({
@@ -89,11 +100,18 @@ const verifyCertificatePublic = async (req, res) => {
             });
         }
 
+        const courseTitle = certificate.courseId ? certificate.courseId.courseTitle : 'Unknown Course';
+        const studentName = certificate.userId ? certificate.userId.name : 'Unknown Student';
+
+        if (!certificate.isFinal) {
+            const cert = await finalizeCertificate(certificate);
+            if (cert) certificate = cert;
+        }
+
         const formattedDate = new Date(certificate.issueDate).toLocaleDateString('en-US', {
             year: 'numeric', month: 'long', day: 'numeric'
         });
-        const courseTitle = certificate.courseId ? certificate.courseId.courseTitle : 'Unknown Course';
-        const studentName = certificate.userId ? certificate.userId.name : 'Unknown Student';
+
 
         return res.status(200).json({
             success: true,
@@ -102,8 +120,9 @@ const verifyCertificatePublic = async (req, res) => {
                 courseTitle,
                 studentName,
                 issueDate: formattedDate,
-                isGraded: certificate.isGraded,
-                scorePercentage: certificate.scorePercentage
+                isGraded: certificate.maxScore > 0 ? true : false,
+                scorePercentage: certificate.maxScore > 0 ? Math.max(0, Math.round((certificate.achievedScore || 0) / certificate.maxScore * 10000) / 100) : 0,
+                isFinal: certificate.isFinal
             }
         });
     } catch (err) {

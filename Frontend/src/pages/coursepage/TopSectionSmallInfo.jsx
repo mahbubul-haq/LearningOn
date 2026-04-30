@@ -47,7 +47,7 @@ const TopSectionSmallInfo = ({
                 )}
                 <Rating
                     rating={{
-                        rating: courseInfo?.ratings?.numberOfRatings > 0 ? courseInfo?.ratings?.totalRating / courseInfo?.ratings?.numberOfRatings : 0,
+                        rating: courseInfo?.ratings?.numberOfRatings > 0 ? Math.round((courseInfo?.ratings?.totalRating || 0) / courseInfo?.ratings?.numberOfRatings * 10) / 10 : 0,
                         count: courseInfo?.ratings?.numberOfRatings,
                         showText: true,
                     }}

@@ -75,11 +75,14 @@ const CertificatePDFTemplate = forwardRef(({ courseInfo, user, certificateId, ce
                         <Box sx={{ mb: 2, display: 'inline-block', border: '2px solid #b8860b', padding: '10px 30px', borderRadius: '50px', backgroundColor: '#fff', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
                             <Typography variant="h5" sx={{ color: '#1a237e', fontWeight: 'bold', margin: 0 }}>
                                 Achieved Score: {certificate.scorePercentage}%
+                                {certificate.isFinal === false && (
+                                    <span style={{ fontSize: '0.6em', fontWeight: 'normal', color: '#777', marginLeft: '8px' }}>(not finalized)</span>
+                                )}
                             </Typography>
                         </Box>
                     ) : (
                         <Typography variant="subtitle1" sx={{ color: '#777', mb: 2, fontStyle: 'italic' }}>
-                            Only ungraded course (No achieved Score)
+                            Ungraded course (No achieved Score)
                         </Typography>
                     )}
 

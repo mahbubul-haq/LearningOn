@@ -19,13 +19,17 @@ const certificateSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    isGraded: {
-        type: Boolean,
-        default: false,
-    },
-    scorePercentage: {
+    maxScore: {
         type: Number,
         default: 0,
+    },
+    achievedScore: {
+        type: Number,
+        default: 0,
+    },
+    isFinal: {
+        type: Boolean,
+        default: false,
     },
 });
 

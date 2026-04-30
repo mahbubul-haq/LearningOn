@@ -1,5 +1,6 @@
 import CourseRating from "../models/CourseRating.js";
 import Course from "../models/Course.js";
+import CourseProgress from "../models/CourseProgress.js";
 
 const createOrUpdateReview = async (req, res) => {
     try {
@@ -81,6 +82,13 @@ const getUserCourseReview = async (req, res) => {
             userId,
         });
 
+        if (!courseRating) {
+            return res.status(404).json({
+                success: false,
+                message: "You haven't rated this course yet",
+            });
+        }
+
         return res.status(200).json({
             success: true,
             courseRating,
@@ -105,6 +113,12 @@ const getCourseReviews = async (req, res) => {
             userId,
         }).populate("userId", "name picturePath") : null;
 
+        const isLearningCompleted = await CourseProgress.exists({
+            courseId,
+            userId,
+            completionDate: { $exists: true, $ne: null }
+        });
+
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 5;
 
@@ -120,6 +134,7 @@ const getCourseReviews = async (req, res) => {
             success: true,
             reviews,
             userReview,
+            isLearningCompleted
         });
     } catch (err) {
         console.log(err);

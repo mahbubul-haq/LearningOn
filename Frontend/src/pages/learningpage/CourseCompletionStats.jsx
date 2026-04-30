@@ -58,11 +58,19 @@ const CourseCompletionStats = ({ courseInfo, displayScore, showScore, timeTaken,
                     border: `1px solid ${theme.palette.primary.light}40`,
                     transition: 'transform 0.5s',
                     transform: showScore ? 'scale(1)' : 'scale(0.8)',
-                    opacity: showScore ? 1 : 0
+                    // opacity: showScore ? 1 : 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
                 }}>
                     <Typography variant="h3" fontWeight={800} color="primary.main">
                         {certificate?.isGraded ? (displayScore + " %") : "Ungraded"}
                     </Typography>
+                    {certificate?.isGraded && certificate?.isFinal === false && (
+                        <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                            (not finalized)
+                        </Typography>
+                    )}
                 </Box>
 
                 <Typography variant="body2" color="text.secondary" mt={2} fontWeight={600}>

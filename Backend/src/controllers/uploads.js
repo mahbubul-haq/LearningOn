@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { uploadImage, deleteImage } from "../utils/cloudinary.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log("upload dirname", __dirname);
+// console.log("upload dirname", __dirname);
 const uploadFile = async (req, res) => {
   // follow up of multer upload.single("picture")
 
@@ -67,7 +67,7 @@ const deleteFile = async (req, res) => {
   fileName = fileName.replace(/@/g, "/");
   //console.log(resource_type, fileName)
 
-  console.log(fileName);
+  // console.log(fileName);
   try {
     const deleteRes = await deleteImage(fileName, resource_type);
     //console.log(deleteRes, fileName);

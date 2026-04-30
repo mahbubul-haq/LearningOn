@@ -86,6 +86,9 @@ const SignUpForm = ({ redirect }) => {
             reader.onerror = () => {
                 console.error("Signup file reader error");
             };
+        } else {
+            values.picture = "";
+            await register(values, onSubmitProps);
         }
     };
 
