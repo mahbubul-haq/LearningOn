@@ -124,17 +124,23 @@ const getCourseReviews = async (req, res) => {
 
         const skip = (page - 1) * limit;
 
-        const reviews = await CourseRating.find({ courseId, userId: { $ne: userId }, review: { $exists: true, $ne: "" } })
+        let query = { courseId, userId: { $ne: includeUserReview ? userId : null }, review: { $exists: true, $ne: "" } };
+
+        const reviews = await CourseRating.find(query)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .populate("userId", "name picturePath");
 
+        const totalReviews = await CourseRating.countDocuments(query);
+
         return res.status(200).json({
             success: true,
             reviews,
             userReview,
-            isLearningCompleted
+            isLearningCompleted,
+            totalReviews,
+            hasMore: totalReviews > skip + reviews.length
         });
     } catch (err) {
         console.log(err);

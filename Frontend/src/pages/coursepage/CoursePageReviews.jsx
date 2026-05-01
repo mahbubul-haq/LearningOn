@@ -6,6 +6,7 @@ import { colorTokens } from "../../theme";
 import { CoursePageContext } from "../../state/CoursePageContext";
 import { Snackbar, Alert } from "@mui/material";
 import MyRating from "../../components/Rating";
+import AllReviewsDialog from "./AllReviewsDialog";
 
 const CoursePageReviews = ({ courseInfo }) => {
     const theme = useTheme();
@@ -15,6 +16,9 @@ const CoursePageReviews = ({ courseInfo }) => {
     const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
     const [myRating, setMyRating] = useState(0);
     const [myReviewText, setMyReviewText] = useState("");
+    const [isAllReviewsOpen, setIsAllReviewsOpen] = useState(false);
+    const [reviewsInDialog, setReviewsInDialog] = useState([]);
+
 
     useEffect(() => {
         if (!courseInfo?._id) return;
@@ -175,6 +179,7 @@ const CoursePageReviews = ({ courseInfo }) => {
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                     <Button
                         variant="contained"
+                        onClick={() => setIsAllReviewsOpen(true)}
                         sx={{
                             backgroundColor: theme.palette.mode === 'dark' ? theme.palette.secondary.main : theme.palette.secondary.light,
                             color: colorTokens.white.main,
@@ -203,6 +208,14 @@ const CoursePageReviews = ({ courseInfo }) => {
                     Review added successfully!
                 </Alert>
             </Snackbar>
+
+            <AllReviewsDialog
+                open={isAllReviewsOpen}
+                onClose={() => setIsAllReviewsOpen(false)}
+                courseId={courseInfo?._id}
+                reviews={reviewsInDialog}
+                setReviews={setReviewsInDialog}
+            />
         </Box>
     );
 };
