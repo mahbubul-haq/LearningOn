@@ -5,11 +5,12 @@ import CourseCompletionReview from "../learningpage/CourseCompletionReview";
 import { colorTokens } from "../../theme";
 import { CoursePageContext } from "../../state/CoursePageContext";
 import { Snackbar, Alert } from "@mui/material";
+import MyRating from "../../components/Rating";
 
 const CoursePageReviews = ({ courseInfo }) => {
     const theme = useTheme();
     const { token, user } = useSelector((state) => state.auth);
-    const { myReview, myReviewLoading, allReviews, allReviewsLoading, fetchAllReviews, isReviewSubmitting, handleSubmitReview, isLearningCompleted, isMyReviewNew } = useContext(CoursePageContext);
+    const { myReview, dynamicRating, allReviews, allReviewsLoading, fetchAllReviews, isReviewSubmitting, handleSubmitReview, isLearningCompleted } = useContext(CoursePageContext);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
     const [myRating, setMyRating] = useState(0);
@@ -81,26 +82,32 @@ const CoursePageReviews = ({ courseInfo }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
                     <Typography variant="h3" fontWeight="bold">Reviews</Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                        <Rating
+                        {/* <Rating
                             value={courseInfo?.ratings?.numberOfRatings > 0 ? (courseInfo.ratings.totalRating / courseInfo.ratings.numberOfRatings) : 0}
                             precision={0.1}
                             readOnly
                             size="medium"
                             sx={{ color: colorTokens.secondary.lighter }}
+                        /> */}
+                        {/* <Typography variant="h6" fontWeight="bold">
+                            {dynamicRating?.rating}
+                           
+                        </Typography> */}
+                        {/* <Typography variant="body1" color="text.secondary">
+                            ({dynamicRating?.numberOfRatings} ratings)
+                        </Typography> */}
+                        <MyRating
+                            rating={{
+                                rating: dynamicRating?.rating,
+                                count: dynamicRating?.numberOfRatings,
+                                showText: true,
+                            }}
                         />
-                        <Typography variant="h6" fontWeight="bold">
-                            {courseInfo?.ratings?.numberOfRatings > 0
-                                ? ((courseInfo.ratings.totalRating || 0) / courseInfo.ratings.numberOfRatings).toFixed(1)
-                                : "0.0"
-                            }
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary">
-                            ({(courseInfo?.ratings?.numberOfRatings || 0) + (isMyReviewNew ? 1 : 0)} ratings)
-                        </Typography>
                     </Box>
                 </Box>
                 <Typography variant="body1" color="text.secondary">
-                    {(courseInfo?.ratings?.reviewCountWithText || 0) + (isMyReviewNew && myReview?.review ? 1 : 0)} reviews
+                    {dynamicRating?.reviewCountWithText} reviews
+                    {/* {(courseInfo?.ratings?.reviewCountWithText || 0) + (isMyReviewNew && myReview?.review ? 1 : 0)} reviews */}
                 </Typography>
             </Box>
 

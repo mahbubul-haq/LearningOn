@@ -21,6 +21,8 @@ const NavRight = ({
     notifications,
     updateNotifications,
     setOpenDrawer,
+    setPendingLink,
+    shouldNavigateRef,
 }) => {
 
     const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
@@ -37,6 +39,8 @@ const NavRight = ({
             newNotifications={newNotifications}
             notifications={notifications}
             updateNotifications={updateNotifications}
+            setPendingLink={setPendingLink}
+            shouldNavigateRef={shouldNavigateRef}
         />
     )
 

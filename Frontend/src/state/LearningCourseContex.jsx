@@ -3,13 +3,17 @@ import { createContext, useEffect, useState, React } from "react";
 export const LearningCourseContext = createContext(null);
 
 export const LearningCourseState = ({ children }) => {
-    const [openedLesson, setOpenedLesson] = useState(localStorage.getItem("openedLesson") ? {
-        lesson: JSON.parse(localStorage.getItem("openedLesson")).lesson,
-        subLesson: JSON.parse(localStorage.getItem("openedLesson")).subLesson,
-    } : {
+    const [openedLesson, setOpenedLesson] = useState({
         lesson: 1,
-        subLesson: 1,
-    });
+        subLesson: 1
+    })
+    // const [openedLesson, setOpenedLesson] = useState(localStorage.getItem("openedLesson") ? {
+    //     lesson: JSON.parse(localStorage.getItem("openedLesson")).lesson,
+    //     subLesson: JSON.parse(localStorage.getItem("openedLesson")).subLesson,
+    // } : {
+    //     lesson: 1,
+    //     subLesson: 1,
+    // });
     const [expandedLessons, setExpandedLessons] = useState([]);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [quizAttempt, setQuizAttempt] = useState(null);
@@ -25,15 +29,6 @@ export const LearningCourseState = ({ children }) => {
     useEffect(() => {
         localStorage.setItem("quizStatus", JSON.stringify(quizStatus));
     }, [quizStatus]);
-
-
-    useEffect(() => {
-        if (!expandedLessons.includes(openedLesson.lesson - 1)) {
-            setExpandedLessons((prev) => [...prev, openedLesson.lesson - 1]);
-        }
-        localStorage.setItem("openedLesson", JSON.stringify(openedLesson));
-
-    }, [openedLesson]);
 
     async function getQuizAttempt(courseId, lessonId, authToken) {
         console.log("getQuizAttempt", courseId, lessonId, authToken);

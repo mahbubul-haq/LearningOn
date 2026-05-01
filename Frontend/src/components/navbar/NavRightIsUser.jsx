@@ -17,6 +17,8 @@ const NavRightIsUser = ({
     newNotifications,
     notifications,
     updateNotifications,
+    setPendingLink,
+    shouldNavigateRef,
 }) => {
     const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
@@ -50,6 +52,8 @@ const NavRightIsUser = ({
                 handleClose={handleClose}
                 notifications={notifications}
                 updateNotifications={updateNotifications}
+                setPendingLink={setPendingLink}
+                shouldNavigateRef={shouldNavigateRef}
             />
             <IconButton
                 component="a"

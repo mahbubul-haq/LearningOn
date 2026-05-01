@@ -3,6 +3,7 @@ import React from "react";
 import * as yup from "yup";
 
 import { Alert, Box, Snackbar, Typography } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
 
 import { useMediaQuery } from "@mui/material";
 import Dropzone from "react-dropzone";
@@ -187,27 +188,50 @@ const SignUpForm = ({ redirect }) => {
                                 >
                                     <input {...getInputProps()} />
                                     {!values.picture ? (
-                                        <img
-                                            src="/images/dummyPerson.jpeg"
-                                            alt="profile"
-                                            width="100%"
-                                            height="100%"
-                                            style={{
-                                                borderRadius: "50%",
-                                                objectFit: "cover",
-                                            }}
-                                        />
+                                        <Box sx={{ 
+                                            width: '100%', height: '100%', 
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                                            position: 'relative',
+                                        }}>
+                                            <PersonIcon sx={{ fontSize: isNonMobileScreens ? 60 : 50, color: 'text.secondary', opacity: 0.4 }} />
+                                            <Box sx={{
+                                                position: 'absolute',
+                                                bottom: 0, width: '100%', height: '35%',
+                                                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.1)',
+                                                backdropFilter: 'blur(2px)',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                            }}>
+                                                <Typography variant="caption" sx={{ color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)', fontSize: '0.6rem', fontWeight: 600, letterSpacing: 0.5 }}>
+                                                    ADD PHOTO
+                                                </Typography>
+                                            </Box>
+                                        </Box>
                                     ) : (
-                                        <img
-                                            src={picturePath}
-                                            alt="profile"
-                                            width="100%"
-                                            height="100%"
-                                            style={{
-                                                borderRadius: "50%",
-                                                objectFit: "cover",
-                                            }}
-                                        />
+                                        <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+                                            <img
+                                                src={picturePath}
+                                                alt="profile"
+                                                width="100%"
+                                                height="100%"
+                                                style={{
+                                                    borderRadius: "50%",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                            <Box sx={{
+                                                position: 'absolute',
+                                                bottom: 0, width: '100%', height: '35%',
+                                                bgcolor: 'rgba(0, 0, 0, 0.5)',
+                                                backdropFilter: 'blur(2px)',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                opacity: 0, transition: 'opacity 0.2s',
+                                                "&:hover": { opacity: 1 }
+                                            }}>
+                                                <Typography variant="caption" sx={{ color: '#ffffff', fontSize: '0.6rem', fontWeight: 700, letterSpacing: 0.5 }}>
+                                                    CHANGE
+                                                </Typography>
+                                            </Box>
+                                        </Box>
                                     )}
                                 </Box>
                             )}

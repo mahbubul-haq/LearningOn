@@ -14,6 +14,8 @@ const NotificationDrawer = ({
   openNotificationDrawer,
   setOpenNotificationDrawer,
   handleClose,
+  setPendingLink,
+  shouldNavigateRef,
 }) => {
   const { notifications, updateNotifications } =
     useContext(NotificationContext);
@@ -31,7 +33,7 @@ const NotificationDrawer = ({
           backgroundColor: theme.palette.notificationMenu.bg,
           backdropFilter: theme.palette.notificationMenu.backdropFilter,
         },
-        zIndex: 5000001, // Higher than MobileNav
+        zIndex: 50001, // Higher than MobileNav 
       }}
     >
       <Box sx={{ pb: "1rem" }}>
@@ -85,15 +87,8 @@ const NotificationDrawer = ({
               key={index}
               onClick={() => {
                 updateNotifications(n._id, "clicked");
-                if (n.link.includes("dashboard")) {
-                  if (window.location.pathname.includes("dashboard")) {
-                    let courseId = n.link.split("/");
-                    courseId = courseId[courseId.length - 1];
-                    navigate("/dashboard/" + courseId);
-                  } else {
-                    window.location.href = n.link;
-                  }
-                }
+                setPendingLink(n.link);
+                shouldNavigateRef.current = true;
                 handleClose();
                 setOpenNotificationDrawer(false);
               }}

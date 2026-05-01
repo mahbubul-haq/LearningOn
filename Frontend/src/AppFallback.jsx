@@ -39,10 +39,11 @@ const AppFallback = () => {
 
     return (
         <Box sx={{
+            zIndex: 9999999,
             height: "100vh", width: "100vw", display: "flex", flexDirection: "column",
             justifyContent: "center", alignItems: "center",
             bgcolor: theme.palette.background.default,
-            backgroundImage: theme.palette.mode === 'dark' 
+            backgroundImage: theme.palette.mode === 'dark'
                 ? `radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.15), transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 0, 128, 0.1), transparent 40%)`
                 : `radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.05), transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 0, 128, 0.05), transparent 40%)`,
         }}>

@@ -8,11 +8,13 @@ import Navbar from "../../components/navbar";
 import RelatedCourses from "./RelatedCourses";
 import CourseExplorer from "../../components/courseExplorer";
 import { colorTokens } from "../../theme";
+import { CoursePageContext } from "../../state/CoursePageContext";
 
 const CoursePage = () => {
     const { courseId } = useParams();
     const [courseInfo, setCourseInfo] = React.useState({});
     const { courseById, getCourseById } = useContext(GlobalContext);
+    const { getDynamicRating, allReviews, myReview } = useContext(CoursePageContext);
 
     // useEffect(() => {
     //     if (!user) {
@@ -21,8 +23,11 @@ const CoursePage = () => {
     // }, []);
 
     useEffect(() => {
-        console.log("coursepage rendered");
-    });
+        // console.log("coursepage rendered");
+        if (courseInfo && courseInfo?._id) {
+            getDynamicRating(courseInfo);
+        }
+    }, [courseInfo, myReview, allReviews]);
 
     useEffect(() => {
         //console.log(courseId, courses);
@@ -55,6 +60,7 @@ const CoursePage = () => {
     //         if (element) element.removeEventListener("scroll", scrollEventListner);
     //     };
     // }, []);
+
 
     return (
         <Box className="custom-scrollbar app-container" sx={{

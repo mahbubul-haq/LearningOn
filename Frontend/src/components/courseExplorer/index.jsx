@@ -8,7 +8,9 @@ import CourseExplorerLeftHover from "./CourseExplorerLeftHover";
 import { GlobalContext } from "../../state/GlobalContext";
 import CourseExplorerRightTop from "./CourseExplorerRightTop";
 import CourseExplorerRIghtBottom from "./CourseExplorerRIghtBottom";
+import { useLocation } from "react-router-dom";
 const CourseExplorer = () => {
+  const location = useLocation();
   const { openCourseExplorer, closeCourseExplorer, filteredCourses, categoryChangedRef, setCategoryChanged, getFilteredCourses, showCourseExplorer } = useContext(CourseExplorerContext);
   const { getCategories, listOfCategories, categories } =
     useContext(GlobalContext);
@@ -18,6 +20,7 @@ const CourseExplorer = () => {
       getCategories();
     }
   }, [categories]);
+  const locationPathname = location.pathname.toLowerCase();
 
   useEffect(() => {
     if (!filteredCourses || filteredCourses.length == 0) {
@@ -26,6 +29,10 @@ const CourseExplorer = () => {
       getFilteredCourses(true);
     }
   }, []);
+
+  const isCoursesPage = locationPathname.startsWith("/courses")
+
+  if (isCoursesPage) return null;
 
 
   return (

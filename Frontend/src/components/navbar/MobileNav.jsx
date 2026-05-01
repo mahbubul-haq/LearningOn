@@ -29,7 +29,7 @@ const MobileNav = ({
                     borderLeft: (theme) => `1px solid ${theme.palette.mobileNav.drawerBorder}`,
                     boxShadow: (theme) => `0 8px 32px 0 ${theme.palette.mobileNav.drawerShadow}`,
                 },
-                zIndex: 5000000,
+                zIndex: 50000,
             }}
         >
             <Box

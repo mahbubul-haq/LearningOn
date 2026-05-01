@@ -15,7 +15,6 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
     const [isDownloading, setIsDownloading] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
     const certificateRef = useRef();
-    const [latestCertId, setLatestCertId] = useState(certificate?.certificateId || "");
     const pdfCertificateRef = useRef();
     const cooldownTimerRef = useRef(null);
 
@@ -79,7 +78,7 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
                 ref={pdfCertificateRef}
                 courseInfo={courseInfo}
                 user={user}
-                certificateId={latestCertId || certificate?.certificateId || dummyCertId}
+                certificateId={certificate?.certificateId || dummyCertId}
                 certificate={certificate}
             />
 
@@ -97,7 +96,7 @@ const CourseCompletionCertificate = ({ courseInfo, user, dummyCertId, certificat
                     ref={certificateRef}
                     courseInfo={courseInfo}
                     user={user}
-                    certificateId={latestCertId || certificate?.certificateId || dummyCertId}
+                    certificateId={certificate?.certificateId || dummyCertId}
                     theme={theme}
                     certificate={certificate}
                 />

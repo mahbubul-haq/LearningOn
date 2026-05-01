@@ -5,6 +5,8 @@ import Rating from "../../components/Rating";
 import { StyledGrid2Cols } from "../../components/StyledBox";
 import useTheme from "@mui/material/styles/useTheme";
 import { getEnrollmentText, isPurchased } from "../../utils/course";
+import { useContext } from "react";
+import { CoursePageContext } from "../../state/CoursePageContext";
 
 const TopSectionSmallInfo = ({
     courseInfo,
@@ -16,6 +18,7 @@ const TopSectionSmallInfo = ({
     const minWidth800 = useMediaQuery("(min-width: 800px)");
     const minWidth900 = useMediaQuery("(min-width: 900px)");
     const theme = useTheme();
+    const { dynamicRating } = useContext(CoursePageContext);
     return (
         <Box sx={{
             display: "flex",
@@ -45,10 +48,18 @@ const TopSectionSmallInfo = ({
                         }}>$ {courseInfo?.coursePrice}</span>
                     </Typography>
                 )}
-                <Rating
+                {/* <Rating
                     rating={{
                         rating: courseInfo?.ratings?.numberOfRatings > 0 ? Math.round((courseInfo?.ratings?.totalRating || 0) / courseInfo?.ratings?.numberOfRatings * 10) / 10 : 0,
                         count: courseInfo?.ratings?.numberOfRatings,
+                        showText: true,
+                    }}
+                /> */}
+
+                <Rating
+                    rating={{
+                        rating: dynamicRating?.rating,
+                        count: dynamicRating?.numberOfRatings,
                         showText: true,
                     }}
                 />

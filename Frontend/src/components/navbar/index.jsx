@@ -25,6 +25,8 @@ const Navbar = () => {
   const [openNotificationDrawer, setOpenNotificationDrawer] = useState(false);
   const theme = useTheme();
   const coursesHoverRef = useRef(null);
+  const [pendingLink, setPendingLink] = useState(null);
+  const shouldNavigateRef = useRef(false);
 
   const { openedItem } = useContext(GlobalContext);
   const { notifications, getNotifications, updateNotifications } =
@@ -43,6 +45,24 @@ const Navbar = () => {
     });
     setNewNotifications(count);
   };
+
+  useEffect(() => {
+    if (!anchorEl && !openNotificationDrawer && pendingLink && shouldNavigateRef.current) {
+      shouldNavigateRef.current = false;
+      if (pendingLink.includes("dashboard")) {
+        if (window.location.pathname.includes("dashboard")) {
+          let courseId = pendingLink.split("/");
+          courseId = courseId[courseId.length - 1];
+          navigate("/dashboard/" + courseId);
+        } else {
+          navigate("/" + pendingLink);
+        }
+      }
+
+      setPendingLink(null);
+    }
+  }, [anchorEl, openNotificationDrawer]);
+
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -78,6 +98,8 @@ const Navbar = () => {
         openNotificationDrawer={openNotificationDrawer}
         setOpenNotificationDrawer={setOpenNotificationDrawer}
         handleClose={handleClose}
+        setPendingLink={setPendingLink}
+        shouldNavigateRef={shouldNavigateRef}
       />
     );
   };
@@ -93,6 +115,8 @@ const Navbar = () => {
         notifications={notifications}
         updateNotifications={updateNotifications}
         setOpenDrawer={setOpenDrawer}
+        setPendingLink={setPendingLink}
+        shouldNavigateRef={shouldNavigateRef}
       />
     );
   };
@@ -222,37 +246,6 @@ const Navbar = () => {
                       }}
                     />
                   </StyledBox1>
-
-                  {/* <StyledBox1
-                    sx={{
-                      "&&": {
-                        cursor: "auto",
-                        opacity: "0.4",
-                      },
-                    }}
-                  >
-                    Blogs
-                    <ExpandMoreIcon
-                      sx={{
-                        fontSize: "1.5rem",
-                      }}
-                    />
-                  </StyledBox1>
-                  <StyledBox1
-                    sx={{
-                      "&&": {
-                        cursor: "auto",
-                        opacity: "0.4",
-                      },
-                    }}
-                  >
-                    Tutors
-                    <ExpandMoreIcon
-                      sx={{
-                        fontSize: "1.5rem",
-                      }}
-                    />
-                  </StyledBox1> */}
                 </FlexBetween>
               )}
             </FlexBetween>

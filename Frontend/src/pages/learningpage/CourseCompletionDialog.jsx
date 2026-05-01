@@ -72,12 +72,18 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
                     getCertificate(attempt + 1);
                 }, 2000);
             }
+            else {
+                setCertificate(null);
+            }
         } catch (error) {
             // console.log(error);
             if (attempt < 2) {
                 setTimeout(() => {
                     getCertificate(attempt + 1);
                 }, 2000);
+            }
+            else {
+                setCertificate(null);
             }
         }
     }

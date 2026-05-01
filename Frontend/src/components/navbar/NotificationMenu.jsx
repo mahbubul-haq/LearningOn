@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import useTheme from "@mui/material/styles/useTheme";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useRef, useState, useEffect } from "react";
 
 const NotificationMenu = ({
     anchorEl,
@@ -13,6 +14,8 @@ const NotificationMenu = ({
     handleClose,
     notifications,
     updateNotifications,
+    setPendingLink,
+    shouldNavigateRef,
 }) => {
     const theme = useTheme();
     const navigate = useNavigate();
@@ -21,7 +24,7 @@ const NotificationMenu = ({
         <Menu
             id="basic-menu"
             anchorEl={anchorEl}
-            open={open}
+            open={Boolean(anchorEl)}
             onClose={handleClose}
             MenuListProps={{
                 "aria-labelledby": "basic-button",
@@ -65,19 +68,10 @@ const NotificationMenu = ({
             {notifications?.map((n, index) => (
                 <MenuItem
                     key={index}
-                    onClick={() => {
+                    onClick={async () => {
                         updateNotifications(n._id, "clicked");
-                        if (n.link.includes("dashboard")) {
-                            if (
-                                window.location.pathname.includes("dashboard")
-                            ) {
-                                let courseId = n.link.split("/");
-                                courseId = courseId[courseId.length - 1];
-                                navigate("/dashboard/" + courseId);
-                            } else {
-                                navigate("/" + n.link);
-                            }
-                        }
+                        setPendingLink(n.link);
+                        shouldNavigateRef.current = true;
                         handleClose();
                     }}
                     sx={{

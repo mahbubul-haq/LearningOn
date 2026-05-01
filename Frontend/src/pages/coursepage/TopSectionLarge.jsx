@@ -9,10 +9,12 @@ import { StyledButton } from "../../components/StyledButton";
 import { getEnrollmentStatus, getEnrollmentText } from "../../utils/course";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { colorTokens } from "../../theme";
+import { CoursePageContext } from "../../state/CoursePageContext";
+import { useContext } from "react";
 
 const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
     const { user } = useSelector((state) => state.auth);
-
+    const { dynamicRating } = useContext(CoursePageContext);
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -101,10 +103,17 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                     <Box sx={{
                         fontSize: "1.1rem",
                     }}>
-                        <Rating
+                        {/* <Rating
                             rating={{
                                 rating: courseInfo?.ratings?.numberOfRatings > 0 ? Math.round((courseInfo?.ratings?.totalRating || 0) / courseInfo?.ratings?.numberOfRatings * 10) / 10 : 0,
                                 count: courseInfo?.ratings?.numberOfRatings,
+                                showText: true,
+                            }}
+                        /> */}
+                        <Rating
+                            rating={{
+                                rating: dynamicRating?.rating,
+                                count: dynamicRating?.numberOfRatings,
                                 showText: true,
                             }}
                         />

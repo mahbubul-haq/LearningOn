@@ -15,7 +15,7 @@ import MainSectionNav from "./MainSectionNav";
 
 const MainSection = ({ courseInfo }) => {
     const theme = useTheme();
-    const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width:900px)");
     const isMobileScreens = useMediaQuery("(max-width:600px)");
     return (
         <>

@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 
 export const CoursePageContext = createContext();
 
@@ -11,7 +11,9 @@ export const CoursePageState = (props) => {
     const [myReviewLoading, setMyReviewLoading] = useState(false);
     const [isReviewSubmitting, setIsReviewSubmitting] = useState(false);
     const [isLearningCompleted, setIsLearningCompleted] = useState(false);
-    const [isMyReviewNew, setIsMyReviewNew] = useState(false);
+    const [dynamicRating, setDynamicRating] = useState(null);
+    const userReviewInAllReviews = useRef(false);
+    const previousRating = useRef({ rating: 0, review: "" });
 
     const fetchRelatedCourses = async (category, courseId, token) => {
 
@@ -98,13 +100,24 @@ export const CoursePageState = (props) => {
 
             if (data.success) {
                 setAllReviews(data.reviews);
-                setMyReview(data.userReview);
+
                 setIsLearningCompleted(data.isLearningCompleted);
+                if (data.userReview) {
+                    userReviewInAllReviews.current = true;
+                    previousRating.current = { rating: data.userReview?.rating, review: data.userReview?.review };
+                } else {
+                    userReviewInAllReviews.current = false;
+                    previousRating.current = { rating: 0, review: "" };
+                }
+
+                setMyReview(data.userReview);
+
             }
             else {
                 setAllReviews([]);
                 setMyReview(null);
                 setIsLearningCompleted(false);
+                userReviewInAllReviews.current = false;
             }
 
         } catch (err) {
@@ -112,11 +125,47 @@ export const CoursePageState = (props) => {
             setAllReviews([]);
             setMyReview(null);
             setIsLearningCompleted(false);
+            userReviewInAllReviews.current = false;
         } finally {
             setAllReviewsLoading(false);
-            setIsMyReviewNew(false);
         }
     };
+
+    const getDynamicRating = (courseInfo) => {
+        if (!courseInfo) {
+            setDynamicRating({
+                rating: 0,
+                totalRating: 0,
+                numberOfRatings: 0,
+                reviewCountWithText: 0
+            })
+            return;
+        }
+
+        let totalRating = courseInfo.ratings?.totalRating;
+        let numberOfRatings = courseInfo.ratings?.numberOfRatings;
+        let reviewCountWithText = courseInfo.ratings?.reviewCountWithText;
+
+
+        if (!userReviewInAllReviews && myReview) {
+            if (myReview?.rating) totalRating += myReview.rating;
+            if (myReview?.review) reviewCountWithText++;
+            numberOfRatings++;
+        }
+        else if (userReviewInAllReviews && myReview) {
+            totalRating += myReview.rating - previousRating.current.rating;
+            reviewCountWithText += (!previousRating.current.review && myReview.review ? 1 :
+                previousRating.current.review && !myReview.review ? -1 :
+                    0)
+        }
+
+        setDynamicRating({
+            rating: numberOfRatings > 0 ? Math.round(((totalRating || 0) / numberOfRatings) * 10) / 10 : 0,
+            totalRating: totalRating || 0,
+            numberOfRatings,
+            reviewCountWithText: reviewCountWithText || 0
+        });
+    }
 
     const handleSubmitReview = async (courseId, rating, review, token) => {
         setIsReviewSubmitting(true);
@@ -139,13 +188,11 @@ export const CoursePageState = (props) => {
             let data = await response.json();
 
             if (data.success) {
-                if (!myReview) {
-                    setIsMyReviewNew(true);
-                }
                 setMyReview(data.courseRating);
 
             }
             else {
+
                 setMyReview(null);
             }
 
@@ -173,7 +220,8 @@ export const CoursePageState = (props) => {
             handleSubmitReview,
             isReviewSubmitting,
             isLearningCompleted,
-            isMyReviewNew
+            getDynamicRating,
+            dynamicRating,
         }}>
             {props.children}
         </CoursePageContext.Provider>

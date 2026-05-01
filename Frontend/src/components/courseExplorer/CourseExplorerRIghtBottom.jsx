@@ -25,7 +25,7 @@ const CourseExplorerRIghtBottom = () => {
   useEffect(() => {
     console.log("loading,", loading);
     console.log("filteredCourses,", filteredCourses);
-  })
+  }, [loading, filteredCourses])
 
   useEffect(() => {
     let t;
