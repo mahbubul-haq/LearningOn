@@ -50,7 +50,7 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
 
                         }}
                     >
-                        {courseInfo?.courseTitle}
+                        {courseInfo?.courseTitle || "Course Title"}
                     </Typography>
                     <Typography
                         sx={{

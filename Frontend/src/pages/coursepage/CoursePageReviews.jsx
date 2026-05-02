@@ -7,6 +7,7 @@ import { CoursePageContext } from "../../state/CoursePageContext";
 import { Snackbar, Alert } from "@mui/material";
 import MyRating from "../../components/Rating";
 import AllReviewsDialog from "./AllReviewsDialog";
+import { useNavigate } from "react-router-dom";
 
 const CoursePageReviews = ({ courseInfo }) => {
     const theme = useTheme();
@@ -18,7 +19,7 @@ const CoursePageReviews = ({ courseInfo }) => {
     const [myReviewText, setMyReviewText] = useState("");
     const [isAllReviewsOpen, setIsAllReviewsOpen] = useState(false);
     const [reviewsInDialog, setReviewsInDialog] = useState([]);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!courseInfo?._id) return;
@@ -153,7 +154,7 @@ const CoursePageReviews = ({ courseInfo }) => {
                                 color: colorTokens.secondary.lighter
                             }} value={review.rating} readOnly size="small" />
                             <Typography variant="body2" sx={{ mt: 1 }}>
-                                by <Box component="span" sx={{ fontWeight: 'bold', textDecoration: 'underline' }}>{review.userId?.name || 'Anonymous'}</Box>
+                                by <a href={`/profile/${review.userId?._id}`} target="_blank" style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{review.userId?.name || 'Anonymous'}</a>
                             </Typography>
                         </Box>
                         <Box sx={{ flexGrow: 1 }}>

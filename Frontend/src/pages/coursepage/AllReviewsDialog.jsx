@@ -3,6 +3,7 @@ import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, TextFi
 import CloseIcon from '@mui/icons-material/Close';
 import { useSelector } from 'react-redux';
 import { colorTokens } from '../../theme';
+import { useNavigate } from 'react-router-dom';
 
 const AllReviewsDialog = ({ open, onClose, courseId, reviews, setReviews }) => {
     const theme = useTheme();
@@ -13,6 +14,7 @@ const AllReviewsDialog = ({ open, onClose, courseId, reviews, setReviews }) => {
     const [search, setSearch] = useState("");
     const [sort, setSort] = useState("newest");
     const [totalReviews, setTotalReviews] = useState(0);
+    const navigate = useNavigate();
 
     const fetchReviews = async (pageNum, isNewSearch = false) => {
         console.log("Calling fetchReviews for allReviewsDialog")
@@ -76,6 +78,7 @@ const AllReviewsDialog = ({ open, onClose, courseId, reviews, setReviews }) => {
         : 'rgba(69, 34, 186, 0.1)';
 
     const displayedReviews = useMemo(() => {
+        console.log('reviews', reviews)
         let filtered = [...reviews];
 
         if (search) {
@@ -165,7 +168,10 @@ const AllReviewsDialog = ({ open, onClose, courseId, reviews, setReviews }) => {
                                     color: colorTokens.secondary.lighter
                                 }} value={review.rating} readOnly size="small" />
                                 <Typography variant="body2" sx={{ mt: 1 }}>
-                                    by <Box component="span" sx={{ fontWeight: 'bold', textDecoration: 'underline' }}>{review.userId?.name || 'Anonymous'}</Box>
+                                    by <a
+                                        href={`/profile/${review.userId?._id}`}
+                                        target="_blank"
+                                        style={{ fontWeight: 'bold', textDecoration: 'underline', cursor: 'pointer' }}>{review.userId?.name || 'Anonymous'}</a>
                                 </Typography>
                             </Box>
                             <Box sx={{ flexGrow: 1 }}>
