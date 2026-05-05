@@ -96,7 +96,7 @@ const CourseSchema = new mongoose.Schema(
             ref: "People",
             default: [],
         },
-        enrolledStudents: {
+        enrolledStudents: { // can have many students 
             type: [mongoose.Schema.Types.ObjectId],
             ref: "Enrollment",
             default: [],
@@ -117,7 +117,7 @@ const CourseSchema = new mongoose.Schema(
 
         },
 
-        lessons: { type: [lessonSchema], default: [] },
+        lessons: { type: [lessonSchema], default: [] },///can be big
         courseStatus: {
             type: String,
             enum: ["draft", "pending", "published", "unpublished"],

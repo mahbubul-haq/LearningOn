@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { deleteCourse, getAllCourses, getCourseById, getCourseByIdWithOutPopulate, getDraftCourses, getMyCourses, newCourse, updateCourse } from "../controllers/courses/course.controller.js";
+import { deleteCourse, getAllCourses, getCourseById, getCourseByIdWithOutPopulate, getDraftCourses, newCourse, updateCourse } from "../controllers/courses/course.controller.js";
 import { getCourseLessons, getFilteredCourses, getPopularCourses } from "../controllers/courses/course.query.controller.js";
 import verifyToken, { verifyTokenLight } from "../middlewares/auth.js";
 import { getCourseProgress, updateProgress, updateWatchTime } from "../controllers/courses/course.progress.controller.js";
@@ -15,7 +15,6 @@ router.put("/update/:courseId/:status", verifyToken, updateCourse);
 router.get("/get/:courseId", getCourseById);
 router.get("/get/plain/:courseId", verifyToken, getCourseByIdWithOutPopulate);
 router.get("/all", getAllCourses);
-router.get("/getmycourses", verifyToken, getMyCourses);
 router.delete("/delete/:courseId", verifyToken, deleteCourse);
 router.get("/getfiltered", getFilteredCourses);
 router.get("/getpopular", getPopularCourses);

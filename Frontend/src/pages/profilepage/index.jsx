@@ -77,29 +77,6 @@ const ProfilePage = () => {
         severity: "success"
     });
 
-    useEffect(() => {
-        const query = new URLSearchParams(location.search);
-        const stripeConnect = query.get("stripe_connect");
-        const error = query.get("error");
-
-        if (stripeConnect === "success") {
-            setSnackbar({
-                open: true,
-                message: "Stripe account connected successfully!",
-                severity: "success"
-            });
-            // Clear params
-            navigate(location.pathname, { replace: true });
-        } else if (stripeConnect === "failed") {
-            setSnackbar({
-                open: true,
-                message: error || "Failed to connect Stripe account.",
-                severity: "error"
-            });
-            navigate(location.pathname, { replace: true });
-        }
-    }, [location.search, navigate]);
-
     const handleCloseSnackbar = () => {
         setSnackbar({ ...snackbar, open: false });
     };

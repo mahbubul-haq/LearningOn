@@ -27,8 +27,11 @@ const EnrollmentSchema = new mongoose.Schema(
             ref: "Payment",
             required: true,
         },
-    }
+    },
+    { timestamps: true }
 )
+
+
 
 const Enrollment = mongoose.model("Enrollment", EnrollmentSchema);
 

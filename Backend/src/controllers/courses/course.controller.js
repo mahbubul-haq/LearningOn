@@ -333,25 +333,21 @@ const getAllCourses = async (req, res) => {
 
 const getMyCourses = async (req, res) => {
     try {
+        console.log("get My courses called");
         // find courses with owner as req.userId or there is an entry req.userId inside courseInstructors
-        const courses = await Course.find({
-            $or: [{ owner: req.userId }, { courseInstructors: req.userId }],
-        })
-            .populate({
-                path: "enrolledStudents",
-                select: "enrolledOn",
-                populate: [{
-                    path: "userId",
-                    select: "name picturePath",
-                }
-                    ,
-                {
-                    path: "paymentId",
-                    select: "paidAmount",
-                }
-                ],
-            })
-        if (!courses) {
+        const courses = await Course.find(
+            { $or: [{ owner: req.userId }, { courseInstructors: req.userId }] },
+            {
+                courseTitle: 1,
+                courseThumbnail: 1,
+                owner: 1,
+                courseInstructors: 1,
+                courseStatus: 1,
+                ratings: 1,
+                createdAt: 1,
+            }
+        ).lean();
+        if (!courses || courses.length === 0) {
             return res.status(404).json({
                 success: false,
                 message: "No courses found",
@@ -360,7 +356,7 @@ const getMyCourses = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            courseInfo: courses,
+            courses,
         });
     } catch (error) {
         res.status(500).json({

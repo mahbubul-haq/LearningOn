@@ -1,5 +1,6 @@
 import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
+import Enrollment from "../../models/Enrollment.js";
 import QuizAttempt from "../../models/QuizAttempt.js";
 import { getRelatedCourses } from "./course.query.service.js";
 
@@ -305,12 +306,11 @@ const getCourseLessons = async (req, res) => {
 };
 
 
-
 export {
     getCourseLessons,
     getFilteredCourses,
     getPopularCourses,
     getUnpublishedCourses,
-    getCourses
+    getCourses,
 };
 

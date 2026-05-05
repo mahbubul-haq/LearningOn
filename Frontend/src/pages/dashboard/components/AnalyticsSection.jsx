@@ -36,7 +36,7 @@ export default function AnalyticsSection({ selectedCourse, totalRevenue, totalSt
                     <Grid item xs={12} sm={4}>
                         <StatCard
                             title="Rating"
-                            value={selectedCourse ? (selectedCourse.ratings?.totalRating || "0.0") : "4.8"}
+                            value={selectedCourse?.ratings?.numberOfRatings > 0 ? (selectedCourse.ratings?.totalRating / selectedCourse.ratings?.numberOfRatings).toFixed(1) : "0.0"}
                             color="#FFAB00"
                             icon={<TrendingUp />}
                             glassSx={glassSx}

@@ -8,10 +8,9 @@ import {
     Button,
     Avatar,
     Link,
-    ThemeProvider,
-    createTheme,
     CssBaseline
 } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 
 // 1. Create a Custom Theme to match your Dark/Neon Home Page
