@@ -13,6 +13,8 @@ export default function useDashboardData() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [showCumulativeEnrollments, setShowCumulativeEnrollments] = useState(false);
+    const [showCumulativeRevenue, setShowCumulativeRevenue] = useState(false);
 
     // const chartData = useMemo(() => generateChartData(minYear, maxYear), [minYear, maxYear]);
 
@@ -40,6 +42,10 @@ export default function useDashboardData() {
         setEndDate,
         drawerOpen,
         setDrawerOpen,
+        showCumulativeEnrollments,
+        setShowCumulativeEnrollments,
+        showCumulativeRevenue,
+        setShowCumulativeRevenue,
         getStatusKey,
         user,
     };

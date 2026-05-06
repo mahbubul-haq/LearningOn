@@ -97,14 +97,22 @@ const formatAnalyticsResponse = (aggregationResult, boundaries, start, end) => {
         return `${date.getDate()} ${month}`;
     };
 
-    chartData = boundaries.slice(0, -1).map((boundary) => {
-        const key = new Date(boundary).getTime();
+    let cumulativeEnrollments = 0;
+    let cumulativeRevenue = 0;
+
+    chartData = boundaries.slice(0, -1).map((boundary, i) => {
+        const key = new Date(boundaries[i + 1]).getTime();
         const bucket = chartMap.get(key);
 
+        cumulativeEnrollments += bucket?.enrollments || 0;
+        cumulativeRevenue += bucket?.revenue || 0;
+
         return {
-            name: timeLabel(boundary),
+            name: timeLabel(boundaries[i + 1]),
             enrollments: bucket?.enrollments || 0,
-            revenue: bucket?.revenue || 0
+            revenue: bucket?.revenue || 0,
+            cumulativeEnrollments,
+            cumulativeRevenue,
         };
     });
 

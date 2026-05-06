@@ -1,14 +1,30 @@
 import React from 'react';
-import { Grid, Paper, Typography, Box } from '@mui/material';
+import { Grid, Paper, Typography, Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-export default function TrendsCharts({ chartData, glassSx, theme }) {
+export default function TrendsCharts({
+    chartData, glassSx, theme,
+    showCumulativeEnrollments, setShowCumulativeEnrollments,
+    showCumulativeRevenue, setShowCumulativeRevenue
+}) {
     return (
         <Box sx={{ overflow: "hidden" }}>
             <Grid container spacing={3} >
                 <Grid item xs={12} lg={6}>
                     <Paper sx={{ ...glassSx, p: 3, height: 350 }}>
-                        <Typography variant="h6" fontWeight="700" mb={2} color="text.primary">Revenue Trends</Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                            <Typography variant="h6" fontWeight="700" color="text.primary">Revenue Trends</Typography>
+                            <ToggleButtonGroup
+                                size="small"
+                                value={showCumulativeRevenue ? "cumulative" : "normal"}
+                                exclusive
+                                onChange={(e, val) => { if (val !== null) setShowCumulativeRevenue(val === "cumulative") }}
+                                sx={{ height: 30 }}
+                            >
+                                <ToggleButton value="normal" sx={{ textTransform: 'none', px: 1.5, fontSize: '0.75rem', fontWeight: 600 }}>Normal</ToggleButton>
+                                <ToggleButton value="cumulative" sx={{ textTransform: 'none', px: 1.5, fontSize: '0.75rem', fontWeight: 600 }}>Cumulative</ToggleButton>
+                            </ToggleButtonGroup>
+                        </Box>
                         <ResponsiveContainer width="100%" height="90%">
                             <AreaChart data={chartData}>
                                 <defs>
@@ -35,14 +51,26 @@ export default function TrendsCharts({ chartData, glassSx, theme }) {
                                     itemStyle={{ color: theme.palette.text.primary }}
                                     formatter={(value) => [new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value), 'Revenue']}
                                 />
-                                <Area type="monotone" dataKey="revenue" stroke="#00C853" strokeWidth={3} fill="url(#colorRev)" />
+                                <Area type="monotone" dataKey={showCumulativeRevenue ? "cumulativeRevenue" : "revenue"} stroke="#00C853" strokeWidth={3} fill="url(#colorRev)" />
                             </AreaChart>
                         </ResponsiveContainer>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} lg={6}>
                     <Paper sx={{ ...glassSx, p: 3, height: 350 }}>
-                        <Typography variant="h6" fontWeight="700" mb={2} color="text.primary">Enrollment Trends</Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                            <Typography variant="h6" fontWeight="700" color="text.primary">Enrollment Trends</Typography>
+                            <ToggleButtonGroup
+                                size="small"
+                                value={showCumulativeEnrollments ? "cumulative" : "normal"}
+                                exclusive
+                                onChange={(e, val) => { if (val !== null) setShowCumulativeEnrollments(val === "cumulative") }}
+                                sx={{ height: 30 }}
+                            >
+                                <ToggleButton value="normal" sx={{ textTransform: 'none', px: 1.5, fontSize: '0.75rem', fontWeight: 600 }}>Regular</ToggleButton>
+                                <ToggleButton value="cumulative" sx={{ textTransform: 'none', px: 1.5, fontSize: '0.75rem', fontWeight: 600 }}>Cumulative</ToggleButton>
+                            </ToggleButtonGroup>
+                        </Box>
                         <ResponsiveContainer width="100%" height="90%">
                             <AreaChart data={chartData}>
                                 <defs>
@@ -68,7 +96,7 @@ export default function TrendsCharts({ chartData, glassSx, theme }) {
                                     }}
                                     itemStyle={{ color: theme.palette.text.primary }}
                                 />
-                                <Area type="monotone" dataKey="enrollments" stroke={theme.palette.primary.lighter} strokeWidth={3} fill="url(#colorEn)" />
+                                <Area type="monotone" dataKey={showCumulativeEnrollments ? "cumulativeEnrollments" : "enrollments"} stroke={theme.palette.primary.lighter} strokeWidth={3} fill="url(#colorEn)" />
                             </AreaChart>
                         </ResponsiveContainer>
                     </Paper>

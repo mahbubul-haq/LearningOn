@@ -6,7 +6,10 @@ import StatCard from './StatCard';
 import TrendsCharts from './TrendsCharts';
 import RecentEnrollments from './RecentEnrollments';
 
-export default function AnalyticsSection({ selectedCourse, totalRevenue, totalStudents, chartData, recentEnrollments, glassSx, theme, user, courseRatings }) {
+export default function AnalyticsSection({ 
+    selectedCourse, totalRevenue, totalStudents, chartData, recentEnrollments, glassSx, theme, user, courseRatings,
+    showCumulativeEnrollments, setShowCumulativeEnrollments, showCumulativeRevenue, setShowCumulativeRevenue 
+}) {
     return (
         <Stack spacing={3}>
             {/* Contextual Header with Buttons */}
@@ -46,7 +49,15 @@ export default function AnalyticsSection({ selectedCourse, totalRevenue, totalSt
             </Box>
 
             {/* Area Graphs (Curved Style) */}
-            <TrendsCharts chartData={chartData} glassSx={glassSx} theme={theme} />
+            <TrendsCharts 
+                chartData={chartData} 
+                glassSx={glassSx} 
+                theme={theme} 
+                showCumulativeEnrollments={showCumulativeEnrollments}
+                setShowCumulativeEnrollments={setShowCumulativeEnrollments}
+                showCumulativeRevenue={showCumulativeRevenue}
+                setShowCumulativeRevenue={setShowCumulativeRevenue}
+            />
 
             {/* Bottom Enrollment List */}
             <RecentEnrollments recentEnrollments={recentEnrollments} glassSx={glassSx} theme={theme} />

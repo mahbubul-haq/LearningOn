@@ -25,6 +25,10 @@ export default function Dashboard() {
         setEndDate,
         drawerOpen,
         setDrawerOpen,
+        showCumulativeEnrollments,
+        setShowCumulativeEnrollments,
+        showCumulativeRevenue,
+        setShowCumulativeRevenue,
         getStatusKey,
     } = useDashboardData();
 
@@ -56,47 +60,18 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (myCourses?.length > 0) {
-            let firstYearVal = 4000, lastYearVal = 0;
-            let firstDate = new Date(8640000000000000); // Max Date
-            let lastDate = new Date(-8640000000000000); // Min Date
+            let firstDate = new Date(myCourses[0].createdAt || 8640000000000000);
 
             myCourses.forEach(course => {
                 const cDate = new Date(course.createdAt);
-                const year = cDate.getFullYear();
-
-                if (year < firstYearVal) {
-                    firstYearVal = year;
-                }
-                if (year > lastYearVal) {
-                    lastYearVal = year;
-                }
-
-                if (cDate < firstDate) {
+                if (firstDate.getTime() > cDate.getTime()) {
                     firstDate = cDate;
                 }
-                if (cDate > lastDate) {
-                    lastDate = cDate;
-                }
+
             });
 
-            // Set start of day for lowest date
-            const startOfDay = new Date(firstDate);
-            startOfDay.setHours(0, 0, 0, 0);
-
-            // Set end of day for highest date
-            const endOfDay = new Date(lastDate);
-            endOfDay.setHours(23, 59, 59, 999);
-
-            // Using Swedish locale (sv-SE) gives YYYY-MM-DD which is standard for date inputs
-            const formatForInput = (d) => {
-                const yyyy = d.getFullYear();
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const dd = String(d.getDate()).padStart(2, '0');
-                return `${yyyy}-${mm}-${dd}`;
-            };
-
-            setStartDate(startOfDay)
-            setEndDate(endOfDay);
+            setStartDate(firstDate);
+            setEndDate(new Date().toISOString());
         }
 
     }, [myCourses]);
@@ -151,6 +126,10 @@ export default function Dashboard() {
                             numberOfRatings: 0,
                             avgRating: 0
                         }}
+                        showCumulativeEnrollments={showCumulativeEnrollments}
+                        setShowCumulativeEnrollments={setShowCumulativeEnrollments}
+                        showCumulativeRevenue={showCumulativeRevenue}
+                        setShowCumulativeRevenue={setShowCumulativeRevenue}
                     />
                 </Grid>
             </Grid>
