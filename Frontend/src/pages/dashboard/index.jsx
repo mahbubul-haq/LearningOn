@@ -6,7 +6,7 @@ import CourseSelector from './components/CourseSelector';
 import AnalyticsSection from './components/AnalyticsSection';
 import useDashboardData from './hooks/useDashboardData';
 import { useSelector } from 'react-redux';
-import { useRecentEnrollments, useMyCourses } from './hooks/DashboardHooks';
+import { useRecentEnrollments, useMyCourses, useEnrollmentAnalytics } from './hooks/DashboardHooks';
 import { useMemo, useEffect } from 'react';
 
 
@@ -19,19 +19,13 @@ export default function Dashboard() {
     const {
         selectedCourse,
         setSelectedCourse,
-        minYear,
-        maxYear,
-        setMinYear,
-        setMaxYear,
+        startDate,
+        endDate,
+        setStartDate,
+        setEndDate,
         drawerOpen,
         setDrawerOpen,
-
-        chartData,
         getStatusKey,
-        firstYear,
-        lastYear,
-        setFirstYear,
-        setLastYear,
     } = useDashboardData();
 
     const { data: myCourses, isLoading: isLoadingMyCourses, isError: isErrorMyCourses } = useMyCourses(token);
@@ -51,24 +45,58 @@ export default function Dashboard() {
         return enrollmentsData.pages.flatMap((page) => page.enrollments);
     }, [enrollmentsData]);
 
+    const { data: analyticsData, isLoading: isLoadingAnalytics, isError: isErrorAnalytics } = useEnrollmentAnalytics(
+        selectedCourse?._id,
+        token,
+        startDate ? new Date(startDate).toISOString() : null,
+        endDate ? new Date(endDate).toISOString() : null,
+        startDate && endDate && myCourses?.length
+    );
+
 
     useEffect(() => {
         if (myCourses?.length > 0) {
-            let first = 4000, last = 0;
-            myCourses.forEach(course => {
-                const year = new Date(course.createdAt).getFullYear();
+            let firstYearVal = 4000, lastYearVal = 0;
+            let firstDate = new Date(8640000000000000); // Max Date
+            let lastDate = new Date(-8640000000000000); // Min Date
 
-                if (year < first) {
-                    first = year;
+            myCourses.forEach(course => {
+                const cDate = new Date(course.createdAt);
+                const year = cDate.getFullYear();
+
+                if (year < firstYearVal) {
+                    firstYearVal = year;
                 }
-                if (year > last) {
-                    last = year;
+                if (year > lastYearVal) {
+                    lastYearVal = year;
+                }
+
+                if (cDate < firstDate) {
+                    firstDate = cDate;
+                }
+                if (cDate > lastDate) {
+                    lastDate = cDate;
                 }
             });
-            setFirstYear(first);
-            setLastYear(last);
-            setMinYear(first);
-            setMaxYear(last);
+
+            // Set start of day for lowest date
+            const startOfDay = new Date(firstDate);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            // Set end of day for highest date
+            const endOfDay = new Date(lastDate);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            // Using Swedish locale (sv-SE) gives YYYY-MM-DD which is standard for date inputs
+            const formatForInput = (d) => {
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}`;
+            };
+
+            setStartDate(startOfDay)
+            setEndDate(endOfDay);
         }
 
     }, [myCourses]);
@@ -78,18 +106,22 @@ export default function Dashboard() {
         overflow: 'hidden'
     };
 
+    useEffect(() => {
+        if (analyticsData) {
+            console.log("analyticsData", analyticsData);
+        }
+    }, [analyticsData]);
+
     return (
         <Box sx={{ p: { xs: "1rem", md: "2rem" }, height: '100vh', background: 'transparent', overflow: 'auto' }}>
             <DashboardHeader
-                minYear={minYear}
-                maxYear={maxYear}
-                setMinYear={setMinYear}
-                setMaxYear={setMaxYear}
+                startDate={startDate}
+                endDate={endDate}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
                 onBack={() => navigate("/")}
                 glassSx={glassSx}
                 theme={theme}
-                firstYear={firstYear || 2023}
-                lastYear={lastYear || new Date().getFullYear()}
             />
 
             <Grid container spacing={3}>
@@ -107,13 +139,18 @@ export default function Dashboard() {
                 <Grid item xs={12} md={8} lg={9}>
                     <AnalyticsSection
                         selectedCourse={selectedCourse}
-                        totalRevenue={0}
-                        totalStudents={0}
-                        chartData={chartData}
+                        totalRevenue={analyticsData?.totalRevenue || 0}
+                        totalStudents={analyticsData?.totalEnrollments || 0}
+                        chartData={analyticsData?.chartData || []}
                         recentEnrollments={recentEnrollments}
                         glassSx={glassSx}
                         theme={theme}
                         user={user}
+                        courseRatings={analyticsData?.courseRatings || {
+                            totalRating: 0,
+                            numberOfRatings: 0,
+                            avgRating: 0
+                        }}
                     />
                 </Grid>
             </Grid>

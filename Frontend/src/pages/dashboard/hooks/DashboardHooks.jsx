@@ -30,3 +30,14 @@ export const useMyCourses = (token) => {
         enabled: !!token,
     });
 }
+
+export const useEnrollmentAnalytics = (courseId, token, startDate, endDate, enabled = true) => {
+    const { getEnrollmentAnalytics } = useContext(DashboardContext);
+    return useQuery({
+        queryKey: ["enrollment-analytics", courseId || "all", startDate, endDate],
+        queryFn: () => getEnrollmentAnalytics({ courseId, authToken: token, startDate, endDate }),
+        staleTime: 30 * 60 * 1000,
+        gcTime: 30 * 60 * 1000,
+        enabled: Boolean(token && enabled && startDate && endDate),
+    });
+}

@@ -10,13 +10,11 @@ export default function useDashboardData() {
     const { user, token } = useSelector((state) => state.auth);
 
     const [selectedCourse, setSelectedCourse] = useState(null);
-    const [minYear, setMinYear] = useState(2023);
-    const [maxYear, setMaxYear] = useState(2024);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [firstYear, setFirstYear] = useState(2023);
-    const [lastYear, setLastYear] = useState(new Date().getFullYear());
 
-    const chartData = useMemo(() => generateChartData(minYear, maxYear), [minYear, maxYear]);
+    // const chartData = useMemo(() => generateChartData(minYear, maxYear), [minYear, maxYear]);
 
 
 
@@ -36,18 +34,13 @@ export default function useDashboardData() {
         selectedCourse,
         setSelectedCourse,
         recentEnrollments,
-        minYear,
-        maxYear,
-        setMinYear,
-        setMaxYear,
+        startDate,
+        endDate,
+        setStartDate,
+        setEndDate,
         drawerOpen,
         setDrawerOpen,
-        chartData,
         getStatusKey,
         user,
-        firstYear,
-        lastYear,
-        setFirstYear,
-        setLastYear,
     };
 }

@@ -10,9 +10,14 @@ export const DashboardState = (props) => {
     const [selectedCourse, setSelectedCourse] = React.useState(null);
     const [recentEnrollments, setRecentEnrollments] = React.useState([]);
     const token = useSelector((state) => state.auth.token);
+    const [enrollmentAnalytics, setEnrollmentAnalytics] = React.useState({
+        chartData: [],
+        totalRevenue: 0,
+        totalEnrollments: 0
+    });
 
     const getMyCourses = async (authToken) => {
-        console.log("getMyCourses called")
+        // console.log("getMyCourses called")
 
         const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/mine`, {
             method: "GET",
@@ -32,7 +37,7 @@ export const DashboardState = (props) => {
     // for react query 
     const getRecentEnrollments = async ({ courseId, authToken, cursor }) => {
 
-        console.log("getRecentEnrollments called", courseId, cursor);
+        // console.log("getRecentEnrollments called", courseId, cursor);
 
         let url = `${import.meta.env.VITE_SERVER_URL}/api/v1/enrollments?limit=20`;
         if (courseId) {
@@ -57,6 +62,28 @@ export const DashboardState = (props) => {
         return data;
     };
 
+    const getEnrollmentAnalytics = async ({ courseId, authToken, startDate, endDate }) => {
+
+        // console.log("getEnrollmentAnalytics called", courseId, startDate, endDate);
+
+        let url = `${import.meta.env.VITE_SERVER_URL}/api/v1/enrollments/analytics?startDate=${startDate}&endDate=${endDate}`;
+        if (courseId) {
+            url += `&courseId=${courseId}`;
+        }
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "auth-token": authToken
+            }
+        });
+        const data = await response.json();
+        console.log("fetched enrollment analytics", courseId, data);
+        if (!data.success) {
+            throw new Error("Failed to fetch enrollment analytics");
+        }
+        return data;
+    }
+
     return (
         <DashboardContext.Provider value={{
             openedTab,
@@ -66,7 +93,10 @@ export const DashboardState = (props) => {
             recentEnrollments,
             setRecentEnrollments,
             getMyCourses,
-            getRecentEnrollments
+            getRecentEnrollments,
+            getEnrollmentAnalytics,
+            enrollmentAnalytics,
+            setEnrollmentAnalytics
         }}>
             {props.children}
         </DashboardContext.Provider>

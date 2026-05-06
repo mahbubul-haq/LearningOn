@@ -31,7 +31,7 @@ const EnrollmentSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-
+EnrollmentSchema.index({ courseId: 1, createdAt: -11, _id: -1 });
 
 const Enrollment = mongoose.model("Enrollment", EnrollmentSchema);
 

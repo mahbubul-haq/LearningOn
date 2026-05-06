@@ -6,7 +6,7 @@ import StatCard from './StatCard';
 import TrendsCharts from './TrendsCharts';
 import RecentEnrollments from './RecentEnrollments';
 
-export default function AnalyticsSection({ selectedCourse, totalRevenue, totalStudents, chartData, recentEnrollments, glassSx, theme, user }) {
+export default function AnalyticsSection({ selectedCourse, totalRevenue, totalStudents, chartData, recentEnrollments, glassSx, theme, user, courseRatings }) {
     return (
         <Stack spacing={3}>
             {/* Contextual Header with Buttons */}
@@ -36,7 +36,7 @@ export default function AnalyticsSection({ selectedCourse, totalRevenue, totalSt
                     <Grid item xs={12} sm={4}>
                         <StatCard
                             title="Rating"
-                            value={selectedCourse?.ratings?.numberOfRatings > 0 ? (selectedCourse.ratings?.totalRating / selectedCourse.ratings?.numberOfRatings).toFixed(1) : "0.0"}
+                            value={`${courseRatings?.avgRating.toFixed(1)}`}
                             color="#FFAB00"
                             icon={<TrendingUp />}
                             glassSx={glassSx}

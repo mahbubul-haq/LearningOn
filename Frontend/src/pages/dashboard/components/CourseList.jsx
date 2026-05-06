@@ -25,11 +25,11 @@ export default function CourseList({ myCourses, selectedCourse, onSelect, user, 
             {myCourses && myCourses.map((course) => {
                 const statusKey = getStatusKey(course.courseStatus || 'draft');
                 const statusTheme = STATUS_THEMES[statusKey];
-                const isSelected = selectedCourse?._id === course._id;
+                const isSelected = selectedCourse?._id === course?._id;
 
                 return (
                     <ListItemButton
-                        key={course._id}
+                        key={course?._id}
                         selected={isSelected}
                         onClick={() => onSelect(course)}
                         sx={{
@@ -63,7 +63,7 @@ export default function CourseList({ myCourses, selectedCourse, onSelect, user, 
                         <Box sx={{ p: 1.5, width: '100%' }}>
                             <Typography variant="body2" fontWeight="700" sx={{ mb: 1, color: 'text.primary', lineHeight: 1.3 }}>{course.courseTitle}</Typography>
                             <Stack direction="row" justifyContent="space-between" width="100%" alignItems="center">
-                                <Chip label={user._id === course.owner ? "Owner" : "Instructor"} size="small" sx={{ height: 18, fontSize: '0.65rem' }} />
+                                <Chip label={user?._id === course.owner ? "Owner" : "Instructor"} size="small" sx={{ height: 18, fontSize: '0.65rem' }} />
                                 <Box sx={{ px: 1, py: 0.3, borderRadius: 1, display: 'flex', alignItems: 'center', gap: 0.5, bgcolor: statusTheme.bg }}>
                                     <Circle sx={{ fontSize: 6, color: statusTheme.color }} />
                                     <Typography sx={{ fontSize: '0.65rem', fontWeight: 800, color: statusTheme.color }}>

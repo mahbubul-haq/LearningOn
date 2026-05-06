@@ -1,5 +1,6 @@
 import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
+import { isValidObjectId } from "mongoose";
 
 
 const getRelatedCourses = async (category, courseId, res) => {
@@ -105,6 +106,7 @@ const getRelatedCourses = async (category, courseId, res) => {
 };
 
 
+
 export {
-    getRelatedCourses
+    getRelatedCourses,
 }
