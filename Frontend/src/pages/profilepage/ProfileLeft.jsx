@@ -12,7 +12,7 @@ import { StyledButton } from "../../components/StyledButton";
 import { ProfilePageContext } from "../../state/ProfilePageContext";
 import { setLogout } from "../../state/reduxStore/authSlice";
 
-const ProfileLeft = ({ userInfo, myPublishedCourses }) => {
+const ProfileLeft = ({ userInfo, userPublishedCourses }) => {
     const theme = useTheme();
     const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
     const { user } = useSelector((state) => state.auth);
@@ -132,7 +132,7 @@ const ProfileLeft = ({ userInfo, myPublishedCourses }) => {
                                     fontWeight: "600",
                                 }}
                             >
-                                {myPublishedCourses?.length || 0}
+                                {userPublishedCourses?.length || 0}
                             </Typography>
                         </FlexBetween>
                     </MenuItem>

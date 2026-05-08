@@ -1,112 +1,126 @@
 import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 
 
-const getRelatedCourses = async (category, courseId, res) => {
-    try {
+const getRelatedCourses = async (category, courseId) => {
 
-        let categories = [category];
-        const dbCategory = await Category.findOne({
-            $or: [
-                { name: category },             // parent category
-                { subcategories: category }     // if it's a subcategory
-            ]
-        }, "name subcategories").lean();
+    const courseIdObj = new Types.ObjectId(courseId);
+    let categories = [category];
+    const dbCategory = await Category.findOne({
+        $or: [
+            { name: category },             // parent category
+            { subcategories: category }     // if it's a subcategory
+        ]
+    }, "name subcategories").lean();
 
-        if (dbCategory) {
-            categories = [...categories, ...dbCategory.subcategories];
+    if (dbCategory) {
+        categories = [...categories, ...dbCategory.subcategories];
+    }
+
+    let courses = await Course.find(
+        {
+            category: { $in: categories },
+            courseStatus: "published",
+            _id: { $ne: courseIdObj },
+        },
+        {
+            courseTitle: 1,
+            courseThumbnail: 1,
+            owner: 1,
+            ratings: 1,
+            coursePrice: 1,
+            skillTags: 1,
+            courseStatus: 1,
+            category: 1,
         }
+    )
+        .limit(4)
+        .populate("owner", "name");
 
-        let courses = await Course.find(
+    // console.log(courses);
+
+    if (courses.length < 4) {
+        const excludeIds = courses.map((c) => c._id);
+        excludeIds.push(courseIdObj);
+        const remainingCount = 4 - courses.length;
+        const randomCourses = await Course.aggregate([
             {
-                category: { $in: categories },
-                courseStatus: "published",
-                _id: { $ne: courseId },
+                $match: {
+                    _id: { $nin: excludeIds },
+                    courseStatus: "published",
+                },
             },
             {
-                courseTitle: 1,
-                courseThumbnail: 1,
-                owner: 1,
-                ratings: 1,
-                coursePrice: 1,
-                skillTags: 1,
-                courseStatus: 1,
-                category: 1,
-            }
-        )
-            .limit(4)
-            .populate("owner", "name");
-
-        // console.log(courses);
-
-        if (courses.length < 4) {
-            const excludeIds = courses.map((c) => c._id);
-            excludeIds.push(courseId);
-            const remainingCount = 4 - courses.length;
-            const randomCourses = await Course.aggregate([
-                {
-                    $match: {
-                        _id: { $nin: excludeIds },
-                        courseStatus: "published",
-                    },
+                $sample: { size: remainingCount },
+            },
+            {
+                $lookup: {
+                    from: "peoples",              // collection name in MongoDB
+                    localField: "owner",        // field in Course
+                    foreignField: "_id",        // field in User
+                    as: "owner",                // output array field
                 },
-                {
-                    $sample: { size: remainingCount },
+            },
+            {
+                $unwind: "$owner",            // convert array → object
+            },
+            {
+                $project: {
+                    courseTitle: 1,
+                    courseThumbnail: 1,
+                    ratings: 1,
+                    coursePrice: 1,
+                    skillTags: 1,
+                    courseStatus: 1,
+                    category: 1,
+                    "owner._id": 1,
+                    "owner.name": 1,
                 },
-                {
-                    $lookup: {
-                        from: "peoples",              // collection name in MongoDB
-                        localField: "owner",        // field in Course
-                        foreignField: "_id",        // field in User
-                        as: "owner",                // output array field
-                    },
-                },
-                {
-                    $unwind: "$owner",            // convert array → object
-                },
-                {
-                    $project: {
-                        courseTitle: 1,
-                        courseThumbnail: 1,
-                        ratings: 1,
-                        coursePrice: 1,
-                        skillTags: 1,
-                        courseStatus: 1,
-                        category: 1,
-                        "owner._id": 1,
-                        "owner.name": 1,
-                    },
-                },
-            ]);
-            courses = [...courses, ...randomCourses];
-        }
-
-        courses = courses.map((course) => {
-            const courseData = course._doc || course;
-            return {
-                ...courseData,
-                ratings: {
-                    totalRating: courseData.ratings?.totalRating || 0,
-                    numberOfRatings: courseData.ratings?.numberOfRatings || 0,
-                },
-            };
-        });
-
-        return res.status(200).json({
-            success: true,
-            courses: courses,
-        });
-    } catch (err) {
-        return res.status(500).json({
-            success: false,
-            message: "Related courses could not be fetched",
-        });
+            },
+        ]);
+        courses = [...courses, ...randomCourses];
     }
+
+    courses = courses.map((course) => {
+        const courseData = course._doc || course;
+        return {
+            ...courseData,
+            ratings: {
+                totalRating: courseData.ratings?.totalRating || 0,
+                numberOfRatings: courseData.ratings?.numberOfRatings || 0,
+            },
+        };
+    });
+
+    return courses;
+
 };
+
+const getUserCourses = async (userId, courseStatus) => {
+
+    const courses = await Course.find(
+        { $or: [{ owner: userId }, { courseInstructors: userId }], courseStatus: courseStatus },
+        {
+            courseTitle: 1,
+            courseThumbnail: 1,
+            owner: 1,
+            ratings: 1,
+            coursePrice: 1,
+            skillTags: 1,
+            courseStatus: 1,
+        }
+    )
+        .sort({ createdAt: -1 })
+        .populate("owner", "name");
+
+    return courses;
+
+}
 
 
 
 export {
     getRelatedCourses,
+    getUserCourses
 }

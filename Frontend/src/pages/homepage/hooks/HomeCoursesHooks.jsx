@@ -1,14 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
-export const useMyPublishedCourses = (token) => {
+export const useUserPublishedCourses = (userId) => {
     return useQuery({
-        queryKey: ["myPublishedCourses"],
+        queryKey: ["userPublishedCourses", userId],
         queryFn: async () => {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/mine/published`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses?userId=${userId}&courseStatus=published`, {
                 method: "GET",
-                headers: {
-                    "auth-token": token
-                }
             });
             const data = await response.json();
             if (!data.success) {
@@ -17,7 +14,7 @@ export const useMyPublishedCourses = (token) => {
             return data.courses;
         },
         staleTime: 1000 * 60 * 60,
-        gcTime: 1000 * 60 * 30,
-        enabled: !!token,
+        gcTime: 1000 * 60 * 10,
+        enabled: !!userId,
     });
 }

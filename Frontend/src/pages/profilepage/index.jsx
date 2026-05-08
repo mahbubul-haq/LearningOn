@@ -16,7 +16,7 @@ import Divider from "@mui/material/Divider";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
-import { useMyPublishedCourses } from "../homepage/hooks/HomeCoursesHooks";
+import { useUserPublishedCourses } from "../homepage/hooks/HomeCoursesHooks";
 
 const ProfilePage = () => {
     const { userId } = useParams();
@@ -31,27 +31,17 @@ const ProfilePage = () => {
     const theme = useTheme();
     const { token } = useSelector((state) => state.auth);
 
-    const { data: myPublishedCourses, isLoading: myPublishedCoursesLoading } = useMyPublishedCourses(token);
+    const { data: userPublishedCourses, isLoading: userPublishedCoursesLoading } = useUserPublishedCourses(userId);
 
     const getQualifications = () => {
         let qualifications = [];
-
-        if (userById?.learning?.length > 0) {
-            qualifications.push("Student");
+        if (userPublishedCourses?.some((course) => course.owner.toString() === userId)) {
+            qualifications.push("Creator");
         }
-        if (userById?.courses?.length > 0) {
+        if (userPublishedCourses?.some((course) => course?.courseInstructors?.some((instructor) => instructor.toString() === userId))) {
             qualifications.push("Instructor");
         }
-        if (userById?.tutoring?.length > 0) {
-            qualifications.push("Tutor");
-        }
-        if (userById?.blogs?.length > 0) {
-            qualifications.push("Blogger");
-        }
-
-        if (qualifications.length === 0) {
-            qualifications.push("Student");
-        }
+        if (!qualifications.length) qualifications.push("Student");
         return qualifications.join(", ");
     };
 
@@ -140,7 +130,7 @@ const ProfilePage = () => {
                                 padding: "0",
                             }}
                         >
-                            <ProfileLeft userInfo={userById} myPublishedCourses={myPublishedCourses} />
+                            <ProfileLeft userInfo={userById} userPublishedCourses={userPublishedCourses} />
                         </Box>
                     )}
                     <Box
@@ -151,7 +141,7 @@ const ProfilePage = () => {
                             padding: { xs: "1rem", sm: "2rem" },
                         }}
                     >
-                        <ProfileRight userInfo={userById} myPublishedCourses={myPublishedCourses} />
+                        <ProfileRight userInfo={userById} userPublishedCourses={userPublishedCourses} />
                     </Box>
                 </Box>
             </Box>

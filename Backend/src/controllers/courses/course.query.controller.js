@@ -2,36 +2,33 @@ import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
 import Enrollment from "../../models/Enrollment.js";
 import QuizAttempt from "../../models/QuizAttempt.js";
-import { getRelatedCourses } from "../../services/courses/course.query.service.js";
+import { getRelatedCourses, getUserCourses } from "../../services/courses/course.query.service.js";
 
 // ================================== NEW CONTROLLERS =================================
 
 const getCourses = async (req, res) => {
 
-    try {
+    const { category, courseId, userId, courseStatus } = req.query;
+    // console.log("category", category);
+    // console.log("courseId", courseId);
+    let courses = [];
 
-        const { category, courseId } = req.query;
-        // console.log("category", category);
-        // console.log("courseId", courseId);
-
-        if (category) {
-            await getRelatedCourses(category, courseId, res);
-            return;
-        }
-        else {
-            return res.status(204).json({
-                success: false,
-                message: "No courses found"
-            })
-        }
+    if (category) {
+        courses = await getRelatedCourses(category, courseId);
     }
-    catch (error) {
-        return res.status(500).json({
+    else if (userId && courseStatus) {
+        courses = await getUserCourses(userId, courseStatus);
+    } else {
+        return res.status(400).json({
             success: false,
-            message: "Internal server error"
+            message: "Invalid query parameters"
         })
     }
 
+    return res.status(200).json({
+        success: true,
+        courses: courses
+    })
 
 }
 
@@ -305,36 +302,7 @@ const getCourseLessons = async (req, res) => {
     }
 };
 
-const getMyPublishedCourses = async (req, res) => {
-    try {
-        const userId = req.userId;
-        const courses = await Course.find(
-            { $or: [{ owner: userId }, { courseInstructors: userId }], courseStatus: "published" },
-            {
-                courseTitle: 1,
-                courseThumbnail: 1,
-                owner: 1,
-                ratings: 1,
-                coursePrice: 1,
-                skillTags: 1,
-                courseStatus: 1,
-            }
-        )
-            .sort({ createdAt: -1 })
-            .populate("owner", "name");
-        res.status(200).json({
-            success: true,
-            courses: courses,
-        });
 
-
-    } catch (error) {
-        // console.log(error);
-        res.status(500).json({
-            success: false,
-        });
-    }
-}
 
 
 export {
@@ -343,6 +311,6 @@ export {
     getPopularCourses,
     getUnpublishedCourses,
     getCourses,
-    getMyPublishedCourses,
+
 };
 

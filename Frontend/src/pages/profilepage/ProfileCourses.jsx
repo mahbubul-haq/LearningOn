@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import CourseWidget from "../../widgets/CourseWidget";
 import { colorTokens } from "../../theme";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = ({ userCourses, myPublishedCourses }) => {
+import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = ({ userCourses, userPublishedCourses }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const containerRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -21,7 +21,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = 
     checkArrows();
     window.addEventListener("resize", checkArrows);
     return () => window.removeEventListener("resize", checkArrows);
-  }, [myPublishedCourses]);
+  }, [userPublishedCourses]);
 
   const handleScroll = (direction) => {
     if (containerRef.current) {
@@ -42,7 +42,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = 
         width: "100%",
       }}
     >
-      {myPublishedCourses && myPublishedCourses.length > 0 && (
+      {userPublishedCourses && userPublishedCourses.length > 0 && (
         <Box
           //className="courses-wrapper"
           sx={{
@@ -149,7 +149,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = 
               scrollbarWidth: "none",
             }}
           >
-            {myPublishedCourses?.map((course) => {
+            {userPublishedCourses?.map((course) => {
               // if (course?.courseStatus !== "published") return null;
               return (
                 <Box
@@ -169,7 +169,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = 
                     </Typography> */}
         </Box>
       )}
-      {(!myPublishedCourses || myPublishedCourses.length === 0) && (
+      {(!userPublishedCourses || userPublishedCourses.length === 0) && (
         <Box
           sx={{
             display: "flex",
