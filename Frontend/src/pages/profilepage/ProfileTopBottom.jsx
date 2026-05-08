@@ -64,17 +64,25 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
           marginBottom: isMobileScreens ? "0.5rem" : "0",
         }}
       >
-        {userInfo?.picturePath ? (
-          <AdvancedImage
-            plugins={[lazyload()]}
-            cldImg={cloudinaryCld.image(userInfo?.picturePath)}
+        {userInfo?.avatar?.secure_url ? (
+          // <AdvancedImage
+          //   plugins={[lazyload()]}
+          //   cldImg={cloudinaryCld.image(userInfo?.avatar?.public_id)}
+          //   style={{
+          //     width: "100%",
+          //     height: "100%",
+          //     objectFit: "cover",
+          //     borderRadius: "50%",
+          //   }}
+          // />
+          <img src={userInfo?.avatar?.secure_url}
+            loading="lazy"
             style={{
               width: "100%",
               height: "100%",
               objectFit: "cover",
               borderRadius: "50%",
-            }}
-          />
+            }} alt="avatar" />
         ) : (
           <img
             src="/images/dummyPerson.jpeg"

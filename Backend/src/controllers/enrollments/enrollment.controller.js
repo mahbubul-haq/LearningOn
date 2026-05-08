@@ -4,6 +4,7 @@ import { isValidObjectId } from "mongoose";
 import { getCourseRatings, getUserCourseIds } from "../../services/enrollments/enrollment.query.service.js";
 import { buildTimeBoundaries } from "../../utils/time.utils.js";
 import { formatAnalyticsResponse, runEnrollmentAnalytics } from "../../services/enrollments/enrollment.analytics.service.js";
+import { Types } from "mongoose";
 
 const getEnrollmentsInMyCourses = async (req, res) => {
     try {
@@ -42,7 +43,8 @@ const getEnrollmentsInMyCourses = async (req, res) => {
                     message: "You are not authorized to view this course",
                 });
             }
-            courseIds = [courseId];
+            // convert courseId in objectId type
+            courseIds = [new Types.ObjectId(courseId)];
         } else {
             courseIds = await Course.distinct("_id", {
                 $or: [
@@ -64,6 +66,7 @@ const getEnrollmentsInMyCourses = async (req, res) => {
             courseId: { $in: courseIds },
             ...cursorQuery
         }).sort({ createdAt: -1, _id: -1 }).limit(limit + 1)
+            .populate("courseId", "courseTitle")
             .populate("userId", "name picturePath")
             .populate("paymentId", "paidAmount").lean();
 
@@ -83,6 +86,7 @@ const getEnrollmentsInMyCourses = async (req, res) => {
         })
     }
     catch (error) {
+        console.error(error);
         return res.status(500).json({
             success: false,
             message: "Internal server error",
@@ -176,6 +180,7 @@ const getEnrollmentAnalytics = async (req, res) => {
 
     }
     catch (error) {
+        console.error(error);
         return res.status(500).json({
             success: false,
             message: "Internal server error",

@@ -44,6 +44,10 @@ export default function Dashboard() {
         error: enrollmentsError,
     } = useRecentEnrollments(selectedCourse?._id, token);
 
+    useEffect(() => {
+        console.log("recentEnrollments", enrollmentsData);
+    }, [enrollmentsData]);
+
     const recentEnrollments = useMemo(() => {
         if (!enrollmentsData) return [];
         return enrollmentsData.pages.flatMap((page) => page.enrollments);

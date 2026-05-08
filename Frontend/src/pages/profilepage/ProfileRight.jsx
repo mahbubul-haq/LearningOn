@@ -12,7 +12,7 @@ import ProfileCourses from "./ProfileCourses";
 import Wallet from "./Wallet";
 import useTheme from "@mui/material/styles/useTheme";
 
-const ProfileRight = ({ userInfo }) => {
+const ProfileRight = ({ userInfo, myPublishedCourses }) => {
     const theme = useTheme();
     const { openedTab } = useContext(ProfilePageContext);
     const user = useSelector((state) => state.auth.user);
@@ -141,7 +141,7 @@ const ProfileRight = ({ userInfo }) => {
                         padding: isMobileScreens ? "0rem" : "0rem 2rem",
                     }}
                 >
-                    <ProfileCourses userCourses={userInfo?.courses} />
+                    <ProfileCourses userCourses={userInfo?.courses} myPublishedCourses={myPublishedCourses} />
                 </Box>
                 <Divider
                     light

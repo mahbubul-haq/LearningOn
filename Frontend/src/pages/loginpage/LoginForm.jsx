@@ -9,6 +9,7 @@ import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton.jsx";
 import StyledTextField from "../../components/StyledInputField.jsx";
+import LoginSignUpButton from "./LoginSignUpButton.jsx";
 
 const loginSchema = yup.object().shape({
     email: yup.string().required("Email is required"),
@@ -20,7 +21,7 @@ const initialValuesLogin = {
     password: "",
 };
 
-const LoginForm = ({ redirect }) => {
+const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
 
     const [emailError, setEmailError] = React.useState("");
@@ -30,44 +31,51 @@ const LoginForm = ({ redirect }) => {
     const dispatch = useDispatch();
 
     const login = async (values, onSubmitProps) => {
-        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {
-            method: "POST",
-            body: JSON.stringify({
-                email: values.email,
-                password: values.password,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        setIsFormSubmitting(true);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {
+                method: "POST",
+                body: JSON.stringify({
+                    email: values.email,
+                    password: values.password,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
-        const data = await response.json();
-        if (data.success) {
-            console.log(data);
-            onSubmitProps.resetForm();
+            const data = await response.json();
+            if (data.success) {
+                // console.log(data);
+                onSubmitProps.resetForm();
 
-            /// dispatch token & user from data
-            dispatch(
-                setLogin({
-                    token: data.token,
-                    user: data.user,
-                })
-            );
-            if (redirect) {
-                navigate(redirect);
+                /// dispatch token & user from data
+                dispatch(
+                    setLogin({
+                        token: data.token,
+                        user: data.user,
+                    })
+                );
+                if (redirect) {
+                    navigate(redirect);
+                } else {
+                    navigate("/");
+                }
             } else {
-                navigate("/");
+                // console.log(data);
+                if (data.errors.email) {
+                    setEmailError("Email is incorrect");
+                    setPasswordError("");
+                }
+                if (data.errors.password) {
+                    setPasswordError("Password is incorrect");
+                    setEmailError("");
+                }
             }
-        } else {
-            console.log(data);
-            if (data.errors.email) {
-                setEmailError("Email is incorrect");
-                setPasswordError("");
-            }
-            if (data.errors.password) {
-                setPasswordError("Password is incorrect");
-                setEmailError("");
-            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsFormSubmitting(false);
         }
     };
 
@@ -79,127 +87,64 @@ const LoginForm = ({ redirect }) => {
     return (
         <Formik initialValues={initialValuesLogin} validationSchema={loginSchema} onSubmit={handleFormSubmit}>
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isValid }) => {
-                const isSubmitDisabled = !isValid || !values.email || !values.password || emailError !== "" || passwordError !== "";
+                const isSubmitDisabled = !isValid || !values.email || !values.password || emailError !== "" || passwordError !== "" || isFormSubmitting;
                 return (
-                <form
-                    style={{
-                        width: "100%",
-                    }}
-                    onSubmit={handleSubmit}
-                >
-                    <Box
-                        sx={{
-                            textAlign: "center",
-                            display: "flex",
-                            flexDirection: "column",
+                    <form
+                        style={{
                             width: "100%",
-                            gap: "0.5rem",
                         }}
+                        onSubmit={handleSubmit}
                     >
-                        <Typography
-                            variant="h5"
-                            sx={{
-                                mb: "2rem",
-                                fontSize: isNonMobileScreens ? "2rem" : "1.5rem",
-                                fontWeight: isNonMobileScreens ? "700" : "600",
-                            }}
-                        >
-                            Login
-                        </Typography>
-
-                        <StyledTextField
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            onInput={() => {
-                                setEmailError("");
-                            }}
-                            value={values.email}
-                            name="email"
-                            error={touched.email && (Boolean(errors.email) || emailError !== "")}
-                            helperText={touched.email && (errors.email || emailError)}
-                            label="Email"
-                        />
-
-                        <StyledTextField
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.password}
-                            name="password"
-                            error={touched.password && (Boolean(errors.password) || passwordError !== "")}
-                            helperText={touched.password && (errors.password || passwordError)}
-                            label="Password"
-                        />
                         <Box
                             sx={{
                                 textAlign: "center",
+                                display: "flex",
+                                flexDirection: "column",
+                                width: "100%",
+                                gap: "0.5rem",
                             }}
                         >
-                            <StyledButton
-                                type="submit"
-                                disabled={isSubmitDisabled}
-                                sx={{
-                                    mt: isNonMobileScreens ? "1rem" : "1rem",
-                                    fontSize: isNonMobileScreens ? "1rem" : "1rem",
-                                    fontWeight: "600",
-                                    "&&": {
-                                        padding: isNonMobileScreens ? "0.5rem 2rem" : "0.5rem 1rem",
-                                        backgroundColor: (theme) => theme.palette.primary.main,
-                                        color: "#ffffff",
-                                        boxShadow: '0 0 15px rgba(107, 76, 221, 0.4)',
-                                        "&:hover": {
-                                            backgroundColor: (theme) => theme.palette.primary.dark,
-                                            boxShadow: '0 0 25px rgba(107, 76, 221, 0.7)',
-                                        },
-                                        "&:disabled": {
-                                            backgroundColor: (theme) => theme.palette.primary.main,
-                                            color: "#ffffff",
-                                            opacity: 0.5,
-                                        }
-                                    },
-                                    width: "100%",
-                                    borderRadius: isNonMobileScreens ? "2rem" : "0.1rem",
-                                }}
-                            >
-                                Log In
-                            </StyledButton>
                             <Typography
-                                variant="body1"
+                                variant="h5"
                                 sx={{
-                                    mt: "1rem",
-                                    fontSize: isNonMobileScreens ? "1rem" : "0.8rem",
+                                    mb: "2rem",
+                                    fontSize: isNonMobileScreens ? "2rem" : "1.5rem",
+                                    fontWeight: isNonMobileScreens ? "700" : "600",
                                 }}
                             >
-                                Don&apos;t have an account?{" "}
-                                <Typography
-                                    variant="body1"
-                                    component="button"
-                                    sx={{
-                                        color: (theme) => theme.palette.error.main,
-                                        fontWeight: "600",
-                                        fontSize: isNonMobileScreens ? "1rem" : "0.8rem",
-                                        cursor: "pointer",
-                                        backgroundColor: "transparent",
-                                        border: "none",
-                                        "&:hover": {
-                                            color: (theme) => theme.palette.error.main,
-                                            textDecoration: "underline",
-                                        },
-                                    }}
-                                    onClick={() => {
-                                        navigate("/signup", {
-                                            state: {
-                                                isLogin: false,
-                                                redirect: redirect
-                                            },
-                                        });
-                                    }}
-                                >
-                                    Sign Up
-                                </Typography>
+                                Login
                             </Typography>
+
+                            <StyledTextField
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                onInput={() => {
+                                    setEmailError("");
+                                }}
+                                value={values.email}
+                                name="email"
+                                error={touched.email && (Boolean(errors.email) || emailError !== "")}
+                                helperText={touched.email && (errors.email || emailError)}
+                                label="Email"
+                            />
+
+                            <StyledTextField
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.password}
+                                name="password"
+                                error={touched.password && (Boolean(errors.password) || passwordError !== "")}
+                                helperText={touched.password && (errors.password || passwordError)}
+                                label="Password"
+                            />
+                            <LoginSignUpButton
+                                isSubmitDisabled={isSubmitDisabled}
+                                redirect={redirect}
+                                isLogin={true}
+                            />
+
                         </Box>
-                    </Box>
-                </form>
+                    </form>
                 );
             }}
         </Formik>

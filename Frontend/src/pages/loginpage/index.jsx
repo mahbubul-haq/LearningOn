@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignupForm";
 import useTheme from "@mui/material/styles/useTheme"
+import { useState } from "react";
 
 const LoginSignUp = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
@@ -11,6 +12,7 @@ const LoginSignUp = () => {
     const isLogin = useLocation().state?.isLogin;
     const redirect = useLocation().state?.redirect;
     const navigate = useNavigate();
+    const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
     return (
         <Box
@@ -131,10 +133,11 @@ const LoginSignUp = () => {
                     }}
                 >
                     {isLogin ? (
-                        <LoginForm redirect={redirect} />
+                        <LoginForm redirect={redirect} isFormSubmitting={isFormSubmitting} setIsFormSubmitting={setIsFormSubmitting} />
                     ) : (
-                        <SignUpForm redirect={redirect} />
+                        <SignUpForm redirect={redirect} isFormSubmitting={isFormSubmitting} setIsFormSubmitting={setIsFormSubmitting} />
                     )}
+
                 </Box>
             </Box>
         </Box>

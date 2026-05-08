@@ -1,48 +1,37 @@
+import React, { useRef, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import CourseWidget from "../../widgets/CourseWidget";
 import { colorTokens } from "../../theme";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import useMediaQuery from "@mui/material/useMediaQuery";
-
-const ProfileCourses = ({ userCourses }) => {
+import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = ({ userCourses, myPublishedCourses }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
+  const containerRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+
+  const checkArrows = () => {
+    if (containerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 1);
+    }
+  };
+
+  useEffect(() => {
+    checkArrows();
+    window.addEventListener("resize", checkArrows);
+    return () => window.removeEventListener("resize", checkArrows);
+  }, [myPublishedCourses]);
 
   const handleScroll = (direction) => {
-    const container = document.querySelector(".profile-courses-container");
-    const scrollDistance = isNonMobileScreens ? 500 : 200;
-    if (direction === "right") {
-      container.scrollBy({
-        top: 0,
-        left: scrollDistance,
-        behavior: "smooth",
-      });
-    } else {
-      container.scrollBy({
-        top: 0,
-        left: -scrollDistance,
-        behavior: "smooth",
-      });
+    if (containerRef.current) {
+      const scrollDistance = isNonMobileScreens ? 500 : 200;
+      if (direction === "right") {
+        containerRef.current.scrollBy({ left: scrollDistance, behavior: "smooth" });
+      } else {
+        containerRef.current.scrollBy({ left: -scrollDistance, behavior: "smooth" });
+      }
     }
-
-    setTimeout(() => {
-      let leftArrow = document.querySelector(".profile-course-left-arrow");
-      let rightArrow = document.querySelector(".profile-course-right-arrow");
-
-      if (container.scrollLeft === 0) {
-        leftArrow.style.visibility = "hidden";
-      } else {
-        leftArrow.style.visibility = "visible";
-      }
-
-      if (
-        container.scrollLeft + container.clientWidth + 10 >=
-        container.scrollWidth
-      ) {
-        rightArrow.style.visibility = "hidden";
-      } else {
-        rightArrow.style.visibility = "visible";
-      }
-    }, 100);
   };
 
   return (
@@ -53,7 +42,7 @@ const ProfileCourses = ({ userCourses }) => {
         width: "100%",
       }}
     >
-      {userCourses && userCourses.length > 0 && (
+      {myPublishedCourses && myPublishedCourses.length > 0 && (
         <Box
           //className="courses-wrapper"
           sx={{
@@ -64,23 +53,28 @@ const ProfileCourses = ({ userCourses }) => {
           <Box
             className="profile-course-right-arrow"
             sx={{
+              display: showRightArrow ? "flex" : "none",
               position: "absolute",
-              right: isNonMobileScreens ? "0" : "-25px",
-              top: isNonMobileScreens ? "0" : "50%",
-              transform: isNonMobileScreens ? "none" : "translateY(-50%)",
-              display: "flex",
+              right: isNonMobileScreens ? "-25px" : "-15px",
+              top: "50%",
+              transform: "translateY(-50%)",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: colorTokens.translucentBlack.x7,
+              backgroundColor: (theme) => theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              border: (theme) => theme.palette.mode === 'dark' ? "1px solid rgba(255, 255, 255, 0.2)" : "1px solid rgba(0, 0, 0, 0.1)",
               ":hover": {
-                backgroundColor: colorTokens.translucentBlack.x9,
+                backgroundColor: (theme) => theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)",
+                transform: "translateY(-50%) scale(1.1)",
               },
               cursor: "pointer",
-              transition: "all 0.5s ease",
-              zIndex: "1",
-              height: isNonMobileScreens ? "100%" : "45px",
-              width: isNonMobileScreens ? "auto" : "45px",
-              borderRadius: isNonMobileScreens ? "0" : "50%",
+              transition: "all 0.3s ease",
+              zIndex: "10",
+              height: isNonMobileScreens ? "50px" : "40px",
+              width: isNonMobileScreens ? "50px" : "40px",
+              borderRadius: "50%",
             }}
             onClick={() => {
               handleScroll("right");
@@ -88,9 +82,10 @@ const ProfileCourses = ({ userCourses }) => {
           >
             <ArrowForwardIosIcon
               sx={{
-                fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
-                color: colorTokens.white.main,
+                fontSize: isNonMobileScreens ? "1.5rem" : "1.2rem",
+                color: (theme) => theme.palette.mode === 'dark' ? colorTokens.white.main : "black",
                 alignSelf: "center",
+                ml: "3px", // visually center
               }}
             />
           </Box>
@@ -98,25 +93,28 @@ const ProfileCourses = ({ userCourses }) => {
           <Box
             className="profile-course-left-arrow"
             sx={{
+              display: showLeftArrow ? "flex" : "none",
               position: "absolute",
-              left: isNonMobileScreens ? "0" : "-25px",
-              // top: "0",
-              // bottom: "0",
-              display: "flex",
+              left: isNonMobileScreens ? "-25px" : "-15px",
+              top: "50%",
+              transform: "translateY(-50%)",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: colorTokens.translucentBlack.x7,
+              backgroundColor: (theme) => theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              border: (theme) => theme.palette.mode === 'dark' ? "1px solid rgba(255, 255, 255, 0.2)" : "1px solid rgba(0, 0, 0, 0.1)",
               ":hover": {
-                backgroundColor: colorTokens.translucentBlack.x9,
+                backgroundColor: (theme) => theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)",
+                transform: "translateY(-50%) scale(1.1)",
               },
               cursor: "pointer",
-              transition: "all 0.5s ease",
-              zIndex: "1",
-              height: isNonMobileScreens ? "100%" : "45px",
-              width: isNonMobileScreens ? "auto" : "45px",
-              borderRadius: isNonMobileScreens ? "0" : "50%",
-              top: isNonMobileScreens ? "0" : "50%",
-              transform: isNonMobileScreens ? "none" : "translateY(-50%)",
+              transition: "all 0.3s ease",
+              zIndex: "10",
+              height: isNonMobileScreens ? "50px" : "40px",
+              width: isNonMobileScreens ? "50px" : "40px",
+              borderRadius: "50%",
             }}
             onClick={() => {
               handleScroll("left");
@@ -124,27 +122,35 @@ const ProfileCourses = ({ userCourses }) => {
           >
             <ArrowForwardIosIcon
               sx={{
-                fontSize: isNonMobileScreens ? "3rem" : "1.5rem",
-                color: colorTokens.white.main,
+                fontSize: isNonMobileScreens ? "1.5rem" : "1.2rem",
+                color: (theme) => theme.palette.mode === 'dark' ? colorTokens.white.main : "black",
                 alignSelf: "center",
                 transform: "rotate(180deg)",
+                mr: "2px", // visually center
               }}
             />
           </Box>
           <Box
+            ref={containerRef}
             className="profile-courses-container"
+            onScroll={checkArrows}
             sx={{
               display: "flex",
               flexWrap: "nowrap",
               gap: isNonMobileScreens ? "1.5rem" : "1rem",
-              overflowX: "hidden",
+              overflowX: "auto",
               width: "100%",
               height: "100%",
               scrollBehavior: "smooth",
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
+              msOverflowStyle: "none",
+              scrollbarWidth: "none",
             }}
           >
-            {userCourses?.map((course) => {
-              if (course?.courseStatus !== "published") return null;
+            {myPublishedCourses?.map((course) => {
+              // if (course?.courseStatus !== "published") return null;
               return (
                 <Box
                   key={course._id}
@@ -163,7 +169,7 @@ const ProfileCourses = ({ userCourses }) => {
                     </Typography> */}
         </Box>
       )}
-      {(!userCourses || userCourses.length === 0) && (
+      {(!myPublishedCourses || myPublishedCourses.length === 0) && (
         <Box
           sx={{
             display: "flex",

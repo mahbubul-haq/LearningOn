@@ -92,8 +92,8 @@ const ProfileTop = ({ userInfo }) => {
     if (!file) {
       return;
     }
-    if (file.size > 1000000) {
-      alert("File size is too large. Please upload a file less than 1MB");
+    if (file.size > 5000000) {
+      alert("File size is too large. Please upload a file less than 5MB");
       return;
     }
 
@@ -104,12 +104,12 @@ const ProfileTop = ({ userInfo }) => {
 
     const formData = new FormData();
     formData.append("picture", file);
-    formData.append("isVideo", "false");
+    formData.append("resource_type", "image");
 
-    await deleteFile(userInfo?.picturePath, false);
+    //await deleteFile(userInfo?.picturePath, false);
 
-    const res = await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/fileupload`,
+    const res = await axios.patch(
+      `${import.meta.env.VITE_SERVER_URL}/api/v1/users/profile-picture`,
       formData,
       {
         headers: {
@@ -120,12 +120,15 @@ const ProfileTop = ({ userInfo }) => {
     );
 
     const data = res.data;
-    // console.log(data);
+
+    console.log(data);
 
     if (data.success) {
-      setChangedProfileInfo({
-        ...changedProfileInfo,
-        picturePath: data.fileName,
+      setUserById(prev => {
+        return {
+          ...prev,
+          avatar: data.avatar
+        }
       });
     } else {
       console.log("File upload failed");
@@ -192,6 +195,7 @@ const ProfileTop = ({ userInfo }) => {
           userInfo={userInfo}
           getQualifications={getQualifications}
           changeProfilePicture={changeProfilePicture}
+          setUserById={setUserById}
         />
 
       </Box>

@@ -84,7 +84,7 @@ const LeftPanelTop = ({ courseInfo, courseProgress, aggregatedProgress, setIsCom
                     background: (theme) => `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`
                 }
             }} />
-            {Math.round(aggregatedProgress) >= 100 && setIsCompletionDialogOpen && (
+            {Math.round(aggregatedProgress) >= 99.9 && setIsCompletionDialogOpen && (
                 <Box
                     onClick={() => setIsCompletionDialogOpen(true)}
                     sx={{

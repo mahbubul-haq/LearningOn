@@ -147,12 +147,12 @@ export const CoursePageState = (props) => {
         let reviewCountWithText = courseInfo.ratings?.reviewCountWithText;
 
 
-        if (!userReviewInAllReviews && myReview) {
+        if (!userReviewInAllReviews.current && myReview) {
             if (myReview?.rating) totalRating += myReview.rating;
             if (myReview?.review) reviewCountWithText++;
             numberOfRatings++;
         }
-        else if (userReviewInAllReviews && myReview) {
+        else if (userReviewInAllReviews.current && myReview) {
             totalRating += myReview.rating - previousRating.current.rating;
             reviewCountWithText += (!previousRating.current.review && myReview.review ? 1 :
                 previousRating.current.review && !myReview.review ? -1 :

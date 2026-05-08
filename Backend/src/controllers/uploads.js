@@ -18,14 +18,14 @@ const uploadFile = async (req, res) => {
       const uploadRes = await uploadImage(req.file.path, isVideo);
       //console.log('not sure what is happening here', uploadRes);
 
-      fs.unlink(
-        path.join(__dirname, "../../assets/images", req.file.filename),
-        (err) => {
-          if (err) {
-            console.log(err);
-          }
-        }
-      );
+      // fs.unlink(
+      //   path.join(__dirname, "../../assets/images", req.file.filename),
+      //   (err) => {
+      //     if (err) {
+      //       console.log(err);
+      //     }
+      //   }
+      // );
 
       if (uploadRes.success) {
         console.log("uploaded to cloudinary");
@@ -58,6 +58,16 @@ const uploadFile = async (req, res) => {
       success: false,
       message: "File upload failed",
     });
+  }
+  finally {
+    if (req.file) {
+      // console.log("unlinking file", req.file);
+      fs.unlink(req.file.path, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
   }
 };
 

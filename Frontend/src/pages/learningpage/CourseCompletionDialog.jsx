@@ -12,6 +12,7 @@ import CourseCompletionReview from './CourseCompletionReview';
 import CourseCompletionNextSteps from './CourseCompletionNextSteps';
 import { CoursePageContext } from '../../state/CoursePageContext';
 import { useSelector } from 'react-redux';
+import { useGetCertificate } from './hooks/CourseCompletionHooks';
 
 const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, user }) => {
     const theme = useTheme();
@@ -26,7 +27,6 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     const [initialRating, setInitialRating] = useState(0);
     const [initialReviewText, setInitialReviewText] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [certificate, setCertificate] = useState(null);
     const [reviewSubmitted, setReviewSubmitted] = useState(false);
     // const [totalScore, setTotalScore] = useState(0);
 
@@ -51,44 +51,8 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
 
     const dummyCertId = `LC-CERT-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
 
-    const getCertificate = async (attempt) => {
-        try {
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/${courseInfo?._id}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        'auth-token': token
-                    },
 
-                }
-            );
-            const data = await res.json();
-            if (data?.success) {
-                setCertificate(data.certificate);
-            }
-            else if (attempt < 2) {
-                setTimeout(() => {
-                    getCertificate(attempt + 1);
-                }, 2000);
-            }
-            else {
-                setCertificate(null);
-            }
-        } catch (error) {
-            // console.log(error);
-            if (attempt < 2) {
-                setTimeout(() => {
-                    getCertificate(attempt + 1);
-                }, 2000);
-            }
-            else {
-                setCertificate(null);
-            }
-        }
-    }
-
-
+    const { data: certificate, isLoading: isLoadingCertificate, error: certificateError } = useGetCertificate(courseInfo?._id, token, !!courseProgress?.completionDate);
 
 
     useEffect(() => {

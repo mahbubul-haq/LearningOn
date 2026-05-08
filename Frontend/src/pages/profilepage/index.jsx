@@ -15,6 +15,8 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { useSelector } from "react-redux";
+import { useMyPublishedCourses } from "../homepage/hooks/HomeCoursesHooks";
 
 const ProfilePage = () => {
     const { userId } = useParams();
@@ -27,6 +29,9 @@ const ProfilePage = () => {
         setProfileInfoChanged,
     } = useContext(ProfilePageContext);
     const theme = useTheme();
+    const { token } = useSelector((state) => state.auth);
+
+    const { data: myPublishedCourses, isLoading: myPublishedCoursesLoading } = useMyPublishedCourses(token);
 
     const getQualifications = () => {
         let qualifications = [];
@@ -135,7 +140,7 @@ const ProfilePage = () => {
                                 padding: "0",
                             }}
                         >
-                            <ProfileLeft userInfo={userById} />
+                            <ProfileLeft userInfo={userById} myPublishedCourses={myPublishedCourses} />
                         </Box>
                     )}
                     <Box
@@ -146,7 +151,7 @@ const ProfilePage = () => {
                             padding: { xs: "1rem", sm: "2rem" },
                         }}
                     >
-                        <ProfileRight userInfo={userById} />
+                        <ProfileRight userInfo={userById} myPublishedCourses={myPublishedCourses} />
                     </Box>
                 </Box>
             </Box>

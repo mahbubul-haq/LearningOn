@@ -305,6 +305,37 @@ const getCourseLessons = async (req, res) => {
     }
 };
 
+const getMyPublishedCourses = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const courses = await Course.find(
+            { $or: [{ owner: userId }, { courseInstructors: userId }], courseStatus: "published" },
+            {
+                courseTitle: 1,
+                courseThumbnail: 1,
+                owner: 1,
+                ratings: 1,
+                coursePrice: 1,
+                skillTags: 1,
+                courseStatus: 1,
+            }
+        )
+            .sort({ createdAt: -1 })
+            .populate("owner", "name");
+        res.status(200).json({
+            success: true,
+            courses: courses,
+        });
+
+
+    } catch (error) {
+        // console.log(error);
+        res.status(500).json({
+            success: false,
+        });
+    }
+}
+
 
 export {
     getCourseLessons,
@@ -312,5 +343,6 @@ export {
     getPopularCourses,
     getUnpublishedCourses,
     getCourses,
+    getMyPublishedCourses,
 };
 

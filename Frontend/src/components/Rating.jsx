@@ -25,7 +25,7 @@ const Rating = ({ rating }) => {
             }}
         >
             <Typography variant="h6">
-                {rating.rating ? rating.rating : 4.5}
+                {rating.rating ? rating.rating.toFixed(1) : (0.0).toFixed(1)}
             </Typography>
             <StyledRating
                 sx={{
@@ -35,16 +35,16 @@ const Rating = ({ rating }) => {
                     paddingBottom: "2px", // readOnly causes some space on top
                     overflow: "hidden",
                 }}
-                defaultValue={2.5}
-                value={rating.rating ? rating.rating : 4.5}
+                defaultValue={0}
+                value={rating.rating ? rating.rating : 0}
                 precision={0.5}
                 size="small"
                 readOnly
-                max={rating.oneStar ? 1 : 5}
+            // max={rating.oneStar ? 1 : 5}
             // max={1}
             />
             <Typography variant="lightGrey">
-                {`(${rating.count ? rating.count : 20})`}
+                {`(${rating.count ? rating.count : 0})`}
             </Typography>
         </Box>
     );

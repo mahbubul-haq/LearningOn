@@ -333,7 +333,7 @@ const getAllCourses = async (req, res) => {
 
 const getMyCourses = async (req, res) => {
     try {
-        console.log("get My courses called");
+        // console.log("get My courses called");
         // find courses with owner as req.userId or there is an entry req.userId inside courseInstructors
         const courses = await Course.find(
             { $or: [{ owner: req.userId }, { courseInstructors: req.userId }] },

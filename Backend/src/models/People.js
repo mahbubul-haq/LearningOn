@@ -23,7 +23,19 @@ const PeopleSchema = new mongoose.Schema(
             minlength: [5, "Password must be at least 5 characters long"],
             maxlength: [100, "Password must be at most 100 characters long"],
         },
-        picturePath: {
+        avatar: {
+            public_id: {
+                type: String,
+                required: false,
+                default: "",
+            },
+            secure_url: {
+                type: String,
+                required: false,
+                default: "",
+            },
+        },
+        picturePath: {//legacy
             type: String,
             required: false,
             default: "",
