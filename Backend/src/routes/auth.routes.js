@@ -1,13 +1,15 @@
 import { Router } from "express";
-import { upload } from "../configs/multer.config.js";
+import { verifyTokenLight } from "../middlewares/auth.middleware.js";
 
-import { login, register } from "../controllers/auth.controller.js";
+import { login, register, logout, refreshToken } from "../controllers/auth.controller.js";
 
 const router = Router();
 
 router.post("/login", login);
 // == uploading image to cloudinary
 router.post("/register", register);
+router.post("/logout", verifyTokenLight, logout);
+router.post("/refresh", refreshToken);
 
 // == uploading image to file system using multer - discarded & register changed accordingly
 // router.post(

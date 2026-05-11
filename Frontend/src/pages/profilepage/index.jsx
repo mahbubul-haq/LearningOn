@@ -18,6 +18,8 @@ import Alert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
 import { useUserPublishedCourses } from "../homepage/hooks/HomeCoursesHooks";
 
+
+
 const ProfilePage = () => {
     const { userId } = useParams();
     const { userById, getUserById, setOpenedItem } = useContext(GlobalContext);

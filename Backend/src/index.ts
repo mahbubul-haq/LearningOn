@@ -6,6 +6,7 @@ import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
 
 
 // internal imports
@@ -13,7 +14,7 @@ import http from "http";
 import { upload } from "./configs/multer.config.js";
 import { initializeStripe, stripeWebHook } from "./controllers/data.js";
 import { deleteFile, uploadFile } from "./controllers/uploads.js";
-import verifyToken from "./middlewares/auth.js";
+import verifyToken from "./middlewares/auth.middleware.js";
 import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.routes.js";
 import quizRoutes from "./routes/quiz.routes.js";
@@ -31,6 +32,7 @@ import certificateRoutes from "./routes/certificate.routes.js";
 import enrollmentRoutes from "./routes/enrollment.routes.js";
 import errorHandler from "./errors/errorHandler.js";
 import userRoutesNew from "./routes/user.routes.js";
+import { connectRedis } from "./configs/redisClient.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 console.log("dirname", __dirname);
@@ -59,12 +61,14 @@ app.use(cors(
     }
 ));
 
+app.use(cookieParser());
+
 app.use("/images", express.static(path.join(__dirname, "../assets/images")));
 
 // routes
 
 // LEGACY
-app.use("/auth", authRoutes);
+app.use("/api/v1/auth", authRoutes);
 app.use("/course", courseRoutes);
 app.use("/data", dataRoutes);
 app.use("/users", userRoutes);
@@ -101,12 +105,12 @@ app.use(errorHandler);
 const server = http.createServer(app);
 
 connectSocket(server);
-
-mongoose.connect(process.env.MONGO_URI!).then(() => {
-    console.log("Connected to MongoDB");
-    server.listen(5000, () => {
-        console.log("Server is running on port 5000");
-    });
-}).catch((err) => {
-    console.log("Database connection failed", err);
-})
+connectRedis().then(() =>
+    mongoose.connect(process.env.MONGO_URI!)).then(() => {
+        console.log("Connected to MongoDB");
+        server.listen(5000, () => {
+            console.log("Server is running on port 5000");
+        });
+    }).catch((err) => {
+        console.log("Database connection failed", err);
+    })

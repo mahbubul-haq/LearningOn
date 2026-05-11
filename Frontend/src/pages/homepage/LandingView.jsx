@@ -19,11 +19,11 @@ const LandingView = () => {
     const showDashboard = () => {
         return (
             user &&
-            (user.courses.reduce((acc, course) => {
+            (user?.courses?.reduce((acc, course) => {
                 return acc + (course.courseStatus == "draft" ? 0 : 1);
             }, 0) > 0 ||
-                user.tutoring.length > 0 ||
-                user.blogs.length > 0)
+                user?.tutoring?.length > 0 ||
+                user?.blogs?.length > 0)
         );
     };
 

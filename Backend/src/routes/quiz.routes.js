@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getQuizAttempt } from "../controllers/quiz.controller.js";
-import verifyToken from "../middlewares/auth.js";
+import verifyToken from "../middlewares/auth.middleware.js";
 import { processAnswer } from "../controllers/quiz.controller.js";
 
 const router = Router();

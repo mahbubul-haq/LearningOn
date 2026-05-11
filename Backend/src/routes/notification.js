@@ -6,7 +6,7 @@ import {
     updateNotification,
     createNotification,
 } from "../controllers/notification.js";
-import verifyToken from "../middlewares/auth.js";
+import verifyToken from "../middlewares/auth.middleware.js";
 
 const router = Router();
 

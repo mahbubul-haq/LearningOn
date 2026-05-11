@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton.jsx";
 import StyledTextField from "../../components/StyledInputField.jsx";
 import LoginSignUpButton from "./LoginSignUpButton.jsx";
+import { apiFetch } from "../../api/apiFetch.js";
 
 const loginSchema = yup.object().shape({
     email: yup.string().required("Email is required"),
@@ -33,18 +34,19 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
     const login = async (values, onSubmitProps) => {
         setIsFormSubmitting(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {
+            const data = await apiFetch({
+                url: "/api/v1/auth/login",
                 method: "POST",
-                body: JSON.stringify({
+                data: {
                     email: values.email,
                     password: values.password,
-                }),
-                headers: {
-                    "Content-Type": "application/json",
                 },
-            });
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            })
 
-            const data = await response.json();
+
             if (data.success) {
                 // console.log(data);
                 onSubmitProps.resetForm();

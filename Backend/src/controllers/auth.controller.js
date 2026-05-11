@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import People from "../models/People.js";
 import { deleteImage, uploadImage } from "../utils/cloudinary.js";
+import { generateAccessToken, generateRefreshToken } from "../services/token.service.js";
+import redisClient from "../configs/redisClient.js";
+import jwt from "jsonwebtoken";
 
 const register = async (req, res) => {
     try {
@@ -68,28 +70,7 @@ const login = async (req, res) => {
 
         let user = await People.findOne({
             email: email,
-        })
-            .populate("followers following")
-            .populate({
-                path: "courses",
-                select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice courseStatus",
-                populate: {
-                    path: "owner",
-                    select: "name _id",
-                },
-            })
-            .populate({
-                path: "enrolledCourses",
-                populate: {
-                    path: "courseId",
-                    select: "_id category courseTitle skillTags ratings courseThumbnail coursePrice courseStatus",
-                    populate: {
-                        path: "owner",
-                        select: "name _id",
-                    },
-                },
-            })
-            .exec();
+        }).select("name email avatar +password").lean();
 
         if (!user) {
             return res.status(401).json({
@@ -116,63 +97,21 @@ const login = async (req, res) => {
         }
 
         user.password = undefined;
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
 
-        user = user._doc;
+        await redisClient.set(`refresh:${user._id}`, refreshToken, { EX: 7 * 24 * 60 * 60 });
 
-        user.courses = user.courses?.map((course) => {
-            return {
-                ...course._doc,
-                ratings: {
-                    totalRating: course._doc.ratings.totalRating,
-                    numberOfRatings: course._doc.ratings.numberOfRatings,
-                },
-            };
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
-
-        user.enrolledCourses = user.enrolledCourses?.map((course) => {
-            if (!course._doc.courseId) return null;
-
-            let modified = {
-                ...course._doc,
-                course: {
-                    category: course._doc.courseId?.category,
-                    coursePrice: course._doc.courseId?.coursePrice,
-                    courseTitle: course._doc.courseId?.courseTitle,
-                    skillTags: course._doc.courseId?.skillTags,
-                    courseThumbnail: course._doc.courseId?.courseThumbnail,
-                    courseStatus: course._doc.courseId?.courseStatus,
-                    _id: course._doc.courseId?._id,
-                    owner: {
-                        _id: course._doc.courseId?.owner?._id,
-                        name: course._doc.courseId?.owner?.name,
-                    },
-                    ratings: {
-                        totalRating: course._doc.courseId?.ratings?.totalRating,
-                        numberOfRatings:
-                            course._doc.courseId?.ratings?.numberOfRatings,
-                    },
-                },
-            };
-            delete modified.courseId;
-
-            return modified;
-        });
-
-        user.enrolledCourses = user.enrolledCourses?.filter((user) => user);
-
-        const token = jwt.sign(
-            {
-                id: user._id,
-                email: user.email,
-                name: user.name,
-            },
-            process.env.JWT_SECRET
-            // no expiration time
-        );
 
         res.status(200).json({
             success: true,
-            token: token,
+            token: accessToken,
             user: user,
         });
     } catch (error) {
@@ -184,5 +123,86 @@ const login = async (req, res) => {
     }
 };
 
-export { login, register };
+const refreshToken = async (req, res) => {
+    try {
+        // get refresh token from HttpOnly cookie
+        const refreshToken = req.cookies.refreshToken;
+
+        if (!refreshToken) {
+            return res.status(401).json({ message: "No refresh token" });
+        }
+
+        // verify token
+        const decoded = jwt.verify(
+            refreshToken,
+            process.env.REFRESH_SECRET
+        );
+
+        // check Redis (server-side validation)
+        const storedToken = await redisClient.get(
+            `refresh:${decoded.id}`
+        );
+
+        if (!storedToken || storedToken !== refreshToken) {
+            return res.status(403).json({ message: "Invalid refresh token" });
+        }
+
+        // generate new tokens (rotation)
+        const newAccessToken = generateAccessToken(decoded);
+        const newRefreshToken = generateRefreshToken(decoded);
+
+        // update Redis
+        await redisClient.set(
+            `refresh:${decoded.id}`,
+            newRefreshToken,
+            { EX: 7 * 24 * 60 * 60 }
+        );
+
+        // update cookie
+        res.cookie("refreshToken", newRefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        return res.json({
+            success: true,
+            token: newAccessToken,
+        });
+    } catch (err) {
+        return res.status(403).json({
+            success: false,
+            message: "Token expired or invalid",
+        });
+    }
+};
+
+const logout = async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        // 1. remove refresh token from Redis (invalidate session)
+        await redisClient.del(`refresh:${userId}`);
+
+        // 2. clear refresh token cookie
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "Logout failed",
+        });
+    }
+};
+
+export { login, register, refreshToken, logout };
 
