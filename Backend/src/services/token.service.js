@@ -6,6 +6,7 @@ export const generateAccessToken = (user) => {
             id: user._id,
             email: user.email,
             name: user.name,
+            timestamp: Date.now()
         },
         process.env.JWT_SECRET,
         { expiresIn: "20m" }

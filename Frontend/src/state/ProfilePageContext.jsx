@@ -1,10 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { createContext } from "react";
 import { useSelector } from "react-redux";
+import { apiFetch } from "../api/apiFetch";
+import { updateAccessToken } from "../api/authStore";
+import { useNavigate } from "react-router-dom";
 
 export const ProfilePageContext = createContext();
 
 export const ProfilePageState = (props) => {
+  const navigate = useNavigate();
   const [openedTab, setOpenedTab] = React.useState("profile");
   const { token } = useSelector((state) => state.auth);
   const [followingDone, setFollowingDone] = React.useState(false);
@@ -63,6 +67,30 @@ export const ProfilePageState = (props) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      const data = await apiFetch(
+        {
+          url: "/api/v1/auth/logout",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data.success) {
+        updateAccessToken(null, Date.now());
+        navigate("/", { replace: true });
+      }
+      else {
+
+      }
+    } catch (err) {
+      //console.log(err?.message);
+    }
+  };
+
   return (
     <ProfilePageContext.Provider
       value={{
@@ -78,6 +106,7 @@ export const ProfilePageState = (props) => {
         changedProfileInfo,
         setChangedProfileInfo,
         updateProfile,
+        logout,
       }}
     >
       {props.children}

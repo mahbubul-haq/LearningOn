@@ -1,31 +1,33 @@
 import axios from "axios";
 
 import {
-    setAccessToken,
+    getLastAccessTokenTime,
     shouldRefreshToken,
-    updateRefreshTime,
+    updateAccessToken,
+    updateAccessTokenTime,
 } from "./authStore";
 
 export const refreshAccessToken = async (force = false) => {
     if (!force && !shouldRefreshToken()) {
         return;
     }
-
-    updateRefreshTime();
-    console.log("Calling refresh access token");
+    console.log("Refreshing access token");
+    let lastAccessTokenTime = getLastAccessTokenTime();
+    updateAccessTokenTime(Date.now())
 
     const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/refresh`,
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/auth/refresh`,
         {},
         {
             withCredentials: true,
         }
     );
 
-    if (res?.data?.accessToken) setAccessToken(res.data.accessToken);
-    else setAccessToken(null);
+    if (res?.data?.token) {
+        updateAccessToken(res.data.token, Date.now());
+    }
+    else updateAccessTokenTime(lastAccessTokenTime);
 
-    updateRefreshTime();
 
     return res?.data?.accessToken || null;
 };

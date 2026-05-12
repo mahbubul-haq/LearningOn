@@ -4,6 +4,7 @@ import { deleteImage, uploadImage } from "../utils/cloudinary.js";
 import { generateAccessToken, generateRefreshToken } from "../services/token.service.js";
 import redisClient from "../configs/redisClient.js";
 import jwt from "jsonwebtoken";
+import { deleteFile, uploadFile } from "../services/upload/uploadFile.js";
 
 const register = async (req, res) => {
     try {
@@ -12,10 +13,9 @@ const register = async (req, res) => {
 
         if (req.body.picture) {
             try {
-                const res = await uploadImage(req.body.picture);
-                if (res.success) {
-                    req.body.picturePath = res.uploadResponse.public_id;
-                }
+                const res = await uploadFile(req.body.picture, 'image');
+                req.body.avatar = res
+
             } catch (err) {
                 console.log(err);
             }
@@ -47,8 +47,8 @@ const register = async (req, res) => {
         //     console.log("File removed");
         // }
         try {
-            if (req.body.picturePath) {
-                await deleteImage(req.body.picturePath);
+            if (req.body.avatar) {
+                await deleteFile(req.body.avatar.public_id);
             }
         } catch (err) {
             //console.log(err);
@@ -101,6 +101,7 @@ const login = async (req, res) => {
         const refreshToken = generateRefreshToken(user);
 
         await redisClient.set(`refresh:${user._id}`, refreshToken, { EX: 7 * 24 * 60 * 60 });
+        await redisClient.set(`accessToken:${user._id}`, accessToken, { EX: 20 * 60 });
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
@@ -127,6 +128,7 @@ const refreshToken = async (req, res) => {
     try {
         // get refresh token from HttpOnly cookie
         const refreshToken = req.cookies.refreshToken;
+        console.log("Refreshing access token");
 
         if (!refreshToken) {
             return res.status(401).json({ message: "No refresh token" });

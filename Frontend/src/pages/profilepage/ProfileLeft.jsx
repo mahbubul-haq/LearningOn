@@ -10,14 +10,11 @@ import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import { StyledButton } from "../../components/StyledButton";
 import { ProfilePageContext } from "../../state/ProfilePageContext";
-import { setLogout } from "../../state/reduxStore/authSlice";
 
 const ProfileLeft = ({ userInfo, userPublishedCourses }) => {
     const theme = useTheme();
-    const { openedTab, setOpenedTab } = useContext(ProfilePageContext);
+    const { openedTab, setOpenedTab, logout } = useContext(ProfilePageContext);
     const { user } = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     return (
         <Box
@@ -295,10 +292,7 @@ const ProfileLeft = ({ userInfo, userPublishedCourses }) => {
                                     },
                                 },
                             }}
-                            onClick={() => {
-                                dispatch(setLogout());
-                                navigate("/");
-                            }}
+                            onClick={logout}
                         >
                             Log out
                         </StyledButton>

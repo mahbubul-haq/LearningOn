@@ -52,16 +52,23 @@ const MobileNavTop = ({
                             setOpenDrawer(false);
                         }}
                     >
-                        {user.picturePath ? (
+                        {user.avatar?.secure_url ? (
 
                             <Box sx={{ width: "2.5rem", height: "2.5rem", borderRadius: "50%", overflow: "hidden" }}>
-                                <AdvancedImage
+                                {/* <AdvancedImage
                                     plugins={[lazyload()]}
                                     cldImg={cloudinaryCld.image(user.picturePath)} style={{
                                         width: "100%",
                                         height: "100%",
                                         objectFit: "cover"
 
+                                    }} /> */}
+                                <img src={user.avatar.secure_url} alt="avatar"
+                                    loading="lazy" style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                        borderRadius: "50%",
                                     }} />
                             </Box>
                             // <img src={`http://localhost:5000/images/1693817741512-237-ip.jpg`} alt="user" style={{width: "2.5rem", height: "2.5rem", borderRadius: "50%", objectFit: "cover"}} loading="lazy" />                                // </CloudinaryContext>

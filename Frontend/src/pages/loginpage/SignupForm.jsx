@@ -12,6 +12,7 @@ import { StyledButton } from "../../components/StyledButton.jsx";
 import StyledTextField from "../../components/StyledInputField.jsx";
 import { colorTokens } from "../../theme.js";
 import LoginSignUpButton from "./LoginSignUpButton.jsx";
+import axiosClient from "../../api/axiosClient.js";
 
 const registerSchema = yup.object().shape({
     name: yup.string().trim().required("Name is required"),
@@ -38,25 +39,19 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
 
     const register = async (values, onSubmitProps) => {
         try {
-            const response = await fetch(
-                `${import.meta.env.VITE_SERVER_URL}/auth/register`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        name: values.name,
-                        email: values.email,
-                        password: values.password,
-                        picture: values.picture,
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await axiosClient({
+                url: `/api/v1/auth/register`,
+                method: "POST",
+                data: {
+                    name: values.name,
+                    email: values.email,
+                    password: values.password,
+                    picture: values.picture,
+                },
+            });
 
-            const data = await response.json();
+            const data = response.data;
             if (data.success) {
-                // console.log(data);
                 setOpenSnackbar(true);
                 onSubmitProps.resetForm();
 
@@ -77,6 +72,8 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
             }
         } catch (error) {
             // console.log(error);
+        } finally {
+            setIsFormSubmitting(false);
         }
     };
 
@@ -90,6 +87,7 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                 reader.onloadend = async () => {
                     values.picture = reader.result;
                     await register(values, onSubmitProps);
+                    setIsFormSubmitting(false);
                 };
                 reader.onerror = () => {
                     console.error("Signup file reader error");
@@ -97,11 +95,11 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
             } else {
                 values.picture = "";
                 await register(values, onSubmitProps);
+                setIsFormSubmitting(false);
             }
         } catch (error) {
             // console.log(error);
         } finally {
-            setIsFormSubmitting(false);
         }
     };
 

@@ -66,7 +66,7 @@ const NavRightIsUser = ({
                     navigate(`/profile/${user._id}`);
                 }}
             >
-                {user.picturePath ? (
+                {user.avatar?.secure_url ? (
                     <Box
                         sx={{
                             width: "2rem",
@@ -74,16 +74,14 @@ const NavRightIsUser = ({
                             borderRadius: "50%",
                         }}
                     >
-                        <AdvancedImage
-                            plugins={[lazyload()]}
-                            cldImg={cloudinaryCld.image(user.picturePath)}
-                            style={{
+
+                        <img src={user.avatar.secure_url} alt="avatar"
+                            loading="lazy" style={{
                                 width: "100%",
                                 height: "100%",
                                 objectFit: "cover",
                                 borderRadius: "50%",
-                            }}
-                        />
+                            }} />
                     </Box>
                 ) : (
                     <AccountCircleIcon

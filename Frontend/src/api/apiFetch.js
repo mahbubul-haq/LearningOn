@@ -4,6 +4,7 @@ import { getAccessToken } from "./authStore";
 
 import { refreshAccessToken } from "./refreshAccessToken";
 import axiosClient from "./axiosClient";
+import { useNavigate } from "react-router-dom";
 
 export const apiFetch = async (config) => {
     // proactive refresh
@@ -15,9 +16,7 @@ export const apiFetch = async (config) => {
             ...config,
             headers: {
                 ...config.headers,
-                "auth-token": getAccessToken()
-                    ? getAccessToken()
-                    : "",
+                "auth-token": getAccessToken() || ""
             },
             withCredentials: true,
         });
@@ -42,9 +41,7 @@ export const apiFetch = async (config) => {
                     ...originalRequest,
                     headers: {
                         ...originalRequest.headers,
-                        "auth-token": getAccessToken()
-                            ? getAccessToken()
-                            : "",
+                        "auth-token": getAccessToken() || ""
                     },
                     withCredentials: true,
                 });
@@ -52,7 +49,9 @@ export const apiFetch = async (config) => {
                 return retryResponse.data;
             } catch (refreshError) {
                 // logout flow
-                window.location.href = "/login";
+                //window.location.href = "/login";
+                const navigate = useNavigate();
+                navigate("/login", { replace: true });
 
                 throw refreshError;
             }

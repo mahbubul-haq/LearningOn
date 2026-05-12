@@ -11,6 +11,7 @@ import { StyledButton } from "../../components/StyledButton.jsx";
 import StyledTextField from "../../components/StyledInputField.jsx";
 import LoginSignUpButton from "./LoginSignUpButton.jsx";
 import { apiFetch } from "../../api/apiFetch.js";
+import axiosClient from "../../api/axiosClient.js";
 
 const loginSchema = yup.object().shape({
     email: yup.string().required("Email is required"),
@@ -34,7 +35,7 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
     const login = async (values, onSubmitProps) => {
         setIsFormSubmitting(true);
         try {
-            const data = await apiFetch({
+            const response = await axiosClient({
                 url: "/api/v1/auth/login",
                 method: "POST",
                 data: {
@@ -46,7 +47,7 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                 },
             })
 
-
+            const data = response.data;
             if (data.success) {
                 // console.log(data);
                 onSubmitProps.resetForm();
@@ -56,6 +57,7 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                     setLogin({
                         token: data.token,
                         user: data.user,
+                        lastAccessTokenTime: Date.now(),
                     })
                 );
                 if (redirect) {
