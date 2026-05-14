@@ -1,8 +1,7 @@
 import "dotenv/config";
 
 import cors from "cors";
-
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -95,11 +94,11 @@ app.use("/api/v1/categories", categoryRoutes);
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);
 app.delete("/filedelete/:fileName/:isVideo", deleteFile);
 
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
     res.send("Hello World");
 });
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).send({
         success: false,
         error: "404 Not found"

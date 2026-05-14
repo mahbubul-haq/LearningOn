@@ -3,6 +3,7 @@ import Course from "../../models/Course.js";
 import QuizAttempt from "../../models/QuizAttempt.js";
 import { createCertificate } from "../certificate/certificate.service.js";
 
+
 const getCourseProgress = async (req: any, res: any) => {
     try {
         const courseId = req.params.courseId;
