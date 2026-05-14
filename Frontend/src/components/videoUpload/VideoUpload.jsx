@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import VideoUploadDropzone from "./VideoUploadDropzone";
 import VideoUploadedFile from "./VideoUploadedFile";
 import VideoUploadProgress from "./VideoUploadProgress";
+import { apiFetch } from "../../api/apiFetch";
 
 const VideoUpload = ({
   updateCallBack,
@@ -89,22 +90,21 @@ const VideoUpload = ({
     };
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/fileupload`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "auth-token": token,
-          },
-          ...options,
-        }
-      );
+      const data = await apiFetch({
+        url: "/fileupload",
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+
+        },
+        ...options,
+      });
 
       // console.log(res.data);
 
-      if (res.data.success) {
-        setFileName(res.data.fileName, res.data.videoDuration);
+      if (data.success) {
+        setFileName(data.fileName, data.videoDuration);
 
         //   setUploadProgress(100);
         //   setWaitingFile(res.data.fileName);

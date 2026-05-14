@@ -3,6 +3,7 @@ import React, { createContext, useRef, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 // import state from ".";
 import axios from "axios";
+import { apiFetch } from "../api/apiFetch";
 
 export const CreateCourseContext = createContext();
 
@@ -136,18 +137,11 @@ export const CreateCourseState = (props) => {
     setDeleteCourseStatus("deleting");
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/delete/${courseId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
-      const data = await response.json();
-      // console.log("deleted", data);
+      const data = await apiFetch({
+        url: `/api/v1/courses/${courseId}`,
+        method: "DELETE",
+      });
+
       if (data.success) {
         setDeleteCourseStatus("deleted");
       } else {
@@ -179,18 +173,10 @@ export const CreateCourseState = (props) => {
     try {
       if (isAnyError()) return;
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/draft`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
-
-      const data = await response.json();
+      const data = await apiFetch({
+        url: `/api/v1/courses/draft`,
+        method: "GET",
+      });
 
       // console.log(data);
 
@@ -211,18 +197,10 @@ export const CreateCourseState = (props) => {
 
   const getCoursePlainById = async (courseId) => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/get/plain/${courseId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
-
-      const data = await response.json();
+      const data = await apiFetch({
+        url: `/api/v1/courses/${courseId}`,
+        method: "GET",
+      });
 
       //console.log(data);
 
@@ -248,22 +226,18 @@ export const CreateCourseState = (props) => {
     // console.log("update course called", status, courseState);
     console.log("updating courseStateId", courseStateRef.current?._id);
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/update/${courseStateRef.current?._id
-        }/${status}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          body: JSON.stringify({
-            ...courseStateRef.current
-          }),
-        }
-      );
+      const data = await apiFetch({
+        url: `/api/v1/courses/${courseStateRef.current?._id}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          ...courseStateRef.current,
+          status: status,
+        },
+      });
 
-      const data = await response.json();
       // console.log("done", data);
       if (data.success) {
         ///setCourseState(data.courseInfo);
@@ -311,59 +285,49 @@ export const CreateCourseState = (props) => {
     };
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/fileupload`,
+      const data = await apiFetch({
+        url: '/fileupload',
+        method: 'POST',
         data,
-        /// send both headers and options
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "auth-token": token,
-          },
-          ...options,
-        }
-      );
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        ...options,
+      });
 
       // console.log(res.data);
 
-      if (res.data.success) {
+      if (data.success) {
         setUploadProgress(100);
 
         if (curValue) {
-          await fetch(
-            `${import.meta.env.VITE_SERVER_URL}/filedelete/${curValue}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                "auth-token": token,
-              },
-            }
+          await apiFetch({
+            url: `/filedelete/${curValue}`,
+            method: "DELETE",
+          }
           );
 
           //const data = await response.json();
           // console.log(data);
         }
 
-        await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/course/update/${courseState._id
-          }/draft`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              "auth-token": token,
-            },
-            body: JSON.stringify({
-              ...courseState,
-              [courseProperty]: res.data.fileName,
-            }),
+        await apiFetch({
+          url: `/api/v1/courses/${courseState._id}`,
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: {
+            ...courseState,
+            status: courseState?.courseStatus !== 'draft' ? "unpublished" : 'draft',
+            [courseProperty]: data.fileName,
           }
-        );
+        });
 
         setCourseState({
           ...courseState,
-          [courseProperty]: res.data.fileName,
+
+          [courseProperty]: data.fileName,
         });
       }
     } catch (err) {

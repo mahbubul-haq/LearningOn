@@ -128,7 +128,7 @@ const refreshToken = async (req, res) => {
     try {
         // get refresh token from HttpOnly cookie
         const refreshToken = req.cookies.refreshToken;
-        console.log("Refreshing access token");
+        // console.log("Refreshing access token", req.cookies.refreshToken);
 
         if (!refreshToken) {
             return res.status(401).json({ message: "No refresh token" });
@@ -142,23 +142,34 @@ const refreshToken = async (req, res) => {
 
         // check Redis (server-side validation)
         const storedToken = await redisClient.get(
-            `refresh:${decoded.id}`
+            `refresh:${decoded._id}`
         );
+
+
+        // console.log("storedToken", storedToken);
+        // console.log("refreshToken", refreshToken);
+
+        // const keys = await redisClient.keys("*");
+        // console.log("All keys of redis", keys);
+        // console.log("decoded", decoded);
 
         if (!storedToken || storedToken !== refreshToken) {
             return res.status(403).json({ message: "Invalid refresh token" });
         }
 
         // generate new tokens (rotation)
+
         const newAccessToken = generateAccessToken(decoded);
         const newRefreshToken = generateRefreshToken(decoded);
 
         // update Redis
         await redisClient.set(
-            `refresh:${decoded.id}`,
+            `refresh:${decoded._id}`,
             newRefreshToken,
             { EX: 7 * 24 * 60 * 60 }
         );
+
+        //print all keys of redis
 
         // update cookie
         res.cookie("refreshToken", newRefreshToken, {

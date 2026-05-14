@@ -108,18 +108,15 @@ const ProfileTop = ({ userInfo }) => {
 
     //await deleteFile(userInfo?.picturePath, false);
 
-    const res = await axios.patch(
-      `${import.meta.env.VITE_SERVER_URL}/api/v1/users/profile-picture`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "auth-token": token,
-        },
-      }
-    );
+    const data = await apiFetch({
+      url: `/api/v1/users/profile-picture`,
+      method: "PATCH",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-    const data = res.data;
 
     console.log(data);
 

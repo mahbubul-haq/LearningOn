@@ -2,6 +2,7 @@ import React, { createContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setLogin } from "./reduxStore/authSlice";
+import { apiFetch } from "../api/apiFetch";
 
 export const GlobalContext = createContext();
 
@@ -20,18 +21,10 @@ export const GlobalState = (props) => {
 
   const getUser = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/users/getuser`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
-
-      const data = await response.json();
+      const data = await apiFetch({
+        url: `/api/v1/users/me`,
+        method: "GET",
+      });
       if (data.success) {
         setUser(data.user);
         console.log("user fetched", data.user);
@@ -53,16 +46,10 @@ export const GlobalState = (props) => {
   };
 
   const getCategories = async () => {
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/data/getcategories`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const data = await response.json();
+    const data = await apiFetch({
+      url: `/api/v1/categories`,
+      method: "GET",
+    });
     setCategories(data.categories);
     // flatten the categories
     const flattenCategories = (categories) => {
@@ -92,17 +79,10 @@ export const GlobalState = (props) => {
   };
 
   const getUsers = async () => {
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/users/all`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
-      }
-    );
-    const data = await response.json();
+    const data = await apiFetch({
+      url: `/api/v1/users`,
+      method: "GET",
+    });
 
     if (data.success) {
       setUsers(data.users);
@@ -114,21 +94,18 @@ export const GlobalState = (props) => {
     try {
       let modifiedFileName = fileName.replace(/\//g, "@");
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/filedelete/${modifiedFileName}/${
-          isVideo ? "true" : "false"
-        }`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
+      const data = await apiFetch({
+        url: `/filedelete/${modifiedFileName}/${isVideo ? "true" : "false"}`,
+        method: "DELETE",
+
+      }
       );
 
-      const data = await response.json();
-      //console.log(data);
+      if (data.success) {
+        console.log("file deleted", data);
+      } else {
+        console.log("file deletion failed", data);
+      }
     } catch (err) {
       //console.log(err?.message);
     }
@@ -136,18 +113,12 @@ export const GlobalState = (props) => {
 
   const getUserById = async (userId) => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/users/getuser/${userId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
 
-      const data = await response.json();
+      const data = await apiFetch({
+        url: `/api/v1/users/${userId}`,
+        method: "GET",
+      });
+
       //console.log(data);
       if (data.success) {
         setUserById(data.user);
@@ -163,26 +134,20 @@ export const GlobalState = (props) => {
 
   const getCourseById = async (courseId) => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/get/${courseId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
-
-      const data = await response.json();
+      const data = await apiFetch({
+        url: `/api/v1/courses/${courseId}`,
+        method: "GET",
+      });
 
       if (data.success) {
 
         console.log("course by id", data.courseInfo);
         setCourseById(data.courseInfo);
       }
+      console.log("course by id", data);
     } catch (err) {
       //console.log(err?.message);
+      console.log("course by id failed", err);
     }
   };
 

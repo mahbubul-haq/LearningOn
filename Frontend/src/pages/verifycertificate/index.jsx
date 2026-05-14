@@ -14,7 +14,8 @@ const VerifyCertificate = () => {
                 const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/verify/${certificateId}`;
                 const response = await fetch(url);
                 const result = await response.json();
-                
+
+
                 if (result.success) {
                     setData(result.certificate);
                 } else {
@@ -99,13 +100,13 @@ const VerifyCertificate = () => {
             <div style={cardStyle}>
                 {/* Top border gradient */}
                 <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '6px', background: 'linear-gradient(90deg, #10b981, #3b82f6)' }} />
-                
+
                 <div style={{ fontSize: '60px', color: '#10b981', marginBottom: '20px' }}>🏆</div>
                 <h1 style={{ margin: '0 0 15px', color: '#111827', fontSize: '28px', fontWeight: 700 }}>Certificate Verified</h1>
                 <div style={{ display: 'inline-block', backgroundColor: '#dcfce7', color: '#166534', padding: '6px 16px', borderRadius: '9999px', fontSize: '14px', fontWeight: 600, marginBottom: '30px', letterSpacing: '0.5px' }}>
                     ✓ OFFICIAL RECORD
                 </div>
-                
+
                 <div style={{ textAlign: 'left', background: '#f9fafb', padding: '25px', borderRadius: '12px', marginTop: '10px' }}>
                     <div style={{ marginBottom: '15px', borderBottom: '1px solid #e5e7eb', paddingBottom: '15px' }}>
                         <span style={{ display: 'block', fontSize: '13px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600, marginBottom: '5px' }}>Awarded To</span>
@@ -126,7 +127,7 @@ const VerifyCertificate = () => {
                         </div>
                     )}
                 </div>
-                
+
                 <div style={{ marginTop: '30px', fontSize: '14px', color: '#9ca3af', fontFamily: 'monospace' }}>
                     Certificate ID: {data.certificateId}
                 </div>

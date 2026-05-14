@@ -21,10 +21,9 @@ import quizRoutes from "./routes/quiz.routes.js";
 
 import courseRoutes from "./routes/course.js";
 import courseRoutesV1 from "./routes/course.routes.js";
-import courseProgressRoutes from "./routes/courseProgress.js";
+import courseProgressRoutes from "./routes/course-progress.routes.js";
 import dataRoutes from "./routes/data.js";
-import notificationRoutes from "./routes/notification.js";
-import userRoutes from "./routes/user.routes.legacy.js";
+import notificationRoutes from "./routes/notification.routes.js";
 import { connectSocket } from "./socket.io.js";
 import "./utils/cloudinary.js";
 import cloudinaryRoutes from "./routes/cloudinary.js";
@@ -33,6 +32,7 @@ import enrollmentRoutes from "./routes/enrollment.routes.js";
 import errorHandler from "./errors/errorHandler.js";
 import userRoutesNew from "./routes/user.routes.js";
 import { connectRedis } from "./configs/redisClient.js";
+import categoryRoutes from "./routes/category.routes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 console.log("dirname", __dirname);
@@ -68,22 +68,29 @@ app.use("/images", express.static(path.join(__dirname, "../assets/images")));
 // routes
 
 // LEGACY
-app.use("/api/v1/auth", authRoutes);
+
 app.use("/course", courseRoutes);
 app.use("/data", dataRoutes);
-app.use("/users", userRoutes);
-app.use("/notification", notificationRoutes);
+
+
 app.use("/cloudinary", cloudinaryRoutes);
 app.use("/admin", adminRoutes);
 
+
 // NEW (RESTful)
+
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/courses", courseRoutesV1);
 app.use("/api/v1/quiz", quizRoutes);
 app.use("/api/v1/course-progress", courseProgressRoutes);
 app.use("/api/v1/certificates", certificateRoutes);
 app.use("/api/v1/enrollments", enrollmentRoutes)
 app.use("/api/v1/users", userRoutesNew);
+app.use("/api/v1/categories", categoryRoutes);
 // app.use("/learning", courseProgressRoutes);
+
+//  will be refactored later
 
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);
 app.delete("/filedelete/:fileName/:isVideo", deleteFile);

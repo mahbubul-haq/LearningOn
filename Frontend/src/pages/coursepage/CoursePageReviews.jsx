@@ -24,9 +24,9 @@ const CoursePageReviews = ({ courseInfo }) => {
     useEffect(() => {
         if (!courseInfo?._id) return;
 
-        fetchAllReviews(courseInfo?._id, token);
+        if (user && courseInfo?._id && token) fetchAllReviews(courseInfo?._id, token);
 
-    }, [courseInfo?._id, token]);
+    }, [courseInfo?._id, user]);
 
     useEffect(() => {
         if (myReview) {

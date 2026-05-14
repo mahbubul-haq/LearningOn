@@ -100,9 +100,10 @@ const getUser = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
+        console.log("this is user by id", req.params.userId);
         const user = await People.findById(req.params.userId)
             .populate("courses followers following")
-            .exec();
+            .lean()
         //console.log(user);
         res.status(200).json({
             success: true,
@@ -167,18 +168,8 @@ const updateUser = async (req, res) => {
                 $set: req.body,
             },
             { new: true }
-        ).exec();
+        ).lean();
 
-        if (req.body.picturePath) {
-            const updatedNotifications = await Notification.updateMany(
-                {
-                    userFrom: user._id,
-                },
-                {
-                    $set: { imageLink: req.body.picturePath },
-                }
-            );
-        }
 
         res.status(200).json({
             success: true,

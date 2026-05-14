@@ -1,6 +1,6 @@
 import { sendAuthEvent } from "./authChannel";
 import { store } from "../main";
-import { setToken, setLastAccessTokenTime, setTokenWithTimestamp } from "../state/reduxStore/authSlice";
+import { setToken, setLastAccessTokenTime, setTokenWithTimestamp, setLogin } from "../state/reduxStore/authSlice";
 
 
 export const setAccessToken = (token) => {
@@ -43,3 +43,25 @@ export const applyRemoteAccessToken = (token, timestamp) => {
 export const applyRemoteAccessTokenTime = (timestamp) => {
     store.dispatch(setLastAccessTokenTime(timestamp));
 };
+
+export const updateDateLogin = (user, token, timestamp) => {
+    store.dispatch(setLogin({
+        user,
+        token,
+        lastAccessTokenTime: timestamp
+    }))
+    sendAuthEvent({ type: "LOGIN", user, token, lastAccessTokenTime: timestamp })
+}
+
+export const applyRemoteLogin = (user, token, timestamp) => {
+    store.dispatch(setLogin({ user, token, lastAccessTokenTime: timestamp }))
+}
+
+export const clearAuthData = () => {
+    sendAuthEvent({ type: "LOGOUT" })
+    store.dispatch(setLogin({ user: null, token: null, lastAccessTokenTime: 0 }))
+}
+
+export const applyRemoteLogout = () => {
+    store.dispatch(setLogin({ user: null, token: null, lastAccessTokenTime: 0 }))
+}

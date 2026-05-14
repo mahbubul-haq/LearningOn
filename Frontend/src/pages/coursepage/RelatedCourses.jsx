@@ -10,15 +10,15 @@ import { CoursePageContext } from "../../state/CoursePageContext";
 const RelatedCourses = ({ courseInfo }) => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const theme = useTheme();
-    const token = useSelector((state) => state.auth.token);
+    const { token, user } = useSelector((state) => state.auth);
 
     const { relatedCourses, relatedCoursesLoading, fetchRelatedCourses } = useContext(CoursePageContext);
 
     useEffect(() => {
-        if (courseInfo?._id && token) {
+        if (courseInfo?._id && user && token) {
             fetchRelatedCourses(courseInfo?.category, courseInfo?._id, token);
         }
-    }, [courseInfo, token]);
+    }, [courseInfo, user]);
 
     if (!relatedCoursesLoading && relatedCourses.length === 0) return null;
 

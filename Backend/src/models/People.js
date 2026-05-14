@@ -52,6 +52,16 @@ const PeopleSchema = new mongoose.Schema(
             required: false,
             default: [],
         },
+        followersCount: {
+            type: Number,
+            required: false,
+            default: 0,
+        },
+        followingCount: {
+            type: Number,
+            required: false,
+            default: 0,
+        },
         following: {
             type: [mongoose.Schema.Types.ObjectId],
             ref: "People",

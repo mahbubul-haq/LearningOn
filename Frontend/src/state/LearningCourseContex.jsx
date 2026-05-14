@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState, React } from "react";
+import { apiFetch } from "../api/apiFetch";
 
 export const LearningCourseContext = createContext(null);
 
@@ -33,15 +34,13 @@ export const LearningCourseState = ({ children }) => {
     async function getQuizAttempt(courseId, lessonId, authToken) {
         console.log("getQuizAttempt", courseId, lessonId, authToken);
         try {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quiz/${courseId}/${lessonId}/attempt`, {
+            const data = await apiFetch({
+                url: `/api/v1/quiz/${courseId}/${lessonId}/attempt`,
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    'auth-token': authToken
                 },
-
             });
-            const data = await response.json();
             if (data.success) {
                 console.log("Quiz Attempt", data.quizAttempt);
                 setQuizAttempt(data.quizAttempt);
@@ -57,14 +56,13 @@ export const LearningCourseState = ({ children }) => {
     async function getQuestions(courseId, lessonId, authToken) {
         console.log("getQuestions", courseId, lessonId, authToken);
         try {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseId}/lessons/${lessonId}/quiz`, {
+            const data = await apiFetch({
+                url: `/api/v1/courses/${courseId}/lessons/${lessonId}/quiz`,
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    'auth-token': authToken
                 },
             });
-            const data = await response.json();
             if (data.success) {
                 console.log("Questions", data.questions);
                 setQuestions(data.questions);
@@ -81,18 +79,17 @@ export const LearningCourseState = ({ children }) => {
     async function submitAnswer(courseId, lessonId, questionId, answer, quizAttemptId, authToken) {
         // console.log("submitAnswer", courseId, lessonId, questionId, answer, authToken);
         try {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quiz/${courseId}/${lessonId}/attempt/${quizAttemptId}`, {
+            const data = await apiFetch({
+                url: `/api/v1/quiz/${courseId}/${lessonId}/attempt/${quizAttemptId}`,
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
-                    'auth-token': authToken
                 },
-                body: JSON.stringify({
+                data: {
                     questionId,
                     answer
-                }),
+                },
             });
-            const data = await response.json();
             if (data.success) {
                 console.log("Answer Submitted", data.quizAttempt);
                 // setQuizAttempt(data.quizAttempt);

@@ -10,7 +10,7 @@ import { refreshAccessToken } from "./api/refreshAccessToken";
 import "./App.css"
 const queryClient = new QueryClient();
 import { initAuthChannel } from "./api/authChannel";
-import { applyRemoteAccessToken, applyRemoteAccessTokenTime } from "./api/authStore";
+import { applyRemoteAccessToken, applyRemoteAccessTokenTime, applyRemoteLogin, applyRemoteLogout } from "./api/authStore";
 
 function App() {
 
@@ -20,6 +20,10 @@ function App() {
   useEffect(() => {
     console.log("Last access token time changed", lastAccessTokenTime);
   }, [lastAccessTokenTime]);
+
+  useEffect(() => {
+    console.log("Token changed", token);
+  }, [token]);
 
   useEffect(() => {
 
@@ -40,9 +44,11 @@ function App() {
       else if (data.type === "LAST_ACCESS_TOKEN_TIME_UPDATED") {
         applyRemoteAccessTokenTime(data.timestamp);
       }
+      else if (data.type === "LOGIN") {
+        applyRemoteLogin(data.user, data.token, data.lastAccessTokenTime);
+      }
       else if (data.type === "LOGOUT") {
-        applyRemoteAccessToken(null, 0);
-        window.location.href = "/login";
+        applyRemoteLogout();
       }
     });
 

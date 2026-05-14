@@ -2,7 +2,7 @@
 import React, { createContext } from "react";
 import { useSelector } from "react-redux";
 import { apiFetch } from "../api/apiFetch";
-import { updateAccessToken } from "../api/authStore";
+import { clearAuthData, updateAccessToken } from "../api/authStore";
 import { useNavigate } from "react-router-dom";
 
 export const ProfilePageContext = createContext();
@@ -18,21 +18,18 @@ export const ProfilePageState = (props) => {
 
   const follow = async (userId) => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/users/follow/${userId}`,
+      const data = await apiFetch(
         {
-          method: "PUT",
+          url: `api/v1/users/${userId}/follow`,
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "auth-token": token,
           },
         }
       );
 
-      const data = await res.json();
-
       if (data.success) {
-        console.log(data);
+        // console.log(data.data);
         setFollowingDone(true);
       }
     } catch (err) {
@@ -42,19 +39,17 @@ export const ProfilePageState = (props) => {
 
   const updateProfile = async () => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/users/update`,
+      const data = await apiFetch(
         {
-          method: "PUT",
+          url: `api/v1/users/profile`,
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "auth-token": token,
           },
-          body: JSON.stringify(changedProfileInfo),
+          data: changedProfileInfo,
         }
       );
 
-      const data = await res.json();
 
       if (data.success) {
         setEditProfileStatus("updated");
@@ -80,11 +75,8 @@ export const ProfilePageState = (props) => {
       );
 
       if (data.success) {
-        updateAccessToken(null, Date.now());
+        clearAuthData();
         navigate("/", { replace: true });
-      }
-      else {
-
       }
     } catch (err) {
       //console.log(err?.message);

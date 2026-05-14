@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import React from "react";
 import { useSelector } from "react-redux";
+import { apiFetch } from "../api/apiFetch";
 
 export const DashboardContext = createContext();
 
@@ -19,13 +20,10 @@ export const DashboardState = (props) => {
     const getMyCourses = async (authToken) => {
         // console.log("getMyCourses called")
 
-        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/mine`, {
+        const data = await apiFetch({
+            url: `/api/v1/courses/mine`,
             method: "GET",
-            headers: {
-                "auth-token": authToken
-            }
         });
-        const data = await response.json();
         if (!data.success) {
             throw new Error("Failed to fetch my courses");
         }
@@ -37,24 +35,21 @@ export const DashboardState = (props) => {
     // for react query 
     const getRecentEnrollments = async ({ courseId, authToken, cursor }) => {
 
-        // console.log("getRecentEnrollments called", courseId, cursor);
-
-        let url = `${import.meta.env.VITE_SERVER_URL}/api/v1/enrollments?limit=20`;
+        let params = {
+            limit: 20
+        }
         if (courseId) {
-            url += `&courseId=${courseId}`;
+            params.courseId = courseId
         }
-
         if (cursor) {
-            url += `&cursor=${encodeURIComponent(JSON.stringify(cursor))}`;
+            params.cursor = cursor
         }
 
-        const response = await fetch(url, {
+        const data = await apiFetch({
+            url: `/api/v1/enrollments`,
             method: "GET",
-            headers: {
-                "auth-token": authToken
-            }
+            params: params
         });
-        const data = await response.json();
         if (!data.success) {
             throw new Error("Failed to fetch recent enrollments");
         }
@@ -70,14 +65,19 @@ export const DashboardState = (props) => {
         if (courseId) {
             url += `&courseId=${courseId}`;
         }
-        const response = await fetch(url, {
+        let params = {
+            startDate: startDate,
+            endDate: endDate
+        }
+        if (courseId) {
+            params.courseId = courseId
+        }
+        const data = await apiFetch({
+            url: `/api/v1/enrollments/analytics`,
             method: "GET",
-            headers: {
-                "auth-token": authToken
-            }
+            params: params
         });
-        const data = await response.json();
-        console.log("fetched enrollment analytics", courseId, data);
+        // console.log("fetched enrollment analytics", courseId, data);
         if (!data.success) {
             throw new Error("Failed to fetch enrollment analytics");
         }

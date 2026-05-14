@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { createContext, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import { apiFetch } from "../api/apiFetch";
 
 export const HomePageContext = createContext();
 
@@ -48,23 +49,18 @@ export const HomePageState = (props) => {
         const timeoutId = setTimeout(() => controller.abort(), 15000);
 
         try {
-            const response = await fetch(
-                `${import.meta.env.VITE_SERVER_URL}/course/getpopular?category=${encodeURIComponent(category)}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                    signal: controller.signal,
+            const data = await apiFetch({
+                url: `api/v1/courses/`,
+                method: "GET",
+                signal: controller.signal,
+                params: {
+                    category,
+                    limit: 15,
                 }
+            }
             );
 
             clearTimeout(timeoutId);
-
-            const data = await response.json();
-            // console.log("courses, ", data);
-
 
             if (data.success) {
                 //console.log("courses", data.courses);

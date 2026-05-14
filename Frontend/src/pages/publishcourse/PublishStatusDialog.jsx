@@ -10,7 +10,7 @@ import { StyledButton } from "../../components/StyledButton";
 import { alpha, useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import StripeConnectModal from "../../components/StripeConnectModal";
+// import StripeConnectModal from "../../components/StripeConnectModal";
 
 
 const PublishStatusDialog = ({
@@ -138,10 +138,10 @@ const PublishStatusDialog = ({
                 </StyledButton>
             </DialogActions>
 
-            <StripeConnectModal
+            {/* <StripeConnectModal
                 open={stripeModalOpen}
                 onClose={() => setStripeModalOpen(false)}
-            />
+            /> */}
         </Dialog>
     )
 }

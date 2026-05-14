@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { isPurchased } from '../../utils/course';
 import TopSectionLarge from './TopSectionLarge';
 import TopSectionSmall from './TopSectionSmall';
-
+import { apiFetch } from '../../api/apiFetch';
 
 const TopSection = ({
     courseInfo,
@@ -30,20 +30,16 @@ const TopSection = ({
     const enrollCourse = async () => {
         try {
             console.log("Enrolling in course:", courseInfo._id);
-            const response = await fetch(
-                `${import.meta.env.VITE_SERVER_URL}/data/create-payment-sesson`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                    body: JSON.stringify({
-                        courseId: courseInfo._id,
-                    }),
-                }
-            );
-            const data = await response.json();
+            const data = await apiFetch({
+                url: `/data/create-payment-sesson`,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: {
+                    courseId: courseInfo._id,
+                },
+            });
             console.log("Payment session response:", data);
 
             if (data.success) {

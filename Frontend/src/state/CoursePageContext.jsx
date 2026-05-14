@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useRef } from "react";
+import { apiFetch } from "../api/apiFetch";
 
 export const CoursePageContext = createContext();
 
@@ -18,21 +19,17 @@ export const CoursePageState = (props) => {
     const fetchRelatedCourses = async (category, courseId, token) => {
 
         setRelatedCoursesLoading(true);
-        let encodedCategory = encodeURIComponent(category);
+        // let encodedCategory = encodeURIComponent(category);
 
         try {
-            let response = await fetch(
-                `${import.meta.env.VITE_SERVER_URL}/api/v1/courses?category=${encodedCategory}&courseId=${courseId}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                }
-            );
-
-            let data = await response.json();
+            let data = await apiFetch({
+                url: `/api/v1/courses`,
+                method: 'GET',
+                params: {
+                    category: category,
+                    courseId: courseId
+                },
+            });
 
             if (data.success) {
                 setRelatedCourses([...data.courses]);
@@ -53,18 +50,10 @@ export const CoursePageState = (props) => {
         console.log("fetch my review called")
         setMyReviewLoading(true);
         try {
-            let response = await fetch(
-                `${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseId}/reviews/me`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                }
-            );
-
-            let data = await response.json();
+            let data = await apiFetch({
+                url: `/api/v1/courses/${courseId}/reviews/me`,
+                method: 'GET',
+            });
 
             if (data.success) {
                 setMyReview(data.courseRating);
@@ -85,18 +74,16 @@ export const CoursePageState = (props) => {
         setAllReviewsLoading(true);
         setIsLearningCompleted(false);
         try {
-            let response = await fetch(
-                `${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseId}/reviews?page=1&limit=5&includeUserReview=true`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
+            let data = await apiFetch({
+                url: `/api/v1/courses/${courseId}/reviews`,
+                method: 'GET',
+                params: {
+                    page: 1,
+                    limit: 5,
+                    includeUserReview: true
                 }
-            );
 
-            let data = await response.json();
+            });
 
             if (data.success) {
                 setAllReviews(data.reviews);
@@ -170,22 +157,19 @@ export const CoursePageState = (props) => {
     const handleSubmitReview = async (courseId, rating, review, token) => {
         setIsReviewSubmitting(true);
         try {
-            let response = await fetch(
-                `${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseId}/reviews`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                    body: JSON.stringify({
-                        rating,
-                        review,
-                    }),
-                }
-            );
+            let data = await apiFetch({
+                url: `/api/v1/courses/${courseId}/reviews`,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: {
+                    rating,
+                    review,
+                },
+            });
 
-            let data = await response.json();
+            // let data = await response.json();
 
             if (data.success) {
                 setMyReview(data.courseRating);

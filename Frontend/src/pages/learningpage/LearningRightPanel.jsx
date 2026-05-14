@@ -7,7 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import React, { useContext, useEffect } from "react";
 import { cloudinaryCld } from "../../configs/cloudinary.config";
 import { LearningCourseContext } from "../../state/LearningCourseContex";
-import Questions from "./Questions";
+// import Questions from "./Questions";
 import { Button } from "@mui/material";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
@@ -109,9 +109,9 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
               </Box>
             </Box>
           )}
-          {openedLesson.subLesson ===
+          {/* {openedLesson.subLesson ===
             courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons?.length +
-            1 && <Questions courseInfo={courseInfo} courseProgress={courseProgress} />}
+            1 && <Questions courseInfo={courseInfo} courseProgress={courseProgress} />} */}
           {openedLesson.subLesson > 0 &&
             openedLesson.subLesson <=
             courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons

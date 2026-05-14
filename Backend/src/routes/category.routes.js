@@ -1,0 +1,15 @@
+import { Router } from 'express';
+
+import { addCategory, getCategories } from '../controllers/category.controller.js';
+
+const router = Router();
+
+router.post('/', addCategory);
+
+router.get('/', getCategories);
+
+
+//router.delete('/allNotifications', deleteAllNotifications);
+//router.delete('/allDraftCourses', deleteAllDraftCourses);
+export default router;
+

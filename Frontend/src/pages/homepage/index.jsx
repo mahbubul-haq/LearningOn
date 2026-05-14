@@ -10,11 +10,13 @@ import LandingView from "./LandingView";
 const HomePage = () => {
 
     const user = useSelector((state) => state.auth.user);
-    console.log("homepage loaded", user);
+
+
     const { setOpenedItem } = useContext(GlobalContext);
     const { getNotifications } = useContext(NotificationContext);
 
     useEffect(() => {
+        console.log("homepage loaded", user);
         const socket = socketIoClient(import.meta.env.VITE_SERVER_URL);
 
         socket.on("my-course-purchased", (data) => {

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { createContext } from "react";
 import { useSelector } from "react-redux";
+import { apiFetch } from "../api/apiFetch";
 
 export const NotificationContext = createContext();
 
@@ -10,20 +11,10 @@ export const NotificationState = (props) => {
 
     const getNotifications = async (userId) => {
         try {
-            const response = await fetch(
-                `${
-                    import.meta.env.VITE_SERVER_URL
-                }/notification/get/${userId}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
-                }
-            );
-
-            const data = await response.json();
+            const data = await apiFetch({
+                url: `/api/v1/notifications`,
+                method: "GET",
+            });
 
             if (data.success) {
                 const notifications = data.notifications?.sort((a, b) => {
@@ -44,19 +35,16 @@ export const NotificationState = (props) => {
         if (status == "opened") {
             notifications.forEach(async (notification) => {
                 if (notification.status == "new") {
-                    const res = await fetch(
-                        `${
-                            import.meta.env.VITE_SERVER_URL
-                        }/notification/update/${notification._id}/opened`,
-                        {
-                            method: "PUT",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "auth-token": token,
-                            },
+                    const data = await apiFetch({
+                        url: `/api/v1/notifications/${notification._id}`,
+                        method: "PATCH",
+                        body: {
+                            status
+                        },
+                        headers: {
+                            "Content-Type": "application/json",
                         }
-                    );
-                    const data = await res.json();
+                    });
                     if (data.success) {
                         setNotifications((prev) => {
                             return prev.map((notification) => {
@@ -71,19 +59,16 @@ export const NotificationState = (props) => {
                 }
             });
         } else if (status == "clicked") {
-            const res = await fetch(
-                `${
-                    import.meta.env.VITE_SERVER_URL
-                }/notification/update/${notificationId}/clicked`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "auth-token": token,
-                    },
+            const data = await apiFetch({
+                url: `/api/v1/notifications/${notificationId}`,
+                method: "PATCH",
+                body: {
+                    status
+                },
+                headers: {
+                    "Content-Type": "application/json",
                 }
-            );
-            const data = await res.json();
+            });
             if (data.success) {
                 setNotifications((prev) => {
                     return prev.map((notification) => {

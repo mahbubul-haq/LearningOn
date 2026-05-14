@@ -27,7 +27,7 @@ const quizTracker = {
 const Quiz = () => {
     const theme = useTheme();
     const { quizAttempt, getQuizAttempt, setQuizStatus, getQuestions, questions, submitAnswer, setQuizAttempt } = useContext(LearningCourseContext);
-    const { token } = useSelector((state) => state.auth);
+    const { token, user } = useSelector((state) => state.auth);
     const { courseInfo } = useSelector((state) => state.course);
     const { courseId, lessonId } = useParams();
     const navigate = useNavigate();
@@ -95,8 +95,8 @@ const Quiz = () => {
                 }
             });
         }
-        else if (!courseInfo?._id && courseId && token) dispatch(fetchLessons(courseId, token));
-    }, [courseId, lessonId, token, courseInfo]);
+        else if (!courseInfo?._id && courseId && user && token) dispatch(fetchLessons(courseId, token));
+    }, [courseId, lessonId, user, courseInfo]);
 
     // useEffect(() => {
     //     if (courseInfo?.lessons?.length > 0) {
@@ -112,7 +112,7 @@ const Quiz = () => {
         if (courseId && lessonId && token) {
             getQuestions(courseId, lessonId, token);
         }
-    }, [courseId, lessonId, token]);
+    }, [courseId, lessonId, user]);
 
 
 

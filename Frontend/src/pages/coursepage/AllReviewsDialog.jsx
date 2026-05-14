@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useSelector } from 'react-redux';
 import { colorTokens } from '../../theme';
 import { useNavigate } from 'react-router-dom';
+import { apiFetch } from '../../api/apiFetch';
 
 const AllReviewsDialog = ({ open, onClose, courseId, reviews, setReviews }) => {
     const theme = useTheme();
@@ -21,14 +22,16 @@ const AllReviewsDialog = ({ open, onClose, courseId, reviews, setReviews }) => {
         if (!courseId) return;
         setLoading(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${courseId}/reviews?page=${pageNum}&limit=20&includeUserReview=false`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "auth-token": token,
+            const data = await apiFetch({
+                url: `/api/v1/courses/${courseId}/reviews`,
+                params: {
+                    page: pageNum,
+                    limit: 20,
+                    includeUserReview: false
                 },
+                method: "GET",
             });
-            const data = await res.json();
+
             if (data.success) {
                 if (isNewSearch) {
                     setReviews(data.reviews);

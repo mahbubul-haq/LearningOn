@@ -14,9 +14,9 @@ const NotificationSchema = new mongoose.Schema({
         required: false,
     },
     userFrom: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "People",
         required: false,
-        default: "",
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,6 +27,11 @@ const NotificationSchema = new mongoose.Schema({
         type: String,
         enum: ["new", "opened", "clicked"],
         default: "new",
+    },
+    type: {
+        type: String,
+        enum: ["course_enroll"],
+        default: ""
     },
     createdAt: {
         type: Date,

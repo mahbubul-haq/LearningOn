@@ -2,22 +2,33 @@ import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
 import Enrollment from "../../models/Enrollment.js";
 import QuizAttempt from "../../models/QuizAttempt.js";
-import { getRelatedCourses, getUserCourses } from "../../services/courses/course.query.service.js";
+import { getFilteredCourses, getPublishedCoursesByCategory, getRelatedCourses, getUserCourses } from "../../services/courses/course.query.service.js";
 
 // ================================== NEW CONTROLLERS =================================
 
 const getCourses = async (req, res) => {
 
-    const { category, courseId, userId, courseStatus } = req.query;
+    const { category, courseId, userId, courseStatus, limit, page, coursePerPage } = req.query;
     // console.log("category", category);
     // console.log("courseId", courseId);
     let courses = [];
+    console.log("page", page, coursePerPage);
 
-    if (category) {
+    if (category && courseId) {
         courses = await getRelatedCourses(category, courseId);
+    }
+    else if (category && limit) {
+        courses = await getPublishedCoursesByCategory(category, limit);
     }
     else if (userId && courseStatus) {
         courses = await getUserCourses(userId, courseStatus);
+    } else if (page && coursePerPage) {
+        const data = await getFilteredCourses(category, page, coursePerPage);
+        return res.status(200).json({
+            success: true,
+            courses: data.courses,
+            totalDocuments: data.totalDocuments
+        })
     } else {
         return res.status(400).json({
             success: false,
@@ -35,97 +46,7 @@ const getCourses = async (req, res) => {
 
 // ================================== OLD CONTROLLERS =================================
 
-const getFilteredCourses = async (req, res) => {
-    try {
-        let { category, page, coursePerPage } = req.query;
-        page = parseInt(page);
-        coursePerPage = parseInt(coursePerPage);
-        let skip = (page - 1) * coursePerPage;
-        let categories = category ? [category] : [];
-        let dbCategory,
-            courses,
-            totalDocuments = 0;
 
-        if (category) {
-            dbCategory = await Category.findOne(
-                { name: category },
-                "name subcategories"
-            );
-        }
-
-        if (dbCategory) {
-            categories = [...categories, ...dbCategory.subcategories];
-        }
-        if (categories.length > 0) {
-            ///console.log(categories, skip, coursePerPage);
-            courses = await Course.find(
-                {
-                    category: { $in: categories },
-                    courseStatus: "published",
-                },
-                {
-                    courseTitle: 1,
-                    courseThumbnail: 1,
-                    owner: 1,
-                    ratings: 1,
-                    // 'ratings.ratings': 0,
-                    coursePrice: 1,
-                    skillTags: 1,
-                    courseStatus: 1,
-                }
-            )
-                .skip(skip)
-                .limit(coursePerPage)
-                .populate("owner", "name");
-
-            totalDocuments = await Course.countDocuments({
-                category: { $in: categories },
-                courseStatus: "published",
-            });
-        } else {
-            courses = await Course.find(
-                { courseStatus: "published" },
-                {
-                    courseTitle: 1,
-                    courseThumbnail: 1,
-                    owner: 1,
-                    ratings: 1,
-                    // 'ratings.ratings': 0,
-                    coursePrice: 1,
-                    skillTags: 1,
-                    courseStatus: 1,
-                }
-            )
-                .skip(skip)
-                .limit(coursePerPage)
-                .populate("owner", "name");
-            totalDocuments = await Course.countDocuments({
-                courseStatus: "published",
-            });
-        }
-
-        courses = courses.map((course) => {
-            return {
-                ...course._doc,
-                ratings: {
-                    totalRating: course.ratings.totalRating,
-                    numberOfRatings: course.ratings.numberOfRatings,
-                },
-            };
-        });
-
-        res.status(200).json({
-            success: true,
-            courses: courses,
-            totalDocuments: totalDocuments,
-        });
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: "course could not be fetched",
-        });
-    }
-};
 
 const getUnpublishedCourses = async (req, res) => {
     try {

@@ -94,7 +94,7 @@ const getDraftCourses = async (req, res) => {
 
 const updateCourse = async (req, res) => {
     let courseId = req.params.courseId;
-    const status = req.params.status;
+    const status = req.body.status;
 
     // console.log("update course", courseId, status);
     if (courseId == undefined || courseId == "undefined") {
@@ -235,7 +235,8 @@ const getCourseByIdWithOutPopulate = async (req, res) => {
 
     try {
 
-        const course = await Course.findById(courseId);
+
+        const course = await Course.findById(courseId)
         if (!course) {
             return res.status(404).json({
                 success: false,
@@ -243,24 +244,45 @@ const getCourseByIdWithOutPopulate = async (req, res) => {
             });
         }
 
+        console.log(req.userId, course.owner)
+
         if (req.userId != course.owner) {
             return res.status(401).json({
                 success: false,
                 message: "Unauthorized",
             });
         }
+        console.log("course without populate", course);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             courseInfo: course,
         });
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: error.message,
         });
     }
 };
+
+const getCourseByIdTemp = async (req, res) => {
+    try {
+        let { populate } = req.query;
+        // console.log("populate", populate);
+        return await getCourseById(req, res);
+
+        // return await getCourseByIdWithOutPopulate(req, res);
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        });
+    }
+}
+
 
 const getCourseById = async (req, res) => {
     const courseId = req.params.courseId;
@@ -294,7 +316,7 @@ const getCourseById = async (req, res) => {
         });
         ///console.log(course);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             courseInfo: course,
         });
@@ -471,5 +493,6 @@ export {
     getMyCourses,
     newCourse,
     updateCourse,
-    updateStatus
+    updateStatus,
+    getCourseByIdTemp
 };

@@ -1,19 +1,14 @@
 import { useQuery } from "@tanstack/react-query"
+import { apiFetch } from "../../../api/apiFetch";
 
 export const useGetCertificate = (courseId, token, enabled) => {
     return useQuery({
         queryKey: ["certificate", courseId],
         queryFn: async () => {
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/certificates/${courseId}`,
-                {
-                    method: "GET",
-                    headers: {
-                        'auth-token': token
-                    },
-
-                }
-            );
-            const data = await res.json();
+            const data = await apiFetch({
+                url: `/api/v1/certificates/${courseId}`,
+                method: "GET",
+            });
             if (!data?.success) {
                 throw new Error(data?.message || "Failed to fetch certificate");
             }

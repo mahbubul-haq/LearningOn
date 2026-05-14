@@ -22,12 +22,15 @@ export const refreshAccessToken = async (force = false) => {
             withCredentials: true,
         }
     );
+    console.log('refresh access token', res?.data)
 
     if (res?.data?.token) {
         updateAccessToken(res.data.token, Date.now());
+    } else if (!lastAccessTokenTime || Date.now() - lastAccessTokenTime >= 20 * 60 * 1000) {
+        updateAccessToken(null, 0);
+    } else {
+        updateAccessTokenTime(lastAccessTokenTime);
     }
-    else updateAccessTokenTime(lastAccessTokenTime);
-
 
     return res?.data?.accessToken || null;
 };

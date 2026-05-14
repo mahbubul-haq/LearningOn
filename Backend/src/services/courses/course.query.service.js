@@ -118,9 +118,115 @@ const getUserCourses = async (userId, courseStatus) => {
 
 }
 
+const getPublishedCoursesByCategory = async (category, limit) => {
+
+    let query = { courseStatus: "published" }
+    if (category !== "all") {
+        query.category = category;
+    }
+
+    const courses = await Course.find(
+        query,
+        {
+            courseTitle: 1,
+            courseThumbnail: 1,
+            owner: 1,
+            ratings: 1,
+            coursePrice: 1,
+            skillTags: 1,
+            courseStatus: 1,
+            category: 1,
+        }
+    )
+        .sort({ createdAt: -1 })
+        .limit(limit)
+        .populate("owner", "name")
+        .lean();
+
+    return courses;
+
+}
+
+const getFilteredCourses = async (category, page, coursePerPage) => {
+
+    page = parseInt(page);
+    coursePerPage = parseInt(coursePerPage);
+    let skip = (page - 1) * coursePerPage;
+    let categories = category ? [category] : [];
+    let dbCategory,
+        courses = [],
+        totalDocuments = 0;
+
+    if (category) {
+        dbCategory = await Category.findOne(
+            { name: category },
+            "name subcategories"
+        );
+    }
+
+    if (dbCategory) {
+        categories = [...categories, ...dbCategory.subcategories];
+    }
+    if (categories.length > 0) {
+        ///console.log(categories, skip, coursePerPage);
+        courses = await Course.find(
+            {
+                category: { $in: categories },
+                courseStatus: "published",
+            },
+            {
+                courseTitle: 1,
+                courseThumbnail: 1,
+                owner: 1,
+                ratings: 1,
+                // 'ratings.ratings': 0,
+                coursePrice: 1,
+                skillTags: 1,
+                courseStatus: 1,
+            }
+        )
+            .skip(skip)
+            .limit(coursePerPage)
+            .populate("owner", "name")
+            .lean();
+
+        totalDocuments = await Course.countDocuments({
+            category: { $in: categories },
+            courseStatus: "published",
+        });
+    } else {
+        courses = await Course.find(
+            { courseStatus: "published" },
+            {
+                courseTitle: 1,
+                courseThumbnail: 1,
+                owner: 1,
+                ratings: 1,
+                // 'ratings.ratings': 0,
+                coursePrice: 1,
+                skillTags: 1,
+                courseStatus: 1,
+            }
+        )
+            .skip(skip)
+            .limit(coursePerPage)
+            .populate("owner", "name")
+            .lean();
+        totalDocuments = await Course.countDocuments({
+            courseStatus: "published",
+        });
+    }
+
+    return { courses, totalDocuments }
+
+
+};
+
 
 
 export {
     getRelatedCourses,
-    getUserCourses
+    getUserCourses,
+    getPublishedCoursesByCategory,
+    getFilteredCourses,
 }

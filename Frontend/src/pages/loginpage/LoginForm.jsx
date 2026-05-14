@@ -12,6 +12,7 @@ import StyledTextField from "../../components/StyledInputField.jsx";
 import LoginSignUpButton from "./LoginSignUpButton.jsx";
 import { apiFetch } from "../../api/apiFetch.js";
 import axiosClient from "../../api/axiosClient.js";
+import { updateDateLogin } from "../../api/authStore.js";
 
 const loginSchema = yup.object().shape({
     email: yup.string().required("Email is required"),
@@ -53,13 +54,7 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                 onSubmitProps.resetForm();
 
                 /// dispatch token & user from data
-                dispatch(
-                    setLogin({
-                        token: data.token,
-                        user: data.user,
-                        lastAccessTokenTime: Date.now(),
-                    })
-                );
+                updateDateLogin(data.user, data.token, Date.now())
                 if (redirect) {
                     navigate(redirect);
                 } else {

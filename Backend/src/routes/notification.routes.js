@@ -5,13 +5,13 @@ import {
     getNotificationsByUserId,
     updateNotification,
     createNotification,
-} from "../controllers/notification.js";
+} from "../controllers/notification.controller.js";
 import verifyToken from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/create", createNotification);
-router.get("/get/:userId", verifyToken, getNotificationsByUserId);
-router.put("/update/:notificationId/:status", verifyToken, updateNotification);
+router.post("/", createNotification);
+router.get("/", verifyToken, getNotificationsByUserId);
+router.patch("/:notificationId", verifyToken, updateNotification);
 
 export default router;

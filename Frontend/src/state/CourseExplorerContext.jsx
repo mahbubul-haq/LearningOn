@@ -2,6 +2,7 @@ import { createContext, useCallback, useEffect, useRef, useState, useContext } f
 import { colorTokens } from "../theme";
 import { useSelector } from "react-redux";
 import { GlobalContext } from "./GlobalContext";
+import { apiFetch } from "../api/apiFetch";
 export const CourseExplorerContext = createContext();
 
 export const CourseExplorerState = (props) => {
@@ -277,9 +278,8 @@ export const CourseExplorerState = (props) => {
    */
 
   const getFilteredCourses = async (changed) => {
-    const encodedCategory = encodeURIComponent(// to handle spaces in query parameters
-      selectedSubCategory ? selectedSubCategory : selectedCategory
-    );
+    const encodedCategory = selectedSubCategory ? selectedSubCategory : selectedCategory
+
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
@@ -287,22 +287,20 @@ export const CourseExplorerState = (props) => {
     }, 10000); // 10 seconds timeout
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/getfiltered?page=${changed ? 1 : pageNumber
-        }&coursePerPage=${coursePerPage}&category=${encodedCategory}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          signal: controller.signal,
-        }
-      );
+      const data = await apiFetch({
+        url: `/api/v1/courses`,
+        method: "GET",
+        params: {
+          page: changed ? 1 : pageNumber,
+          coursePerPage: coursePerPage,
+          category: encodedCategory,
+        },
+        signal: controller.signal
+      });
 
       clearTimeout(timeoutId);
+      console.log("data", data);
 
-      let data = await res.json();
       if (data.success) {
         console.log("explorer courses success");
         if (changed) {

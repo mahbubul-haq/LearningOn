@@ -1,13 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
+import { apiFetch } from "../../../api/apiFetch";
 
 export const useUserPublishedCourses = (userId) => {
     return useQuery({
         queryKey: ["userPublishedCourses", userId],
         queryFn: async () => {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/courses?userId=${userId}&courseStatus=published`, {
+            const data = await apiFetch({
+                url: `/api/v1/courses`,
                 method: "GET",
+                params: {
+                    userId,
+                    courseStatus: 'published'
+                }
             });
-            const data = await response.json();
             if (!data.success) {
                 throw new Error("Failed to fetch my published courses");
             }

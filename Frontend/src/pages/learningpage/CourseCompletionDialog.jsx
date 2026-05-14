@@ -14,10 +14,10 @@ import { CoursePageContext } from '../../state/CoursePageContext';
 import { useSelector } from 'react-redux';
 import { useGetCertificate } from './hooks/CourseCompletionHooks';
 
-const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, user }) => {
+const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress }) => {
     const theme = useTheme();
     const navigate = useNavigate();
-    const token = useSelector((state) => state.auth.token);
+    const { token, user } = useSelector((state) => state.auth)
 
     // UI States
     const [displayScore, setDisplayScore] = useState(0);
@@ -27,7 +27,7 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
     const [initialRating, setInitialRating] = useState(0);
     const [initialReviewText, setInitialReviewText] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [reviewSubmitted, setReviewSubmitted] = useState(false);
+    const [reviewSubmitted, setReviewSubmitted] = useState(false)
     // const [totalScore, setTotalScore] = useState(0);
 
     const { myReview, isReviewSubmitting, fetchMyReview, handleSubmitReview } = useContext(CoursePageContext);
@@ -56,8 +56,8 @@ const CourseCompletionDialog = ({ open, onClose, courseInfo, courseProgress, use
 
 
     useEffect(() => {
-        if (courseInfo?._id && open && token) fetchMyReview(courseInfo?._id, token);
-    }, [open, courseInfo?._id, token]);
+        if (courseInfo?._id && open && user && token) fetchMyReview(courseInfo?._id, token);
+    }, [open, courseInfo?._id, user]);
 
     useEffect(() => {
         if (myReview) {

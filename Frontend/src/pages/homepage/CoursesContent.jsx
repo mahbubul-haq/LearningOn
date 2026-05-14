@@ -25,7 +25,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
 
   useEffect(() => {
     console.log("Re rendering, loading:", loading, "waitingForSelectedCourses:", waitingForSelectedCourses, "waitingForSelectedCoursesRef:", waitingForSelectedCoursesRef.current);
-  });
+  }, []);
 
   useEffect(() => {
     let coursesContainer = document.querySelector(".courses-container");

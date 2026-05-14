@@ -40,7 +40,7 @@ const createNotification = async (req, res) => {
 const getNotificationsByUserId = async (req, res) => {
     try {
         let notifications = await Notification.find({
-            userId: req.params.userId,
+            userId: req.userId
         });
         if (!notifications) {
             return res.status(404).json({
@@ -63,10 +63,10 @@ const getNotificationsByUserId = async (req, res) => {
 
 const updateNotification = async (req, res) => {
     try {
+        const { status } = req.body;
         const notification = await Notification.findById(
             req.params.notificationId
         );
-        const status = req.params.status;
         if (!notification) {
             return res.status(404).json({
                 success: false,

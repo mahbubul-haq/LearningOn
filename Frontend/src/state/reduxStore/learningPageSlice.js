@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { apiFetch } from "../../api/apiFetch";
 
 const initialState = {
   courseInfo: {},
@@ -7,65 +8,58 @@ const initialState = {
   answer: {},
 };
 
-export const submitQuiz = createAsyncThunk(
-  "/learning/submitQuiz",
-  async ({ courseId, token, lessonNo, answer }, { dispatch }) => {
-    try {
+// export const submitQuiz = createAsyncThunk(
+//   "/learning/submitQuiz",
+//   async ({ courseId, token, lessonNo, answer }, { dispatch }) => {
+//     try {
 
-      let tempAnswer = {};
-      Object.keys(answer).forEach(key => {
-        let lessonNumber = parseInt(key.split("_")[0].substring(1));
-        if (lessonNumber == lessonNo) {
-          tempAnswer[key] = answer[key];
-        }
-      })
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/learning/${courseId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          body: JSON.stringify({
-            lesson: lessonNo,
-            answer: tempAnswer
-          }),
-        }
-      );
-      const data = await res.json();
-      if (data.success) {
-        let newObj = { ...answer };
-        Object.keys(tempAnswer).forEach(key => {
-          delete newObj[key];
-        })
-        dispatch(setAnswer(newObj));
-        return data.progressData;
-      }
-      else return null;
-    }
-    catch (err) {
-      //
-      return null;
-    }
-  }
-);
+//       let tempAnswer = {};
+//       Object.keys(answer).forEach(key => {
+//         let lessonNumber = parseInt(key.split("_")[0].substring(1));
+//         if (lessonNumber == lessonNo) {
+//           tempAnswer[key] = answer[key];
+//         }
+//       })
+//       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/learning/${courseId}`,
+//         {
+//           method: "PUT",
+//           headers: {
+//             "Content-Type": "application/json",
+//             "auth-token": token,
+//           },
+//           body: JSON.stringify({
+//             lesson: lessonNo,
+//             answer: tempAnswer
+//           }),
+//         }
+//       );
+//       const data = await res.json();
+//       if (data.success) {
+//         let newObj = { ...answer };
+//         Object.keys(tempAnswer).forEach(key => {
+//           delete newObj[key];
+//         })
+//         dispatch(setAnswer(newObj));
+//         return data.progressData;
+//       }
+//       else return null;
+//     }
+//     catch (err) {
+//       //
+//       return null;
+//     }
+//   }
+// );
 
 export const fetchProgress = createAsyncThunk(
   "/course/learning/progress",
   async ({ courseId, token }) => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/learning/progress/${courseId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
+      const data = await apiFetch({
+        url: `/api/v1/course-progress/${courseId}`,
+        method: "GET"
+      });
 
-      const data = await res.json();
       //console.log("progressData, ", data);
       if (data.success) {
         return data.courseProgress;
@@ -83,19 +77,10 @@ export const fetchLessons = createAsyncThunk(
   async ({ courseId, token }) => {
     console.log("In fetchLessons", courseId, token);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/getlessons/${courseId}`,
-        {
-          method: "GET",
-
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
-
-      const data = await res.json();
+      const data = await apiFetch({
+        url: `/api/v1/courses/${courseId}/lessons`,
+        method: "GET"
+      });
 
       if (data.success) {
         return data.courseInfo;
@@ -115,23 +100,19 @@ export const updateWatchTime = createAsyncThunk(
   "/course/learning/updatetime",
   async (/** @type {{ courseId: string; token: string; lessonId: string; subLessonId: string; watchTime: number; currentTime: number }} */ { courseId, token, lessonId, subLessonId, watchTime, currentTime }) => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/learning/updatetime/${courseId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          body: JSON.stringify({
-            lessonId: lessonId,
-            subLessonId: subLessonId,
-            watchTime: watchTime,
-            currentTime: currentTime
-          }),
+      const data = await apiFetch({
+        url: `/api/v1/course-progress/${courseId}/watch-time`,
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          lessonId: lessonId,
+          subLessonId: subLessonId,
+          watchTime: watchTime,
+          currentTime: currentTime
         }
-      );
-      const data = await res.json();
+      });
       if (data.success) {
         return data;
       }
@@ -145,21 +126,17 @@ export const updateProgress = createAsyncThunk(
   "/course/learning/updateprogress",
   async (/** @type {{ courseId: string; token: string; lessonId: string; subLessonId: string; }} */ { courseId, token, lessonId, subLessonId }) => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/course/learning/updateprogress/${courseId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          body: JSON.stringify({
-            lessonId: lessonId,
-            subLessonId: subLessonId,
-          }),
-        }
-      );
-      const data = await res.json();
+      const data = await apiFetch({
+        url: `/api/v1/course-progress/${courseId}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          lessonId: lessonId,
+          subLessonId: subLessonId,
+        },
+      });
       if (data.success) {
         return data.courseProgress;
       }
@@ -175,17 +152,10 @@ export const updateCompletionDate = createAsyncThunk(
   "/api/v1/course-progress/",
   async (/** @type {{ courseId: string; token: string; }} */ { courseId, token }) => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/v1/course-progress/${courseId}/complete`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-        }
-      );
-      const data = await res.json();
+      const data = await apiFetch({
+        url: `/api/v1/course-progress/${courseId}/complete`,
+        method: "PATCH",
+      });
       if (data.success) {
         return data.courseProgress;
       }
@@ -254,15 +224,15 @@ const learningPageSlice = createSlice({
 
     });
 
-    builder.addCase(submitQuiz.pending, () => {
+    // builder.addCase(submitQuiz.pending, () => {
 
-    }).addCase(submitQuiz.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.courseProgress = action.payload;
-      }
-    }).addCase(submitQuiz.rejected, () => {
+    // }).addCase(submitQuiz.fulfilled, (state, action) => {
+    //   if (action.payload) {
+    //     state.courseProgress = action.payload;
+    //   }
+    // }).addCase(submitQuiz.rejected, () => {
 
-    });
+    // });
 
     builder.addCase(updateWatchTime.pending, () => {
 
