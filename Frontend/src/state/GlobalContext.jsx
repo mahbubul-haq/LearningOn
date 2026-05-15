@@ -51,16 +51,15 @@ export const GlobalState = (props) => {
       method: "GET",
     });
     setCategories(data.categories);
+    console.log("categories", data.categories);
     // flatten the categories
     const flattenCategories = (categories) => {
       let result = [];
       categories?.forEach((category) => {
         result.push([category.name, category.name]);
-        if (category.subcategories?.length > 0) {
-          for (const subcategory of category.subcategories) {
-            result.push([subcategory, category.name]);
-          }
-        }
+        category.subcategories?.forEach((subcat) => {
+          result.push([subcat, category.name]);
+        })
       });
       return result;
     };
@@ -136,6 +135,7 @@ export const GlobalState = (props) => {
     try {
       const data = await apiFetch({
         url: `/api/v1/courses/${courseId}`,
+        params: { populate: "true" },
         method: "GET",
       });
 

@@ -108,6 +108,7 @@ const login = async (req, res) => {
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/",
         });
 
         res.status(200).json({
@@ -146,12 +147,12 @@ const refreshToken = async (req, res) => {
         );
 
 
-        // console.log("storedToken", storedToken);
-        // console.log("refreshToken", refreshToken);
+        console.log("storedToken", storedToken);
+        console.log("refreshToken", refreshToken);
 
-        // const keys = await redisClient.keys("*");
-        // console.log("All keys of redis", keys);
-        // console.log("decoded", decoded);
+        const keys = await redisClient.keys("*");
+        console.log("All keys of redis", keys);
+        console.log("decoded", decoded);
 
         if (!storedToken || storedToken !== refreshToken) {
             return res.status(403).json({ message: "Invalid refresh token" });
@@ -177,6 +178,7 @@ const refreshToken = async (req, res) => {
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/",
         });
 
         return res.json({
@@ -203,6 +205,7 @@ const logout = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
+            path: "/",
         });
 
         return res.status(200).json({

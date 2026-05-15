@@ -24,6 +24,7 @@ export const refreshAccessToken = async (force = false) => {
     );
     console.log('refresh access token', res?.data)
 
+
     if (res?.data?.token) {
         updateAccessToken(res.data.token, Date.now());
     } else if (!lastAccessTokenTime || Date.now() - lastAccessTokenTime >= 20 * 60 * 1000) {

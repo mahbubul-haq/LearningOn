@@ -1,65 +1,69 @@
 import Category from "../models/Category.js";
+import redisClient from "../configs/redisClient.js";
 
 const addCategory = async (req, res) => {
-    try {
-        let category = await Category.findOne({
+
+    let category = await Category.findOne({
+        name: req.body.name,
+    });
+
+    if (!category) {
+        category = new Category({
             name: req.body.name,
-        });
-
-        if (!category) {
-            category = new Category({
-                name: req.body.name,
-            });
-            await category.save();
-        }
-
-        //copilot not working!!!
-
-        if (req.body.subcategory.length > 0) {
-            req.body.subcategory.forEach(async (subcategory) => {
-                //check if subcategory inside category.subcategories
-
-                if (!category.subcategories.includes(subcategory)) {
-                    category.subcategories.push(subcategory);
-                }
-            });
-            await category.save();
-        }
-
-        res.status(201).json({
-            success: true,
-            category: category,
-        });
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            errors: { ...error.errors },
+            subcategories: []
         });
     }
+
+
+    req.body.subcategory?.forEach((subcategory) => {
+        const normalized = subcategory.trim().toLowerCase();
+        if (!category.subcategories.some(s => s.toLowerCase() === normalized)) {
+            category.subcategories.push(subcategory.trim());
+        }
+    });
+    await category.save();
+
+    const categories = await Category.find().select("name subcategories").sort({ name: 1 }).lean();
+
+    // sort the subcategories ascending order by name
+    categories.forEach((category1) => {
+        category1.subcategories = (category1.subcategories || []).sort();
+    });
+
+    await redisClient.set("categories", JSON.stringify(categories));
+
+
+    res.status(201).json({
+        success: true,
+        category: category,
+    });
+
 };
 
 const getCategories = async (req, res) => {
-    try {
-        // sort the categories ascending order by name
-        // sort the subcategories ascending order by name
 
-        const categories = await Category.find().sort({ name: 1 }).exec();
-
-        // sort the subcategories ascending order by name
-        categories.forEach((category) => {
-            category.subcategories.sort();
-        });
-
-        res.status(200).json({
+    const cachedCategories = await redisClient.get("categories");
+    if (cachedCategories) {
+        return res.status(200).json({
             success: true,
-            categories: categories,
-        });
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            errors: { ...error.errors },
+            categories: JSON.parse(cachedCategories),
         });
     }
+
+    const categories = await Category.find().select("name subcategories").sort({ name: 1 }).lean();
+
+    // sort the subcategories ascending order by name
+    categories.forEach((category) => {
+        category.subcategories = (category.subcategories || []).sort();
+    });
+
+    await redisClient.set("categories", JSON.stringify(categories));
+
+    res.status(200).json({
+        success: true,
+        categories: categories,
+    });
+
 };
 
 export {

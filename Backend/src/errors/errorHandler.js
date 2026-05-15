@@ -13,7 +13,7 @@ const errorHandler = (err, req, res, next) => {
     console.log("from error handler", err);
     res.status(statusCode).json({
         success: false,
-        message: errorMessages[err.message] || "Something went wrong"
+        message: errorMessages[err.message] || err.message || "Something went wrong"
     });
 };
 

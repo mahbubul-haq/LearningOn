@@ -244,15 +244,15 @@ const getCourseByIdWithOutPopulate = async (req, res) => {
             });
         }
 
-        console.log(req.userId, course.owner)
+        // console.log(req.userId, course.owner)
 
-        if (req.userId != course.owner) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized",
-            });
-        }
-        console.log("course without populate", course);
+        // if (req.userId != course.owner) {
+        //     return res.status(401).json({
+        //         success: false,
+        //         message: "Unauthorized",
+        //     });
+        // }
+        // console.log("course without populate", course);
 
         return res.status(200).json({
             success: true,
@@ -270,9 +270,8 @@ const getCourseByIdTemp = async (req, res) => {
     try {
         let { populate } = req.query;
         // console.log("populate", populate);
-        return await getCourseById(req, res);
-
-        // return await getCourseByIdWithOutPopulate(req, res);
+        if (populate == "true") return await getCourseById(req, res);
+        else return await getCourseByIdWithOutPopulate(req, res);
     }
     catch (err) {
         console.log(err);
