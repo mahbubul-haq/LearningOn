@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Alert, Box, Snackbar, Typography } from "@mui/material";
 import { Formik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -29,9 +29,14 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
 
     const [emailError, setEmailError] = React.useState("");
     const [passwordError, setPasswordError] = React.useState("");
+    const [snackbarConfig, setSnackbarConfig] = React.useState({ open: false, message: "", severity: "success" });
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
+
+    const showSnackbar = (message, severity = "success") => {
+        setSnackbarConfig({ open: true, message, severity });
+    };
 
     const login = async (values, onSubmitProps) => {
         setIsFormSubmitting(true);
@@ -51,28 +56,44 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
             const data = response.data;
             if (data.success) {
                 // console.log(data);
+                showSnackbar("Login successful!", "success");
                 onSubmitProps.resetForm();
 
                 /// dispatch token & user from data
                 updateDateLogin(data.user, data.token, Date.now())
-                if (redirect) {
-                    navigate(redirect);
-                } else {
-                    navigate("/");
-                }
+                setTimeout(() => {
+                    if (redirect) {
+                        navigate(redirect);
+                    } else {
+                        navigate("/");
+                    }
+                }, 1000);
             } else {
                 // console.log(data);
-                if (data.errors.email) {
+                showSnackbar(data.message || "Login failed", "error");
+
+                console.log(data.errors);
+                if (data.errors?.email) {
                     setEmailError("Email is incorrect");
                     setPasswordError("");
                 }
-                if (data.errors.password) {
+                if (data.errors?.password) {
                     setPasswordError("Password is incorrect");
                     setEmailError("");
                 }
             }
         } catch (error) {
             console.log(error);
+            showSnackbar(error.response?.data?.message || error.message || "An error occurred", "error");
+
+            if (error.response?.data?.errors?.email) {
+                setEmailError("Email is incorrect");
+                setPasswordError("");
+            }
+            if (error.response?.data?.errors?.password) {
+                setPasswordError("Password is incorrect");
+                setEmailError("");
+            }
         } finally {
             setIsFormSubmitting(false);
         }
@@ -103,6 +124,31 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                                 gap: "0.5rem",
                             }}
                         >
+                            <Snackbar
+                                open={snackbarConfig.open}
+                                autoHideDuration={6000}
+                                onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
+                                anchorOrigin={{
+                                    vertical: "top",
+                                    horizontal: "center",
+                                }}
+                            >
+                                <Alert
+                                    onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
+                                    severity={snackbarConfig.severity}
+                                    sx={{
+                                        width: "100%",
+                                        ...(snackbarConfig.severity === "success" && {
+                                            backgroundColor: (theme) => theme.palette.primary.main,
+                                            color: "#fff",
+                                            "& .MuiAlert-icon": { color: "#fff" }
+                                        })
+                                    }}
+                                >
+                                    {snackbarConfig.message}
+                                </Alert>
+                            </Snackbar>
+
                             <Typography
                                 variant="h5"
                                 sx={{

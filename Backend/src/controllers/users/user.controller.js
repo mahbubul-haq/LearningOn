@@ -1,3 +1,5 @@
+import Course from "../../models/Course.js";
+import Enrollment from "../../models/Enrollment.js";
 import Notification from "../../models/Notification.js";
 import People from "../../models/People.js";
 
@@ -18,6 +20,25 @@ const getAllUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
+        const { light } = req.query;
+        if (light === "true") {
+            const user = await People.findById(req.userId).select("name avatar email").lean();
+
+            if (user) {
+                const myCoursesCount = await Course.countDocuments({
+                    $or: [
+                        { owner: user._id },
+                        { courseInstructors: user._id }
+                    ]
+                });
+                user.myCoursesCount = myCoursesCount;
+            }
+
+            return res.status(200).json({
+                success: true,
+                user: user,
+            });
+        }
         let user = await People.findById(req.userId)
             .populate("followers following")
             .populate({
@@ -160,7 +181,7 @@ const follow = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const userId = req.userId;
-    console.log(req.body);
+    // console.log(req.body);
     try {
         const user = await People.findByIdAndUpdate(
             userId,
@@ -183,5 +204,29 @@ const updateUser = async (req, res) => {
     }
 };
 
-export { follow, getAllUsers, getUser, getUserById, updateUser };
+const getUserEnrolledCourses = async (req, res) => {
+
+    let courses = await Enrollment.find({ userId: req.userId })
+        .populate({
+            path: "courseId",
+            select: "_id courseTitle category courseThumbnail courseStatus coursePrice skillTags owner",
+            populate: {
+                path: "owner",
+                select: "name _id"
+            }
+        }).sort({ createdAt: -1 }).lean();
+
+    courses = courses.map((course) => {
+        return {
+            ...course.courseId
+        }
+    })
+
+    return res.json({
+        success: true,
+        courses
+    })
+};
+
+export { follow, getAllUsers, getUser, getUserById, updateUser, getUserEnrolledCourses };
 

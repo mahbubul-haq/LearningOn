@@ -5,7 +5,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 
 const router = Router();
 
-router.post('/', addCategory);
+router.post('/', asyncHandler(addCategory));
 
 router.get('/', asyncHandler(getCategories));
 

@@ -5,7 +5,7 @@ import useTheme from "@mui/material/styles/useTheme";
 import { useContext, useEffect } from "react";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 import FlexBetween from "../FlexBetween";
-import { GlobalContext } from "../../state/GlobalContext";
+import { AppContext } from "../../state/AppContext"
 
 const CourseExplorerLeftHover = () => {
   const theme = useTheme();
@@ -21,7 +21,7 @@ const CourseExplorerLeftHover = () => {
     categoryChangedRef,
     setCategoryChanged,
   } = useContext(CourseExplorerContext);
-  const { categories } = useContext(GlobalContext);
+  const { categories } = useContext(AppContext);
 
   useEffect(() => {
     let leftHover = document.querySelector(".explorer-left-hover");

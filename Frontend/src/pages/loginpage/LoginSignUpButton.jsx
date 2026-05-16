@@ -49,7 +49,7 @@ const LoginSignUpButton = ({ isSubmitDisabled, redirect, isLogin }) => {
                     fontSize: isNonMobileScreens ? "1rem" : "0.8rem",
                 }}
             >
-                {isLogin ? "Already have an account?" : "Don&apos;t have an account?"}{" "}
+                {isLogin ? "Already have an account? " : <>Don&apos;t have an account?{" "}</>}
                 <Typography
                     variant="body1"
                     component="button"

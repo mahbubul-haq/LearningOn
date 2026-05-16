@@ -1,13 +1,13 @@
 import Box from "@mui/material/Box";
 import React, { useContext, useEffect } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse";
-import { GlobalContext } from "../../state/GlobalContext";
+import { AppContext } from "../../state/AppContext";
 import BasicInfoBottom from "./BasicInfoBottom";
 import BasicInfoTop from "./BasicInfoTop";
 import RightPanelBottom from "./RightPanelBottom";
 
 const BasicInfo = () => {
-  const { categoriesWithLabel } = useContext(GlobalContext);
+  const { categoriesWithLabel } = useContext(AppContext);
   const { courseState, setCourseState } = useContext(CreateCourseContext);
   const [addSkill, setAddSkill] = React.useState(false);
   const [skillName, setSkillName] = React.useState("");

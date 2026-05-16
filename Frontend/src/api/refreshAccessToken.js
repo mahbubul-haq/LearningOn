@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import {
+    clearAuthData,
     getLastAccessTokenTime,
     shouldRefreshToken,
     updateAccessToken,
@@ -28,10 +29,11 @@ export const refreshAccessToken = async (force = false) => {
     if (res?.data?.token) {
         updateAccessToken(res.data.token, Date.now());
     } else if (!lastAccessTokenTime || Date.now() - lastAccessTokenTime >= 20 * 60 * 1000) {
-        updateAccessToken(null, 0);
+        clearAuthData();
+        return null;
     } else {
         updateAccessTokenTime(lastAccessTokenTime);
     }
 
-    return res?.data?.accessToken || null;
+    return res?.data?.token || null;
 };

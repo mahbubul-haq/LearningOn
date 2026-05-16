@@ -7,10 +7,8 @@ import { apiFetch } from "../api/apiFetch";
 export const GlobalContext = createContext();
 
 export const GlobalState = (props) => {
-  const [categories, setCategories] = React.useState([]);
-  const [listOfCategories, setListOfCategories] = React.useState([]);
-  const [categoriesWithLabel, setCategoriesWithLabel] = React.useState([]); // [{name: "Development", label: "Development"}, {name: "Web Development", label: "Web Development"}
   const [users, setUsers] = React.useState([]);
+
   const [user, setUser] = React.useState(null);
   const [userById, setUserById] = React.useState(null);
   const [courseById, setCourseById] = React.useState(null);
@@ -43,38 +41,6 @@ export const GlobalState = (props) => {
       //dispatch(setLogout());
       dispatch(setLogin({ token: token, user: null }));
     }
-  };
-
-  const getCategories = async () => {
-    const data = await apiFetch({
-      url: `/api/v1/categories`,
-      method: "GET",
-    });
-    setCategories(data.categories);
-    console.log("categories", data.categories);
-    // flatten the categories
-    const flattenCategories = (categories) => {
-      let result = [];
-      categories?.forEach((category) => {
-        result.push([category.name, category.name]);
-        category.subcategories?.forEach((subcat) => {
-          result.push([subcat, category.name]);
-        })
-      });
-      return result;
-    };
-
-    //sort the flattened
-
-    const sortedCategories = flattenCategories(data.categories).sort();
-    const categoriesWithLabel = sortedCategories.map((category, index) => {
-      return { label: category[0], id: index + 1, category: category[1] };// label:  subcategory or category name, category: parent category name
-    });
-    setCategoriesWithLabel(categoriesWithLabel);
-
-    setListOfCategories(sortedCategories.map((category) => category[0]));
-
-    //console.log("categories fetched");
   };
 
   const getUsers = async () => {
@@ -152,22 +118,17 @@ export const GlobalState = (props) => {
   };
 
   useEffect(() => {
-    getUser();
-    getCategories();
+    // getUser();
+    // getCategories();
     getUsers();
   }, []);
 
   return (
     <GlobalContext.Provider
       value={{
-        categories,
-        setCategories,
-        listOfCategories,
-        categoriesWithLabel,
         getUsers,
         users,
         setUsers,
-        getCategories,
         deleteFile,
         getUserById,
         userById,

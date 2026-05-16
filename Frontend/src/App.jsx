@@ -6,64 +6,27 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { themeSettings } from "./theme";
-import { refreshAccessToken } from "./api/refreshAccessToken";
 import "./App.css"
+import { AppProvider } from "./state/AppContext";
+import AppInitializer from "./AppInitializer";
+
 const queryClient = new QueryClient();
-import { initAuthChannel } from "./api/authChannel";
-import { applyRemoteAccessToken, applyRemoteAccessTokenTime, applyRemoteLogin, applyRemoteLogout } from "./api/authStore";
 
 function App() {
 
-  const { mode, token, lastAccessTokenTime } = useSelector((state) => state.auth);
+  const { mode } = useSelector((state) => state.auth);
   const theme = useMemo(() => createTheme(themeSettings({ mode })), [mode])
-
-  useEffect(() => {
-    console.log("Last access token time changed", lastAccessTokenTime);
-  }, [lastAccessTokenTime]);
-
-  useEffect(() => {
-    console.log("Token changed", token);
-  }, [token]);
-
-  useEffect(() => {
-
-
-    const initializeAuth = async () => {
-      try {
-        await refreshAccessToken(true);
-      } catch (err) {
-      }
-    };
-
-    initializeAuth();
-
-    const cleanup = initAuthChannel((data) => {
-      if (data.type === "ACCESS_TOKEN_UPDATED") {
-        applyRemoteAccessToken(data.token, data.timestamp);
-      }
-      else if (data.type === "LAST_ACCESS_TOKEN_TIME_UPDATED") {
-        applyRemoteAccessTokenTime(data.timestamp);
-      }
-      else if (data.type === "LOGIN") {
-        applyRemoteLogin(data.user, data.token, data.lastAccessTokenTime);
-      }
-      else if (data.type === "LOGOUT") {
-        applyRemoteLogout();
-      }
-    });
-
-    return () => {
-      cleanup?.();
-    }
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
 
         <BrowserRouter>
-          <CssBaseline />
-          <RootRoutes />
+          <AppProvider>
+            <CssBaseline />
+            <AppInitializer />
+            <RootRoutes />
+          </AppProvider>
         </BrowserRouter>
       </ThemeProvider>
     </QueryClientProvider>

@@ -138,7 +138,7 @@ const ProfilePage = () => {
                     <Box
                         sx={{
                             flex: 1,
-                            width: isNonMobileScreens ? "auto" : "100%",
+                            width: isNonMobileScreens ? "75%" : "100%",
                             ...theme.palette.glassSheet,
                             padding: { xs: "1rem", sm: "2rem" },
                         }}

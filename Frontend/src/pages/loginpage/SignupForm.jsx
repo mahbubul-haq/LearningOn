@@ -34,8 +34,12 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     const [picturePath, setPicturePath] = React.useState("");
     const [emailExists, setEmailExists] = React.useState("");
-    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const [snackbarConfig, setSnackbarConfig] = React.useState({ open: false, message: "", severity: "success" });
     const navigate = useNavigate();
+
+    const showSnackbar = (message, severity = "success") => {
+        setSnackbarConfig({ open: true, message, severity });
+    };
 
     const register = async (values, onSubmitProps) => {
         try {
@@ -52,7 +56,7 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
 
             const data = response.data;
             if (data.success) {
-                setOpenSnackbar(true);
+                showSnackbar("Signup successful!", "success");
                 onSubmitProps.resetForm();
 
                 setTimeout(() => {
@@ -65,13 +69,18 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                 }, 2000);
             } else {
                 //console.log(data);
-                if (data.errors.email) {
+                showSnackbar(data.message || "Signup failed", "error");
+                if (data.errors?.email) {
                     setEmailExists("Email already exists");
                     console.log("email exists");
                 }
             }
         } catch (error) {
             // console.log(error);
+            if (error.response?.data?.errors?.email) {
+                setEmailExists("Email already exists");
+            }
+            showSnackbar(error.response?.data?.message || error.message || "An error occurred", "error");
         } finally {
             setIsFormSubmitting(false);
         }
@@ -137,24 +146,27 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                             }}
                         >
                             <Snackbar
-                                open={openSnackbar}
+                                open={snackbarConfig.open}
                                 autoHideDuration={6000}
-                                onClose={() => setOpenSnackbar(false)}
+                                onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
                                 anchorOrigin={{
                                     vertical: "top",
                                     horizontal: "center",
                                 }}
                             >
                                 <Alert
-                                    onClose={() => setOpenSnackbar(false)}
-                                    severity="success"
+                                    onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
+                                    severity={snackbarConfig.severity}
                                     sx={{
                                         width: "100%",
-                                        backgroundColor: (theme) =>
-                                            theme.palette.primary.main,
+                                        ...(snackbarConfig.severity === "success" && {
+                                            backgroundColor: (theme) => theme.palette.primary.main,
+                                            color: "#fff",
+                                            "& .MuiAlert-icon": { color: "#fff" }
+                                        })
                                     }}
                                 >
-                                    Signup successful!
+                                    {snackbarConfig.message}
                                 </Alert>
                             </Snackbar>
 

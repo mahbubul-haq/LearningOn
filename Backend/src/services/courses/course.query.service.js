@@ -109,6 +109,7 @@ const getUserCourses = async (userId, courseStatus) => {
             coursePrice: 1,
             skillTags: 1,
             courseStatus: 1,
+            category: 1
         }
     )
         .sort({ createdAt: -1 })

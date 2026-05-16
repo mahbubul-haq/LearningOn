@@ -55,7 +55,7 @@ export const HomePageState = (props) => {
                 signal: controller.signal,
                 params: {
                     category,
-                    limit: 15,
+                    limit: 25,
                 }
             }
             );

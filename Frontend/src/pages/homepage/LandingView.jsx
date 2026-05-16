@@ -16,15 +16,9 @@ const LandingView = () => {
     const navigate = useNavigate();
     const theme = useTheme();
 
+
     const showDashboard = () => {
-        return (
-            user &&
-            (user?.courses?.reduce((acc, course) => {
-                return acc + (course.courseStatus == "draft" ? 0 : 1);
-            }, 0) > 0 ||
-                user?.tutoring?.length > 0 ||
-                user?.blogs?.length > 0)
-        );
+        return user?.myCoursesCount > 0;
     };
 
     const glowColor = 'rgba(146, 120, 230, 0.42)';

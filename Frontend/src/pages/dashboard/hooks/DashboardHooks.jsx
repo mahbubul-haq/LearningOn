@@ -2,11 +2,11 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { DashboardContext } from "../../../state/DashboardContext";
 
-export const useRecentEnrollments = (courseId, token) => {
+export const useRecentEnrollments = (courseId, user) => {
     const { getRecentEnrollments } = useContext(DashboardContext);
     return useInfiniteQuery({
-        queryKey: ["recent-enrollments", courseId || "all"],
-        queryFn: ({ pageParam = null }) => getRecentEnrollments({ courseId, authToken: token, cursor: pageParam }),
+        queryKey: ["recent-enrollments", user?._id, courseId || "all"],
+        queryFn: ({ pageParam = null }) => getRecentEnrollments({ courseId, cursor: pageParam }),
 
         getNextPageParam: (lastPage) => {
             if (lastPage.success) {
@@ -16,28 +16,28 @@ export const useRecentEnrollments = (courseId, token) => {
         },
         staleTime: 30 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
-        enabled: !!token,
+        enabled: !!user,
     });
 }
 
-export const useMyCourses = (token) => {
+export const useMyCourses = (user) => {
     const { getMyCourses } = useContext(DashboardContext);
     return useQuery({
-        queryKey: ["my-courses"],
-        queryFn: () => getMyCourses(token),
+        queryKey: ["my-courses", user?._id],
+        queryFn: () => getMyCourses(),
         staleTime: 30 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
-        enabled: !!token,
+        enabled: !!user,
     });
 }
 
-export const useEnrollmentAnalytics = (courseId, token, startDate, endDate, enabled = true) => {
+export const useEnrollmentAnalytics = (courseId, user, startDate, endDate, enabled = true) => {
     const { getEnrollmentAnalytics } = useContext(DashboardContext);
     return useQuery({
-        queryKey: ["enrollment-analytics", courseId || "all", startDate, endDate],
-        queryFn: () => getEnrollmentAnalytics({ courseId, authToken: token, startDate, endDate }),
+        queryKey: ["enrollment-analytics", user?._id, courseId || "all", startDate, endDate],
+        queryFn: () => getEnrollmentAnalytics({ courseId, startDate, endDate }),
         staleTime: 30 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
-        enabled: Boolean(token && enabled && startDate && endDate),
+        enabled: Boolean(enabled && user && startDate && endDate),
     });
 }

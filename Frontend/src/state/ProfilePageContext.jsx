@@ -46,7 +46,9 @@ export const ProfilePageState = (props) => {
           headers: {
             "Content-Type": "application/json",
           },
-          data: changedProfileInfo,
+          data: {
+            about: changedProfileInfo?.about,
+          }
         }
       );
 

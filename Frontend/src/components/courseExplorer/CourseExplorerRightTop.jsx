@@ -6,7 +6,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext } from "react";
 import { MdSearch } from "react-icons/md";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext";
-import { GlobalContext } from "../../state/GlobalContext";
+import { AppContext } from "../../state/AppContext";
 import FlexBetween from "../FlexBetween";
 import StyledTextField2 from "../StyledTextField2";
 
@@ -22,7 +22,7 @@ const CourseExplorerRightTop = ({ coursePage }) => {
     categoryChangedRef,
     setCategoryChanged,
   } = useContext(CourseExplorerContext);
-  const { categoriesWithLabel } = useContext(GlobalContext);
+  const { categoriesWithLabel } = useContext(AppContext);
   const theme = useTheme();
   const minWidth1300 = useMediaQuery("(min-width: 1300px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");

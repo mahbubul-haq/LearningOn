@@ -131,6 +131,8 @@ const CourseSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+CourseSchema.index({ owner: 1 });
+CourseSchema.index({ courseInstructors: 1 });
 
 const Course = mongoose.model("Course", CourseSchema);
 

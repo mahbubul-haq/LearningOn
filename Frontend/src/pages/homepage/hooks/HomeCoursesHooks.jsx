@@ -23,3 +23,23 @@ export const useUserPublishedCourses = (userId) => {
         enabled: !!userId,
     });
 }
+
+export const useMyEnrolledCourses = (userId) => {
+    return useQuery({
+        queryKey: ["myEnrolledCourses", userId],
+        queryFn: async () => {
+            const data = await apiFetch({
+                url: `/api/v1/users/me/enrolled-courses`,
+                method: "GET",
+            });
+            if (!data.success) {
+                throw new Error("Failed to fetch my enrolled courses");
+            }
+            // console.log("my enrolled courses", data.courses);
+            return data.courses;
+        },
+        staleTime: 1000 * 60 * 60,
+        gcTime: 1000 * 60 * 10,
+        enabled: !!userId,
+    });
+}

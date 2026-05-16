@@ -5,6 +5,7 @@ import { generateAccessToken, generateRefreshToken } from "../services/token.ser
 import redisClient from "../configs/redisClient.js";
 import jwt from "jsonwebtoken";
 import { deleteFile, uploadFile } from "../services/upload/uploadFile.js";
+import Course from "../models/Course.js";
 
 const register = async (req, res) => {
     try {
@@ -72,6 +73,8 @@ const login = async (req, res) => {
             email: email,
         }).select("name email avatar +password").lean();
 
+
+
         if (!user) {
             return res.status(401).json({
                 success: false,
@@ -95,6 +98,14 @@ const login = async (req, res) => {
                 },
             });
         }
+
+        const myCoursesCount = await Course.countDocuments({
+            $or: [
+                { owner: user._id },
+                { courseInstructors: user._id }
+            ]
+        });
+        user.myCoursesCount = myCoursesCount;
 
         user.password = undefined;
         const accessToken = generateAccessToken(user);
@@ -147,12 +158,12 @@ const refreshToken = async (req, res) => {
         );
 
 
-        console.log("storedToken", storedToken);
-        console.log("refreshToken", refreshToken);
+        // console.log("storedToken", storedToken);
+        // console.log("refreshToken", refreshToken);
 
-        const keys = await redisClient.keys("*");
-        console.log("All keys of redis", keys);
-        console.log("decoded", decoded);
+        // const keys = await redisClient.keys("*");
+        // console.log("All keys of redis", keys);
+        // console.log("decoded", decoded);
 
         if (!storedToken || storedToken !== refreshToken) {
             return res.status(403).json({ message: "Invalid refresh token" });

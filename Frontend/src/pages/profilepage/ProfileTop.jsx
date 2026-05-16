@@ -1,6 +1,8 @@
 import HomeIcon from "@mui/icons-material/Home";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import BreadCrumbs from "@mui/material/Breadcrumbs";
+import Snackbar from "@mui/material/Snackbar";
 import useTheme from "@mui/material/styles/useTheme";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -12,6 +14,7 @@ import FlexBetween from "../../components/FlexBetween";
 import { GlobalContext } from "../../state/GlobalContext";
 import { ProfilePageContext } from "../../state/ProfilePageContext";
 import ProfileTopBottom from "./ProfileTopBottom";
+import { apiFetch } from "../../api/apiFetch";
 
 const ProfileTop = ({ userInfo }) => {
   const theme = useTheme();
@@ -21,6 +24,12 @@ const ProfileTop = ({ userInfo }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const mounted = React.useRef(true);
+
+  const [snackbarConfig, setSnackbarConfig] = React.useState({ open: false, message: "", severity: "success" });
+  const showSnackbar = (message, severity = "success") => {
+    setSnackbarConfig({ open: true, message, severity });
+  };
+
   const {
     followingDone,
     setFollowingDone,
@@ -29,6 +38,8 @@ const ProfileTop = ({ userInfo }) => {
     changedProfileInfo,
     setChangedProfileInfo,
     updateProfile,
+    profileInfoChanged,
+    setProfileInfoChanged,
   } = React.useContext(ProfilePageContext);
   const { setUserById, getUserById, getUser, deleteFile } =
     React.useContext(GlobalContext);
@@ -69,11 +80,15 @@ const ProfileTop = ({ userInfo }) => {
         ...userInfo,
         ...changedProfileInfo,
       });
-      setEditProfileStatus("editing");
-      setChangedProfileInfo({
-        ...changedProfileInfo,
-        picturePath: "",
-      });
+      setEditProfileStatus("");
+      setChangedProfileInfo({});
+      setProfileInfoChanged(false);
+      showSnackbar("Profile updated successfully!", "success");
+    } else if (editProfileStatus === "error") {
+      setEditProfileStatus("");
+      setChangedProfileInfo({});
+      setProfileInfoChanged(false);
+      showSnackbar("Failed to update profile", "error");
     }
   }, [editProfileStatus]);
 
@@ -86,49 +101,66 @@ const ProfileTop = ({ userInfo }) => {
     mounted.current = false;
   }, [changedProfileInfo.picturePath]);
 
-  const changeProfilePicture = async (e) => {
+  const changeProfilePicture = (e) => {
     const file = e.target.files[0];
-    //console.log(file);
     if (!file) {
       return;
     }
     if (file.size > 5000000) {
-      alert("File size is too large. Please upload a file less than 5MB");
+      showSnackbar("File size is too large. Please upload a file less than 5MB", "error");
       return;
     }
 
     if (![`image/jpeg`, `image/png`, `image/jpg`].includes(file.type)) {
-      alert("Only jpg, jpeg and png files are allowed");
+      showSnackbar("Only jpg, jpeg and png files are allowed", "error");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("picture", file);
-    formData.append("resource_type", "image");
+    const previewUrl = URL.createObjectURL(file);
+    setChangedProfileInfo((prev) => ({
+      ...prev,
+      avatarPreview: previewUrl,
+      avatarFile: file,
+    }));
+    setProfileInfoChanged(true);
+  };
 
-    //await deleteFile(userInfo?.picturePath, false);
+  const saveProfileChanges = async () => {
+    try {
+      if (changedProfileInfo.avatarFile) {
+        const formData = new FormData();
+        formData.append("picture", changedProfileInfo.avatarFile);
+        formData.append("resource_type", "image");
 
-    const data = await apiFetch({
-      url: `/api/v1/users/profile-picture`,
-      method: "PATCH",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+        const data = await apiFetch({
+          url: `/api/v1/users/profile-picture`,
+          method: "PATCH",
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
-
-    console.log(data);
-
-    if (data.success) {
-      setUserById(prev => {
-        return {
-          ...prev,
-          avatar: data.avatar
+        if (data.success) {
+          setUserById((prev) => ({
+            ...prev,
+            avatar: data.avatar,
+          }));
+          showSnackbar("Profile picture updated successfully!", "success");
+        } else {
+          showSnackbar(data.message || "File upload failed", "error");
+          return; // Stop if image upload fails
         }
-      });
-    } else {
-      console.log("File upload failed");
+      }
+      
+      // Now update the rest of the profile if there are changes
+      await updateProfile();
+    } catch (error) {
+      console.log(error);
+      showSnackbar(
+        error.response?.data?.message || error.message || "An error occurred",
+        "error"
+      );
     }
   };
 
@@ -139,6 +171,30 @@ const ProfileTop = ({ userInfo }) => {
         // Background handled by parent glass container
       }}
     >
+      <Snackbar
+        open={snackbarConfig.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <Alert
+          onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
+          severity={snackbarConfig.severity}
+          sx={{
+            width: "100%",
+            ...(snackbarConfig.severity === "success" && {
+              backgroundColor: (theme) => theme.palette.primary.main,
+              color: "#fff",
+              "& .MuiAlert-icon": { color: "#fff" }
+            })
+          }}
+        >
+          {snackbarConfig.message}
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           width: "100%",
@@ -192,6 +248,7 @@ const ProfileTop = ({ userInfo }) => {
           userInfo={userInfo}
           getQualifications={getQualifications}
           changeProfilePicture={changeProfilePicture}
+          saveProfileChanges={saveProfileChanges}
           setUserById={setUserById}
         />
 

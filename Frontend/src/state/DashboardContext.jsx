@@ -17,7 +17,7 @@ export const DashboardState = (props) => {
         totalEnrollments: 0
     });
 
-    const getMyCourses = async (authToken) => {
+    const getMyCourses = async () => {
         // console.log("getMyCourses called")
 
         const data = await apiFetch({
@@ -33,7 +33,7 @@ export const DashboardState = (props) => {
     };
 
     // for react query 
-    const getRecentEnrollments = async ({ courseId, authToken, cursor }) => {
+    const getRecentEnrollments = async ({ courseId, cursor }) => {
 
         let params = {
             limit: 20
@@ -57,7 +57,7 @@ export const DashboardState = (props) => {
         return data;
     };
 
-    const getEnrollmentAnalytics = async ({ courseId, authToken, startDate, endDate }) => {
+    const getEnrollmentAnalytics = async ({ courseId, startDate, endDate }) => {
 
         // console.log("getEnrollmentAnalytics called", courseId, startDate, endDate);
 

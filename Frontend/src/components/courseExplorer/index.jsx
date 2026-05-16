@@ -6,18 +6,18 @@ import { colorTokens } from "../../theme";
 import CourseExplorerLeft from "./CourseExplorerLeft";
 import CourseExplorerLeftHover from "./CourseExplorerLeftHover";
 import { GlobalContext } from "../../state/GlobalContext";
+import { AppContext } from "../../state/AppContext";
 import CourseExplorerRightTop from "./CourseExplorerRightTop";
 import CourseExplorerRIghtBottom from "./CourseExplorerRIghtBottom";
 import { useLocation } from "react-router-dom";
 const CourseExplorer = () => {
   const location = useLocation();
   const { openCourseExplorer, closeCourseExplorer, filteredCourses, categoryChangedRef, setCategoryChanged, getFilteredCourses, showCourseExplorer } = useContext(CourseExplorerContext);
-  const { getCategories, listOfCategories, categories } =
-    useContext(GlobalContext);
+  const { fetchCategories, listOfCategories, categories } = useContext(AppContext);
   const theme = useTheme();
   useEffect(() => {
     if (!categories || categories.length == 0) {
-      getCategories();
+      fetchCategories();
     }
   }, [categories]);
   const locationPathname = location.pathname.toLowerCase();

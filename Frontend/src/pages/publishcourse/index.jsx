@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { GlobalContext } from "../../state/GlobalContext";
+import { AppContext } from "../../state/AppContext"
 import DeleteCourseDialog from "./DeleteCourseDialog";
 import PublishStatusDialog from "./PublishStatusDialog";
 import RightPanel from "./RightPanel";
@@ -41,7 +42,8 @@ const PublishCourse = () => {
     setMobileDrawerOpen,
     isCourseValid,
   } = useContext(CreateCourseContext);
-  const { getUsers, getCategories, getUser } = useContext(GlobalContext);
+  const { getUsers } = useContext(GlobalContext);
+  const { fetchUser, fetchCategories } = useContext(AppContext);
   const navigate = useNavigate();
 
   // --- Dynamic Mesh Background ---
@@ -80,12 +82,12 @@ const PublishCourse = () => {
     if (edit == "edit" && id) {
       getCoursePlainById(id);
       getUsers();
-      getCategories();
+      fetchCategories();
     } else {
       console.log("not edit mode")
       getDraftCourse();
-      getUsers();
-      getCategories();
+      fetchUser();
+      fetchCategories();
     }
   }, []);
 

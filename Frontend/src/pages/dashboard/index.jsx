@@ -32,7 +32,7 @@ export default function Dashboard() {
         getStatusKey,
     } = useDashboardData();
 
-    const { data: myCourses, isLoading: isLoadingMyCourses, isError: isErrorMyCourses } = useMyCourses(token);
+    const { data: myCourses, isLoading: isLoadingMyCourses, isError: isErrorMyCourses } = useMyCourses(user);
 
     const {
         data: enrollmentsData,
@@ -42,7 +42,7 @@ export default function Dashboard() {
         isFetching: isFetchingEnrollments,
         isError: isErrorEnrollments,
         error: enrollmentsError,
-    } = useRecentEnrollments(selectedCourse?._id, token);
+    } = useRecentEnrollments(selectedCourse?._id, user);
 
     useEffect(() => {
         console.log("recentEnrollments", enrollmentsData);
@@ -55,7 +55,7 @@ export default function Dashboard() {
 
     const { data: analyticsData, isLoading: isLoadingAnalytics, isError: isErrorAnalytics } = useEnrollmentAnalytics(
         selectedCourse?._id,
-        token,
+        user,
         startDate ? new Date(startDate).toISOString() : null,
         endDate ? new Date(endDate).toISOString() : null,
         startDate && endDate && myCourses?.length

@@ -3,19 +3,21 @@ import { colorTokens } from "../../theme";
 import React, { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
 import CustomSlider from "../../components/CustomSlider";
-import { GlobalContext } from "../../state/GlobalContext";
+import { AppContext } from "../../state/AppContext";
 import { HomePageContext } from "../../state/HomePageState";
 import CoursesBottom from "./CoursesBottom";
 import CoursesContent from "./CoursesContent";
 import CoursesTop from "./CoursesTop";
+import { useMyEnrolledCourses, useUserPublishedCourses } from "./hooks/HomeCoursesHooks";
 
 const HomeCourses = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const [courseType, setCourseType] = React.useState("Popular Courses");
-  const { listOfCategories, getCategories } = useContext(GlobalContext);
+  const { listOfCategories, fetchCategories } = useContext(AppContext);
   const [categoriesWithCourse, setCategoriesWithCourse] = React.useState([]);
+  const [popularCategories, setPopularCategories] = React.useState([]);
   const [selectedItem, setSelectedItem] = React.useState("All");
-  const selectedItemRef = React.useRef(selectedItem);
+  const selectedItemRef = React.useRef(selectedItem || "All");
   const [changingCourseType, setChangingCourseType] = React.useState(false);
   const changingCourseTypeRef = React.useRef(changingCourseType);
 
@@ -36,6 +38,9 @@ const HomeCourses = () => {
   } = useContext(HomePageContext);
 
   const user = useSelector((state) => state.auth.user);
+
+  const { data: userPublishedCourses, isPending: userPublishedCoursesPending } = useUserPublishedCourses(user?._id);
+  const { data: userEnrolledCourses, isPending: userEnrolledCoursesPending } = useMyEnrolledCourses(user?._id);
 
   useEffect(() => {
     console.log("Waiting for selected courses Changed", waitingForSelectedCourses);
@@ -88,18 +93,23 @@ const HomeCourses = () => {
     //console.log(filteredCourses, listOfCategories);
     //setSelectedItem("All");
 
-    if (courseType == "Popular Courses" && selectedItemRef.current != "All") return;
+    // if (courseType == "Popular Courses" && selectedItemRef.current != "All") return;
 
-    if (filteredCourses.length > 0 && listOfCategories.length > 0) {
+    if (filteredCourses?.length > 0 && listOfCategories.length > 0) {
       const categoriesWithCourse = listOfCategories.filter((category) => {
         return filteredCourses.reduce((cur, course) => {
           return cur || course?.category === category;
         }, false);
       });
       setCategoriesWithCourse(["All", ...categoriesWithCourse]);
+      if (courseType === "Popular Courses" && popularCategories?.length === 0) {
+        setPopularCategories(["All", ...categoriesWithCourse]);
+      }
     } else {
       setCategoriesWithCourse([]);
     }
+
+
   }, [filteredCourses, listOfCategories]);
 
   useEffect(() => {
@@ -116,11 +126,11 @@ const HomeCourses = () => {
 
   const changeCourseType = () => {
     if (courseType === "My Courses") {
-      setFilteredCourses(user?.courses?.filter((course) => course.courseStatus == "published"));
+      setFilteredCourses(userPublishedCourses?.length ? userPublishedCourses : []);
     } else if (courseType === "I am Learning") {
-      setFilteredCourses(user?.enrolledCourses?.filter((course) => course.course.courseStatus == "published").map((course) => course.course));
+      setFilteredCourses(userEnrolledCourses?.length ? userEnrolledCourses : []);
     } else if (courseType === "Popular Courses") {
-      setFilteredCourses(courses);
+      setFilteredCourses(courses?.length ? courses : []);
     }
   };
 
@@ -151,7 +161,7 @@ const HomeCourses = () => {
     }
     if (!listOfCategories || listOfCategories.length === 0) {
       ///console.log("calling for categories from home");
-      getCategories();
+      fetchCategories();
     }
   }, [selectedItem, courseType]);
 
@@ -318,7 +328,7 @@ const HomeCourses = () => {
             }}
           >
             <CustomSlider
-              items={categoriesWithCourse}
+              items={courseType === "Popular Courses" ? popularCategories : categoriesWithCourse}
               selectedItem={selectedItemRef.current}
               setSelectedItem={setSelectedItem}
               selectedItemRef={selectedItemRef}

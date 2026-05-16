@@ -13,7 +13,7 @@ import { StyledButton } from "../../components/StyledButton";
 import { cloudinaryCld } from "../../configs/cloudinary.config";
 import { ProfilePageContext } from "../../state/ProfilePageContext";
 
-const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture }) => {
+const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, saveProfileChanges }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const {
@@ -22,6 +22,9 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
     setFollowingDone,
     setEditProfileStatus,
     profileInfoChanged,
+    setProfileInfoChanged,
+    changedProfileInfo,
+    setChangedProfileInfo,
   } = useContext(ProfilePageContext);
   const theme = useTheme();
   const user = useSelector((state) => state.auth.user);
@@ -64,7 +67,16 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
           marginBottom: isMobileScreens ? "0.5rem" : "0",
         }}
       >
-        {userInfo?.avatar?.secure_url ? (
+        {changedProfileInfo?.avatarPreview ? (
+          <img src={changedProfileInfo.avatarPreview}
+            loading="lazy"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "50%",
+            }} alt="preview" />
+        ) : userInfo?.avatar?.secure_url ? (
           // <AdvancedImage
           //   plugins={[lazyload()]}
           //   cldImg={cloudinaryCld.image(userInfo?.avatar?.public_id)}
@@ -115,23 +127,29 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
               alignItems: "center",
             }}
           >
-            <IconButton
+            <Box
               sx={{
                 position: "absolute",
-                top: "70%",
-                left: isNonMobileScreens ? "75%" : "65%",
-                backgroundColor: theme.palette.grey[200],
-                padding: "0.7rem",
-                boxShadow: `0 0 5px ${colorTokens.translucentBlack.x5}`,
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+                backgroundColor: "rgba(0,0,0,0.4)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "#fff",
+                backdropFilter: "blur(2px)",
               }}
             >
               <MdAddPhotoAlternate
-                size={isMobileScreens ? 20 : 25}
+                size={isMobileScreens ? 24 : 32}
                 style={{
-                  color: theme.palette.grey[900],
+                  color: "#fff",
                 }}
               />
-            </IconButton>
+            </Box>
             <input
               type="file"
               accept="image/jpg, image/jpeg, image/png"
@@ -183,43 +201,82 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture })
           </Typography>
         </Box>
 
-        <StyledButton
-          sx={{
-            "&&": {
-              px: isMobileScreens ? "2rem" : "2rem", // More touch area
-              width: isMobileScreens ? "100%" : "auto", // Optional: Full width button on mobile? User complained about squeezed. Let's keep it auto but with min-width maybe. Or just ample padding.
-              maxWidth: isMobileScreens ? "300px" : "none",
-            },
-          }}
-          onClick={() => {
-            if (userInfo?._id == user?._id) {
-              if (editProfileStatus === "editing") {
+        {userInfo?._id == user?._id && editProfileStatus === "editing" ? (
+          <Box
+            sx={{
+              display: "flex",
+              gap: "1rem",
+              width: isMobileScreens ? "100%" : "auto",
+              flexDirection: isMobileScreens ? "column" : "row",
+              alignItems: "center",
+            }}
+          >
+            <StyledButton
+              sx={{
+                "&&": {
+                  px: isMobileScreens ? "2rem" : "2rem",
+                  width: isMobileScreens ? "100%" : "auto",
+                  maxWidth: isMobileScreens ? "300px" : "none",
+                  backgroundColor: theme.palette.error.main,
+                  "&:hover": {
+                    backgroundColor: theme.palette.error.dark,
+                  },
+                },
+              }}
+              onClick={() => {
                 setEditProfileStatus("");
-              } else {
+                setProfileInfoChanged(false);
+                setChangedProfileInfo({});
+              }}
+            >
+              Cancel Edit
+            </StyledButton>
+            {profileInfoChanged && (
+              <StyledButton
+                sx={{
+                  "&&": {
+                    px: isMobileScreens ? "2rem" : "2rem",
+                    width: isMobileScreens ? "100%" : "auto",
+                    maxWidth: isMobileScreens ? "300px" : "none",
+                  },
+                }}
+                onClick={() => saveProfileChanges()}
+              >
+                Save Update
+              </StyledButton>
+            )}
+          </Box>
+        ) : (
+          <StyledButton
+            sx={{
+              "&&": {
+                px: isMobileScreens ? "2rem" : "2rem", // More touch area
+                width: isMobileScreens ? "100%" : "auto", // Optional: Full width button on mobile? User complained about squeezed. Let's keep it auto but with min-width maybe. Or just ample padding.
+                maxWidth: isMobileScreens ? "300px" : "none",
+              },
+            }}
+            onClick={() => {
+              if (userInfo?._id == user?._id) {
                 setEditProfileStatus("editing");
+              } else {
+                setFollowingDone(false);
+                follow(userInfo?._id);
               }
-            } else {
-              setFollowingDone(false);
-              follow(userInfo?._id);
-            }
-          }}
-        >
-          {userInfo?._id == user?._id
-            ? editProfileStatus === "editing"
-              ? profileInfoChanged
-                ? "Save Update"
-                : "Cancel Edit"
-              : "Edit Profile"
-            : userInfo?.followers?.length > 0 &&
-              userInfo?.followers?.reduce((prev, cur) => {
-                if (cur._id == user?._id) {
-                  return true;
-                }
-                return prev || false;
-              })
-              ? "Unfollow"
-              : "Follow"}
-        </StyledButton>
+            }}
+          >
+            {userInfo?._id == user?._id
+              ? "Edit Profile"
+              : userInfo?.followers?.length > 0 &&
+                userInfo?.followers?.reduce((prev, cur) => {
+                  if (cur._id == user?._id) {
+                    return true;
+                  }
+                  return prev || false;
+                }, false)
+                ? "Unfollow"
+                : "Follow"}
+          </StyledButton>
+        )}
       </FlexBetween>
     </Box>
   );

@@ -1,5 +1,5 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Divider } from "@mui/material";
+import { Divider, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -14,7 +14,7 @@ import useTheme from "@mui/material/styles/useTheme";
 
 const ProfileRight = ({ userInfo, userPublishedCourses }) => {
     const theme = useTheme();
-    const { openedTab } = useContext(ProfilePageContext);
+    const { openedTab, editProfileStatus, changedProfileInfo, setChangedProfileInfo, setProfileInfoChanged } = useContext(ProfilePageContext);
     const user = useSelector((state) => state.auth.user);
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
 
@@ -58,30 +58,48 @@ const ProfileRight = ({ userInfo, userPublishedCourses }) => {
                 >
                     About
                 </Typography>
-                <Typography
-                    sx={{
-                        fontSize: "0.9rem",
-                        lineHeight: "1.5rem",
-                        overflowWrap: "anywhere",
-                        padding: isMobileScreens ? "0rem" : "0rem 2rem",
-                    }}
-                >
-                    {userInfo?.about ? (
-                        <>
-                            {" "}
-                            {userInfo?.about.split("\n").map((item, key) => {
-                                return (
-                                    <span key={key}>
-                                        {item}
-                                        <br />
-                                    </span>
-                                );
-                            })}
-                        </>
-                    ) : (
-                        "No description provided by the user"
-                    )}
-                </Typography>
+                {editProfileStatus === "editing" ? (
+                    <Box sx={{ padding: isMobileScreens ? "0rem" : "0rem 2rem", mt: 1 }}>
+                        <TextField
+                            multiline
+                            minRows={3}
+                            maxRows={8}
+                            fullWidth
+                            value={changedProfileInfo.about !== undefined ? changedProfileInfo.about : (userInfo?.about || "")}
+                            onChange={(e) => {
+                                setChangedProfileInfo({ ...changedProfileInfo, about: e.target.value });
+                                setProfileInfoChanged(true);
+                            }}
+                            variant="outlined"
+                            placeholder="Write something about yourself..."
+                        />
+                    </Box>
+                ) : (
+                    <Typography
+                        sx={{
+                            fontSize: "0.9rem",
+                            lineHeight: "1.5rem",
+                            overflowWrap: "anywhere",
+                            padding: isMobileScreens ? "0rem" : "0rem 2rem",
+                        }}
+                    >
+                        {userInfo?.about ? (
+                            <>
+                                {" "}
+                                {userInfo?.about.split("\n").map((item, key) => {
+                                    return (
+                                        <span key={key}>
+                                            {item}
+                                            <br />
+                                        </span>
+                                    );
+                                })}
+                            </>
+                        ) : (
+                            "No description provided by the user"
+                        )}
+                    </Typography>
+                )}
                 <Divider
                     light
                     sx={{
