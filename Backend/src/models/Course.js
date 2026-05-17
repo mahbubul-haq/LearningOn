@@ -101,6 +101,18 @@ const CourseSchema = new mongoose.Schema(
             ref: "Enrollment",
             default: [],
         },
+        enrollmentTrend: {
+            type: [Number],
+            default: new Array(20).fill(0),
+        },
+        trendDayKeys: {
+            type: [String],
+            default: new Array(20).fill(0),
+        },
+        enrolledStudentsCount: {
+            type: Number,
+            default: 0,
+        },
         ratings: {
             totalRating: {
                 type: Number,

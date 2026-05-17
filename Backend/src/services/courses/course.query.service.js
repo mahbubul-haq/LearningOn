@@ -1,7 +1,8 @@
 import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
 import { isValidObjectId, Types } from "mongoose";
-
+import redisClient from "../../configs/redisClient.js";
+import { rebuildLeaderboard } from "./leaderboard.job.js";
 
 const getRelatedCourses = async (category, courseId) => {
 
@@ -121,8 +122,27 @@ const getUserCourses = async (userId, courseStatus) => {
 
 const getPublishedCoursesByCategory = async (category, limit) => {
 
+    if (category?.toString().toLowerCase() === "all") {
+        /// this is hit when user enters homepage -> for other categories based on
+        //chip click -> will modify design for other categories based on frontend
+        //implementation
+        // await redisClient.del("leaderboard:popular");
+        let cachedPopularCourses = await redisClient.get("leaderboard:popular");
+        if (!cachedPopularCourses) {
+            // console.log("Rebuilding leaderboard...");
+            await rebuildLeaderboard();
+            cachedPopularCourses = await redisClient.get("leaderboard:popular");
+
+        }
+        // console.log(cachedPopularCourses);
+
+        return JSON.parse(cachedPopularCourses);
+    }
+
+
+
     let query = { courseStatus: "published" }
-    if (category !== "all") {
+    if (category?.toString().toLowerCase() !== "all") {
         query.category = category;
     }
 

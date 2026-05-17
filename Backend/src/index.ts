@@ -32,6 +32,7 @@ import errorHandler from "./errors/errorHandler.js";
 import userRoutesNew from "./routes/user.routes.js";
 import { connectRedis } from "./configs/redisClient.js";
 import categoryRoutes from "./routes/category.routes.js";
+import "./jobs/dailyBucketShift.job.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 console.log("dirname", __dirname);
@@ -110,13 +111,23 @@ app.use(errorHandler);
 
 const server = http.createServer(app);
 
-connectSocket(server);
-connectRedis().then(() =>
-    mongoose.connect(process.env.MONGO_URI!)).then(() => {
+async function startServer() {
+    try {
+        connectSocket(server);
+
+        await connectRedis();
+        await mongoose.connect(process.env.MONGO_URI!);
+
         console.log("Connected to MongoDB");
+
         server.listen(5000, () => {
             console.log("Server is running on port 5000");
         });
-    }).catch((err) => {
-        console.log("Database connection failed", err);
-    })
+
+    } catch (err) {
+        console.log("Startup failed", err);
+    }
+}
+
+startServer();
+

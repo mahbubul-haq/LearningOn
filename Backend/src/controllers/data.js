@@ -240,8 +240,25 @@ const stripeWebHook = async (req, res) => {
                         }
                         if (!course.enrolledStudents.includes(enrollment._id)) {
                             course.enrolledStudents.push(enrollment._id);
-                            await course.save();
+
                         }
+                        if (!course.enrolledStudentsCount) {
+                            course.enrolledStudentsCount = 0;
+                        }
+                        course.enrolledStudentsCount++;
+
+                        if (!course.enrollmentTrend || course.enrollmentTrend.length === 0) {
+                            course.trendDayKeys = new Array(20).fill(0);
+                            course.enrollmentTrend = new Array(20).fill(0);
+                        }
+                        let todayKey = Math.floor(Date.now() / 86400000);
+                        let idx = todayKey % 20;
+                        if (course.trendDayKeys[idx] !== todayKey) {
+                            course.trendDayKeys[idx] = todayKey;
+                            course.enrollmentTrend[idx] = 0;
+                        }
+                        course.enrollmentTrend[idx]++;
+                        await course.save();
                     }
 
                     // Add enrollment reference to user.enrolledCourses
