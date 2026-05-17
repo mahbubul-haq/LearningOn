@@ -2,19 +2,24 @@ import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
 import Enrollment from "../../models/Enrollment.js";
 import QuizAttempt from "../../models/QuizAttempt.js";
-import { getFilteredCourses, getPublishedCoursesByCategory, getRelatedCourses, getUserCourses } from "../../services/courses/course.query.service.js";
+import { getFilteredCourses, getPublishedCoursesByCategory, getRecentCourses, getRelatedCourses, getTrendingCourses, getUserCourses } from "../../services/courses/course.query.service.js";
 
 // ================================== NEW CONTROLLERS =================================
 
 const getCourses = async (req, res) => {
 
-    const { category, courseId, userId, courseStatus, limit, page, coursePerPage } = req.query;
+    const { trending, recent, category, courseId, userId, courseStatus, limit, page, coursePerPage } = req.query;
     // console.log("category", category);
     // console.log("courseId", courseId);
     let courses = [];
     console.log("page", page, coursePerPage);
-
-    if (category && courseId) {
+    if (trending == "true") {
+        courses = await getTrendingCourses()
+    }
+    else if (recent == "true") {
+        courses = await getRecentCourses()
+    }
+    else if (category && courseId) {
         courses = await getRelatedCourses(category, courseId);
     }
     else if (category && limit) {
@@ -85,6 +90,7 @@ const getPopularCourses = async (req, res) => {
                     skillTags: 1,
                     category: 1,
                     courseStatus: 1,
+                    enrolledStudentsCount: 1,
                 }
             )
                 .sort({ "ratings.totalRating": -1 })
@@ -106,6 +112,7 @@ const getPopularCourses = async (req, res) => {
                     skillTags: 1,
                     category: 1,
                     courseStatus: 1,
+                    enrolledStudentsCount: 1,
                 }
             )
                 .sort({ "ratings.totalRating": -1 })

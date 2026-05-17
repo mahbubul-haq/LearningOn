@@ -8,7 +8,8 @@ import { HomePageContext } from "../../state/HomePageState";
 import CoursesBottom from "./CoursesBottom";
 import CoursesContent from "./CoursesContent";
 import CoursesTop from "./CoursesTop";
-import { useMyEnrolledCourses, useUserPublishedCourses } from "./hooks/HomeCoursesHooks";
+import { useMyEnrolledCourses, useUserPublishedCourses, useTrendingCourses, useRecentCourses } from "./hooks/HomeCoursesHooks";
+import CourseListSlider from "./CourseListSlider";
 
 const HomeCourses = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
@@ -41,6 +42,8 @@ const HomeCourses = () => {
 
   const { data: userPublishedCourses, isPending: userPublishedCoursesPending } = useUserPublishedCourses(user?._id);
   const { data: userEnrolledCourses, isPending: userEnrolledCoursesPending } = useMyEnrolledCourses(user?._id);
+  const { data: trendingCourses, isPending: trendingCoursesPending } = useTrendingCourses();
+  const { data: recentCourses, isPending: recentCoursesPending } = useRecentCourses();
 
   useEffect(() => {
     console.log("Waiting for selected courses Changed", waitingForSelectedCourses);
@@ -366,6 +369,8 @@ const HomeCourses = () => {
             loading={loading}
           />
         </Box>
+        <CourseListSlider courses={trendingCourses} title="Trending Courses" loading={trendingCoursesPending} />
+        <CourseListSlider courses={recentCourses} title="Recent Courses" loading={recentCoursesPending} />
       </Box>
     </Box>
   );

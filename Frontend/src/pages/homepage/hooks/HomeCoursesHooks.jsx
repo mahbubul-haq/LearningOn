@@ -43,3 +43,47 @@ export const useMyEnrolledCourses = (userId) => {
         enabled: !!userId,
     });
 }
+
+export const useTrendingCourses = () => {
+    return useQuery({
+        queryKey: ["trendingCourses"],
+        queryFn: async () => {
+            const data = await apiFetch({
+                url: `/api/v1/courses`,
+                method: "GET",
+                params: {
+                    trending: 'true'
+                }
+            });
+            console.log("trending courses", data.courses);
+            if (!data.success) {
+                throw new Error("Failed to fetch trending courses");
+            }
+            return data.courses;
+        },
+        staleTime: 1000 * 60 * 60,
+        gcTime: 1000 * 60 * 60,
+    });
+}
+
+export const useRecentCourses = () => {
+    return useQuery({
+        queryKey: ["recentCourses"],
+        queryFn: async () => {
+            const data = await apiFetch({
+                url: `/api/v1/courses`,
+                method: "GET",
+                params: {
+                    recent: 'true'
+                }
+            });
+            console.log("recent courses", data.courses);
+            if (!data.success) {
+                throw new Error("Failed to fetch recent courses");
+            }
+            return data.courses;
+        },
+        staleTime: 1000 * 60 * 60,
+        gcTime: 1000 * 60 * 60,
+    });
+}

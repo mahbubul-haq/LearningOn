@@ -366,6 +366,8 @@ const getMyCourses = async (req, res) => {
                 courseStatus: 1,
                 ratings: 1,
                 createdAt: 1,
+                enrolledStudentsCount: 1,
+                category: 1,
             }
         ).lean();
         if (!courses || courses.length === 0) {

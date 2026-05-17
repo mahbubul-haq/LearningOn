@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import CustomSlider1 from "../components/CustomSlider1";
 import Rating from "../components/Rating";
 import { CourseExplorerContext } from "../state/CourseExplorerContext";
+import GroupIcon from '@mui/icons-material/Group';
 
 const CourseWidget = ({ courseInfo }) => {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ const CourseWidget = ({ courseInfo }) => {
           } else navigate(`/course/${courseInfo?._id}`);
         }}
         sx={{
+          position: "relative",
           width: "100%",
           height: isNonMobileScreens ? "160px" : "140px", // Increased image height slightly
           maxWidth: "100%",
@@ -69,7 +71,34 @@ const CourseWidget = ({ courseInfo }) => {
         image={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
           }/image/upload/${courseInfo?.courseThumbnail}`}
         title={courseInfo?.courseTitle}
-      />
+      >
+        {courseInfo?.enrolledStudentsCount > 0 && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              background: "linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)",
+              color: "white",
+              padding: "4px 10px",
+              borderBottomLeftRadius: "12px",
+              borderTopRightRadius: isNonMobileScreens ? "0.8rem" : "0.4rem",
+              fontSize: "0.75rem",
+              fontWeight: "bold",
+              boxShadow: "-2px 2px 10px rgba(255, 107, 107, 0.4)",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              zIndex: 10,
+            }}
+          >
+            <GroupIcon sx={{ fontSize: "1rem" }} />
+            {courseInfo.enrolledStudentsCount} {courseInfo.enrolledStudentsCount === 1 ? 'Learner' : 'Learners'}
+          </Box>
+        )}
+      </CardMedia>
       <CardContent
         sx={{
           height: isNonMobileScreens

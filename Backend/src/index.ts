@@ -18,7 +18,7 @@ import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.routes.js";
 import quizRoutes from "./routes/quiz.routes.js";
 
-import courseRoutes from "./routes/course.js";
+// import courseRoutes from "./routes/course.js";
 import courseRoutesV1 from "./routes/course.routes.js";
 import courseProgressRoutes from "./routes/course-progress.routes.js";
 import dataRoutes from "./routes/data.js";
@@ -32,7 +32,7 @@ import errorHandler from "./errors/errorHandler.js";
 import userRoutesNew from "./routes/user.routes.js";
 import { connectRedis } from "./configs/redisClient.js";
 import categoryRoutes from "./routes/category.routes.js";
-import "./jobs/dailyBucketShift.job.js";
+import "./jobs/courses.job.js"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 console.log("dirname", __dirname);
@@ -69,7 +69,7 @@ app.use("/images", express.static(path.join(__dirname, "../assets/images")));
 
 // LEGACY
 
-app.use("/course", courseRoutes);
+// app.use("/course", courseRoutes);
 app.use("/data", dataRoutes);
 
 

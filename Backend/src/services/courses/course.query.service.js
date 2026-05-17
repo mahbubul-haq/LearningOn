@@ -2,7 +2,8 @@ import Category from "../../models/Category.js";
 import Course from "../../models/Course.js";
 import { isValidObjectId, Types } from "mongoose";
 import redisClient from "../../configs/redisClient.js";
-import { rebuildLeaderboard } from "./leaderboard.job.js";
+import { rebuildLeaderboard, rebuildRecentCourses, rebuildTrendingCourses } from "./course.leaderboard.service.js";
+import { getLast20DaysTotalEnrollments } from "./leaderboard.service.js";
 
 const getRelatedCourses = async (category, courseId) => {
 
@@ -34,6 +35,7 @@ const getRelatedCourses = async (category, courseId) => {
             skillTags: 1,
             courseStatus: 1,
             category: 1,
+            enrolledStudentsCount: 1,
         }
     )
         .limit(4)
@@ -75,6 +77,7 @@ const getRelatedCourses = async (category, courseId) => {
                     skillTags: 1,
                     courseStatus: 1,
                     category: 1,
+                    enrolledStudentsCount: 1,
                     "owner._id": 1,
                     "owner.name": 1,
                 },
@@ -110,7 +113,8 @@ const getUserCourses = async (userId, courseStatus) => {
             coursePrice: 1,
             skillTags: 1,
             courseStatus: 1,
-            category: 1
+            category: 1,
+            enrolledStudentsCount: 1,
         }
     )
         .sort({ createdAt: -1 })
@@ -126,7 +130,7 @@ const getPublishedCoursesByCategory = async (category, limit) => {
         /// this is hit when user enters homepage -> for other categories based on
         //chip click -> will modify design for other categories based on frontend
         //implementation
-        // await redisClient.del("leaderboard:popular");
+        await redisClient.del("leaderboard:popular");
         let cachedPopularCourses = await redisClient.get("leaderboard:popular");
         if (!cachedPopularCourses) {
             // console.log("Rebuilding leaderboard...");
@@ -157,6 +161,7 @@ const getPublishedCoursesByCategory = async (category, limit) => {
             skillTags: 1,
             courseStatus: 1,
             category: 1,
+            enrolledStudentsCount: 1
         }
     )
         .sort({ createdAt: -1 })
@@ -204,6 +209,8 @@ const getFilteredCourses = async (category, page, coursePerPage) => {
                 coursePrice: 1,
                 skillTags: 1,
                 courseStatus: 1,
+                category: 1,
+                enrolledStudentsCount: 1
             }
         )
             .skip(skip)
@@ -227,6 +234,8 @@ const getFilteredCourses = async (category, page, coursePerPage) => {
                 coursePrice: 1,
                 skillTags: 1,
                 courseStatus: 1,
+                category: 1,
+                enrolledStudentsCount: 1
             }
         )
             .skip(skip)
@@ -243,6 +252,24 @@ const getFilteredCourses = async (category, page, coursePerPage) => {
 
 };
 
+const getTrendingCourses = async () => {
+    let cachedTrendingCourses = await redisClient.get("leaderboard:trending");
+    if (!cachedTrendingCourses) {
+        await rebuildTrendingCourses();
+    }
+    cachedTrendingCourses = await redisClient.get("leaderboard:trending");
+    return JSON.parse(cachedTrendingCourses);
+}
+
+const getRecentCourses = async () => {
+    let cachedRecentCourses = await redisClient.get("leaderboard:recent");
+    if (!cachedRecentCourses) {
+        await rebuildRecentCourses();
+    }
+    cachedRecentCourses = await redisClient.get("leaderboard:recent");
+    return JSON.parse(cachedRecentCourses);
+}
+
 
 
 export {
@@ -250,4 +277,6 @@ export {
     getUserCourses,
     getPublishedCoursesByCategory,
     getFilteredCourses,
+    getRecentCourses,
+    getTrendingCourses
 }
