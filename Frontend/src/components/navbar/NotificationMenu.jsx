@@ -49,6 +49,7 @@ const NotificationMenu = ({
                     overflow: "hidden",
                     maxHeight: "80vh",
                     minWidth: "350px",
+                    overflowY: "auto",
                 }
             }}
         >

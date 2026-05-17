@@ -116,4 +116,4 @@ const CourseExplorerRIghtBottom = () => {
   );
 };
 
-export default CourseExplorerRIghtBottom;
+export default CourseExplorerRIghtBottom

@@ -35,36 +35,7 @@ export default function DashboardHeader({ startDate, endDate, setStartDate, setE
     };
 
     return (
-        <>
-            {/* BACK BUTTON */}
-            <Box sx={{ mb: 2 }}>
-                <Button
-                    startIcon={<ArrowBack />}
-                    onClick={onBack}
-                    sx={{
-                        color: theme.palette.text.primary,
-                        textTransform: 'none',
-                        fontWeight: 600
-                    }}
-                >
-                    Back
-                </Button>
-            </Box>
-
-            {/* HEADER SECTION */}
-            <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                justifyContent="space-between"
-                alignItems="flex-start"
-                spacing={2}
-                sx={{ mb: 4 }}
-            >
-                <Box>
-                    <Typography variant="h4" fontWeight="800" color="text.primary">Dashboard</Typography>
-                    <Typography variant="body2" color="text.secondary">Real-time performance metrics</Typography>
-                </Box>
-
-                <Paper sx={{ ...glassSx, p: 1.5, px: { xs: 2, sm: 3 }, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: { xs: 1, sm: 3 }, width: { xs: '100%', sm: 'auto' } }}>
+        <Paper sx={{ ...glassSx, p: 1.5, px: { xs: 2, sm: 3 }, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: { xs: 1, sm: 3 }, width: { xs: '100%', sm: 'auto' } }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', sm: 'flex-start' }, width: { xs: '100%', sm: 'auto' } }}>
                         <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                             Pick Start Date
@@ -144,8 +115,6 @@ export default function DashboardHeader({ startDate, endDate, setStartDate, setE
                             }}
                         />
                     </Box>
-                </Paper>
-            </Stack>
-        </>
+        </Paper>
     );
 }

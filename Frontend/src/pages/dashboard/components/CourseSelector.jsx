@@ -18,9 +18,10 @@ export default function CourseSelector({ myCourses, selectedCourse, onSelect, dr
             {/* Desktop View */}
             <Paper sx={{
                 ...glassSx,
-                height: { md: 'calc(100vh - 180px)' },
+                height: { md: '100%' },
                 display: { xs: 'none', md: 'flex' },
-                flexDirection: 'column'
+                flexDirection: 'column',
+                overflowY: "auto"
             }}>
                 <Box sx={{ p: 3, borderBottom: `1px solid ${theme.palette.divider}` }}>
                     <Typography variant="h6" fontWeight="700" color="text.primary">Select Course</Typography>
