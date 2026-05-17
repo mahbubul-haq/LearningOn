@@ -40,25 +40,42 @@ const CourseListSlider = ({ courses, title, loading }) => {
     if (!container) return;
 
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchStartTime = 0;
     let lastTouchX = 0;
     let isDragging = false;
+    let isHorizontalSwipe = null;
 
     const MIN_SWIPE_DISTANCE = 30;
     const MIN_SWIPE_VELOCITY = 0.3;
 
     const handleTouchStart = (event) => {
       touchStartX = event.changedTouches[0].clientX;
+      touchStartY = event.changedTouches[0].clientY;
       lastTouchX = touchStartX;
       touchStartTime = Date.now();
       isDragging = false;
+      isHorizontalSwipe = null;
+      if (container) container.style.scrollBehavior = "auto";
     };
 
     const handleTouchMove = (event) => {
       const currentTouchX = event.touches[0].clientX;
+      const currentTouchY = event.touches[0].clientY;
       const deltaX = currentTouchX - lastTouchX;
 
-      if (Math.abs(deltaX) > 0.5) {
+      if (isHorizontalSwipe === null) {
+        const totalDeltaX = Math.abs(currentTouchX - touchStartX);
+        const totalDeltaY = Math.abs(currentTouchY - touchStartY);
+        
+        if (totalDeltaX > 5 || totalDeltaY > 5) {
+          isHorizontalSwipe = totalDeltaX > totalDeltaY;
+        }
+      }
+
+      if (isHorizontalSwipe === false) return;
+
+      if (isHorizontalSwipe && Math.abs(deltaX) > 0.5) {
         isDragging = true;
         const absDistance = Math.abs(deltaX);
         const direction = deltaX > 0 ? "left" : "right";
@@ -69,6 +86,9 @@ const CourseListSlider = ({ courses, title, loading }) => {
     };
 
     const handleTouchEnd = (event) => {
+      if (container) container.style.scrollBehavior = "smooth";
+      if (isHorizontalSwipe === false) return;
+
       const touchEndX = event.changedTouches[0].clientX;
       const totalDistance = touchEndX - touchStartX;
       const totalTime = Date.now() - touchStartTime;

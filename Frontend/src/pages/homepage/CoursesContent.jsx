@@ -33,26 +33,45 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
     if (!coursesContainer) return;
 
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchStartTime = 0;
     let lastTouchX = 0;
     let isDragging = false;
+    let isHorizontalSwipe = null;
 
     const MIN_SWIPE_DISTANCE = 30; // Minimum distance to trigger swipe
     const MIN_SWIPE_VELOCITY = 0.3; // Minimum velocity (px/ms) to trigger momentum scroll
 
     const handleTouchStart = (event) => {
       touchStartX = event.changedTouches[0].clientX;
+      touchStartY = event.changedTouches[0].clientY;
       lastTouchX = touchStartX;
       touchStartTime = Date.now();
       isDragging = false;
+      isHorizontalSwipe = null;
+      if (coursesContainer) coursesContainer.style.scrollBehavior = "auto";
     };
 
     const handleTouchMove = (event) => {
       const currentTouchX = event.touches[0].clientX;
+      const currentTouchY = event.touches[0].clientY;
       const deltaX = currentTouchX - lastTouchX;
+      
+      if (isHorizontalSwipe === null) {
+        const totalDeltaX = Math.abs(currentTouchX - touchStartX);
+        const totalDeltaY = Math.abs(currentTouchY - touchStartY);
+        
+        // Wait for a minimum threshold of movement to determine swipe direction
+        if (totalDeltaX > 5 || totalDeltaY > 5) {
+          isHorizontalSwipe = totalDeltaX > totalDeltaY;
+        }
+      }
 
-      // Only scroll if there's meaningful movement
-      if (Math.abs(deltaX) > 0.5) {
+      // If we determine it's a vertical swipe, don't interfere with horizontal scrolling
+      if (isHorizontalSwipe === false) return;
+
+      // Only scroll if there's meaningful movement and it's a horizontal swipe
+      if (isHorizontalSwipe && Math.abs(deltaX) > 0.5) {
         isDragging = true;
         const absDistance = Math.abs(deltaX);
         const direction = deltaX > 0 ? "left" : "right";
@@ -63,6 +82,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
     };
 
     const handleTouchEnd = (event) => {
+      if (coursesContainer) coursesContainer.style.scrollBehavior = "smooth";
+      if (isHorizontalSwipe === false) return;
+      
       const touchEndX = event.changedTouches[0].clientX;
       const totalDistance = touchEndX - touchStartX;
       const totalTime = Date.now() - touchStartTime;
