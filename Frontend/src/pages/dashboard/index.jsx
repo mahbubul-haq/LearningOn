@@ -157,6 +157,9 @@ export default function Dashboard() {
                             totalStudents={analyticsData?.totalEnrollments || 0}
                             chartData={analyticsData?.chartData || []}
                             recentEnrollments={recentEnrollments}
+                            hasNextEnrollmentsPage={hasNextEnrollmentsPage}
+                            fetchNextEnrollmentsPage={fetchNextEnrollmentsPage}
+                            isFetchingEnrollments={isFetchingEnrollments}
                             glassSx={glassSx}
                             theme={theme}
                             user={user}

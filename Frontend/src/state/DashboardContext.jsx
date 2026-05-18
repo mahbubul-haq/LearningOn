@@ -36,7 +36,7 @@ export const DashboardState = (props) => {
     const getRecentEnrollments = async ({ courseId, cursor }) => {
 
         let params = {
-            limit: 20
+            limit: 10
         }
         if (courseId) {
             params.courseId = courseId

@@ -7,7 +7,9 @@ import TrendsCharts from './TrendsCharts';
 import RecentEnrollments from './RecentEnrollments';
 
 export default function AnalyticsSection({ 
-    selectedCourse, totalRevenue, totalStudents, chartData, recentEnrollments, glassSx, theme, user, courseRatings,
+    selectedCourse, totalRevenue, totalStudents, chartData, recentEnrollments, 
+    hasNextEnrollmentsPage, fetchNextEnrollmentsPage, isFetchingEnrollments,
+    glassSx, theme, user, courseRatings,
     showCumulativeEnrollments, setShowCumulativeEnrollments, showCumulativeRevenue, setShowCumulativeRevenue 
 }) {
     return (
@@ -60,7 +62,14 @@ export default function AnalyticsSection({
             />
 
             {/* Bottom Enrollment List */}
-            <RecentEnrollments recentEnrollments={recentEnrollments} glassSx={glassSx} theme={theme} />
+            <RecentEnrollments 
+                recentEnrollments={recentEnrollments} 
+                hasNextEnrollmentsPage={hasNextEnrollmentsPage}
+                fetchNextEnrollmentsPage={fetchNextEnrollmentsPage}
+                isFetchingEnrollments={isFetchingEnrollments}
+                glassSx={glassSx} 
+                theme={theme} 
+            />
         </Stack>
     );
 }

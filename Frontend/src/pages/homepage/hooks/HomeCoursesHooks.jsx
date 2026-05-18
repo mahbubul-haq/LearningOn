@@ -87,3 +87,26 @@ export const useRecentCourses = () => {
         gcTime: 1000 * 60 * 60,
     });
 }
+
+export const usePopularCourses = () => {
+    return useQuery({
+        queryKey: ["popularCourses"],
+        queryFn: async () => {
+            const data = await apiFetch({
+                url: `/api/v1/courses`,
+                method: "GET",
+                params: {
+                    category,
+                    limit: 25,
+                }
+            });
+            console.log("popular courses", data.courses);
+            if (!data.success) {
+                throw new Error("Failed to fetch popular courses");
+            }
+            return data.courses;
+        },
+        staleTime: 1000 * 60 * 60,
+        gcTime: 1000 * 60 * 60,
+    });
+}

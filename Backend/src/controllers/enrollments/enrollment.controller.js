@@ -10,7 +10,7 @@ const getEnrollmentsInMyCourses = async (req, res) => {
     try {
         const userId = req.userId;
         const { cursor, courseId } = req.query;
-        const limit = Math.min(20, Math.max(10, parseInt(req.query.limit) || 10));
+        let limit = Math.min(10, Math.max(10, parseInt(req.query.limit) || 10));//10
 
         const cursorQuery = {}
         if (cursor?.date && cursor?._id) {

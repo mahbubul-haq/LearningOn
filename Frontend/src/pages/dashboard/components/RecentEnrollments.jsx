@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Paper, Typography, Button, Stack, Avatar } from '@mui/material';
+import AllEnrollmentsDialog from './AllEnrollmentsDialog';
 
-export default function RecentEnrollments({ recentEnrollments, glassSx, theme }) {
+export default function RecentEnrollments({ recentEnrollments, hasNextEnrollmentsPage, fetchNextEnrollmentsPage, isFetchingEnrollments, glassSx, theme }) {
+    const [openDialog, setOpenDialog] = useState(false);
 
 
 
@@ -9,7 +11,6 @@ export default function RecentEnrollments({ recentEnrollments, glassSx, theme })
         <Paper sx={{ ...glassSx, p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                 <Typography variant="h6" fontWeight="700" color="text.primary">Recent Enrollments</Typography>
-                <Button size="small" sx={{ textTransform: 'none', fontWeight: 700 }}>View All</Button>
             </Box>
             <Stack spacing={2}>
                 {recentEnrollments.slice(0, 10).map((enrollment, i) => {
@@ -44,7 +45,28 @@ export default function RecentEnrollments({ recentEnrollments, glassSx, theme })
                 {(!recentEnrollments || recentEnrollments.length === 0) && (
                     <Typography variant="body2" color="text.secondary" textAlign="center">No enrollments yet.</Typography>
                 )}
+
+                {(recentEnrollments?.length > 10 || hasNextEnrollmentsPage) && (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+                        <Button
+                            variant="outlined"
+                            onClick={() => setOpenDialog(true)}
+                            sx={{ textTransform: 'none', fontWeight: 'bold' }}
+                        >
+                            View All
+                        </Button>
+                    </Box>
+                )}
             </Stack>
+
+            <AllEnrollmentsDialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                enrollments={recentEnrollments}
+                hasNextPage={hasNextEnrollmentsPage}
+                fetchNextPage={fetchNextEnrollmentsPage}
+                isFetching={isFetchingEnrollments}
+            />
         </Paper>
     );
 }
