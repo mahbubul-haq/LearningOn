@@ -69,7 +69,7 @@ const CourseWidget = ({ courseInfo }) => {
           cursor: "pointer",
         }}
         image={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-          }/image/upload/${courseInfo?.courseThumbnail}`}
+          }/image/upload/${courseInfo?.courseThumbnail?.public_id}`}
         title={courseInfo?.courseTitle}
       >
         {courseInfo?.enrolledStudentsCount > 0 && (

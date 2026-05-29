@@ -6,11 +6,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useTheme from "@mui/material/styles/useTheme";
 import { StyledButton } from "../../components/StyledButton";
 import TextField from "@mui/material/TextField";
-import VideoUpload from "../../components/videoUpload/VideoUpload";
 import InputLabel from "@mui/material/InputLabel";
 import { CreateCourseContext } from "../../state/CreateCourse";
 import { colorTokens } from "../../theme";
-import { useContext, useState, useEffect, useCallback } from "react";
+import { useContext, useState, useEffect } from "react";
 import SubLessonVideoUploader from "./SubLessonVideoUploader";
 import { alpha } from "@mui/material/styles";
 
@@ -24,23 +23,31 @@ const CourseContentSublesson = ({
   setVideoLinks,
   deleteSubLesson,
   videoLinks,
+  isDeleting,
+  onLessonsSynced,
 }) => {
   const theme = useTheme();
-  const { updateCallback, courseStateRef, setCourseState } =
-    useContext(CreateCourseContext);
-  const [subLessonTitle, setSubLessonTitle] = useState(lesson?.subLessons.map((subLesson) => subLesson.title));
-  const [subLessonLectureNote, setSubLessonLectureNote] = useState(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
+  const { courseStateRef, setCourseState } = useContext(CreateCourseContext);
+  const subLessons = lesson?.subLessons ?? [];
+
+  const [subLessonTitle, setSubLessonTitle] = useState(() =>
+    subLessons.map((subLesson) => subLesson.title ?? "")
+  );
+  const [subLessonLectureNote, setSubLessonLectureNote] = useState(() =>
+    subLessons.map((subLesson) => subLesson.lectureNote ?? "")
+  );
 
   useEffect(() => {
-    setSubLessonTitle(lesson?.subLessons.map((subLesson) => subLesson.title));
-    setSubLessonLectureNote(lesson?.subLessons.map((subLesson) => subLesson.lectureNote));
+    const next = lesson?.subLessons ?? [];
+    setSubLessonTitle(next.map((s) => s.title ?? ""));
+    setSubLessonLectureNote(next.map((s) => s.lectureNote ?? ""));
   }, [lesson]);
 
   return (
     <>
-      {lesson.subLessons.map((subLesson, subIndex) => (
+      {subLessons.map((subLesson, subIndex) => (
         <Accordion
-          key={index + " " + subIndex}
+          key={subLesson._id || `sub-${index}-${subIndex}`}
           expanded={subExpanded === `subPanel${index}${subIndex}`}
           sx={{
             backgroundColor: "transparent",
@@ -99,7 +106,7 @@ const CourseContentSublesson = ({
             </Typography>
             <StyledButton
               variant="outlined"
-              disabled={lesson.subLessons.length === 1}
+              disabled={subLessons.length === 1 || isDeleting}
               sx={{
                 ml: "auto",
                 mr: "1rem",
@@ -123,7 +130,7 @@ const CourseContentSublesson = ({
               onClick={async (event) => {
                 event.stopPropagation();
 
-                await deleteSubLesson(index, subIndex);
+                await deleteSubLesson(lesson?._id, subLesson?._id);
               }}
             >
               Delete {index + 1}.{subIndex + 1}
@@ -170,14 +177,18 @@ const CourseContentSublesson = ({
                 const newTitles = [...subLessonTitle];
                 newTitles[subIndex] = event.target.value;
                 setSubLessonTitle(newTitles);
-                courseStateRef.current.lessons[index].subLessons[subIndex].title = event.target.value;
+                const sub =
+                  courseStateRef.current?.lessons?.[index]?.subLessons?.[
+                  subIndex
+                  ];
+                if (sub) sub.title = event.target.value;
               }}
               onBlur={(event) => {
                 setCourseState({
                   ...courseStateRef.current
                 });
               }}
-              value={subLessonTitle[subIndex]}
+              value={subLessonTitle[subIndex] ?? ""}
               fullWidth
               variant="outlined"
 
@@ -200,12 +211,11 @@ const CourseContentSublesson = ({
             </InputLabel>
 
             <SubLessonVideoUploader
-              updateCallback={updateCallback}
-              subLessonVideoLink={subLesson.videoLink}
-              index={index}
-              subIndex={subIndex}
-              handleInput={handleInput}
+              subLessonVideoLink={subLesson.videoLink?.public_id || ""}
+              lessonId={lesson._id}
+              subLessonId={subLesson._id}
               setVideoLinks={setVideoLinks}
+              onLessonsSynced={onLessonsSynced}
             />
 
             <InputLabel htmlFor="sublesson-note">
@@ -236,9 +246,13 @@ const CourseContentSublesson = ({
                 const newLectureNotes = [...subLessonLectureNote];
                 newLectureNotes[subIndex] = event.target.value;
                 setSubLessonLectureNote(newLectureNotes);
-                courseStateRef.current.lessons[index].subLessons[subIndex].lectureNote = event.target.value;
+                const sub =
+                  courseStateRef.current?.lessons?.[index]?.subLessons?.[
+                  subIndex
+                  ];
+                if (sub) sub.lectureNote = event.target.value;
               }}
-              value={subLessonLectureNote[subIndex]}
+              value={subLessonLectureNote[subIndex] ?? ""}
               onBlur={(event) => {
                 setCourseState({
                   ...courseStateRef.current

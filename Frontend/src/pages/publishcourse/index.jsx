@@ -106,14 +106,14 @@ const PublishCourse = () => {
       <DeleteCourseDialog
         setEditMode={setEditMode}
         setCourseId={setCourseId}
-        getUser={getUser}
+        // getUser={getUser}
       />
       <PublishStatusDialog
         uploadStatus={uploadStatus}
         setUploadStatus={setUploadStatus}
         setEditMode={setEditMode}
         setCourseId={setCourseId}
-        getUser={getUser}
+        // getUser={getUser}
       />
       {/* ThemeProvider removed as we use global theme now */}
       <Box

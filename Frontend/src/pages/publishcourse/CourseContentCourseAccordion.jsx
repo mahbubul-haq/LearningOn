@@ -29,11 +29,15 @@ const CourseContentCourseAccordion = ({
   handleInput,
   deleteLesson,
   deleteSubLesson,
+  addSubLesson,
   courseState,
   setCourseState,
   subExpanded,
   videoLinks,
   setVideoLinks,
+  isDeleting,
+  isAdding,
+  onLessonsSynced,
 }) => {
   const theme = useTheme();
   const isMobileScreens = useMediaQuery("(max-width:600px)");
@@ -115,6 +119,7 @@ const CourseContentCourseAccordion = ({
         </Typography>
         <StyledButton
           variant="outlined"
+          disabled={isDeleting}
           sx={{
             ml: "auto",
             mr: "1rem",
@@ -135,7 +140,7 @@ const CourseContentCourseAccordion = ({
           onClick={async (event) => {
             event.stopPropagation();
 
-            await deleteLesson(index);
+            await deleteLesson(lesson?._id);
           }}
         >
           Delete
@@ -244,11 +249,14 @@ const CourseContentCourseAccordion = ({
           deleteSubLesson={deleteSubLesson}
           videoLinks={videoLinks}
           setVideoLinks={setVideoLinks}
+          isDeleting={isDeleting}
+          onLessonsSynced={onLessonsSynced}
         />
 
         <Fab
           variant="extended"
           size="medium"
+          disabled={isDeleting || isAdding || !lesson._id}
           sx={{
             mt: "1rem",
             backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
@@ -261,29 +269,7 @@ const CourseContentCourseAccordion = ({
               borderColor: (theme) => theme.palette.primary.main,
             },
           }}
-          onClick={() => {
-            setCourseState((prevState) => ({
-              ...prevState,
-              lessons: [
-                ...prevState.lessons.map((curLesson, curIndex) => {
-                  if (curIndex === index) {
-                    return {
-                      ...curLesson,
-                      subLessons: [
-                        ...curLesson.subLessons,
-                        {
-                          title: "",
-                          lectureNote: "",
-                          videoLink: "",
-                        },
-                      ],
-                    };
-                  }
-                  return curLesson;
-                }),
-              ],
-            }));
-          }}
+          onClick={() => addSubLesson(index)}
         >
           <AddIcon sx={{ mr: "0.5rem" }} />
           <Typography

@@ -5,10 +5,9 @@ const subLessonSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    videoLink: String,
-    videoDuration: {
-        type: Number,
-        default: 0,
+    videoLink: {
+        type: Object,
+        default: { public_id: "", secure_url: "", duration: 0 },
     },
     lectureNote: String,
 }, {
@@ -72,12 +71,12 @@ const CourseSchema = new mongoose.Schema(
             default: [],
         },
         courseThumbnail: {
-            type: String,
-            default: "",
+            type: Object,
+            default: { public_id: "", secure_url: "" },
         },
         introVideo: {
-            type: String,
-            default: "",
+            type: Object,
+            default: { public_id: "", secure_url: "", duration: 0 },
         },
         courseLanguage: {
             type: String,

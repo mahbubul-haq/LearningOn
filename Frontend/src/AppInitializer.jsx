@@ -44,7 +44,7 @@ const AppInitializer = () => {
         });
 
         return () => {
-            cleanup?.();
+            cleanup?.()
         }
     }, []);
 

@@ -119,7 +119,7 @@ const PublishStatusDialog = ({
                             setUploadStatus("");
                             setEditMode("");
                             setCourseId("");
-                            getUser();
+                            // getUser();
                         } else {
                             setUploadStatus("");
                         }

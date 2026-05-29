@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
         cb(
             null,
             //date now milliseconds + random number 3 digit random number + original file name
-            new Date().getTime() +
+            Date.now() +
             "-" +
             Math.round(Math.random() * 1000) +
             "-" +

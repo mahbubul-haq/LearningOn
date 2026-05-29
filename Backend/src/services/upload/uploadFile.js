@@ -11,7 +11,8 @@ const uploadFile = async (filePath, resource_type = "image") => {
         });
         return {
             public_id: uploadResponse.public_id,
-            secure_url: uploadResponse.secure_url
+            secure_url: uploadResponse.secure_url,
+            duration: uploadResponse.duration,//for video it will be there for image it will be undefined
         };
     }
 

@@ -33,6 +33,8 @@ import userRoutesNew from "./routes/user.routes.js";
 import { connectRedis } from "./configs/redisClient.js";
 import categoryRoutes from "./routes/category.routes.js";
 import "./jobs/courses.job.js"
+import Course from "./models/Course.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 console.log("dirname", __dirname);
@@ -95,8 +97,10 @@ app.use("/api/v1/categories", categoryRoutes);
 app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);
 app.delete("/filedelete/:fileName/:isVideo", deleteFile);
 
+
+
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
-    res.send("Hello World");
+    res.send("Hello World")
 });
 
 app.use((req: Request, res: Response, next: NextFunction) => {

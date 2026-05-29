@@ -48,9 +48,9 @@ const VideoUploadDropzone = ({
                         setOpenSnackbar(true);
                         setSnackbarMessage("Invalid file type");
                         setSnackbarSeverity("error");
-                    } else if (isImage && acceptedFiles[0].size > 1000000) {
+                    } else if (isImage && acceptedFiles[0].size > 5000000) {
                         setOpenSnackbar(true);
-                        setSnackbarMessage("File size must be less than 1MB");
+                        setSnackbarMessage("File size must be less than 5MB");
                         setSnackbarSeverity("error");
                     }
                     else if (!isImage && acceptedFiles[0].size > 500000000) {

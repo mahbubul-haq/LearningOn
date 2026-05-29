@@ -1,50 +1,97 @@
-import React, { Dispatch, SetStateAction, useCallback } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useContext } from "react";
+import Typography from "@mui/material/Typography";
 import VideoUpload from "../../components/videoUpload/VideoUpload";
+import { CreateCourseContext } from "../../state/CreateCourse";
+import {
+  deleteSubLessonVideoApi,
+  uploadSubLessonVideoApi,
+} from "./api/courseLessonsApi";
 
 type Props = {
-    updateCallback: () => void;
-    subLessonVideoLink: string;
-    index: number;
-    subIndex: number;
-    handleInput: (event: { target: { name: string; value: string, value1?: number, name1?: string } }, index: number, subIndex?: number) => void;
-    setVideoLinks: Dispatch<SetStateAction<string[]>>;
-}
+  subLessonVideoLink: string;
+  lessonId: string | undefined;
+  subLessonId: string | undefined;
+  setVideoLinks: Dispatch<SetStateAction<string[]>>;
+  onLessonsSynced: (lessons: unknown[]) => void;
+};
 
-export default React.memo(function SubLessonVideoUploader({ updateCallback, subLessonVideoLink, index, subIndex, handleInput, setVideoLinks }: Props) {
+export default React.memo(function SubLessonVideoUploader({
+  subLessonVideoLink,
+  lessonId,
+  subLessonId,
+  setVideoLinks,
+  onLessonsSynced,
+}: Props) {
+  const { courseStateRef } = useContext(CreateCourseContext);
 
-    const setFileName = useCallback((fileName: string, duration?: number) => {
-        const e = {
-            target: {
-                name: "videoLink",
-                value: fileName,
-                name1: duration ? "videoDuration" : "",
-                value1: duration ? duration : 0,
-            },
-        };
+  const setFileName = useCallback(
+    (fileName: string) => {
+      if (fileName) {
+        setVideoLinks((prev: string[]) => [...prev, fileName]);
+      } else {
+        setVideoLinks((prev: string[]) =>
+          prev.filter((link: string) => link !== subLessonVideoLink)
+        );
+      }
+    },
+    [setVideoLinks, subLessonVideoLink]
+  );
 
-        if (fileName) {
-            setVideoLinks((prev: string[]) => [...prev, fileName]);
+  const uploadHandler = useCallback(
+    async (file: File, { onUploadProgress }: { onUploadProgress?: (e: unknown) => void } = {}) => {
+      const courseId = courseStateRef.current?._id;
+      if (!courseId || !lessonId || !subLessonId) {
+        return { success: false };
+      }
 
-        } else {
-            setVideoLinks((prev: string[]) => [...prev.filter((link: string) => link !== subLessonVideoLink)]);
-            // setVideoLinks([
-            //   ...videoLinks.filter(
-            //     (link) => link !== subLesson.videoLink
-            //   ),
-            // ]);
-        }
+      const data = await uploadSubLessonVideoApi(
+        courseId,
+        lessonId,
+        subLessonId,
+        file,
+        onUploadProgress
+      );
 
-        handleInput(e, index, subIndex);
-    }, [handleInput, index, subIndex, subLessonVideoLink]);
+      if (data?.success && data.courseInfo?.lessons) {
+        onLessonsSynced(data.courseInfo.lessons);
+      }
 
+      return data;
+    },
+    [courseStateRef, lessonId, subLessonId, onLessonsSynced]
+  );
+
+  const deleteHandler = useCallback(async () => {
+    const courseId = courseStateRef.current?._id;
+    if (!courseId || !lessonId || !subLessonId) {
+      return { success: false };
+    }
+
+    const data = await deleteSubLessonVideoApi(courseId, lessonId, subLessonId);
+
+    if (data?.success && data.courseInfo?.lessons) {
+      onLessonsSynced(data.courseInfo.lessons);
+    }
+
+    return data;
+  }, [courseStateRef, lessonId, subLessonId, onLessonsSynced]);
+
+  if (!lessonId || !subLessonId) {
     return (
-        <VideoUpload
-            // id="sublesson-video"
-            // name="videoLink"
-            updateCallBack={updateCallback}
-            fileName={subLessonVideoLink}
-            setFileName={setFileName}
-            isImage={false}
-        />
+      <Typography sx={{ color: (theme) => theme.palette.text.secondary }}>
+        Save lesson structure before uploading video.
+      </Typography>
     );
+  }
+
+  return (
+    <VideoUpload
+      updateCallBack={undefined}
+      uploadHandler={uploadHandler}
+      deleteHandler={deleteHandler}
+      fileName={subLessonVideoLink}
+      setFileName={setFileName}
+      isImage={false}
+    />
+  );
 });

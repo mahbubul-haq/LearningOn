@@ -4,72 +4,128 @@ import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 import React, { useContext, useEffect, useCallback } from "react";
 import { CreateCourseContext } from "../../state/CreateCourse.jsx";
-import { GlobalContext } from "../../state/GlobalContext.jsx";
 import CourseContentCourseAccordion from "./CourseContentCourseAccordion.jsx";
 import RightPanelBottom from "./RightPanelBottom.jsx";
-import { colorTokens } from "../../theme.js";
 import { alpha } from "@mui/material/styles";
+import {
+  addLessonApi,
+  addSubLessonApi,
+  deleteLessonApi,
+  deleteSubLessonApi,
+} from "./api/courseLessonsApi.js";
 
-const CourseContent = () => {
-  const { courseState, setCourseState, updateCallback } =
-    useContext(CreateCourseContext);
-  const { deleteFile } = useContext(GlobalContext);
-  // const [lessons, setLessons] = React.useState(courseState.lessons);
-  const [expanded, setExpanded] = React.useState("");
-  const [subExpanded, setSubExpanded] = React.useState(""); // [panelIndex, subPanelIndex
-  const [videoLinks, setVideoLinks] = React.useState([]); // [panelIndex, subPanelIndex
-  const [deleteLessonStatus, setDeleteLessonStatus] = React.useState("");
-
-  const deleteLesson = async (index) => {
-    setExpanded("");
-    setDeleteLessonStatus("deleting");
-    for (const subLesson of courseState.lessons[index].subLessons) {
-      const videoLink = subLesson.videoLink;
-      if (videoLink) {
-        await deleteFile(videoLink, true);
+const collectVideoLinks = (lessons = []) => {
+  const links = [];
+  for (const lesson of lessons) {
+    for (const subLesson of lesson.subLessons || []) {
+      if (subLesson.videoLink) {
+        links.push(subLesson.videoLink);
       }
     }
+  }
+  return links;
+};
 
-    setCourseState((prevState) => ({
-      ...prevState,
-      lessons: [
-        ...prevState.lessons.filter((lesson, curIndex) => {
-          return curIndex !== index;
-        }),
-      ],
-    }));
+const CourseContent = () => {
+  const { courseState, setCourseState, courseStateRef } =
+    useContext(CreateCourseContext);
+  const [expanded, setExpanded] = React.useState("");
+  const [subExpanded, setSubExpanded] = React.useState("");
+  const [videoLinks, setVideoLinks] = React.useState([]);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+  const [isAdding, setIsAdding] = React.useState(false);
 
-    setDeleteLessonStatus("deleted");
+  const applyLessonsFromServer = useCallback((lessons) => {
+    courseStateRef.current = {
+      ...courseStateRef.current,
+      lessons,
+    };
+    setCourseState({ ...courseStateRef.current });
+    // setVideoLinks(collectVideoLinks(lessons));
+  }, [courseStateRef, setCourseState]);
+
+  const addLesson = async () => {
+    const courseId = courseStateRef.current?._id;
+    if (!courseId) return;
+
+    setIsAdding(true)
+    try {
+      const data = await addLessonApi(courseId);
+      if (data?.success) {
+        applyLessonsFromServer(data.courseInfo.lessons)
+      }
+    } catch (err) {
+      console.error("Failed to add lesson", err);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
-  const deleteSubLesson = async (index, subIndex) => {
-    setSubExpanded("");
-    setDeleteLessonStatus("deleting");
-    const videoLink = courseState.lessons[index].subLessons[subIndex].videoLink;
-    if (videoLink) {
-      await deleteFile(videoLink, true);
+  const addSubLesson = async (lessonIndex) => {
+    const courseId = courseStateRef.current?._id;
+    const lesson = courseStateRef.current.lessons[lessonIndex];
+    if (!courseId || !lesson?._id) return;
+
+    setIsAdding(true);
+    try {
+      const data = await addSubLessonApi(courseId, lesson._id);
+      if (data?.success) {
+        applyLessonsFromServer(data.courseInfo.lessons);
+      }
+    } catch (err) {
+      console.error("Failed to add sublesson", err);
+    } finally {
+      setIsAdding(false);
     }
+  };
 
-    setCourseState((prevState) => ({
-      ...prevState,
-      lessons: [
-        ...prevState.lessons.map((lesson, curIndex) => {
-          if (curIndex === index) {
-            return {
-              ...lesson,
-              subLessons: [
-                ...lesson.subLessons.filter((subLesson, curSubIndex) => {
-                  return curSubIndex !== subIndex;
-                }),
-              ],
-            };
-          }
-          return lesson;
-        }),
-      ],
-    }));
+  const deleteLesson = async (lessonId) => {
+    const courseId = courseStateRef.current?._id;
+    if (!courseId) return;
 
-    setDeleteLessonStatus("deleted");
+    const lesson = courseStateRef.current.lessons.find((l) => l._id == lessonId);
+    if (!lesson) return;
+
+    setExpanded("");
+    setIsDeleting(true);
+
+    try {
+      const data = await deleteLessonApi(courseId, lesson);
+
+      if (data?.success) {
+        applyLessonsFromServer(data.courseInfo.lessons);
+      }
+    } catch (err) {
+      console.error("Failed to delete lesson", err);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const deleteSubLesson = async (lessonId, subLessonId) => {
+    const courseId = courseStateRef.current?._id;
+    if (!courseId) return;
+
+    const lesson = courseStateRef.current.lessons.find((l) => l._id == lessonId);
+    if (!lesson) return;
+
+    const subLesson = lesson?.subLessons?.find((s) => s._id == subLessonId);
+    if (!subLesson) return;
+
+    setSubExpanded("");
+    setIsDeleting(true);
+
+    try {
+      const data = await deleteSubLessonApi(courseId, lesson._id, subLesson._id);
+
+      if (data?.success) {
+        applyLessonsFromServer(data.courseInfo.lessons);
+      }
+    } catch (err) {
+      console.error("Failed to delete sublesson", err);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleExpand = (event, index, subIndex) => {
@@ -139,35 +195,11 @@ const CourseContent = () => {
         ],
       }));
     }
-  }, []);
+  }, [setCourseState]);
 
   useEffect(() => {
-    //videlinks is a 1D array of videoLinks
-    const links = [];
-    for (const lesson of courseState.lessons) {
-      for (const subLesson of lesson.subLessons) {
-        if (subLesson.videoLink) {
-          links.push(subLesson.videoLink);
-        }
-      }
-    }
-    setVideoLinks(links);
+    setVideoLinks(collectVideoLinks(courseState.lessons));
   }, []);
-  //useEffect calls when videoLink is updated
-  useEffect(() => {
-    if (deleteLessonStatus === "") return;
-    // deleteLessonStatus will at least be "deleting" in case of any file deletion
-    // because file deletion is async and takes time -> so before setState is called, it will be "deleting"
-    // in case of no file deletion, it is not mandatory to call updateCourse
-
-    console.log(deleteLessonStatus, "updateCourse.lessons");
-    const callUpdate = async () => {
-      await updateCallback();
-    };
-    callUpdate();
-
-    setDeleteLessonStatus("");
-  }, [courseState.lessons]);
 
   useEffect(() => {
     let element = document.querySelector(".right-panel-course-content");
@@ -191,7 +223,7 @@ const CourseContent = () => {
         {courseState.lessons?.length > 0 ? (
           courseState.lessons.map((lesson, index) => (
             <CourseContentCourseAccordion
-              key={index}
+              key={lesson._id || `lesson-${index}`}
               lesson={lesson}
               index={index}
               expanded={expanded}
@@ -199,11 +231,15 @@ const CourseContent = () => {
               handleInput={handleInput}
               deleteLesson={deleteLesson}
               deleteSubLesson={deleteSubLesson}
+              addSubLesson={addSubLesson}
               courseState={courseState}
               setCourseState={setCourseState}
               subExpanded={subExpanded}
               videoLinks={videoLinks}
               setVideoLinks={setVideoLinks}
+              isDeleting={isDeleting}
+              isAdding={isAdding}
+              onLessonsSynced={applyLessonsFromServer}
             />
           ))
         ) : (
@@ -222,6 +258,7 @@ const CourseContent = () => {
         <Fab
           variant="extended"
           size="medium"
+          disabled={isDeleting || isAdding}
           sx={{
             mt: "1rem",
             backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
@@ -234,40 +271,7 @@ const CourseContent = () => {
               borderColor: (theme) => theme.palette.primary.main,
             },
           }}
-          onClick={() => {
-            setCourseState((prevState) => ({
-              ...prevState,
-              lessons:
-                prevState.lessons.length == 0
-                  ? [
-                    {
-                      title: "",
-                      description: "",
-                      subLessons: [
-                        {
-                          title: "",
-                          videoLink: "",
-                          lectureNote: "",
-                        },
-                      ],
-                    },
-                  ]
-                  : [
-                    ...prevState.lessons,
-                    {
-                      title: "",
-                      description: "",
-                      subLessons: [
-                        {
-                          title: "",
-                          videoLink: "",
-                          lectureNote: "",
-                        },
-                      ],
-                    },
-                  ],
-            }));
-          }}
+          onClick={addLesson}
         >
           <AddIcon sx={{ mr: "0.5rem" }} />
           <Typography

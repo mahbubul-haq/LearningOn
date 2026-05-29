@@ -13,8 +13,8 @@ export const initialCourseState = {
   courseDescription: "",
   studentRequirements: "",
   skillTags: [],
-  courseThumbnail: "",
-  introVideo: "",
+  courseThumbnail: { public_id: "", secure_url: "" },
+  introVideo: { public_id: "", secure_url: "" },
   courseLanguage: "",
   coursePrice: "",
   approxTimeToComplete: "",
@@ -95,7 +95,7 @@ export const CreateCourseState = (props) => {
   const isCourseMediaValid = () => {
     if (!courseState) return false;
     // upto skill tags
-    return courseState.courseThumbnail?.trim() && courseState.introVideo?.trim();
+    return courseState.courseThumbnail?.public_id?.trim() && courseState.introVideo?.public_id?.trim();
   }
 
   const isCourseMoreInfoValid = () => {
@@ -113,7 +113,7 @@ export const CreateCourseState = (props) => {
     courseState.lessons?.forEach((lesson) => {
       if (!lesson.title?.trim()) flag = false;
       lesson.subLessons?.forEach((subLesson) => {
-        if (!subLesson.title?.trim() || !(subLesson.videoLink?.trim() || subLesson.lectureNote?.trim()))
+        if (!subLesson.title?.trim() || !(subLesson.videoLink?.public_id?.trim() || subLesson.lectureNote?.trim()))
           flag = false;
       });
     });

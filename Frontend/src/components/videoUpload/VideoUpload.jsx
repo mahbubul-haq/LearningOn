@@ -11,6 +11,8 @@ import { apiFetch } from "../../api/apiFetch";
 
 const VideoUpload = ({
   updateCallBack,
+  uploadHandler,
+  deleteHandler,
   setFileName,
   fileName,
   isImage,
@@ -26,27 +28,31 @@ const VideoUpload = ({
   const token = useSelector((state) => state.auth.token);
   const initialRender = useRef(true);
   const [deleting, setDeleting] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState(["", "uploading", "deleting", "success", "failed"][0]);// prevents triggering fileupload snackbar on page load
+  const [uploadStatus, setUploadStatus] = useState("");
   const uploadStatusRef = useRef(uploadStatus);
+  const usesPersistedUpload = Boolean(uploadHandler);
 
   useEffect(() => {
     uploadStatusRef.current = uploadStatus;
   }, [uploadStatus]);
 
   useEffect(() => {
-    if (!updateCallBack) return;
+    setWaitingFile(fileName);
+  }, [fileName]);
+
+  useEffect(() => {
+    if (usesPersistedUpload || !updateCallBack) return;
     if (initialRender.current) {
       initialRender.current = false;
       return;
     }
 
     async function updateResource() {
-      console.log("updating resource from video upload", fileName);
       let res;
 
       if (uploadStatusRef.current !== "") res = await updateCallBack();
 
-      if (!res.success) return;
+      if (!res?.success) return;
 
       setWaitingFile(fileName);
 
@@ -70,19 +76,52 @@ const VideoUpload = ({
       }
     }
     updateResource();
-  }, [fileName]);
+  }, [fileName, updateCallBack, usesPersistedUpload]);
+
+  const showUploadSuccess = () => {
+    setPreview(null);
+    setUploadProgress(100);
+    setOpenSnackbar(true);
+    setSnackbarMessage("File uploaded successfully!");
+    setSnackbarSeverity("success");
+    uploadStatusRef.current = "";
+    setUploadStatus("");
+  };
+
+  const showUploadFailure = () => {
+    setOpenSnackbar(true);
+    setSnackbarMessage("File upload failed!");
+    setSnackbarSeverity("error");
+    setPreview(null);
+  };
+
+  const showDeleteSuccess = () => {
+    setUploadProgress(0);
+    setPreview(null);
+    setDeleting(false);
+    setOpenSnackbar(true);
+    setSnackbarMessage("File Deleted!");
+    setSnackbarSeverity("error");
+    uploadStatusRef.current = "";
+    setUploadStatus("");
+  };
+
+  const showDeleteFailure = () => {
+    setUploadProgress(0);
+    setPreview(null);
+    setDeleting(false);
+    setOpenSnackbar(true);
+    setSnackbarMessage("File Deletion Failed!");
+    setSnackbarSeverity("error");
+    uploadStatusRef.current = "";
+    setUploadStatus("");
+  };
 
   const uploadVideo = async (fileToUpload) => {
-    const formData = new FormData();
-
-    formData.append("picture", fileToUpload);
-    formData.append("isVideo", isImage ? "false" : "true");
-
-    const options = {
+    const progressOptions = {
       onUploadProgress: (progressEvent) => {
         const { loaded, total } = progressEvent;
-        let percent = Math.floor((loaded * 100) / total);
-        //console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+        const percent = Math.floor((loaded * 100) / total);
         if (percent <= 100) {
           setUploadProgress(percent);
         }
@@ -90,91 +129,44 @@ const VideoUpload = ({
     };
 
     try {
-      const data = await apiFetch({
-        url: "/fileupload",
-        method: "POST",
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
+      let data;
 
-        },
-        ...options,
-      });
+      data = await uploadHandler(fileToUpload, progressOptions);
 
-      // console.log(res.data);
-
-      if (data.success) {
-        setFileName(data.fileName, data.videoDuration);
-
-        //   setUploadProgress(100);
-        //   setWaitingFile(res.data.fileName);
-        //   setPreview(null);
+      if (data?.success) {
+        setFileName(data.fileName);
+        setWaitingFile(data.fileName ?? "");
+        showUploadSuccess();
       } else {
         if (fileName === "") {
-          setOpenSnackbar(true);
-          setSnackbarMessage("File upload failed!");
-          setSnackbarSeverity("error");
-          setPreview(null);
+          showUploadFailure();
         }
         setFileName("");
       }
     } catch (err) {
       console.log(err);
-      //   setUploadProgress(0);
       if (fileName === "") {
-        setOpenSnackbar(true);
-        setSnackbarMessage("File upload failed!");
-        setSnackbarSeverity("error");
-        setPreview(null);
+        showUploadFailure();
       }
       setFileName("");
-      //   setWaitingFile("");
-      //   setPreview(null);
     }
   };
 
-  const deleteVideo = async (fileName) => {
+  const deleteVideo = async (currentFileName) => {
     try {
-      let modifiedFileName = fileName.replace(/\//g, "@");
-      console.log(modifiedFileName);
-      const res = await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/filedelete/${modifiedFileName}/${isImage ? "false" : "true"}`,
-        {
-          headers: {
-            "auth-token": token,
-          },
-        }
-      );
-
-      //.log(res.data);
-      if (res.data.success) {
-        // console.log("deleted", res.data);
+      const data = await deleteHandler(currentFileName);
+      if (data?.success) {
         setFileName("");
+        setWaitingFile("");
+        if (usesPersistedUpload) {
+          showDeleteSuccess();
+        }
       } else {
-        // setFileName(""); //
-        setUploadProgress(0);
-        setPreview(null);
-        setDeleting(false);
-        setOpenSnackbar(true);
-        setSnackbarMessage("File Deletion Failed!");
-        setSnackbarSeverity("error");
-        uploadStatusRef.current = "";
-        setUploadStatus("");
+        showDeleteFailure();
       }
     } catch (err) {
       console.log(err);
-      //   setUploadProgress(0);
-      // setFileName("");
-
-      //   setPreview(null);
-      setUploadProgress(0);
-      setPreview(null);
-      setDeleting(false);
-      setOpenSnackbar(true);
-      setSnackbarMessage("File Deletion Failed!");
-      setSnackbarSeverity("error");
-      uploadStatusRef.current = "";
-      setUploadStatus("");
+      showDeleteFailure();
     }
   };
 
@@ -198,10 +190,11 @@ const VideoUpload = ({
           severity={snackbarSeverity}
           sx={{
             width: "100%",
-
             zIndex: 1000,
-            backgroundColor: snackbarSeverity == "error" ? (theme) =>
-              theme.palette.background.buttonBgLightPink : (theme) => theme.palette.background.bottom,
+            backgroundColor:
+              snackbarSeverity == "error"
+                ? (theme) => theme.palette.background.buttonBgLightPink
+                : (theme) => theme.palette.background.bottom,
           }}
         >
           <Typography

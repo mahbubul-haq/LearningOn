@@ -165,7 +165,7 @@ const DeleteCourseDialog = ({ getUser }) => {
 
                 if (editMode) {
                   navigate("/dashboard");
-                  getUser();
+                  // getUser();
                 } else {
                   navigate("/");
                 }
