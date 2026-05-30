@@ -59,7 +59,7 @@ const getCourseProgress = async (req: any, res: any) => {
                         subLessonMap.set(course.lessons[i].subLessons[j]._id?.toString(), {
                             subLessonId: course.lessons[i].subLessons[j]._id!,
                             completed: false,
-                            videoDuration: course.lessons[i].subLessons[j].videoDuration,
+                            videoDuration: course.lessons[i].subLessons[j].videoLink?.duration,
                         });
                     } else {
                         let addCompletedSublessons = subLessonMap.get(course.lessons[i].subLessons[j]._id?.toString())?.completed ? 1 : 0;
