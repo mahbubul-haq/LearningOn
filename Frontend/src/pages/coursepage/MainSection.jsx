@@ -97,7 +97,7 @@ const MainSection = ({ courseInfo }) => {
                         >
 
                             <AdvancedVideo
-                                cldVid={cloudinaryCld.video(courseInfo?.introVideo)}
+                                cldVid={cloudinaryCld.video(courseInfo?.introVideo?.public_id)}
                                 plugins={[lazyload()]}
                                 style={{
                                     maxWidth: isMobileScreens ? "100%" : "400px",

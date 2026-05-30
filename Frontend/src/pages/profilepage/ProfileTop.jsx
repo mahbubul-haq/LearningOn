@@ -41,7 +41,7 @@ const ProfileTop = ({ userInfo }) => {
     profileInfoChanged,
     setProfileInfoChanged,
   } = React.useContext(ProfilePageContext);
-  const { setUserById, getUserById, getUser, deleteFile } =
+  const { setUserById, getUserById, getUser } =
     React.useContext(GlobalContext);
 
   const getQualifications = () => {
@@ -152,7 +152,7 @@ const ProfileTop = ({ userInfo }) => {
           return; // Stop if image upload fails
         }
       }
-      
+
       // Now update the rest of the profile if there are changes
       await updateProfile();
     } catch (error) {

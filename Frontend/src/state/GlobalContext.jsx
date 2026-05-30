@@ -55,27 +55,6 @@ export const GlobalState = (props) => {
     }
   };
 
-  const deleteFile = async (fileName, isVideo) => {
-    try {
-      let modifiedFileName = fileName.replace(/\//g, "@");
-
-      const data = await apiFetch({
-        url: `/filedelete/${modifiedFileName}/${isVideo ? "true" : "false"}`,
-        method: "DELETE",
-
-      }
-      );
-
-      if (data.success) {
-        console.log("file deleted", data);
-      } else {
-        console.log("file deletion failed", data);
-      }
-    } catch (err) {
-      //console.log(err?.message);
-    }
-  };
-
   const getUserById = async (userId) => {
     try {
 
@@ -129,7 +108,6 @@ export const GlobalState = (props) => {
         getUsers,
         users,
         setUsers,
-        deleteFile,
         getUserById,
         userById,
         setUserById,

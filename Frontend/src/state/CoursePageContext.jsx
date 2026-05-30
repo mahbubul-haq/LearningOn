@@ -70,7 +70,7 @@ export const CoursePageState = (props) => {
         }
     };
 
-    const fetchAllReviews = async (courseId, token) => {
+    const fetchAllReviews = async (courseId, userId) => {
         setAllReviewsLoading(true);
         setIsLearningCompleted(false);
         try {
@@ -80,7 +80,8 @@ export const CoursePageState = (props) => {
                 params: {
                     page: 1,
                     limit: 5,
-                    includeUserReview: true
+                    includeUserReview: !!userId,
+                    userId: userId,
                 }
 
             });
@@ -98,6 +99,7 @@ export const CoursePageState = (props) => {
                 }
 
                 setMyReview(data.userReview);
+                return data.reviews;
 
             }
             else {
@@ -105,6 +107,7 @@ export const CoursePageState = (props) => {
                 setMyReview(null);
                 setIsLearningCompleted(false);
                 userReviewInAllReviews.current = false;
+                return [];
             }
 
         } catch (err) {
@@ -113,6 +116,7 @@ export const CoursePageState = (props) => {
             setMyReview(null);
             setIsLearningCompleted(false);
             userReviewInAllReviews.current = false;
+            return [];
         } finally {
             setAllReviewsLoading(false);
         }

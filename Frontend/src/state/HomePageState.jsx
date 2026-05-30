@@ -45,14 +45,11 @@ export const HomePageState = (props) => {
 
         getCoursesAttempt.current += 1;
         console.log("getCourses attempt:", getCoursesAttempt.current, "category:", category);
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
 
         try {
             const data = await apiFetch({
                 url: `api/v1/courses/`,
                 method: "GET",
-                signal: controller.signal,
                 params: {
                     category,
                     limit: 25,
@@ -60,38 +57,32 @@ export const HomePageState = (props) => {
             }
             );
 
-            clearTimeout(timeoutId);
-
             if (data.success) {
                 //console.log("courses", data.courses);
-                setCourses(data.courses);
+                // setCourses(data.courses);
                 if (initialRender) setTimeout(() => setInitialRender(false), 2000);
                 getCoursesAttempt.current = 0;
                 waitingForSelectedCoursesRef.current = true;
                 setWaitingForSelectedCourses(true);
                 setLoading(false);
                 getCoursesAttempt.current = 0;
+                return data.courses;
             }
             else {
-                if (getCoursesAttempt.current < 2) {
-                    getCourses(category);
-                } else {
-                    setLoading(false);
-                    setCourseFetchError(true);
-                    getCoursesAttempt.current = 0;
-                }
+
+                setLoading(false);
+                setCourseFetchError(true);
+                getCoursesAttempt.current = 0;
+                return [];
 
             }
         } catch (err) {
             //console.log(err?.message);
-            if (getCoursesAttempt.current < 2) {
-                getCourses(category);
-            }
-            else {
-                setLoading(false);
-                setCourseFetchError(true);
-                getCoursesAttempt.current = 0;
-            }
+
+            setLoading(false);
+            setCourseFetchError(true);
+            getCoursesAttempt.current = 0;
+            return [];
         }
     };
 

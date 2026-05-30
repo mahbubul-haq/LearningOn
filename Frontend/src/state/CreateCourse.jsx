@@ -48,43 +48,7 @@ export const CreateCourseState = (props) => {
   const [newDraft, setNewDraft] = React.useState(false);/// discarded due to redirecting to home/dashboard
   const [deleteCourseStatus, setDeleteCourseStatus] = React.useState("");// trigger delete course, shows dialog: "", "deleting", "deleted", "failed"
   const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
-  // useEffect(() => {
-  //     console.log(isCourseValid());
-  // }, [courseState]);
 
-  // useEffect(() => {
-  //     //short youtube link with id -> https://youtu.be/3v1n5b0Uu3g
-  //     console.log(courseState.introVideo);
-  //     setIntroVideoUrl(`https://youtu.be/${courseState.introVideo}`);
-  // }, []);
-
-  // useEffect(() => {
-  //     setCourseState({
-  //         ...courseState,
-  //         introVideo: getYouTubeId(introVideoUrl),
-  //     });
-  // }, [introVideoUrl]);
-
-  // const getYouTubeId = (url) => {
-  //     if (url) {
-
-  //         let ampersandPosition = url.indexOf("&");
-  //         if (ampersandPosition != -1) {
-  //             url = url.substring(0, ampersandPosition);
-  //         }
-
-  //         if (url.includes("v=")) {
-  //             let id = url.split("v=")[1];
-  //             return id;
-  //         }
-  //         else {
-  //             let id = url.split("/");
-  //             //console.log(id[id.length - 1]);
-  //             return id[id.length - 1];
-  //         }
-  //     }
-  //     return "";
-  // };
 
   const isBasicInfoValid = () => {
     if (!courseState) return false;
@@ -269,71 +233,6 @@ export const CreateCourseState = (props) => {
     }
   };
 
-  const uploadFile = async (courseProperty, file, curValue) => {
-    const data = new FormData();
-    data.append("picture", file);
-
-    const options = {
-      onUploadProgress: (progressEvent) => {
-        const { loaded, total } = progressEvent;
-        let percent = Math.floor((loaded * 100) / total);
-        //console.log(`${loaded}kb of ${total}kb | ${percent}%`);
-        if (percent < 100) {
-          setUploadProgress(percent);
-        }
-      },
-    };
-
-    try {
-      const data = await apiFetch({
-        url: '/fileupload',
-        method: 'POST',
-        data,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        ...options,
-      });
-
-      // console.log(res.data);
-
-      if (data.success) {
-        setUploadProgress(100);
-
-        if (curValue) {
-          await apiFetch({
-            url: `/filedelete/${curValue}`,
-            method: "DELETE",
-          }
-          );
-
-          //const data = await response.json();
-          // console.log(data);
-        }
-
-        await apiFetch({
-          url: `/api/v1/courses/${courseState._id}`,
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          data: {
-            ...courseState,
-            status: courseState?.courseStatus !== 'draft' ? "unpublished" : 'draft',
-            [courseProperty]: data.fileName,
-          }
-        });
-
-        setCourseState({
-          ...courseState,
-
-          [courseProperty]: data.fileName,
-        });
-      }
-    } catch (err) {
-      //console.log(err);
-    }
-  };
 
   const isAnyError = () => {
     if (errors) {
@@ -359,7 +258,6 @@ export const CreateCourseState = (props) => {
         setIntroVideoInput,
         getDraftCourse,
         updateCourse,
-        uploadFile,
         uploadProgress,
         setUploadProgress,
         inputLessons,

@@ -105,13 +105,13 @@ const getUserCourseReview = async (req, res) => {
 const getCourseReviews = async (req, res) => {
     try {
         const courseId = req.params.courseId;
-        const userId = req.userId;
-        const includeUserReview = req.query.includeUserReview === "true";
+        const userId = req.query.userId;
+        const includeUserReview = !!(userId && req.query.includeUserReview === "true");
 
         const userReview = includeUserReview ? await CourseRating.findOne({
             courseId,
             userId,
-        }).populate("userId", "name picturePath") : null;
+        }).populate("userId", "name") : null;
 
         const isLearningCompleted = await CourseProgress.exists({
             courseId,
@@ -130,7 +130,7 @@ const getCourseReviews = async (req, res) => {
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
-            .populate("userId", "name picturePath");
+            .populate("userId", "name");
 
         const totalReviews = await CourseRating.countDocuments(query);
 

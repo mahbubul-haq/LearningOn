@@ -68,8 +68,8 @@ const CourseWidget = ({ courseInfo }) => {
           width: "calc(100% - 1rem)",
           cursor: "pointer",
         }}
-        image={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-          }/image/upload/${courseInfo?.courseThumbnail?.public_id}`}
+        image={courseInfo?.courseThumbnail?.public_id ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+          }/image/upload/${courseInfo?.courseThumbnail?.public_id}` : "#"}
         title={courseInfo?.courseTitle}
       >
         {courseInfo?.enrolledStudentsCount > 0 && (

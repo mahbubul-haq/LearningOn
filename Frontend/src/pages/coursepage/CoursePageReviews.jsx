@@ -8,11 +8,12 @@ import { Snackbar, Alert } from "@mui/material";
 import MyRating from "../../components/Rating";
 import AllReviewsDialog from "./AllReviewsDialog";
 import { useNavigate } from "react-router-dom";
+import { useCoursePageReviews } from "./hooks/CoursePageHooks";
 
 const CoursePageReviews = ({ courseInfo }) => {
     const theme = useTheme();
     const { token, user } = useSelector((state) => state.auth);
-    const { myReview, dynamicRating, allReviews, allReviewsLoading, fetchAllReviews, isReviewSubmitting, handleSubmitReview, isLearningCompleted } = useContext(CoursePageContext);
+    const { myReview, dynamicRating, fetchAllReviews, isReviewSubmitting, handleSubmitReview, isLearningCompleted } = useContext(CoursePageContext);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
     const [myRating, setMyRating] = useState(0);
@@ -21,12 +22,8 @@ const CoursePageReviews = ({ courseInfo }) => {
     const [reviewsInDialog, setReviewsInDialog] = useState([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!courseInfo?._id) return;
+    const { data: allReviews, isLoading: allReviewsLoading, isError: allReviewsError } = useCoursePageReviews(courseInfo?._id, user?._id);
 
-        if (user && courseInfo?._id && token) fetchAllReviews(courseInfo?._id, token);
-
-    }, [courseInfo?._id, user]);
 
     useEffect(() => {
         if (myReview) {

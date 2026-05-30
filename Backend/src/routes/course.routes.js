@@ -27,7 +27,7 @@ router.get("/:courseId/lessons", verifyToken, getCourseLessons);
 router.get("/:courseId/lessons/:lessonId/quiz", verifyToken, getQuestions);
 router.post("/:courseId/reviews", verifyToken, createOrUpdateReview);
 router.get("/:courseId/reviews/me", verifyToken, getUserCourseReview);
-router.get("/:courseId/reviews", verifyToken, getCourseReviews);
+router.get("/:courseId/reviews", getCourseReviews);
 router.get("/", asyncHandler(getCourses));
 
 router.post(

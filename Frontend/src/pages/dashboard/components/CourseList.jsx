@@ -47,10 +47,10 @@ export default function CourseList({ myCourses, selectedCourse, onSelect, user, 
                         }}
                     >
                         <Box sx={{ width: '100%', height: 80, bgcolor: 'action.hover' }}>
-                            {course.courseThumbnail && (
+                            {course.courseThumbnail?.public_id && (
                                 <Box
                                     component="img"
-                                    src={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${course.courseThumbnail}`}
+                                    src={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${course.courseThumbnail?.public_id}`}
                                     alt={course.courseTitle}
                                     sx={{
                                         width: '100%',

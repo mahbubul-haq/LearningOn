@@ -77,16 +77,7 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, s
               borderRadius: "50%",
             }} alt="preview" />
         ) : userInfo?.avatar?.secure_url ? (
-          // <AdvancedImage
-          //   plugins={[lazyload()]}
-          //   cldImg={cloudinaryCld.image(userInfo?.avatar?.public_id)}
-          //   style={{
-          //     width: "100%",
-          //     height: "100%",
-          //     objectFit: "cover",
-          //     borderRadius: "50%",
-          //   }}
-          // />
+
           <img src={userInfo?.avatar?.secure_url}
             loading="lazy"
             style={{
@@ -95,6 +86,17 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, s
               objectFit: "cover",
               borderRadius: "50%",
             }} alt="avatar" />
+        ) : userInfo?.avatar?.public_id ? (
+          <AdvancedImage
+            plugins={[lazyload()]}
+            cldImg={cloudinaryCld.image(userInfo?.avatar?.public_id)}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "50%",
+            }}
+          />
         ) : (
           <img
             src="/images/dummyPerson.jpeg"

@@ -59,8 +59,8 @@ const InstructorProfile = ({ instructorId }) => {
                     }}
                 >
                     <Avatar
-                        src={instructor?.picturePath
-                            ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${instructor?.picturePath}`
+                        src={instructor?.avatar?.public_id
+                            ? `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${instructor?.avatar?.public_id}`
                             : "/images/dummyPerson.jpeg"}
                         alt={instructor?.name}
                         sx={{

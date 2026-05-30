@@ -67,7 +67,7 @@ const CourseListSlider = ({ courses, title, loading }) => {
       if (isHorizontalSwipe === null) {
         const totalDeltaX = Math.abs(currentTouchX - touchStartX);
         const totalDeltaY = Math.abs(currentTouchY - touchStartY);
-        
+
         if (totalDeltaX > 5 || totalDeltaY > 5) {
           isHorizontalSwipe = totalDeltaX > totalDeltaY;
         }
@@ -206,7 +206,7 @@ const CourseListSlider = ({ courses, title, loading }) => {
           borderRadius: "12px",
           boxShadow: isNonMobileScreens ? (theme) => `0 8px 40px ${theme.palette.homepage.cardShadow}` : "none",
           width: "100%",
-          height: isNonMobileScreens ? "520px" : "480px",
+          height: isNonMobileScreens ? "500px" : "400px",
           position: "relative",
         }}
       >

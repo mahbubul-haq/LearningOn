@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "../../../api/apiFetch";
+import { HomePageContext } from "../../../state/HomePageState";
+import { useContext } from "react";
 
 export const useUserPublishedCourses = (userId) => {
     return useQuery({
@@ -88,25 +90,16 @@ export const useRecentCourses = () => {
     });
 }
 
-export const usePopularCourses = () => {
+export const usePopularCourses = (catgory, courseType) => {
+    const { getCourses } = useContext(HomePageContext);
     return useQuery({
-        queryKey: ["popularCourses"],
+        queryKey: ["popularCourses", catgory],
         queryFn: async () => {
-            const data = await apiFetch({
-                url: `/api/v1/courses`,
-                method: "GET",
-                params: {
-                    category,
-                    limit: 25,
-                }
-            });
-            console.log("popular courses", data.courses);
-            if (!data.success) {
-                throw new Error("Failed to fetch popular courses");
-            }
-            return data.courses;
+            const data = await getCourses(catgory);
+            return data;
         },
         staleTime: 1000 * 60 * 60,
         gcTime: 1000 * 60 * 60,
+        enabled: courseType === "Popular Courses"
     });
 }

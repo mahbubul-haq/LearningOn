@@ -92,13 +92,6 @@ app.use("/api/v1/users", userRoutesNew);
 app.use("/api/v1/categories", categoryRoutes);
 // app.use("/learning", courseProgressRoutes);
 
-//  will be refactored later
-
-app.post("/fileupload", verifyToken, upload.single("picture"), uploadFile);
-app.delete("/filedelete/:fileName/:isVideo", deleteFile);
-
-
-
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
     res.send("Hello World")
 });

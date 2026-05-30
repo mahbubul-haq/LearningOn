@@ -8,7 +8,7 @@ import { HomePageContext } from "../../state/HomePageState";
 import CoursesBottom from "./CoursesBottom";
 import CoursesContent from "./CoursesContent";
 import CoursesTop from "./CoursesTop";
-import { useMyEnrolledCourses, useUserPublishedCourses, useTrendingCourses, useRecentCourses } from "./hooks/HomeCoursesHooks";
+import { useMyEnrolledCourses, useUserPublishedCourses, useTrendingCourses, useRecentCourses, usePopularCourses } from "./hooks/HomeCoursesHooks";
 import CourseListSlider from "./CourseListSlider";
 
 const HomeCourses = () => {
@@ -24,7 +24,6 @@ const HomeCourses = () => {
 
 
   const {
-    courses,
     getCourses,
     setLoading,
     selectedCourses,
@@ -32,7 +31,7 @@ const HomeCourses = () => {
     filteredCourses,
     setFilteredCourses,
     initialRender,
-    loading,
+    // loading,
     waitingForSelectedCoursesRef,
     waitingForSelectedCourses,
     setWaitingForSelectedCourses,
@@ -40,6 +39,7 @@ const HomeCourses = () => {
 
   const user = useSelector((state) => state.auth.user);
 
+  const { data: courses, isPending: loading } = usePopularCourses(selectedItem === "All" ? "all" : selectedItem, courseType);
   const { data: userPublishedCourses, isPending: userPublishedCoursesPending } = useUserPublishedCourses(user?._id);
   const { data: userEnrolledCourses, isPending: userEnrolledCoursesPending } = useMyEnrolledCourses(user?._id);
   const { data: trendingCourses, isPending: trendingCoursesPending } = useTrendingCourses();
@@ -157,10 +157,10 @@ const HomeCourses = () => {
   // }, [selectedItem]);
 
   useEffect(() => {
-    console.log("calling getCourses, []");
+    //console.log("calling getCourses, []");
     if (courseType === "Popular Courses") {
-      setLoading(true);
-      getCourses(selectedItemRef.current == "All" ? "all" : selectedItemRef.current);
+      //setLoading(true);
+      //getCourses(selectedItemRef.current == "All" ? "all" : selectedItemRef.current);
     }
     if (!listOfCategories || listOfCategories.length === 0) {
       ///console.log("calling for categories from home");
@@ -293,7 +293,7 @@ const HomeCourses = () => {
     <Box
       sx={{
         backgroundColor: (theme) => theme.palette.homepage.sectionBg,
-
+        pb: "5rem",
         width: "100%",
       }}
     >
