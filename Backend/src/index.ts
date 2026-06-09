@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 // internal imports
 import http from "http";
 import { upload } from "./configs/multer.config.js";
-import { initializeStripe, stripeWebHook } from "./controllers/data.js";
+import { initializeStripe, stripeWebHook } from "./controllers/payment.controller.js";
 import { deleteFile, uploadFile } from "./controllers/uploads.js";
 import verifyToken from "./middlewares/auth.middleware.js";
 import adminRoutes from "./routes/admin.js";
@@ -21,7 +21,7 @@ import quizRoutes from "./routes/quiz.routes.js";
 // import courseRoutes from "./routes/course.js";
 import courseRoutesV1 from "./routes/course.routes.js";
 import courseProgressRoutes from "./routes/course-progress.routes.js";
-import dataRoutes from "./routes/data.js";
+import dataRoutes from "./routes/payment.route.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import { connectSocket } from "./socket.io.js";
 import "./utils/cloudinary.js";
@@ -33,6 +33,7 @@ import userRoutesNew from "./routes/user.routes.js";
 import { connectRedis } from "./configs/redisClient.js";
 import categoryRoutes from "./routes/category.routes.js";
 import "./jobs/courses.job.js"
+import "./jobs/enrollment.job.js"
 import Course from "./models/Course.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -127,4 +128,3 @@ async function startServer() {
 }
 
 startServer();
-

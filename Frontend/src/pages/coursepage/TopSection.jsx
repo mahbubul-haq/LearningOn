@@ -19,6 +19,7 @@ const TopSection = ({
             return cur || enrollMent.userId == user?._id;
         }, false)
     );
+    // console.log("purchased", purchased, user?._id);
 
     React.useEffect(() => {
         //console.log(user, courseInfo);

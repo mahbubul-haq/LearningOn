@@ -30,14 +30,12 @@ const NotificationSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ["course_enroll"],
+        enum: ["course_enroll", ""],
         default: ""
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
 
+}, {
+    timestamps: true,
 });
 
 const Notification = mongoose.model("Notification", NotificationSchema);

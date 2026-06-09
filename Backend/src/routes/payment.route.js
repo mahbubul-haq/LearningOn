@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import express from 'express';
 
-import { makePayment, stripeWebHook } from '../controllers/data.js';
+import { makePayment, stripeWebHook } from '../controllers/payment.controller.js';
 import verifyToken from '../middlewares/auth.middleware.js';
 import { deleteAllDraftCourses, deleteAllNotifications } from '../controllers/data.delete.js';
 

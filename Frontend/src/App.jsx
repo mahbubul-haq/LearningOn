@@ -25,6 +25,7 @@ function App() {
           <AppProvider>
             <CssBaseline />
             <AppInitializer />
+            
             <RootRoutes />
           </AppProvider>
         </BrowserRouter>
