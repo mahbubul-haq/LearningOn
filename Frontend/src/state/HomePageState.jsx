@@ -73,7 +73,7 @@ export const HomePageState = (props) => {
                 setLoading(false);
                 setCourseFetchError(true);
                 getCoursesAttempt.current = 0;
-                return [];
+                throw new Error("Error fetching popular courses");
 
             }
         } catch (err) {
@@ -82,7 +82,7 @@ export const HomePageState = (props) => {
             setLoading(false);
             setCourseFetchError(true);
             getCoursesAttempt.current = 0;
-            return [];
+            throw new Error("Error fetching popular courses");
         }
     };
 

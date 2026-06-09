@@ -194,7 +194,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                           padding: 0,
                         }}
                       />
-                      : courseInfo?.lessons[index]?.subLessons[subIndex]?.videoLink ?
+                      : courseInfo?.lessons[index]?.subLessons[subIndex]?.videoLink?.public_id?.trim()  ?
                         <MdOutlinePlayCircle
                           style={{
                             // color: "#1febfaff",

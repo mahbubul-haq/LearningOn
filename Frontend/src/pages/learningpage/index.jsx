@@ -57,7 +57,7 @@ const LearningPage = () => {
 
       //console.log("inside", lessonId, subLessonId);
       if (courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]) {
-        if (!courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]?.videoLink?.trim()) {
+        if (!courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[openedLesson.subLesson - 1]?.videoLink?.public_id?.trim()) {
           let isSublessonAlreadyCompleted = courseProgress?.lessonsProgress?.find((lesson) => lesson.lessonId.toString() == lessonId.toString())?.subLessonsProgress?.find((subLesson) => subLesson.subLessonId.toString() == subLessonId.toString())?.completed;
           if (isSublessonAlreadyCompleted) {
             return;

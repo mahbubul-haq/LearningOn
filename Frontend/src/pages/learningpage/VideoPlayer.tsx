@@ -18,7 +18,9 @@ type VideoPlayerProps = {
         lessons: {
             _id: string,
             subLessons: {
-                videoLink?: string,
+                videoLink?: {
+                    public_id: string
+                },
                 title?: string
                 _id: string
             }[]
@@ -278,7 +280,7 @@ const VideoPlayer = ({ courseInfo, openedLesson, courseProgress }: VideoPlayerPr
                         cldVid={useMemo(() => cloudinaryCld.video(
                             courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[
                                 openedLesson.subLesson - 1
-                            ]?.videoLink
+                            ]?.videoLink?.public_id?.trim() || ""
                         ), [courseInfo, openedLesson])}
                         plugins={videoPlugins}
                         style={videoStyle}

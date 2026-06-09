@@ -89,7 +89,7 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                     {courseInfo?.lessons[
                       openedLesson.lesson - 1
                     ].subLessons.reduce(
-                      (acc, curr) => (curr.videoLink != "" ? acc + 1 : acc),
+                      (acc, curr) => (curr.videoLink?.public_id?.trim() ? acc + 1 : acc),
 
                       0
                     )}
@@ -100,7 +100,7 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
                     {courseInfo?.lessons[
                       openedLesson.lesson - 1
                     ].subLessons.reduce(
-                      (acc, curr) => (curr.lectureNote != "" ? acc + 1 : acc),
+                      (acc, curr) => (curr.lectureNote?.trim() ? acc + 1 : acc),
                       0
                     )}
                     &nbsp; Lecture Notes
