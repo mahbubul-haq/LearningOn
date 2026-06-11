@@ -2,12 +2,15 @@ import FlexBetween from "../../components/FlexBetween.jsx";
 import { colorTokens } from "../../theme.js";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { Box, Typography, useMediaQuery } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import useTheme from "@mui/material/styles/useTheme";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton.jsx";
+import LogosMarquee from "./LogosMarquee.jsx";
 
 const LandingView = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
@@ -15,6 +18,7 @@ const LandingView = () => {
     const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const theme = useTheme();
+    const isDark = theme.palette.mode === "dark";
 
 
     const showDashboard = () => {
@@ -27,7 +31,7 @@ const LandingView = () => {
     return (
         <Box sx={{
             width: "100%",
-            backgroundColor: theme.palette.mode === 'dark' ? "#0f0f13" : "#F0F4F8",
+            backgroundColor: isDark ? "#0f0f13" : "#F0F4F8",
 
         }}>
             <Box
@@ -38,6 +42,9 @@ const LandingView = () => {
                     paddingTop: "6rem",
                     position: "relative",
                     zIndex: 0,
+                    minHeight: { xs: "auto", md: "min(100vh, 1200px)" },
+                    display: "flex",
+                    flexDirection: "column",
 
                     // Full section background
                     backgroundImage: theme.palette.mode === 'dark'
@@ -57,9 +64,15 @@ const LandingView = () => {
                 <Box
                     sx={{
                         mt: isNonMobileScreens ? "0rem" : "0",
-                        padding: isNonMobileScreens ? "6rem 64px" : "2rem 24px",
+                        padding: isNonMobileScreens ? "2rem 64px 2rem 64px" : "2rem 24px",
                         maxWidth: "2000px",
                         mx: "auto",
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        flexGrow: 1,
+                        justifyContent: "center",
+                        gap: isNonMobileScreens ? "4rem" : "2rem",
                     }}
                 >
                     <FlexBetween
@@ -110,9 +123,10 @@ const LandingView = () => {
                                         gap: '1.5rem',
                                     }
                                 }}>
-                                    <StyledButton
+                                    <Button
                                         component="a"
                                         href={`${import.meta.env.VITE_CLIENT_URL}/publishcourse`}
+                                        startIcon={<RocketLaunchIcon />}
                                         onClick={(e) => {
                                             e.preventDefault();
                                             if (user) {
@@ -124,35 +138,53 @@ const LandingView = () => {
                                             });
                                         }}
                                         sx={{
-                                            color: "inherit",
+                                            px: isNonMobileScreens ? 4 : 3,
+                                            py: isNonMobileScreens ? 1.5 : 1.2,
+                                            borderRadius: "16px",
+                                            fontWeight: 700,
+                                            fontSize: { xs: "1rem", md: "1.2rem" },
+                                            color: "#ffffff",
+                                            background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                                            backgroundSize: "200% auto",
+                                            transition: "all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                                            boxShadow: isDark
+                                                ? `0 10px 30px ${alpha(theme.palette.primary.main, 0.3)}`
+                                                : `0 10px 30px ${alpha(theme.palette.primary.main, 0.2)}`,
                                             "&:hover": {
-                                                color: "inherit",
-                                            },
-                                            "&&": {
-                                                padding: isNonMobileScreens
-                                                    ? "0.5rem 1.5rem"
-                                                    : "0.4rem 1.5rem",
-                                                borderRadius: "2rem",
+                                                color: "#ffffff",
+                                                backgroundPosition: "right center",
+                                                transform: "translateY(-4px)",
+                                                boxShadow: isDark
+                                                    ? `0 20px 40px ${alpha(theme.palette.primary.main, 0.5)}`
+                                                    : `0 20px 40px ${alpha(theme.palette.primary.main, 0.3)}`,
                                             },
                                         }}
                                     >
-                                        <Typography variant="h4">
-                                            {"Publish a Course"}
-                                        </Typography>
-                                    </StyledButton>
+                                        Publish a Course
+                                    </Button>
                                     {showDashboard() && isNonMobileScreens && (
                                         <Button
                                             component="a"
                                             href={`${import.meta.env.VITE_CLIENT_URL}/dashboard`}
+                                            startIcon={<DashboardIcon />}
                                             sx={{
-                                                borderRadius: "1000px",
-                                                border: "1px solid " + theme.palette.homepage.buttonSecondary,
-                                                padding: "0.5rem 1rem",
-                                                color: theme.palette.homepage.buttonSecondary,
-
+                                                px: isNonMobileScreens ? 4 : 3,
+                                                py: isNonMobileScreens ? 1.5 : 1.2,
+                                                borderRadius: "16px",
+                                                fontWeight: 700,
+                                                fontSize: { xs: "1rem", md: "1.2rem" },
+                                                color: theme.palette.mode === "dark" ? "#ffffff" : theme.palette.primary.main,
+                                                border: `2px solid ${alpha(theme.palette.primary.main, 0.4)}`,
+                                                background: alpha(theme.palette.background.paper, 0.5),
+                                                backdropFilter: "blur(10px)",
+                                                transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
                                                 "&:hover": {
-                                                    backgroundColor: `rgba(194, 33, 95, ${colorTokens.opacity[10]})`,
-                                                    color: "inherit",
+                                                    background: alpha(theme.palette.primary.main, 0.1),
+                                                    border: `2px solid ${theme.palette.primary.main}`,
+                                                    transform: "translateY(-4px)",
+                                                    boxShadow: isDark
+                                                        ? `0 10px 20px ${alpha(theme.palette.primary.main, 0.2)}`
+                                                        : `0 10px 20px ${alpha(theme.palette.primary.main, 0.1)}`,
                                                 },
                                             }}
                                             onClick={(e) => {
@@ -160,14 +192,7 @@ const LandingView = () => {
                                                 navigate("/dashboard");
                                             }}
                                         >
-                                            {/* <DashboardIcon
-                                            sx={{
-                                                mr: "0.5rem",
-                                            }}
-                                        /> */}
-                                            <Typography sx={{}} variant="h6">
-                                                My Dashboard
-                                            </Typography>
+                                            My Dashboard
                                         </Button>
                                     )}
                                 </FlexBetween>
@@ -225,6 +250,9 @@ const LandingView = () => {
                         </Box>
                     </FlexBetween>
 
+                    <Box sx={{ width: "100%", pb: isNonMobileScreens ? "2rem" : "1rem" }}>
+                        <LogosMarquee />
+                    </Box>
 
                 </Box>
             </Box>

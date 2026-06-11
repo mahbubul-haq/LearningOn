@@ -81,6 +81,9 @@ const Navbar = () => {
     if (user) getNotifications(user?._id);
   }, []);
 
+  useEffect(() => {
+    console.log("Notifications updated:", notifications);
+  }, [notifications]);
   const mobileNav = () => {
     return (
       <MobileNav

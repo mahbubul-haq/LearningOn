@@ -51,7 +51,7 @@ const AppInitializer = () => {
     useEffect(() => {
         if (token && !user) {
 
-            fetchUser(token);
+            fetchUser(token, lastAccessTokenTime);
         }
 
     }, [token])

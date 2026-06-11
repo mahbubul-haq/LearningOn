@@ -293,7 +293,7 @@ const HomeCourses = () => {
     <Box
       sx={{
         backgroundColor: (theme) => theme.palette.homepage.sectionBg,
-        pb: "5rem",
+        pb: "12rem",
         width: "100%",
       }}
     >

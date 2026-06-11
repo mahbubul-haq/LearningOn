@@ -26,6 +26,7 @@ const NotificationSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ["new", "opened", "clicked"],
+        required: true,
         default: "new",
     },
     type: {

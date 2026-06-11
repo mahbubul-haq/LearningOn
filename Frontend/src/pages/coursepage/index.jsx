@@ -9,6 +9,7 @@ import RelatedCourses from "./RelatedCourses";
 import CourseExplorer from "../../components/courseExplorer";
 import { colorTokens } from "../../theme";
 import { CoursePageContext } from "../../state/CoursePageContext";
+import SiteFooter from "../../components/SiteFooter";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -89,7 +90,7 @@ const CoursePage = () => {
                     width: "100%",
                     maxWidth: "2000px",
                     mx: "auto",
-                    paddingBottom: "4rem",
+                    // paddingBottom: "4rem",
                     background: (theme) => theme.palette.mode === 'dark'
                         ? `${colorTokens.glassMorphism.backgroundImageDark}, ${colorTokens.glassMorphism.backgroundColorDark}`
                         : `${colorTokens.glassMorphism.backgroundImageLight}, #ffffff`,
@@ -122,7 +123,11 @@ const CoursePage = () => {
                 <MainSection courseInfo={courseInfo} />
 
                 <RelatedCourses courseInfo={courseInfo} />
+                <Box sx={{ height: "10rem", width: "100%" }}></Box>
+                <SiteFooter />
             </Box>
+
+
 
         </Box>
     );

@@ -20,7 +20,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const PublishCourse = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
-  const user = useSelector((state) => state.auth.user);
+  const {user, token, lastAccessTokenTime} = useSelector((state) => state.auth);
   const mode = useSelector((state) => state.auth.mode); // Get global mode
   const dispatch = useDispatch();
   const edit = useParams().edit;
@@ -43,7 +43,7 @@ const PublishCourse = () => {
     isCourseValid,
   } = useContext(CreateCourseContext);
   const { getUsers } = useContext(GlobalContext);
-  const { fetchUser, fetchCategories } = useContext(AppContext);
+  const { fetchUser, fetchCategories, categories } = useContext(AppContext);
   const navigate = useNavigate();
 
   // --- Dynamic Mesh Background ---
@@ -70,6 +70,17 @@ const PublishCourse = () => {
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login", {
+  //       state: {
+  //         isLogin: true,
+  //         redirect: "/publishcourse"
+  //       }
+  //     });
+  //   }
+  // }, [user]);
+
   useEffect(() => {
     if (!user) {
       navigate("/login", {
@@ -82,11 +93,16 @@ const PublishCourse = () => {
     if (edit == "edit" && id) {
       getCoursePlainById(id);
       getUsers();
-      fetchCategories();
+      /// need to optimize *******************************
+      // fetchCategories();
     } else {
       console.log("not edit mode")
       getDraftCourse();
-      fetchUser();
+      // fetchUser(token, lastAccessTokenTime);
+      // fetchCategories();
+    }
+
+    if (!(categories?.length > 0)) {
       fetchCategories();
     }
   }, []);

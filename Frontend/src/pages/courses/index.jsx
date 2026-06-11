@@ -2,43 +2,46 @@ import { Box } from '@mui/material'
 import { useContext, useEffect } from 'react'
 import CourseExplorerRIghtBottom from '../../components/courseExplorer/CourseExplorerRIghtBottom'
 import CourseExplorerRightTop from '../../components/courseExplorer/CourseExplorerRightTop'
+import SiteFooter from '../../components/SiteFooter'
 import { CourseExplorerContext } from '../../state/CourseExplorerContext'
 import { GlobalContext } from '../../state/GlobalContext'
 
 const Courses = () => {
 
-    const {setOpenedItem} = useContext(GlobalContext);
-    const {setCoursePageOpened, filteredCourses, getFilteredCourses, categoryChangedRef, setCategoryChanged} = useContext(CourseExplorerContext);
+  const { setOpenedItem } = useContext(GlobalContext);
+  const { setCoursePageOpened, filteredCourses, getFilteredCourses, categoryChangedRef, setCategoryChanged } = useContext(CourseExplorerContext);
 
 
-    useEffect(() => {
-        setOpenedItem("courses");
+  useEffect(() => {
+    setOpenedItem("courses");
 
-        setCoursePageOpened(true);
+    setCoursePageOpened(true);
 
-        if (!filteredCourses || filteredCourses.length == 0) {
-            categoryChangedRef.current = true;
-            setCategoryChanged(true);
-            getFilteredCourses(true);
-          }
+    if (!filteredCourses || filteredCourses.length == 0) {
+      categoryChangedRef.current = true;
+      setCategoryChanged(true);
+      getFilteredCourses(true);
+    }
 
 
-        return () => {
-          setCoursePageOpened(false);
-        }
+    return () => {
+      setCoursePageOpened(false);
+    }
 
-    }, []);
+  }, []);
 
-    
+
 
   return (
     <Box sx={{
-        maxWidth: "2000px",
-        mx: "auto",
-        
+      maxWidth: "2000px",
+      mx: "auto",
+
     }}>
-        <CourseExplorerRightTop coursePage={true} />
-        <CourseExplorerRIghtBottom />
+      <CourseExplorerRightTop coursePage={true} />
+      <CourseExplorerRIghtBottom />
+      <Box sx={{ width: "100%", height: "10rem" }}></Box>
+      <SiteFooter />
     </Box>
   )
 }

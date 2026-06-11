@@ -9,12 +9,18 @@ import useDashboardData from './hooks/useDashboardData';
 import { useSelector } from 'react-redux';
 import { useRecentEnrollments, useMyCourses, useEnrollmentAnalytics } from './hooks/DashboardHooks';
 import { useMemo, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import "../../App.css";
 
 
 export default function Dashboard() {
     const navigate = useNavigate();
+    const isNonMobileScreens = useMediaQuery("(min-width:900px)");
     const theme = useTheme();
     const { token, user } = useSelector((state) => state.auth);
+
+    const { courseId } = useParams();
 
     // Custom hook handles all data logic
     const {
@@ -62,6 +68,24 @@ export default function Dashboard() {
         startDate && endDate && myCourses?.length
     );
 
+    useEffect(() => {
+        if (courseId && myCourses?.length > 0) {
+            myCourses.forEach(course => {
+                if (course._id === courseId) {
+                    setSelectedCourse(course);
+                }
+            });
+        }
+    }, [myCourses]);
+
+    useEffect(() => {
+        if (courseId != selectedCourse?._id) {
+            // add courseId to url if not present, do not navigate just update url
+            navigate(`/dashboard/${selectedCourse?._id}`, { replace: true });
+        }
+
+    }, [selectedCourse]);
+
 
     useEffect(() => {
         if (myCourses?.length > 0) {
@@ -93,17 +117,31 @@ export default function Dashboard() {
     }, [analyticsData]);
 
     return (
-        <Box sx={{ p: { xs: "1rem", md: "2rem" }, height: '100vh', background: 'transparent', overflow: 'auto' }}>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={4} lg={3} sx={{
+        <Box sx={{ height: '100vh', background: 'transparent', overflow: 'scroll', maxWidth: "2000px", mx: "auto" }}>
+            <Box container  sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                    xs: "1fr",
+                    md: "4fr 8fr",
+                    lg: "3fr 9fr"
+                },
+                gap: "2rem",
+                px: {
+                    xs: "1rem",
+                    md: '2rem',
+                }
+            }}>
+                <Box  sx={{
                     height: {
                         xs: 'fit-content',
-                        md: `calc(100vh - 4rem)`,
+                        md: `calc(100vh - 2rem)`,
                     },
                     position: { xs: "relative", md: "sticky" },
                     top: { md: "0rem" },
                     display: 'flex',
                     flexDirection: 'column',
+                    pt: "3rem",
+                    // border: "2px solid red"
                 }}>
                     <Stack spacing={2} sx={{ mb: 0, height: { sm: 'fit-content', md: '6rem' }, display: 'flex', justifyContent: 'center' }}>
                         <Box>
@@ -136,9 +174,12 @@ export default function Dashboard() {
                             getStatusKey={getStatusKey}
                         />
                     </Box>
-                </Grid>
+                </Box>
 
-                <Grid item xs={12} md={8} lg={9}>
+                <Box sx={{
+                    mb: "1.5rem",
+                    mt: isNonMobileScreens ? "1.5rem" : 0,
+                }}>
                     <Stack spacing={3}>
                         <Box sx={{ height: { sm: 'fit-content', md: '6rem' }, display: 'flex', alignItems: 'center', justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
                             <DashboardHeader
@@ -174,8 +215,8 @@ export default function Dashboard() {
                             setShowCumulativeRevenue={setShowCumulativeRevenue}
                         />
                     </Stack>
-                </Grid>
-            </Grid>
+                </Box>
+            </Box>
         </Box>
     );
 }

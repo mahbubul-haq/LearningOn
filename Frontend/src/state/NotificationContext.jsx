@@ -33,36 +33,41 @@ export const NotificationState = (props) => {
 
     const updateNotifications = async (notificationId, status) => {
         if (status == "opened") {
-            notifications.forEach(async (notification) => {
-                if (notification.status == "new") {
-                    const data = await apiFetch({
-                        url: `/api/v1/notifications/${notification._id}`,
-                        method: "PATCH",
-                        body: {
-                            status
-                        },
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    });
-                    if (data.success) {
-                        setNotifications((prev) => {
-                            return prev.map((notification) => {
-                                if (notification._id == data.notification._id) {
-                                    return data.notification;
-                                } else {
-                                    return notification;
-                                }
-                            });
-                        });
-                    }
+            let hasNew = notifications.some((notification) => notification.status == "new");
+            if (!hasNew) {
+                return;
+            }
+
+            const data = await apiFetch({
+                url: `/api/v1/notifications/${notificationId}`,
+                method: "PATCH",
+                data: {
+                    status
+                },
+                headers: {
+                    "Content-Type": "application/json",
                 }
             });
+            if (data.success) {
+                setNotifications((prev) => {
+                    return prev.map((notification) => {
+                        if (notification.status == "new") {
+                            return {
+                                ...notification,
+                                status: "opened",
+                            };
+                        } else {
+                            return notification;
+                        }
+                    });
+                });
+            }
+            
         } else if (status == "clicked") {
             const data = await apiFetch({
                 url: `/api/v1/notifications/${notificationId}`,
                 method: "PATCH",
-                body: {
+                data: {
                     status
                 },
                 headers: {

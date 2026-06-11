@@ -132,6 +132,7 @@ const VideoUpload = ({
       let data;
 
       data = await uploadHandler(fileToUpload, progressOptions);
+      console.log("upload video response", data);
 
       if (data?.success) {
         setFileName(data.fileName);

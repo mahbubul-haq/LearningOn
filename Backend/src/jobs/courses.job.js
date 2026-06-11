@@ -13,8 +13,8 @@ cron.schedule("5 5 * * *", async () => {
 });
 
 
-//runs everyday at 4:05 AM
-cron.schedule("5 4 * * *", async () => {
+//runs everyday at 5:05 AM
+cron.schedule("5 5 * * *", async () => {
     //console.log("Rebuilding trending courses...");
     try {
         await rebuildTrendingCourses();

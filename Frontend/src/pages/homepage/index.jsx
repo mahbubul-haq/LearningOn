@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import socketIoClient from "socket.io-client";
 import { GlobalContext } from "../../state/GlobalContext";
 import { NotificationContext } from "../../state/NotificationContext";
+import SiteFooter from "../../components/SiteFooter.jsx";
 import HomeCourses from "./HomeCourses.jsx";
 import LandingView from "./LandingView";
 
@@ -64,6 +65,7 @@ const HomePage = () => {
             }}>
                 <LandingView />
                 <HomeCourses />
+                <SiteFooter />
             </Box>
         </>
     );

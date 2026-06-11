@@ -230,8 +230,14 @@ export const colorTokens = {
             opacity: 0.4,
             pointerEvents: "none",
             zIndex: -1,
-            backgroundImage: `url("https://grainy-gradients.vercel.app/noise.svg")`,
-            filter: "contrast(170%) brightness(50%)",
+            backgroundImage: `
+                radial-gradient(circle at 25% 20%, rgba(255,255,255,0.35) 0 0.5px, transparent 0.75px),
+                radial-gradient(circle at 75% 65%, rgba(0,0,0,0.22) 0 0.55px, transparent 0.85px),
+                radial-gradient(circle at 45% 85%, rgba(255,255,255,0.16) 0 0.45px, transparent 0.7px)
+            `,
+            backgroundSize: "17px 17px, 23px 23px, 13px 13px",
+            backgroundPosition: "0 0, 8px 11px, 3px 6px",
+            filter: "contrast(140%) brightness(80%)",
 
         }
     },

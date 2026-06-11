@@ -19,18 +19,22 @@ const LoginSignUp = () => {
             sx={{
                 height: "100%",
                 width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                maxWidth: "2000px",
+                mx: "auto",
+                // display: "flex",
+                // alignItems: "center",
+                // justifyContent: "center",
                 overflow: "auto",
                 position: "relative",
+                px: { xs: "24px", md: "64px" },
+                py: "2rem"
             }}
         >
             <Box
                 sx={{
-                    position: "absolute",
-                    top: isNonMobileScreens ? "2rem" : "1.5rem",
-                    left: isNonMobileScreens ? "3rem" : "1.5rem",
+                    position: "relative",
+                    // top: isNonMobileScreens ? "2rem" : "1.5rem",
+                    // left: isNonMobileScreens ? "3rem" : "1.5rem",
                     display: "flex",
                     alignItems: "center",
                     gap: "0.5rem",

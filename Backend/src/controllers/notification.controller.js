@@ -1,4 +1,5 @@
 import Notification from "../models/Notification.js";
+import mongoose from "mongoose";
 
 const createNotification = async (req, res) => {
     console.log("create notification called");
@@ -64,6 +65,24 @@ const getNotificationsByUserId = async (req, res) => {
 const updateNotification = async (req, res) => {
     try {
         const { status } = req.body;
+        console.log("status", status, req.params.notificationId, req.userId);
+        if (status == "opened") {
+            //convert req.userId into mongoose ObjectId
+            const userId = new mongoose.Types.ObjectId(req.userId);
+            await Notification.updateMany({
+                userId: userId,
+                $or: [
+                    { status: "new" },
+                    { status: { $exists: false } },
+                ]
+            }, {
+                status: "opened",
+            });
+            return res.status(200).json({
+                success: true,
+                message: "All notifications marked as opened",
+            });
+        }
         const notification = await Notification.findById(
             req.params.notificationId
         );

@@ -62,9 +62,11 @@ const addSubLesson = async (req, res) => {
 
 const uploadThumbnail = async (req, res) => {
     try {
+        console.log(req.file);
         if (!req.file) {
             throw new AppError("FILE_MISSING", 400);
         }
+
 
         const { course, updatedFields } = await uploadAndSetCourseThumbnail(
             req.params.courseId,

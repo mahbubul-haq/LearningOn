@@ -30,6 +30,7 @@ export const uploadCourseThumbnailApi = async (
   file,
   onUploadProgress
 ) => {
+  // console.log("uploadCourseThumbnailApi called with file", file);
   return apiFetch({
     url: `/api/v1/courses/${courseId}/media/thumbnail`,
     method: "POST",
