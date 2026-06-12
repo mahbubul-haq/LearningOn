@@ -22,6 +22,10 @@ const HomeCourses = () => {
   const [changingCourseType, setChangingCourseType] = React.useState(false);
   const changingCourseTypeRef = React.useRef(changingCourseType);
 
+  const LEARNING_COURSES = "I am Learning";
+  const MY_COURSES = "My Courses";
+  const POPULAR_COURSES = "Popular Courses";
+
 
   const {
     getCourses,
@@ -39,11 +43,11 @@ const HomeCourses = () => {
 
   const user = useSelector((state) => state.auth.user);
 
-  const { data: courses, isPending: loading } = usePopularCourses(selectedItem === "All" ? "all" : selectedItem, courseType);
-  const { data: userPublishedCourses, isPending: userPublishedCoursesPending } = useUserPublishedCourses(user?._id);
-  const { data: userEnrolledCourses, isPending: userEnrolledCoursesPending } = useMyEnrolledCourses(user?._id);
-  const { data: trendingCourses, isPending: trendingCoursesPending } = useTrendingCourses();
-  const { data: recentCourses, isPending: recentCoursesPending } = useRecentCourses();
+  const { data: courses, isPending: loading, error: popularCoursesError, refetch: popularCoursesRefetch } = usePopularCourses(selectedItem === "All" ? "all" : selectedItem, courseType);
+  const { data: userPublishedCourses, isPending: userPublishedCoursesPending, error: userPublishedCoursesError, refetch: userPublishedCoursesRefetch } = useUserPublishedCourses(user?._id);
+  const { data: userEnrolledCourses, isPending: userEnrolledCoursesPending, error: userEnrolledCoursesError, refetch: userEnrolledCoursesRefetch } = useMyEnrolledCourses(user?._id);
+  const { data: trendingCourses, isPending: trendingCoursesPending, error: trendingCoursesError } = useTrendingCourses();
+  const { data: recentCourses, isPending: recentCoursesPending, error: recentCoursesError } = useRecentCourses();
 
   useEffect(() => {
     console.log("Waiting for selected courses Changed", waitingForSelectedCourses);
@@ -343,30 +347,38 @@ const HomeCourses = () => {
               position: "relative",
 
               width: "100%",
-              // border: "1px solid red"
+              height: "calc(100% - 5rem)",
+              // border: "2px solid blue"
             }}
           >
             <CoursesContent
               handleScroll={handleScroll}
-              selectedItem={selectedItemRef.current}
               selectedCourses={selectedCourses}
               courseType={courseType}
-              changingCourseType={changingCourseType}
-              changingCourseTypeRef={changingCourseTypeRef}
               setCourseType={setCourseType}
+              loading={
+                courseType === POPULAR_COURSES ? loading :
+                  courseType === MY_COURSES ? userPublishedCoursesPending :
+                    userEnrolledCoursesPending
+              }
+              loadingError={
+                courseType === POPULAR_COURSES ? popularCoursesError :
+                  courseType === MY_COURSES ? userPublishedCoursesError :
+                    userEnrolledCoursesError
+              }
+              refetch={
+                courseType === POPULAR_COURSES ? popularCoursesRefetch :
+                  courseType === MY_COURSES ? userPublishedCoursesRefetch :
+                    userEnrolledCoursesRefetch
+              }
             />
 
 
           </Box>
           <CoursesBottom
-            categoriesWithCourse={categoriesWithCourse}
             selectedItem={selectedItemRef.current}
-            setSelectedItem={setSelectedItem}
             selectedCourses={selectedCourses}
-            selectedItemRef={selectedItemRef}
             courseType={courseType}
-            waitingForSelectedCoursesRef={waitingForSelectedCoursesRef}
-            loading={loading}
           />
         </Box>
         <CourseListSlider courses={trendingCourses} title="Trending Courses" loading={trendingCoursesPending} />

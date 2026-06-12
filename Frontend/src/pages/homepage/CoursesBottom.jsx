@@ -8,14 +8,9 @@ import { useContext } from "react";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 
 const CoursesBottom = ({
-  categoriesWithCourse,
   selectedItem,
-  setSelectedItem,
   selectedCourses,
-  selectedItemRef,
   courseType,
-  waitingForSelectedCoursesRef,
-  loading,
 }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const navigate = useNavigate();

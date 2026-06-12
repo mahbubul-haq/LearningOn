@@ -17,15 +17,11 @@ import { useNavigate } from "react-router-dom";
 import WaveLoader from "../../components/WaveLoader";
 
 
-const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseType, changingCourseType, changingCourseTypeRef, setCourseType }) => {
+const CoursesContent = ({ handleScroll, selectedCourses, courseType, setCourseType, loadingError, loading, refetch }) => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
-  const { loading, courseFetchError, waitingForSelectedCoursesRef, waitingForSelectedCourses, setLoading, getCourses, setCourseFetchError } = useContext(HomePageContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("Re rendering, loading:", loading, "waitingForSelectedCourses:", waitingForSelectedCourses, "waitingForSelectedCoursesRef:", waitingForSelectedCoursesRef.current);
-  }, []);
 
   useEffect(() => {
     let coursesContainer = document.querySelector(".courses-container");
@@ -56,11 +52,11 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
       const currentTouchX = event.touches[0].clientX;
       const currentTouchY = event.touches[0].clientY;
       const deltaX = currentTouchX - lastTouchX;
-      
+
       if (isHorizontalSwipe === null) {
         const totalDeltaX = Math.abs(currentTouchX - touchStartX);
         const totalDeltaY = Math.abs(currentTouchY - touchStartY);
-        
+
         // Wait for a minimum threshold of movement to determine swipe direction
         if (totalDeltaX > 5 || totalDeltaY > 5) {
           isHorizontalSwipe = totalDeltaX > totalDeltaY;
@@ -84,7 +80,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
     const handleTouchEnd = (event) => {
       if (coursesContainer) coursesContainer.style.scrollBehavior = "smooth";
       if (isHorizontalSwipe === false) return;
-      
+
       const touchEndX = event.changedTouches[0].clientX;
       const totalDistance = touchEndX - touchStartX;
       const totalTime = Date.now() - touchStartTime;
@@ -126,8 +122,9 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
     <Box
       sx={{
         width: "100%",
+        height: "100%",
         position: "relative",
-        // border: "2px solid red",
+        // border: "2px solid green",
       }}
     >
       <CourseNextPrevButton
@@ -206,12 +203,11 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
           height: "100%",
           // border: "2px solid red",
           scrollBehavior: "smooth",
-          opacity: loading || waitingForSelectedCourses || changingCourseTypeRef.current ? 0.3 : 1,
+          opacity: loading ? 0.3 : 1,
         }}
       >
-        {selectedCourses.map((course) => {
+        {!loading && !loadingError && selectedCourses?.length > 0 && selectedCourses.map((course) => {
           if (course.courseStatus != "published") return null;
-          // return null;
 
           return (
             <Box
@@ -247,13 +243,13 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
             </Box>
           );
         })}
-        {selectedCourses.length === 0 && (loading || waitingForSelectedCoursesRef.current || changingCourseTypeRef.current) && !courseFetchError && (
-          <Box sx={{ py: 10, mx: "auto", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        {selectedCourses.length === 0 && loading && (
+          <Box sx={{ py: 10, mx: "auto", display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
 
             <WaveLoader />
           </Box>
         )}
-        {selectedCourses.length === 0 && !loading && !waitingForSelectedCoursesRef.current && !courseFetchError && !changingCourseType &&
+        {selectedCourses.length === 0 && !loading && !loadingError &&
           <>
             {courseType == "I am Learning" &&
               <Box sx={{ mx: "auto", display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
@@ -305,7 +301,7 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
           </>
         }
 
-        {courseFetchError && (
+        {loadingError && (
           <Box sx={{ mx: "auto", display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
             <Box sx={{ mb: 3, position: 'relative' }}>
               <WifiOffIcon sx={{ fontSize: 60, color: 'text.disabled' }} />
@@ -323,9 +319,8 @@ const CoursesContent = ({ handleScroll, selectedItem, selectedCourses, courseTyp
               startIcon={<RefreshIcon />}
               sx={{ bgcolor: theme.palette.homepage.coursePlaceholder.reloadButtonBg, color: colorTokens.white.pure, borderRadius: 3, px: 4, '&:hover': { bgcolor: theme.palette.homepage.coursePlaceholder.reloadButtonHover } }}
               onClick={() => {
-                setLoading(true);
-                setCourseFetchError(false);
-                getCourses(selectedItem == "All" ? "all" : selectedItem);
+
+                refetch();
               }}
             >
               Reload Courses

@@ -103,26 +103,43 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
     if (!slider || !customSlider) return;
 
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchStartTime = 0;
     let lastTouchX = 0;
     let isDragging = false;
+    let isHorizontalSwipe = null;
 
     const MIN_SWIPE_DISTANCE = 30; // Minimum distance to trigger swipe
     const MIN_SWIPE_VELOCITY = 0.3; // Minimum velocity (px/ms) to trigger momentum scroll
 
     const handleTouchStart = (event) => {
       touchStartX = event.changedTouches[0].clientX;
+      touchStartY = event.changedTouches[0].clientY;
       lastTouchX = touchStartX;
       touchStartTime = Date.now();
       isDragging = false;
+      isHorizontalSwipe = null;
+      if (slider) slider.style.scrollBehavior = "auto";
     };
 
     const handleTouchMove = (event) => {
       const currentTouchX = event.touches[0].clientX;
+      const currentTouchY = event.touches[0].clientY;
       const deltaX = currentTouchX - lastTouchX;
 
+      if (isHorizontalSwipe === null) {
+        const totalDeltaX = Math.abs(currentTouchX - touchStartX);
+        const totalDeltaY = Math.abs(currentTouchY - touchStartY);
+
+        if (totalDeltaX > 5 || totalDeltaY > 5) {
+          isHorizontalSwipe = totalDeltaX > totalDeltaY;
+        }
+      }
+
+      if (isHorizontalSwipe === false) return;
+
       // Only scroll if there's meaningful movement
-      if (Math.abs(deltaX) > 0.5) {
+      if (isHorizontalSwipe && Math.abs(deltaX) > 0.5) {
         isDragging = true;
         const absDistance = Math.abs(deltaX);
         const direction = deltaX > 0 ? "prev" : "next";
@@ -133,6 +150,9 @@ const CustomSlider = ({ items, selectedItem, setSelectedItem, selectedItemRef })
     };
 
     const handleTouchEnd = (event) => {
+      if (slider) slider.style.scrollBehavior = "smooth";
+      if (isHorizontalSwipe === false) return;
+
       const touchEndX = event.changedTouches[0].clientX;
       const totalDistance = touchEndX - touchStartX;
       const totalTime = Date.now() - touchStartTime;
