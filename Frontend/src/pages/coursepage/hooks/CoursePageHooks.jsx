@@ -12,3 +12,15 @@ export const useCoursePageReviews = (courseId, userId) => {
         cacheTime: 1000 * 60 * 5,
     })
 }
+
+export const useCoursePageRelatedCourses = (category, courseId) => {
+    const { fetchRelatedCourses } = useContext(CoursePageContext);
+    return useQuery({
+        queryKey: [`coursePageRelatedCourses`, category, courseId],
+        queryFn: () => fetchRelatedCourses(category, courseId),
+        enabled: !!category && !!courseId,
+        staleTime: 1000 * 60 * 5,
+        cacheTime: 1000 * 60 * 5,
+    })
+}
+

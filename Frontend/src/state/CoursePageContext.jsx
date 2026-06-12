@@ -16,34 +16,22 @@ export const CoursePageState = (props) => {
     const userReviewInAllReviews = useRef(false);
     const previousRating = useRef({ rating: 0, review: "" });
 
-    const fetchRelatedCourses = async (category, courseId, token) => {
+    const fetchRelatedCourses = async (category, courseId) => {
 
-        setRelatedCoursesLoading(true);
-        // let encodedCategory = encodeURIComponent(category);
+        let data = await apiFetch({
+            url: `/api/v1/courses`,
+            method: 'GET',
+            params: {
+                category: category,
+                courseId: courseId
+            },
+        });
 
-        try {
-            let data = await apiFetch({
-                url: `/api/v1/courses`,
-                method: 'GET',
-                params: {
-                    category: category,
-                    courseId: courseId
-                },
-            });
-
-            if (data.success) {
-                setRelatedCourses([...data.courses]);
-            }
-            else {
-                setRelatedCourses([]);
-            }
-
-        } catch (err) {
-            // console.error("Failed to fetch related courses:", err);
-            setRelatedCourses([]);
-        } finally {
-            setRelatedCoursesLoading(false);
+        if (data.success) {
+            return data.courses;
         }
+        throw new Error("Failed to fetch related courses");
+
     };
 
     const fetchMyReview = async (courseId, token) => {
