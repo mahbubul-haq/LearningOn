@@ -9,35 +9,57 @@ import CourseWidgetSkeleton from "../CourseWidgetSkeleton";
 import { StyledButton } from "../StyledButton";
 import NoCourseFound from "./NoCourseFound";
 
-const CourseExplorerRIghtBottom = () => {
-  const {
-    filteredCourses,
-    loading,
-    totalDocuments,
-    coursePerPage,
-    setLoading,
-  } = useContext(CourseExplorerContext);
+const CourseExplorerRIghtBottom = ({
+  filteredCourses,
+  loading,
+  isError,
+  totalDocuments,
+  coursePerPage,
+  fetchNextPage,
+  hasNextPage,
+  refetchCourses
+}) => {
+
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const theme = useTheme();
-  const [showLoadMore, setShowLoadMore] = useState(true);
+  // const [showLoadMore, setShowLoadMore] = useState(true);
+
+  // useEffect(() => {
+  //   console.log("loading,", loading);
+  //   console.log("filteredCourses,", filteredCourses);
+  // }, [loading, filteredCourses])
+
+  // useEffect(() => {
+  //   let t;
+  //   if (loading) {
+  //     setShowLoadMore(false);
+  //   } else {
+  //     t = setTimeout(() => setShowLoadMore(true), 500);
+  //   }
+  //   return () => {
+  //     if (t) clearTimeout(t);
+  //   };
+  // }, [loading]);
 
   useEffect(() => {
-    console.log("loading,", loading);
-    console.log("filteredCourses,", filteredCourses);
-  }, [loading, filteredCourses])
+    const sentinel = document.getElementById("explorer-end-sentinel");
+    if (!sentinel) return;
 
-  useEffect(() => {
-    let t;
-    if (loading) {
-      setShowLoadMore(false);
-    } else {
-      t = setTimeout(() => setShowLoadMore(true), 500);
-    }
-    return () => {
-      if (t) clearTimeout(t);
-    };
-  }, [loading]);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && hasNextPage && !loading) {
+          // console.log("Observer triggered");
+          fetchNextPage();
+        }
+      });
+    }, { threshold: 0.5 });
+
+    observer.observe(sentinel);
+    // console.log("Observer running with hasNextPage:", hasNextPage);
+
+    return () => observer.disconnect();
+  }, [hasNextPage, fetchNextPage, loading]);
 
   return (
     <Box
@@ -73,9 +95,9 @@ const CourseExplorerRIghtBottom = () => {
         </Box>
       ))}
 
-      {filteredCourses?.length == 0 && <NoCourseFound />}
+      {filteredCourses?.length == 0 && <NoCourseFound refetchCourses={refetchCourses} loading={loading} isError={isError} />}
 
-      {loading && filteredCourses?.length !== totalDocuments && (
+      {loading && hasNextPage && (
         <>
           {new Array(
             Math.min(coursePerPage, Math.max(5, totalDocuments - filteredCourses.length))
@@ -88,7 +110,7 @@ const CourseExplorerRIghtBottom = () => {
             ))}
         </>
       )}
-      {filteredCourses?.length !== totalDocuments && !loading && showLoadMore && (
+      {hasNextPage && !loading && (
         <Box
           // onClick={() => setLoading(true)}
           sx={{
@@ -102,7 +124,7 @@ const CourseExplorerRIghtBottom = () => {
           }}
         >
           <StyledButton
-            onClick={() => setLoading(true)}
+            onClick={() => fetchNextPage()}
             sx={{
               mx: "auto",
               width: "fit-content",
@@ -112,6 +134,11 @@ const CourseExplorerRIghtBottom = () => {
           </StyledButton>
         </Box>
       )}
+
+      <Box id="explorer-end-sentinel" sx={{
+        height: "1px",
+        visibility: "hidden",
+      }}></Box>
     </Box>
   );
 };

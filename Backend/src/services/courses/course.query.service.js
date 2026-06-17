@@ -213,6 +213,7 @@ const getFilteredCourses = async (category, page, coursePerPage) => {
                 enrolledStudentsCount: 1
             }
         )
+            .sort({ enrolledStudentsCount: -1, "ratings.totalRating": -1 })
             .skip(skip)
             .limit(coursePerPage)
             .populate("owner", "name")
@@ -238,6 +239,7 @@ const getFilteredCourses = async (category, page, coursePerPage) => {
                 enrolledStudentsCount: 1
             }
         )
+            .sort({ enrolledStudentsCount: -1, "ratings.totalRating": -1 })
             .skip(skip)
             .limit(coursePerPage)
             .populate("owner", "name")

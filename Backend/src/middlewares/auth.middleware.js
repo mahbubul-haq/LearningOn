@@ -28,6 +28,7 @@ const verifyToken = async (req, res, next) => {
         req.userId = verified.id;
         next();
     } catch (error) {
+        // console.log("verifytoken error")
         res.status(500).json({
             success: false,
             message: error.message,
@@ -40,6 +41,7 @@ const verifyToken = async (req, res, next) => {
 export const verifyTokenLight = async (req, res, next) => {
     try {
         const authToken = req.headers["auth-token"];
+        // console.log("verifytokenlight", authToken)
         //console.log("authToken verify", authToken);
         if (!authToken) {
             return res.status(401).json({
@@ -51,6 +53,7 @@ export const verifyTokenLight = async (req, res, next) => {
         req.userId = verified.id;
         next();
     } catch (error) {
+        // console.log("verifytokenlight error")
         res.status(500).json({
             success: false,
             message: error.message,

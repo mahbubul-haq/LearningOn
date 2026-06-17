@@ -10,11 +10,29 @@ import { AppContext } from "../../state/AppContext";
 import CourseExplorerRightTop from "./CourseExplorerRightTop";
 import CourseExplorerRIghtBottom from "./CourseExplorerRIghtBottom";
 import { useLocation } from "react-router-dom";
+import { useExplorerCourses } from "./hooks/CourseExplorerHooks";
+import { useMemo } from "react";
 const CourseExplorer = () => {
   const location = useLocation();
-  const { openCourseExplorer, closeCourseExplorer, filteredCourses, categoryChangedRef, setCategoryChanged, getFilteredCourses, showCourseExplorer } = useContext(CourseExplorerContext);
+  const { openCourseExplorer, closeCourseExplorer, showCourseExplorer, selectedCategory, selectedSubCategory } = useContext(CourseExplorerContext);
   const { fetchCategories, listOfCategories, categories } = useContext(AppContext);
   const theme = useTheme();
+
+  const { data: explorerCourses, hasNextPage: hasMorePages, fetchNextPage: fetchMoreCourses, isLoading: isLoadingCourses, isFetching: isFetchingCourses, isError: isErrorCourses, error: errorCourses, refetch: refetchCourses } = useExplorerCourses({
+    category: selectedSubCategory || selectedCategory || "",
+    coursePerPage: 15
+  });
+
+  const filteredCourses = useMemo(() => {
+    if (!explorerCourses) return [];
+    return explorerCourses.pages.flatMap((page) => page.courses);
+  }, [explorerCourses]);
+
+  const totalDocuments = useMemo(() => {
+    return explorerCourses?.pages?.[0]?.totalDocuments || 0;
+  }, [explorerCourses]);
+
+
   useEffect(() => {
     if (!categories || categories.length == 0) {
       fetchCategories();
@@ -22,13 +40,7 @@ const CourseExplorer = () => {
   }, [categories]);
   const locationPathname = location.pathname.toLowerCase();
 
-  useEffect(() => {
-    if (!filteredCourses || filteredCourses.length == 0) {
-      categoryChangedRef.current = true;
-      setCategoryChanged(true);
-      getFilteredCourses(true);
-    }
-  }, []);
+
 
   const isCoursesPage = locationPathname.startsWith("/courses")
 
@@ -84,9 +96,9 @@ const CourseExplorer = () => {
           scrollBehavior: "smooth",
         }}
       >
-        <CourseExplorerRightTop />
+        <CourseExplorerRightTop totalDocuments={totalDocuments} filteredCourses={filteredCourses} />
 
-        <CourseExplorerRIghtBottom />
+        <CourseExplorerRIghtBottom totalDocuments={totalDocuments} filteredCourses={filteredCourses} loading={isLoadingCourses || isFetchingCourses} isError={isErrorCourses} coursePerPage={15} fetchNextPage={fetchMoreCourses} hasNextPage={hasMorePages} refetchCourses={refetchCourses} />
       </Box>
     </Box>
   );

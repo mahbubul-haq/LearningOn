@@ -12,12 +12,15 @@ import { setLogout, setMode } from "../../state/reduxStore/authSlice";
 import { MobileNavItem } from "../StyledBox";
 import { StyledButton } from "../StyledButton";
 import { DarkMode, LightMode } from "@mui/icons-material";
+import { useContext } from "react";
+import { ProfilePageContext } from "../../state/ProfilePageContext";
 
 const MobileNavBottom = ({ setOpenDrawer }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
+  const { logout } = useContext(ProfilePageContext);
 
   return (
     <>
@@ -169,11 +172,11 @@ const MobileNavBottom = ({ setOpenDrawer }) => {
         >
           <MobileNavItem
             onClick={() => {
-              dispatch(setLogout());
+              logout();
               setOpenDrawer(false);
               //reload page
 
-              navigate("/");
+              navigate("/", { replace: true });
               // window.location.reload();
             }}
           >

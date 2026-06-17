@@ -13,15 +13,8 @@ export const CourseExplorerState = (props) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [closeLeftHover, setCloseLeftHover] = useState(false);
-  const [filteredCourses, setFilteredCourses] = useState([]);
-  const [totalDocuments, setTotalDocuments] = useState(0);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [categoryChanged, setCategoryChanged] = useState(false);
   const [coursePageOpened, setCoursePageOpened] = useState(false);
   const courseExplorerRef = useRef(null);
-  const categoryChangedRef = useRef(false);
-  const [courseLoadingError, setCourseLoadingError] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
   const coursePerPage = 12;
 
@@ -34,8 +27,6 @@ export const CourseExplorerState = (props) => {
    */
   const changeCategory = (category) => {
     if (category == "" && selectedCategory != "") {
-      categoryChangedRef.current = true;
-      setCategoryChanged(true);
       setSelectedCategory("");
       setSelectedSubCategory("");
       return;
@@ -44,8 +35,6 @@ export const CourseExplorerState = (props) => {
     if (categories) {
       let isCategory = categories.find((cat) => cat.name == category);
       if (isCategory) {
-        categoryChangedRef.current = true;
-        setCategoryChanged(true);
         setSelectedCategory(category);
         setSelectedSubCategory("");
       } else {
@@ -55,8 +44,6 @@ export const CourseExplorerState = (props) => {
 
           if (isSubCategory) {
             //console.log("found subcategory", category);
-            categoryChangedRef.current = true;
-            setCategoryChanged(true);
             setSelectedCategory(cat.name);
             setSelectedSubCategory(category);
             break;
@@ -173,24 +160,7 @@ export const CourseExplorerState = (props) => {
 
   }, [showCourseExplorer, closeBtnClicked]);
 
-  useEffect(() => {
-    categoryChangedRef.current = categoryChanged;
-    let courseExplorerRightBottom = document.querySelectorAll(
-      ".course-explorer-right-bottom"
-    );
 
-    if (categoryChangedRef.current) {
-      if (courseExplorerRightBottom) {
-        courseExplorerRightBottom.forEach((element) => {
-          element.style.opacity = 0.5;
-        });
-      }
-    } else if (courseExplorerRightBottom) {
-      courseExplorerRightBottom.forEach((element) => {
-        element.style.opacity = 1;
-      });
-    }
-  }, [categoryChanged]);
 
   useEffect(() => {
     let explorerRightContainer = document.querySelector(
@@ -200,144 +170,33 @@ export const CourseExplorerState = (props) => {
     if (explorerRightContainer) explorerRightContainer.scrollTo(0, 0);
   }, [selectedCategory, selectedSubCategory]);
 
-  useEffect(() => {
-    //console.log("Calling for filtered courss");
-    setPageNumber(1);
-
-    getFilteredCourses(true);
-  }, [selectedCategory, selectedSubCategory]);
-
-  useEffect(() => {
-    console.log("page number", pageNumber);
-    if (pageNumber > 1) {
-      getFilteredCourses(false);
-    }
-  }, [pageNumber]);
-
-
-
-  useEffect(() => {
-
-
-    console.log(filteredCourses);
-    console.log("setting loading false");
-
-    setLoading(false)
-  }, [filteredCourses]);
-
-  useEffect(() => {
-    if (loading) setPageNumber((pageNumber) => pageNumber + 1);
-  }, [loading]);
-
-  useEffect(() => {
-    const handleScroll = (e) => {
-      let explorerRightContainer = e.target;
-
-      // console.log(
-      //   explorerRightContainer.scrollTop,
-      //   explorerRightContainer.clientHeight,
-      //   explorerRightContainer.scrollHeight
-      // );
-
-      if (
-        explorerRightContainer.scrollTop +
-        explorerRightContainer.clientHeight +
-        5 >=
-        explorerRightContainer.scrollHeight
-      ) {
-        if (!loading && filteredCourses.length < totalDocuments) {
-          setLoading(true);
-        }
-      }
-    };
-
-    let explorerRightContainer = document.querySelector(
-      ".explorer-right-container"
-    );
-
-    let appContainer = document.querySelector(".app-container");
-
-    if (appContainer && coursePageOpened)
-      appContainer.addEventListener("scroll", handleScroll);
-
-    if (explorerRightContainer)
-      explorerRightContainer.addEventListener("scroll", handleScroll);
-
-    return () => {
-      if (explorerRightContainer)
-        explorerRightContainer.removeEventListener("scroll", handleScroll);
-      if (appContainer)
-        appContainer.removeEventListener("scroll", handleScroll);
-    };
-  });
-
   /**
    * Fetches filtered courses based on the selected category/subcategory/pagenumber
    *
    * @param {boolean} changed - true ->  category changed -> new fetch, false: pagination
    */
 
-  const getFilteredCourses = async (changed) => {
-    const encodedCategory = selectedSubCategory ? selectedSubCategory : selectedCategory
+  const getFilteredCourses = async ({ page = 1, coursePerPage = 15, category = null }) => {
 
+    // try {
+    const data = await apiFetch({
+      url: `/api/v1/courses`,
+      method: "GET",
+      params: {
+        page,
+        coursePerPage,
+        category,
+      },
+    });
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => {
-      controller.abort();
-    }, 10000); // 10 seconds timeout
-
-    try {
-      const data = await apiFetch({
-        url: `/api/v1/courses`,
-        method: "GET",
-        params: {
-          page: changed ? 1 : pageNumber,
-          coursePerPage: coursePerPage,
-          category: encodedCategory,
-        },
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-      console.log("data", data);
-
-      if (data.success) {
-        console.log("explorer courses success");
-        if (changed) {
-          setFilteredCourses(data.courses);
-        } else {
-          // use functional update to avoid stale closure
-          setFilteredCourses((prev) => [...prev, ...data.courses]);
-        }
-        if (data.totalDocuments != totalDocuments) setTotalDocuments(data.totalDocuments);
-        // we've finished fetching and updated courses — clear loading immediately
-        setLoading(false);
+    if (data.success) {
+      if (page * coursePerPage < data.totalDocuments) {
+        return { ...data, nextPage: page + 1 }
       }
-      else {
-        console.log("explorer courses error");
-        setCourseLoadingError(true);
-        setTotalDocuments(0);
-        setFilteredCourses([]);
-        setLoading(false);
-      }
-
-      categoryChangedRef.current = false;
-      setCategoryChanged(false);
-      setInitialRender(false);
-      //setLoading(false);
-    } catch (err) {
-      setCourseLoadingError(true);
-      setTotalDocuments(0);
-      setFilteredCourses([]);
-      setLoading(false);
-      if (err.name === "AbortError") {
-        // timeout
-      }
-      console.log("explorer courses fetch error");
-      categoryChangedRef.current = false;
-      setCategoryChanged(false);
-      setInitialRender(false);
+      return { ...data, nextPage: null }
     }
+
+    throw new Error("Failed to fetch filtered courses");
   };
 
   return (
@@ -357,21 +216,12 @@ export const CourseExplorerState = (props) => {
         setSelectedSubCategory,
         closeLeftHover,
         setCloseLeftHover,
-        filteredCourses,
-        totalDocuments,
-        loading,
-        setLoading,
         coursePerPage,
         coursePageOpened,
         setCoursePageOpened,
         openCourseExplorer,
         closeCourseExplorer,
         getFilteredCourses,
-        categoryChanged,
-        categoryChangedRef,
-        setCategoryChanged,
-        courseLoadingError,
-        setCourseLoadingError,
         changeCategory,
         initialRender,
       }}

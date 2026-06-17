@@ -23,7 +23,7 @@ export const refreshAccessToken = async (force = false) => {
             withCredentials: true,
         }
     );
-    console.log('refresh access token', res?.data)
+    // console.log('refreshed access token', res?.data)
 
 
     if (res?.data?.token) {

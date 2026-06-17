@@ -10,17 +10,13 @@ import { AppContext } from "../../state/AppContext";
 import FlexBetween from "../FlexBetween";
 import StyledTextField2 from "../StyledTextField2";
 
-const CourseExplorerRightTop = ({ coursePage }) => {
+const CourseExplorerRightTop = ({ coursePage, totalDocuments, filteredCourses }) => {
   const {
     closeCourseExplorer,
     selectedCategory,
     selectedSubCategory,
     setSelectedCategory,
     setSelectedSubCategory,
-    filteredCourses,
-    totalDocuments,
-    categoryChangedRef,
-    setCategoryChanged,
   } = useContext(CourseExplorerContext);
   const { categoriesWithLabel } = useContext(AppContext);
   const theme = useTheme();
@@ -157,25 +153,13 @@ const CourseExplorerRightTop = ({ coursePage }) => {
 
             if (newValue && newValue.label !== "All") {
               if (newValue.label === newValue.category) {
-                if (newValue.label != selectedCategory) {
-                  categoryChangedRef.current = true;
-                  setCategoryChanged(true);
-                }
                 setSelectedCategory(newValue.category);
                 setSelectedSubCategory("");
               } else {
-                if (newValue.label != selectedSubCategory) {
-                  categoryChangedRef.current = true;
-                  setCategoryChanged(true);
-                }
                 setSelectedCategory(newValue.category);
                 setSelectedSubCategory(newValue.label);
               }
             } else {
-              if (selectedCategory || selectedSubCategory) {
-                categoryChangedRef.current = true;
-                setCategoryChanged(true);
-              }
               setSelectedCategory("");
               setSelectedSubCategory("");
             }

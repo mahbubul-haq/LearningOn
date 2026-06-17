@@ -4,27 +4,58 @@ import React, { useContext } from "react";
 import { CourseExplorerContext } from "../../state/CourseExplorerContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { StyledButton } from "../StyledButton";
+import CircularProgress from "@mui/material/CircularProgress";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
 
-const NoCourseFound = () => {
+const NoCourseFound = ({ refetchCourses, loading, isError }) => {
     const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
     const theme = useTheme();
-    const {
-        getFilteredCourses,
-        categoryChanged,
-        categoryChangedRef,
-        setCategoryChanged,
-        courseLoadingError,
-        initialRender,
-    } = useContext(CourseExplorerContext);
-    return (
-        <Box>
-            {categoryChangedRef.current || initialRender ? (
-                <Box disabled={categoryChanged}> {/* to  ensure re-render */}
 
-                    <Typography variant="h4" sx={{ color: theme.palette.courseExplorer.textSecondary }}>Loading courses...</Typography>
+    return (
+        <Box sx={{ width: "100%", gridColumn: "1 / -1" }}>
+            {loading ? (
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: isNonMobileScreens ? "4rem 2rem" : "3rem 1rem",
+                        backgroundColor: theme.palette.mode === "dark" ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)",
+                        borderRadius: "16px",
+                        border: `1px dashed ${theme.palette.mode === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
+                        margin: "2rem auto",
+                        maxWidth: "600px",
+                        textAlign: "center",
+                        gap: "1.5rem",
+                    }}
+                >
+                    <CircularProgress size={48} thickness={4} sx={{ color: theme.palette.primary?.main || theme.palette.text.primary }} />
+                    <Box>
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                color: theme.palette.text.primary,
+                                fontWeight: 600,
+                                letterSpacing: "-0.5px",
+                                mb: 1
+                            }}
+                        >
+                            Loading Courses...
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: theme.palette.text.secondary,
+                                maxWidth: "300px",
+                                mx: "auto"
+                            }}
+                        >
+                            Please wait while we fetch the best learning materials for you.
+                        </Typography>
+                    </Box>
                 </Box>
-            ) : !courseLoadingError ? (
+            ) : !isError ? (
                 <Box
                     sx={{
                         display: "flex",
@@ -94,9 +125,7 @@ const NoCourseFound = () => {
                     <StyledButton
                         variant="contained"
                         onClick={() => {
-                            categoryChangedRef.current = true;
-                            setCategoryChanged(true);
-                            getFilteredCourses(true)
+                            refetchCourses();
                         }
                         }
                         sx={{ padding: "0.5rem 1.5rem", fontSize: "1rem" }}

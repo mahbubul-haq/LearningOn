@@ -143,7 +143,7 @@ const refreshToken = async (req, res) => {
         // console.log("Refreshing access token", req.cookies.refreshToken);
 
         if (!refreshToken) {
-            return res.status(401).json({ message: "No refresh token" });
+            return res.status(401).json({ success: false, message: "No refresh token" });
         }
 
         // verify token
@@ -166,7 +166,7 @@ const refreshToken = async (req, res) => {
         // console.log("decoded", decoded);
 
         if (!storedToken || storedToken !== refreshToken) {
-            return res.status(403).json({ message: "Invalid refresh token" });
+            return res.status(403).json({ success: false, message: "Invalid refresh token" });
         }
 
         // generate new tokens (rotation)

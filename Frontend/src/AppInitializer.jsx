@@ -22,7 +22,9 @@ const AppInitializer = () => {
             try {
                 await refreshAccessToken(true);
             } catch (err) {
-                if (!lastAccessTokenTime || Date.now() - lastAccessTokenTime >= 19 * 60 * 1000) clearAuthData();
+                if (token || user) {
+                    clearAuthData();
+                }
             }
         };
 

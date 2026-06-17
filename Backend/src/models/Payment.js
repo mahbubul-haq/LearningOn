@@ -58,6 +58,8 @@ const PaymentSchema = new mongoose.Schema(
     },
 );
 
+PaymentSchema.index({ courseId: 1, userId: 1 }, { unique: true })
+
 const Payment = mongoose.model("Payment", PaymentSchema);
 
 export default Payment;
