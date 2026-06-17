@@ -11,7 +11,7 @@ const getQuestions = async (req, res) => {
             !mongoose.Types.ObjectId.isValid(lessonId)) {
             return res.status(400).json({ success: false, message: "Invalid ID" });
         }
-        console.log(courseId, lessonId, userId);
+        // console.log(courseId, lessonId, userId);
         const course = await Course.findOne(
             { _id: courseId, "lessons._id": lessonId },
             {
@@ -21,7 +21,7 @@ const getQuestions = async (req, res) => {
                 enrolledStudents: 1,
             }
         ).populate("enrolledStudents", "userId").lean();
-        console.log(course);
+        // console.log(course);
 
         if (!course) {
             return res.status(404).json({ success: false, message: "Course or lesson not found" });

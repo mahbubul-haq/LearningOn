@@ -243,6 +243,7 @@ const LearningPage = () => {
                 courseProgress={courseProgress}
                 aggregatedProgress={aggregatedProgress}
                 setIsCompletionDialogOpen={setIsCompletionDialogOpen}
+                setIsMobileDrawerOpen={setIsMobileDrawerOpen}
               />
             </Box>
           </Drawer>

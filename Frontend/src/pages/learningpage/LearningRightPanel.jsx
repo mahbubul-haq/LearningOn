@@ -126,7 +126,7 @@ const LearningRightPanel = ({ courseInfo, courseProgress }) => {
               >
                 {courseInfo?.lessons[openedLesson.lesson - 1]?.subLessons[
                   openedLesson.subLesson - 1
-                ]?.videoLink && (
+                ]?.videoLink?.public_id?.trim() && (
                     <VideoPlayer courseInfo={courseInfo} openedLesson={openedLesson} courseProgress={courseProgress} />
                   )}
 

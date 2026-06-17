@@ -13,7 +13,8 @@ const QuizButton = ({
     setQuizStatus,
     getLessonProgress,
     lessonNo,
-    lesson
+    lesson,
+    setIsMobileDrawerOpen,
 }) => {
 
     const theme = useTheme();
@@ -95,6 +96,7 @@ const QuizButton = ({
                     lessonNo: lessonNo,
                     status: "attempting",
                 });
+                // setIsMobileDrawerOpen(false);
             }}
             title={getLessonProgress(lesson._id?.toString()) > 99 ? "" : "Lesson not completed"}
             disabled={getLessonProgress(lesson._id?.toString()) > 99 ? false : true}

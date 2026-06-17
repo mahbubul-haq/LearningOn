@@ -29,10 +29,10 @@ const CourseCompletionStats = ({ courseInfo, displayScore, showScore, timeTaken,
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
-                    {courseInfo?.courseThumbnail ? (
+                    {courseInfo?.courseThumbnail?.public_id?.trim() ? (
                         <img
                             src={`https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-                                }/image/upload/${courseInfo?.courseThumbnail}`}
+                                }/image/upload/${courseInfo?.courseThumbnail?.public_id?.trim()}`}
                             alt={courseInfo?.courseTitle}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />

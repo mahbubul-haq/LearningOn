@@ -141,7 +141,7 @@ const getPopularCourses = async (req, res) => {
 };
 
 const getCourseLessons = async (req, res) => {
-    console.log("getCourseLessons", req.params.courseId, req.userId);
+    // console.log("getCourseLessons", req.params.courseId, req.userId);
     try {
         const userId = req.userId;
         const courseId = req.params.courseId;

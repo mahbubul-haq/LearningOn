@@ -118,7 +118,7 @@ export default function Dashboard() {
 
     return (
         <Box sx={{ height: '100vh', background: 'transparent', overflow: 'scroll', maxWidth: "2000px", mx: "auto" }}>
-            <Box container  sx={{
+            <Box container sx={{
                 display: "grid",
                 gridTemplateColumns: {
                     xs: "1fr",
@@ -126,12 +126,13 @@ export default function Dashboard() {
                     lg: "3fr 9fr"
                 },
                 gap: "2rem",
+                pb: { xs: "4rem", sm: 0 },
                 px: {
                     xs: "1rem",
                     md: '2rem',
                 }
             }}>
-                <Box  sx={{
+                <Box sx={{
                     height: {
                         xs: 'fit-content',
                         md: `calc(100vh - 2rem)`,

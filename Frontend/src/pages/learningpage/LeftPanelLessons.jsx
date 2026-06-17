@@ -19,7 +19,7 @@ import { Button } from "@mui/material";
 import QuizAttemptDialog from "./QuizAttemptDialog";
 import QuizButton from "./QuizButton";
 
-const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
+const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress, setIsMobileDrawerOpen }) => {
 
   const theme = useTheme();
 
@@ -145,11 +145,13 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                   },
                 }}
                 onClick={() => {
+                  setIsMobileDrawerOpen(false);
                   setOpenedLesson({
                     lesson: index + 1,
                     subLesson: subIndex + 1,
                   });
                   setOpenDrawer(false);
+
                   scrollTop();
                 }}
               >
@@ -194,7 +196,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                           padding: 0,
                         }}
                       />
-                      : courseInfo?.lessons[index]?.subLessons[subIndex]?.videoLink?.public_id?.trim()  ?
+                      : courseInfo?.lessons[index]?.subLessons[subIndex]?.videoLink?.public_id?.trim() ?
                         <MdOutlinePlayCircle
                           style={{
                             // color: "#1febfaff",
@@ -229,6 +231,7 @@ const LeftPanelLessons = ({ scrollTop, courseInfo, courseProgress }) => {
                 getLessonProgress={getLessonProgress}
                 lessonNo={index + 1}
                 lesson={lesson}
+                setIsMobileDrawerOpen={setIsMobileDrawerOpen}
               />
 
               <QuizAttemptDialog metadata={{ ...lesson.quiz.metadata }} />

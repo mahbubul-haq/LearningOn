@@ -6,7 +6,7 @@ import "./LearningPage.css";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import LeftPanelLessons from "./LeftPanelLessons";
 
-export const LearningLeftPanel = ({ courseInfo, scrollTop, courseProgress, aggregatedProgress, setIsCompletionDialogOpen }) => {
+export const LearningLeftPanel = ({ courseInfo, scrollTop, courseProgress, aggregatedProgress, setIsCompletionDialogOpen, setIsMobileDrawerOpen }) => {
 
 
   const theme = useTheme();
@@ -45,7 +45,7 @@ export const LearningLeftPanel = ({ courseInfo, scrollTop, courseProgress, aggre
         }}
       >
         {courseInfo?.lessons?.length > 0 ? (
-          <LeftPanelLessons scrollTop={scrollTop} courseInfo={courseInfo} courseProgress={courseProgress} />
+          <LeftPanelLessons scrollTop={scrollTop} courseInfo={courseInfo} courseProgress={courseProgress} setIsMobileDrawerOpen={setIsMobileDrawerOpen} />
         ) : (
           <Typography
             variant="body1"
