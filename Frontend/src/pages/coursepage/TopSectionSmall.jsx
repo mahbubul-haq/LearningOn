@@ -4,16 +4,14 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StyledButton } from "../../components/StyledButton";
-import { getEnrollmentStatus } from "../../utils/course";
+import { getEnrollmentButtonText, isOwnerOrInstructor } from "../../utils/course";
 import TopSectionSmallInfo from "./TopSectionSmallInfo";
 import { colorTokens } from "../../theme";
 
-const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
+const TopSectionSmall = ({ user, courseInfo, enrollCourse, enrollmentStatus }) => {
     const isMobileScreen = useMediaQuery("(max-width: 600px)");
     const minWidth800 = useMediaQuery("(min-width: 800px)");
     const minWidth900 = useMediaQuery("(min-width: 900px)");
-
-    const { user } = useSelector((state) => state.auth);
 
     const navigate = useNavigate();
     const theme = useTheme();
@@ -104,22 +102,21 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
 
                 <StyledButton
                     component="a"
-                    href={`${import.meta.env.VITE_CLIENT_URL}/learning/course/${courseInfo?._id}`}
+                    href="#"
+                    disabled={enrollmentStatus?.status === "pending"}
                     onClick={(e) => {
                         e.preventDefault();
-                        if (purchased) {
+                        if (isOwnerOrInstructor(user, courseInfo) || enrollmentStatus?.status === "enrolled") {
                             navigate(`/learning/course/${courseInfo?._id}`);
-                        } else {
-                            if (user) {
-                                enrollCourse();
-                            } else {
-                                navigate("/login", {
-                                    state: {
-                                        isLogin: true,
-                                        redirect: `/course/${courseInfo?._id}`,
-                                    },
-                                });
-                            }
+                        } else if (user && enrollmentStatus?.status !== "pending") {
+                            enrollCourse();
+                        } else if (!user) {
+                            navigate("/login", {
+                                state: {
+                                    isLogin: true,
+                                    redirect: `/course/${courseInfo?._id}`,
+                                },
+                            });
                         }
                     }}
                     sx={{
@@ -139,18 +136,20 @@ const TopSectionSmall = ({ courseInfo, purchased, enrollCourse }) => {
                         },
                     }}
                 >
-                    {getEnrollmentStatus(purchased, user, courseInfo)}
+                    {getEnrollmentButtonText(user, courseInfo, enrollmentStatus)}
                 </StyledButton>
 
             </Box>
 
-            {!isMobileScreen && <Divider sx={{
-                width: minWidth900 ? "70%" : minWidth800 ? "80%" : "100%",
-                mx: "auto",
-            }} />}
+            {
+                !isMobileScreen && <Divider sx={{
+                    width: minWidth900 ? "70%" : minWidth800 ? "80%" : "100%",
+                    mx: "auto",
+                }} />
+            }
 
-            <TopSectionSmallInfo courseInfo={courseInfo} purchased={purchased} user={user} />
-        </Box>
+            <TopSectionSmallInfo courseInfo={courseInfo} enrollmentStatus={enrollmentStatus} user={user} />
+        </Box >
     );
 };
 

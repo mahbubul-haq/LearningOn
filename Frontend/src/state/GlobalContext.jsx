@@ -89,7 +89,7 @@ export const GlobalState = (props) => {
         console.log("course by id", data.courseInfo);
         setCourseById(data.courseInfo);
       }
-      console.log("course by id", data);
+      // console.log("course by id", data);
     } catch (err) {
       //console.log(err?.message);
       console.log("course by id failed", err);

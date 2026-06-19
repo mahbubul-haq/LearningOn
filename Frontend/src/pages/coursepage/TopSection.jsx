@@ -1,10 +1,10 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { isPurchased } from '../../utils/course';
 import TopSectionLarge from './TopSectionLarge';
 import TopSectionSmall from './TopSectionSmall';
 import { apiFetch } from '../../api/apiFetch';
+import { useEnrollmentStatus } from './hooks/CoursePageHooks';
 
 const TopSection = ({
     courseInfo,
@@ -14,19 +14,8 @@ const TopSection = ({
 
     const { user, token } = useSelector((state) => state.auth);
 
-    const [purchased, setPurchased] = React.useState(
-        courseInfo?.enrolledStudents?.reduce((cur, enrollMent) => {
-            return cur || enrollMent.userId == user?._id;
-        }, false)
-    );
-    // console.log("purchased", purchased, user?._id);
-
-    React.useEffect(() => {
-        //console.log(user, courseInfo);
-        if (user && courseInfo) {
-            setPurchased(isPurchased(user, courseInfo));
-        }
-    }, [user, courseInfo]);
+    const { data: enrollmentStatus } = useEnrollmentStatus(courseInfo?._id, user, token);
+    console.log("enrollmentStatus", enrollmentStatus);
 
     const enrollCourse = async () => {
         try {
@@ -62,12 +51,14 @@ const TopSection = ({
         <>
             {isNonMobileScreens ? <TopSectionLarge
                 courseInfo={courseInfo}
-                purchased={purchased}
                 enrollCourse={enrollCourse}
+                enrollmentStatus={enrollmentStatus}
+                user={user}
             /> : <TopSectionSmall
                 courseInfo={courseInfo}
-                purchased={purchased}
                 enrollCourse={enrollCourse}
+                enrollmentStatus={enrollmentStatus}
+                user={user}
             />}
         </>
     )

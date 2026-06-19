@@ -4,13 +4,13 @@ import Typography from "@mui/material/Typography";
 import Rating from "../../components/Rating";
 import { StyledGrid2Cols } from "../../components/StyledBox";
 import useTheme from "@mui/material/styles/useTheme";
-import { getEnrollmentText, isPurchased } from "../../utils/course";
+import { getEnrollmentText } from "../../utils/course";
 import { useContext } from "react";
 import { CoursePageContext } from "../../state/CoursePageContext";
 
 const TopSectionSmallInfo = ({
     courseInfo,
-    purchased,
+    enrollmentStatus,
     user
 }) => {
 
@@ -109,7 +109,7 @@ const TopSectionSmallInfo = ({
                             justifySelf: "left",
                         }}
                     >
-                        {getEnrollmentText(purchased, user, courseInfo)}
+                        {getEnrollmentText(user, courseInfo, enrollmentStatus)}
                     </Typography>
                 )}
                 <Typography

@@ -63,7 +63,73 @@ const deleteAllData = async (req, res) => {
 const makePayment = async (req, res) => {
     console.log("makePayment called", req.body, req.userId);
     try {
-        const courseInfo = await Course.findOne({ _id: req.body.courseId });
+        const courseId = req.body.courseId;
+        const userId = req.userId;
+
+        // 1. Check for existing payment
+        let existingPayment = await Payment.findOne({ userId, courseId });
+
+        if (existingPayment) {
+            if (existingPayment.enrollmentStatus === "enrolled") {
+                return res.status(200).json({
+                    success: false,
+                    reason: "already_enrolled",
+                    message: "You are already enrolled in this course.",
+                });
+            }
+
+            if (existingPayment.paymentStatus === "pending" && existingPayment.stripeSessionId) {
+                try {
+                    // Check Stripe session status
+                    const session = await stripe.checkout.sessions.retrieve(existingPayment.stripeSessionId);
+
+                    if (session.payment_status === "paid") {
+                        // Webhook might have missed this, process enrollment now
+                        //console.log("Stripe session is paid but DB is pending. Processing enrollment...");
+                        try {
+                            await processEnrollment(session.id);
+                            return res.status(200).json({
+                                success: false,
+                                reason: "already_enrolled",
+                                message: "Your payment was successful and you are enrolled.",
+                            });
+                        }
+                        catch (err) {
+                            return res.status(200).json({
+                                success: false,
+                                reason: "processing_payment",
+                                message: "Your payment was successful but enrollment failed. Please contact support.",
+                            });
+                        }
+                    }
+
+                    if (session.status === "open") {
+                        // Session is still valid, return the same URL
+                        // console.log("Reusing existing open Stripe session:", session.id);
+                        return res.status(200).json({
+                            success: true,
+                            url: session.url,
+                        });
+                    }
+
+                    // Session is expired or complete (but not paid), delete stale payment and proceed to create new one
+                    // console.log("Existing Stripe session is expired or invalid. Deleting stale payment record.");
+                    await Payment.deleteOne({ _id: existingPayment._id });
+                } catch (stripeError) {
+                    // console.error("Error retrieving Stripe session:", stripeError);
+                    if (stripeError.statusCode === 404) {
+                        await Payment.deleteOne({ _id: existingPayment._id });
+                    } else {
+                        return res.status(500).json({
+                            success: false,
+                            message: "Error checking payment status.",
+                        });
+                    }
+                }
+            }
+        }
+
+        const courseInfo = await Course.findOne({ _id: courseId });
         console.log("Course found:", courseInfo?.courseTitle);
 
         // Get platform fee percentage from environment
@@ -77,10 +143,10 @@ const makePayment = async (req, res) => {
         console.log("Creating Stripe customer...");
         const customer = await stripe.customers.create({
             metadata: {
-                userId: req.userId,
+                userId: userId,
                 cart: JSON.stringify([
                     {
-                        courseId: req.body.courseId,
+                        courseId: courseId,
                         courseTitle: courseInfo.courseTitle,
                         coursePrice: courseInfo.coursePrice,
                         owner: courseInfo.owner,
@@ -110,8 +176,8 @@ const makePayment = async (req, res) => {
                     quantity: 1,
                 },
             ],
-            success_url: `${process.env.CLIENT_URL}/payment/success/${req.body.courseId}`,
-            cancel_url: `${process.env.CLIENT_URL}/payment/cancel/${req.body.courseId}`,
+            success_url: `${process.env.CLIENT_URL}/payment/success/${courseId}`,
+            cancel_url: `${process.env.CLIENT_URL}/payment/cancel/${courseId}`,
         });
 
         console.log("Stripe checkout session created successfully!");
@@ -120,9 +186,8 @@ const makePayment = async (req, res) => {
         const stripeSessionId = session.id;
 
         const payment = await Payment.create({
-            userId: req.userId,
-            courseId: req.body.courseId,
-            // paymentIntentId: session.payment_intent,
+            userId: userId,
+            courseId: courseId,
             paidAmount: coursePrice,
             currency: "usd",
             paymentStatus: "pending",
@@ -149,6 +214,67 @@ const makePayment = async (req, res) => {
             success: false,
             message: e.message,
         });
+    }
+};
+
+const getPaymentStatus = async (req, res) => {
+    try {
+        const { courseId } = req.params;
+        const userId = req.userId;
+
+        if (!courseId) {
+            return res.status(400).json({ success: false, message: "courseId is required" });
+        }
+
+        const payment = await Payment.findOne({ userId, courseId });
+
+        if (!payment) {
+            return res.status(200).json({ success: true, status: "none" });
+        }
+
+        if (payment.enrollmentStatus === "enrolled") {
+            return res.status(200).json({ success: true, status: "enrolled" });
+        }
+
+        if (payment.paymentStatus === "pending" && payment.stripeSessionId) {
+            try {
+                const session = await stripe.checkout.sessions.retrieve(payment.stripeSessionId);
+
+                if (session.payment_status === "paid") {
+                    //console.log("Stripe session is paid but DB is pending. Processing enrollment in status check...");
+                    try {
+                        await processEnrollment(session.id);
+                    } catch (err) {
+                        //
+                    }
+
+
+                    return res.status(200).json({ success: true, status: "pending" });
+                }
+
+                if (session.status === "open") {
+                    return res.status(200).json({ success: true, status: "open", url: session.url });
+                }
+
+                // Session expired
+                // console.log("Existing Stripe session is expired. Deleting stale payment record.");
+                await Payment.deleteOne({ _id: payment._id });
+                return res.status(200).json({ success: true, status: "none" });
+
+            } catch (stripeError) {
+                // console.error("Error retrieving Stripe session for status check:", stripeError);
+
+                // await Payment.deleteOne({ _id: payment._id });
+                return res.status(200).json({ success: true, status: "none" });
+            }
+        }
+
+        // Fallback
+        return res.status(200).json({ success: true, status: "none" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message, status: "none" });
     }
 };
 
@@ -221,4 +347,4 @@ const stripeWebHook = async (req, res) => {
 
 // });
 
-export { deleteAllData, makePayment, stripeWebHook };
+export { deleteAllData, getPaymentStatus, makePayment, stripeWebHook };

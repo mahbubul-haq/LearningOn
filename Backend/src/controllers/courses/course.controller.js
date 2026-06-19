@@ -236,7 +236,7 @@ const getCourseByIdWithOutPopulate = async (req, res) => {
     try {
 
 
-        const course = await Course.findById(courseId)
+        const course = await Course.findById(courseId).select("-enrolledStudents").lean();
         if (!course) {
             return res.status(404).json({
                 success: false,
@@ -288,11 +288,11 @@ const getCourseById = async (req, res) => {
 
     try {
         let course = await Course.findById(courseId)
+            .select("-enrolledStudents")
             .populate({
                 path: "courseInstructors",
                 select: "_id name",
-            })
-            .populate("enrolledStudents");
+            }).lean();
         if (!course) {
             return res.status(404).json({
                 success: false,
@@ -300,7 +300,7 @@ const getCourseById = async (req, res) => {
             });
         }
 
-        course = course._doc;
+        // course = course._doc;
 
         course.lessons = course.lessons.map((lesson) => {
             let subLessons = lesson.subLessons;

@@ -6,14 +6,13 @@ import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import Rating from "../../components/Rating";
 import { StyledButton } from "../../components/StyledButton";
-import { getEnrollmentStatus, getEnrollmentText } from "../../utils/course";
+import { getEnrollmentButtonText, getEnrollmentText, isOwnerOrInstructor } from "../../utils/course";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { colorTokens } from "../../theme";
 import { CoursePageContext } from "../../state/CoursePageContext";
 import { useContext } from "react";
 
-const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
-    const { user } = useSelector((state) => state.auth);
+const TopSectionLarge = ({ courseInfo, user, enrollmentStatus, enrollCourse }) => {
     const { dynamicRating } = useContext(CoursePageContext);
     const navigate = useNavigate();
     const theme = useTheme();
@@ -193,27 +192,26 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                             color: (theme) => theme.palette.homepage.textSecondary,
                         }}
                     >
-                        {getEnrollmentText(purchased, user, courseInfo)}
+                        {getEnrollmentText(user, courseInfo, enrollmentStatus)}
                     </Typography>
 
                     <StyledButton
                         component="a"
-                        href={`${import.meta.env.VITE_CLIENT_URL}/learning/course/${courseInfo?._id}`}
+                        href="#"
+                        disabled={enrollmentStatus?.status === "pending"}
                         onClick={(e) => {
                             e.preventDefault();
-                            if (purchased) {
+                            if (isOwnerOrInstructor(user, courseInfo) || enrollmentStatus?.status === "enrolled") {
                                 navigate(`/learning/course/${courseInfo?._id}`);
-                            } else {
-                                if (user) {
-                                    enrollCourse();
-                                } else {
-                                    navigate("/login", {
-                                        state: {
-                                            isLogin: true,
-                                            redirect: `/course/${courseInfo?._id}`,
-                                        },
-                                    });
-                                }
+                            } else if (user && enrollmentStatus?.status !== "pending") {
+                                enrollCourse();
+                            } else if (!user) {
+                                navigate("/login", {
+                                    state: {
+                                        isLogin: true,
+                                        redirect: `/course/${courseInfo?._id}`,
+                                    },
+                                });
                             }
                         }}
                         sx={{
@@ -229,13 +227,13 @@ const TopSectionLarge = ({ courseInfo, purchased, enrollCourse }) => {
                             },
                         }}
                     >
-                        {getEnrollmentStatus(purchased, user, courseInfo)}
+                        {getEnrollmentButtonText(user, courseInfo, enrollmentStatus)}
                     </StyledButton>
 
                 </Box>
             </Box>
 
-        </Box>
+        </Box >
 
     );
 };
