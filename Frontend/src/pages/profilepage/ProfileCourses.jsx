@@ -3,7 +3,11 @@ import Box from "@mui/material/Box";
 import CourseWidget from "../../widgets/CourseWidget";
 import { colorTokens } from "../../theme";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = ({ userCourses, userPublishedCourses }) => {
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+
+const ProfileCourses = ({ userCourses, userPublishedCourses }) => {
+  const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const containerRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -177,7 +181,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"; const ProfileCourses = 
             alignItems: "center",
             height: "100%",
             width: "100%",
-            color: colorTokens.translucentBlack.x5,
+            color: theme.palette.text.secondary,
             fontSize: "1rem",
             // fontWeight: "600",
           }}

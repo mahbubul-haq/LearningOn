@@ -2,13 +2,11 @@ import Box from "@mui/material/Box";
 import React, { useContext, useEffect } from "react";
 import { languages } from "../../data";
 import { CreateCourseContext } from "../../state/CreateCourse";
-import { GlobalContext } from "../../state/GlobalContext";
 import MoreInfoBottom from "./MoreInfoBottom";
 import MoreInfoTop from "./MoreInfoTop";
 import RightPanelBottom from "./RightPanelBottom";
 
 const MoreInfo = () => {
-  const { users } = useContext(GlobalContext);
   const { courseState, setCourseState, errors, setErrors } =
     useContext(CreateCourseContext);
   const [instructor, setInstructor] = React.useState(null);
@@ -63,7 +61,6 @@ const MoreInfo = () => {
       <MoreInfoBottom
         courseState={courseState}
         setCourseState={setCourseState}
-        users={users}
         instructor={instructor}
         setInstructor={setInstructor}
         addInstructor={addInstructor}

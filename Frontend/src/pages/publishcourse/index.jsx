@@ -5,7 +5,7 @@ import { useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { CreateCourseContext } from "../../state/CreateCourse";
-import { GlobalContext } from "../../state/GlobalContext";
+
 import { AppContext } from "../../state/AppContext"
 import DeleteCourseDialog from "./DeleteCourseDialog";
 import PublishStatusDialog from "./PublishStatusDialog";
@@ -42,7 +42,7 @@ const PublishCourse = () => {
     setMobileDrawerOpen,
     isCourseValid,
   } = useContext(CreateCourseContext);
-  const { getUsers } = useContext(GlobalContext);
+
   const { fetchUser, fetchCategories, categories } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -92,7 +92,6 @@ const PublishCourse = () => {
     }
     if (edit == "edit" && id) {
       getCoursePlainById(id);
-      getUsers();
       /// need to optimize *******************************
       // fetchCategories();
     } else {

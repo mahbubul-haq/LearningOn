@@ -3,6 +3,33 @@ import Enrollment from "../../models/Enrollment.js";
 import Notification from "../../models/Notification.js";
 import People from "../../models/People.js";
 
+const searchUsers = async (req, res) => {
+    try {
+        const { q } = req.query;
+
+        if (!q || q.trim().length < 2) {
+            return res.status(200).json({ success: true, users: [] });
+        }
+
+        // Escape special regex characters to prevent ReDoS attacks
+        const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        const users = await People.find({
+            $or: [
+                { name: { $regex: escaped, $options: "i" } },
+                { email: { $regex: escaped, $options: "i" } },
+            ],
+        })
+            .select("name email avatar")
+            .limit(10)
+            .lean();
+
+        res.status(200).json({ success: true, users });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 const getAllUsers = async (req, res) => {
     try {
         const users = await People.find().populate("courses").exec();
@@ -122,9 +149,17 @@ const getUser = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         console.log("this is user by id", req.params.userId);
-        const user = await People.findById(req.params.userId)
-            .populate("courses followers following")
-            .lean()
+        const { instructorCard } = req.query;
+        let user;
+        if (instructorCard) {
+            //will optimize later
+            user = await People.findById(req.params.userId).populate("courses").lean();
+        }
+        else {
+            user = await People.findById(req.params.userId)
+                .populate("courses followers following")
+                .lean();
+        }
         //console.log(user);
         res.status(200).json({
             success: true,
@@ -228,5 +263,5 @@ const getUserEnrolledCourses = async (req, res) => {
     })
 };
 
-export { follow, getAllUsers, getUser, getUserById, updateUser, getUserEnrolledCourses };
+export { follow, getAllUsers, getUser, getUserById, searchUsers, updateUser, getUserEnrolledCourses };
 

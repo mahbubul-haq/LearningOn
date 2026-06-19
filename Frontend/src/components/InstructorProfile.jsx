@@ -1,24 +1,67 @@
-import { Box, Typography, Divider, useTheme, Avatar } from "@mui/material";
+import { Box, Typography, Divider, useTheme, Avatar, Skeleton } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GlobalContext } from "../state/GlobalContext";
+import { apiFetch } from "../api/apiFetch";
 import Rating from "./Rating";
 
 const InstructorProfile = ({ instructorId }) => {
-    const { users } = useContext(GlobalContext);
+    const [instructor, setInstructor] = useState(null);
+    const [loading, setLoading] = useState(true);
     const theme = useTheme();
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
-    const instructor = users.find((user) => user._id == instructorId);
 
-    // Calculate stats
+    useEffect(() => {
+        if (!instructorId) return;
+
+        let cancelled = false;
+        const fetchInstructor = async () => {
+            try {
+                setLoading(true);
+                const data = await apiFetch({
+                    url: `/api/v1/users/${instructorId}`,
+                    method: "GET",
+                    params: {
+                        instructorCard: true,
+                    },
+                });
+                if (data.success && !cancelled) {
+                    setInstructor(data.user);
+                }
+            } catch (err) {
+                console.error("Error fetching instructor:", err);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        };
+
+        fetchInstructor();
+        return () => { cancelled = true; };
+    }, [instructorId]);
+
+    const navigate = useNavigate();
+
+    // Calculate stats from fetched data
     const numberOfEnrolledStudents = instructor?.courses?.reduce((acc, course) => {
         return acc + (course.enrolledStudents ? course.enrolledStudents.length : 0);
     }, 0) || 0;
 
     const numberOfCourses = instructor?.courses?.length || 0;
 
-    const navigate = useNavigate();
+    if (loading) {
+        return (
+            <Box sx={{ width: "100%", ...theme.palette.glassSheet, padding: "1.5rem" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+                    <Skeleton variant="circular" width={90} height={90} />
+                    <Box sx={{ flex: 1 }}>
+                        <Skeleton variant="text" width="60%" height={32} />
+                        <Skeleton variant="text" width="30%" height={20} />
+                        <Skeleton variant="text" width="40%" height={20} />
+                    </Box>
+                </Box>
+            </Box>
+        );
+    }
 
     if (!instructor) return null;
 

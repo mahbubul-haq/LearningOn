@@ -7,7 +7,6 @@ import { apiFetch } from "../api/apiFetch";
 export const GlobalContext = createContext();
 
 export const GlobalState = (props) => {
-  const [users, setUsers] = React.useState([]);
 
   const [user, setUser] = React.useState(null);
   const [userById, setUserById] = React.useState(null);
@@ -43,17 +42,7 @@ export const GlobalState = (props) => {
     }
   };
 
-  const getUsers = async () => {
-    const data = await apiFetch({
-      url: `/api/v1/users`,
-      method: "GET",
-    });
 
-    if (data.success) {
-      setUsers(data.users);
-      // console.log("users fetched", data.users);
-    }
-  };
 
   const getUserById = async (userId) => {
     try {
@@ -96,18 +85,11 @@ export const GlobalState = (props) => {
     }
   };
 
-  useEffect(() => {
-    // getUser();
-    // getCategories();
-    getUsers();
-  }, []);
+
 
   return (
     <GlobalContext.Provider
       value={{
-        getUsers,
-        users,
-        setUsers,
         getUserById,
         userById,
         setUserById,

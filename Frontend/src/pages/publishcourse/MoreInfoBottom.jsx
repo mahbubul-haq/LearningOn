@@ -2,6 +2,7 @@ import { alpha } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import Typography from "@mui/material/Typography";
@@ -9,17 +10,60 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import TextField from "@mui/material/TextField";
 import InstructorProfile from "../../components/InstructorProfile";
 import { StyledButton } from "../../components/StyledButton";
-import { colorTokens } from "../../theme";
+import { apiFetch } from "../../api/apiFetch";
+import { useState, useEffect } from "react";
 
 const MoreInfoBottom = ({
     courseState,
     setCourseState,
-    users,
     instructor,
     setInstructor,
     addInstructor,
 }) => {
     const isMobileScreens = useMediaQuery("(max-width: 600px)");
+
+    // Async search state
+    const [inputValue, setInputValue] = useState("");
+    const [options, setOptions] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    // Debounced search effect
+    useEffect(() => {
+        if (inputValue.trim().length < 2) {
+            setOptions([]);
+            return;
+        }
+
+        setLoading(true);
+
+        const delayDebounceFn = setTimeout(async () => {
+            try {
+                const data = await apiFetch({
+                    url: `/api/v1/users/search`,
+                    method: "GET",
+                    params: { q: inputValue },
+                });
+
+                if (data.success) {
+                    setOptions(
+                        data.users.map((user) => ({
+                            label: user.name,
+                            value: user._id,
+                        }))
+                    );
+                }
+            } catch (err) {
+                console.error("Error searching users:", err);
+            } finally {
+                setLoading(false);
+            }
+        }, 400);
+
+        return () => {
+            clearTimeout(delayDebounceFn);
+            setLoading(false);
+        };
+    }, [inputValue]);
 
     return (
         <>
@@ -120,18 +164,24 @@ const MoreInfoBottom = ({
                         onChange={(event, value) => {
                             setInstructor(value);
                         }}
-                        value={{
-                            label: instructor ? instructor.label : "",
-                            value: instructor ? instructor.value : "",
+                        onInputChange={(event, newInputValue, reason) => {
+                            if (reason === "input") {
+                                setInputValue(newInputValue);
+                            }
                         }}
+                        value={instructor}
+                        loading={loading}
+                        filterOptions={(x) => x}
+                        isOptionEqualToValue={(option, value) =>
+                            option.value === value?.value
+                        }
+                        getOptionLabel={(option) => option?.label || ""}
                         id="course-instructors"
-                        options={
-                            users
-                                ? users.map((user) => ({
-                                    label: user.name,
-                                    value: user._id,
-                                }))
-                                : [{ label: "No data" }]
+                        options={options}
+                        noOptionsText={
+                            inputValue.trim().length < 2
+                                ? "Type at least 2 characters to search"
+                                : "No users found"
                         }
                         sx={{
                             width: "100%",
@@ -141,7 +191,7 @@ const MoreInfoBottom = ({
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                placeholder="Add Instructor"
+                                placeholder="Search for an instructor..."
                                 size="small"
                                 fullWidth
                                 variant="outlined"
@@ -177,6 +227,17 @@ const MoreInfoBottom = ({
                                                 Add
                                             </Typography>
                                         </StyledButton>
+                                    ),
+                                    endAdornment: (
+                                        <>
+                                            {loading ? (
+                                                <CircularProgress
+                                                    color="inherit"
+                                                    size={20}
+                                                />
+                                            ) : null}
+                                            {params.InputProps.endAdornment}
+                                        </>
                                     ),
                                 }}
                                 sx={{

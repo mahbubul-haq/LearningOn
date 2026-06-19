@@ -8,6 +8,7 @@ const PeopleSchema = new mongoose.Schema(
             required: [true, "Name is required"],
             minlength: [1, "Name must be at least 1 character long"],
             maxlength: [50, "Name must be at most 50 characters long"],
+            index: true,
         },
         email: {
             type: String,
