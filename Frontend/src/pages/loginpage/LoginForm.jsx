@@ -53,6 +53,11 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                 },
             })
 
+            if (response.status === 429) {
+                alert("too many login attempts. Please try again later.");
+                return;
+            }
+
             const data = response.data;
             if (data.success) {
                 // console.log(data);

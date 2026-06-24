@@ -32,6 +32,7 @@ import errorHandler from "./errors/errorHandler.js";
 import userRoutesNew from "./routes/user.routes.js";
 import { connectRedis } from "./configs/redisClient.js";
 import categoryRoutes from "./routes/category.routes.js";
+import { generalIpRateLimiter } from "./middlewares/rateLimit.middleware.js";
 import "./jobs/courses.job.js"
 import "./jobs/enrollment.job.js"
 import Course from "./models/Course.js";
@@ -41,6 +42,7 @@ const __dirname = path.dirname(__filename);
 console.log("dirname", __dirname);
 
 const app = express();
+app.set("trust proxy", 1);
 
 app.post('/data/stripe/webhook', express.raw({ type: 'application/json' }), stripeWebHook);
 
@@ -82,6 +84,7 @@ app.use("/admin", adminRoutes);
 
 // NEW (RESTful)
 
+app.use("/api/v1", generalIpRateLimiter);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/courses", courseRoutesV1);

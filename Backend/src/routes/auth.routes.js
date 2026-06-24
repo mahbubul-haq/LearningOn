@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { verifyTokenLight } from "../middlewares/auth.middleware.js";
+import { loginRateLimiter } from "../middlewares/rateLimit.middleware.js";
 
 import { login, register, logout, refreshToken } from "../controllers/auth.controller.js";
 
 const router = Router();
 
-router.post("/login", login);
+router.post("/login", loginRateLimiter, login);
 // == uploading image to cloudinary
 router.post("/register", register);
 router.post("/logout", verifyTokenLight, logout);

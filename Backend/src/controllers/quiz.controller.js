@@ -35,7 +35,7 @@ const getQuizAttempt = async (req, res) => {
             if (!duration || duration === 0) {
                 duration = Math.max(1 * 60, lesson?.questions?.questions?.length * 90);
             }
-            console.log("duration", duration);
+            // console.log("duration", duration);
             quizAttempt = await QuizAttempt.create({
                 userId: userId,
                 courseId: courseId,
