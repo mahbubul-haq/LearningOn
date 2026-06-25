@@ -85,6 +85,7 @@ app.use("/admin", adminRoutes);
 // NEW (RESTful)
 
 app.use("/api/v1", generalIpRateLimiter);
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/courses", courseRoutesV1);

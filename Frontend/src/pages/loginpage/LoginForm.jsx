@@ -13,7 +13,7 @@ import LoginSignUpButton from "./LoginSignUpButton.jsx";
 import { apiFetch } from "../../api/apiFetch.js";
 import axiosClient from "../../api/axiosClient.js";
 import { updateDateLogin } from "../../api/authStore.js";
-
+import GoogleAuthButton from "../../components/GoogleAuthButton.jsx";
 const loginSchema = yup.object().shape({
     email: yup.string().required("Email is required"),
     password: yup.string().required("Password is required"),
@@ -29,7 +29,11 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
 
     const [emailError, setEmailError] = React.useState("");
     const [passwordError, setPasswordError] = React.useState("");
-    const [snackbarConfig, setSnackbarConfig] = React.useState({ open: false, message: "", severity: "success" });
+    const [snackbarConfig, setSnackbarConfig] = React.useState({
+        open: false,
+        message: "",
+        severity: "success",
+    });
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -49,9 +53,9 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                     password: values.password,
                 },
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-            })
+            });
 
             if (response.status === 429) {
                 alert("too many login attempts. Please try again later.");
@@ -65,7 +69,7 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                 onSubmitProps.resetForm();
 
                 /// dispatch token & user from data
-                updateDateLogin(data.user, data.token, Date.now())
+                updateDateLogin(data.user, data.token, Date.now());
                 setTimeout(() => {
                     if (redirect) {
                         navigate(redirect);
@@ -89,14 +93,23 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
             }
         } catch (error) {
             console.log(error);
-            showSnackbar(error.response?.data?.message || error.message || "An error occurred", "error");
+            const responseData = error.response?.data;
+            const backendMessage =
+                responseData?.message || error.message || "An error occurred";
 
-            if (error.response?.data?.errors?.email) {
-                setEmailError("Email is incorrect");
+            showSnackbar(backendMessage, "error");
+
+            if (responseData?.errors?.email) {
+                setEmailError(
+                    responseData.errors.email.message || "Email is incorrect",
+                );
                 setPasswordError("");
             }
-            if (error.response?.data?.errors?.password) {
-                setPasswordError("Password is incorrect");
+
+            if (responseData?.errors?.password) {
+                setPasswordError(
+                    responseData.errors.password.message || "Password is incorrect",
+                );
                 setEmailError("");
             }
         } finally {
@@ -110,9 +123,27 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
     };
 
     return (
-        <Formik initialValues={initialValuesLogin} validationSchema={loginSchema} onSubmit={handleFormSubmit}>
-            {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isValid }) => {
-                const isSubmitDisabled = !isValid || !values.email || !values.password || emailError !== "" || passwordError !== "" || isFormSubmitting;
+        <Formik
+            initialValues={initialValuesLogin}
+            validationSchema={loginSchema}
+            onSubmit={handleFormSubmit}
+        >
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isValid,
+            }) => {
+                const isSubmitDisabled =
+                    !isValid ||
+                    !values.email ||
+                    !values.password ||
+                    emailError !== "" ||
+                    passwordError !== "" ||
+                    isFormSubmitting;
                 return (
                     <form
                         style={{
@@ -132,22 +163,26 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                             <Snackbar
                                 open={snackbarConfig.open}
                                 autoHideDuration={6000}
-                                onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
+                                onClose={() =>
+                                    setSnackbarConfig({ ...snackbarConfig, open: false })
+                                }
                                 anchorOrigin={{
                                     vertical: "top",
                                     horizontal: "center",
                                 }}
                             >
                                 <Alert
-                                    onClose={() => setSnackbarConfig({ ...snackbarConfig, open: false })}
+                                    onClose={() =>
+                                        setSnackbarConfig({ ...snackbarConfig, open: false })
+                                    }
                                     severity={snackbarConfig.severity}
                                     sx={{
                                         width: "100%",
                                         ...(snackbarConfig.severity === "success" && {
                                             backgroundColor: (theme) => theme.palette.primary.main,
                                             color: "#fff",
-                                            "& .MuiAlert-icon": { color: "#fff" }
-                                        })
+                                            "& .MuiAlert-icon": { color: "#fff" },
+                                        }),
                                     }}
                                 >
                                     {snackbarConfig.message}
@@ -173,7 +208,9 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                                 }}
                                 value={values.email}
                                 name="email"
-                                error={touched.email && (Boolean(errors.email) || emailError !== "")}
+                                error={
+                                    touched.email && (Boolean(errors.email) || emailError !== "")
+                                }
                                 helperText={touched.email && (errors.email || emailError)}
                                 label="Email"
                             />
@@ -183,8 +220,13 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                                 onChange={handleChange}
                                 value={values.password}
                                 name="password"
-                                error={touched.password && (Boolean(errors.password) || passwordError !== "")}
-                                helperText={touched.password && (errors.password || passwordError)}
+                                error={
+                                    touched.password &&
+                                    (Boolean(errors.password) || passwordError !== "")
+                                }
+                                helperText={
+                                    touched.password && (errors.password || passwordError)
+                                }
                                 label="Password"
                             />
                             <LoginSignUpButton
@@ -193,6 +235,26 @@ const LoginForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                                 isLogin={true}
                             />
 
+                            <Box
+                                sx={{
+                                    my: "1rem",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "0.75rem",
+                                }}
+                            >
+                                <Box sx={{ flex: 1, height: "1px", bgcolor: "divider" }} />
+                                <Typography variant="body2" color="text.secondary">
+                                    or
+                                </Typography>
+                                <Box sx={{ flex: 1, height: "1px", bgcolor: "divider" }} />
+                            </Box>
+
+                            <GoogleAuthButton
+                                redirect={redirect}
+                                isFormSubmitting={isFormSubmitting}
+                                setIsFormSubmitting={setIsFormSubmitting}
+                            />
                         </Box>
                     </form>
                 );

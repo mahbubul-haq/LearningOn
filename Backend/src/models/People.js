@@ -17,10 +17,17 @@ const PeopleSchema = new mongoose.Schema(
             minlength: [5, "Email must be at least 5 characters long"],
             // add unique validator with custom error message
             unique: true,
+            lowercase: true,
+            trim: true,
+        },
+        emailVerified: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         password: {
             type: String,
-            required: [true, "Password is required"],
+            required: false,
             minlength: [5, "Password must be at least 5 characters long"],
             maxlength: [100, "Password must be at most 100 characters long"],
             select: false,

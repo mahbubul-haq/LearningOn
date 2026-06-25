@@ -64,6 +64,7 @@ const MobileNavTop = ({
 
                                     }} /> */}
                                 <img src={user.avatar.secure_url} alt="avatar"
+                                    referrerPolicy="no-referrer"
                                     loading="lazy" style={{
                                         width: "100%",
                                         height: "100%",

@@ -23,6 +23,7 @@ const NavRightIsUser = ({
     const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
 
+
     return (
         <>
             <IconButton
@@ -76,6 +77,7 @@ const NavRightIsUser = ({
                     >
 
                         <img src={user.avatar.secure_url} alt="avatar"
+                            referrerPolicy="no-referrer"
                             loading="lazy" style={{
                                 width: "100%",
                                 height: "100%",

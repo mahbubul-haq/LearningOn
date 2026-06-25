@@ -13,6 +13,7 @@ import StyledTextField from "../../components/StyledInputField.jsx";
 import { colorTokens } from "../../theme.js";
 import LoginSignUpButton from "./LoginSignUpButton.jsx";
 import axiosClient from "../../api/axiosClient.js";
+import GoogleAuthButton from "../../components/GoogleAuthButton.jsx";
 
 const registerSchema = yup.object().shape({
     name: yup.string().trim().required("Name is required"),
@@ -71,16 +72,18 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                 //console.log(data);
                 showSnackbar(data.message || "Signup failed", "error");
                 if (data.errors?.email) {
-                    setEmailExists("Email already exists");
-                    console.log("email exists");
+                    setEmailExists(data.errors.email.message || "Email already exists");
                 }
             }
         } catch (error) {
             // console.log(error);
-            if (error.response?.data?.errors?.email) {
-                setEmailExists("Email already exists");
+            const responseData = error.response?.data;
+
+            if (responseData?.errors?.email) {
+                setEmailExists(responseData.errors.email.message || "Email already exists");
             }
-            showSnackbar(error.response?.data?.message || error.message || "An error occurred", "error");
+
+            showSnackbar(responseData?.message || error.message || "An error occurred", "error");
         } finally {
             setIsFormSubmitting(false);
         }
@@ -300,6 +303,20 @@ const SignUpForm = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
                                 isSubmitDisabled={isSubmitDisabled}
                                 redirect={redirect}
                                 isLogin={false}
+                            />
+                            <Box sx={{ my: "1rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                                <Box sx={{ flex: 1, height: "1px", bgcolor: "divider" }} />
+                                <Typography variant="body2" color="text.secondary">
+                                    or
+                                </Typography>
+                                <Box sx={{ flex: 1, height: "1px", bgcolor: "divider" }} />
+                            </Box>
+
+
+                            <GoogleAuthButton
+                                redirect={redirect}
+                                isFormSubmitting={isFormSubmitting}
+                                setIsFormSubmitting={setIsFormSubmitting}
                             />
                         </Box>
                     </form>

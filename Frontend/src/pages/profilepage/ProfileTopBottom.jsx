@@ -80,6 +80,7 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, s
 
           <img src={userInfo?.avatar?.secure_url}
             loading="lazy"
+            referrerPolicy="no-referrer"
             style={{
               width: "100%",
               height: "100%",
