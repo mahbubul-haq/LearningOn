@@ -62,4 +62,21 @@ export const verifyTokenLight = async (req, res, next) => {
 
 };
 
+/**
+ * Optional auth middleware - extracts userId if token is present,
+ * but does not block the request if no token or invalid token.
+ */
+export const optionalAuth = async (req, res, next) => {
+    try {
+        const authToken = req.headers["auth-token"];
+        if (authToken) {
+            const verified = jwt.verify(authToken, process.env.JWT_SECRET);
+            req.userId = verified.id;
+        }
+    } catch (error) {
+        // Token invalid or expired — continue without userId
+    }
+    next();
+};
+
 export default verifyToken;

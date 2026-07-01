@@ -115,6 +115,7 @@ const getUserCourses = async (userId, courseStatus) => {
             courseStatus: 1,
             category: 1,
             enrolledStudentsCount: 1,
+            courseInstructors: 1,
         }
     )
         .sort({ createdAt: -1 })

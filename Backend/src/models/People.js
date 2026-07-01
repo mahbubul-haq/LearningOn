@@ -54,12 +54,6 @@ const PeopleSchema = new mongoose.Schema(
             required: false,
             default: ["Student"],
         },
-        followers: {
-            type: [mongoose.Schema.Types.ObjectId],
-            ref: "People",
-            required: false,
-            default: [],
-        },
         followersCount: {
             type: Number,
             required: false,
@@ -69,12 +63,6 @@ const PeopleSchema = new mongoose.Schema(
             type: Number,
             required: false,
             default: 0,
-        },
-        following: {
-            type: [mongoose.Schema.Types.ObjectId],
-            ref: "People",
-            required: false,
-            default: [],
         },
         externalProfiles: {
             type: [

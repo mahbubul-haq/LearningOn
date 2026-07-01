@@ -13,7 +13,7 @@ import StyledTextField from "../../components/StyledInputField.jsx";
 import { colorTokens } from "../../theme.js";
 import LoginSignUpButton from "./LoginSignUpButton.jsx";
 import axiosClient from "../../api/axiosClient.js";
-import GoogleAuthButton from "../../components/GoogleAuthButton.jsx";
+import GoogleAuthButton from "./GoogleAuthButton.jsx";
 
 const registerSchema = yup.object().shape({
     name: yup.string().trim().required("Name is required"),

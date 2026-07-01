@@ -3,7 +3,8 @@ import asyncHandler from "../utils/asyncHandler.js";
 import verifyToken from "../middlewares/auth.middleware.js";
 import { uploadProfilePicture } from "../controllers/users/user.files.controller.js";
 import { upload } from "../configs/multer.config.js";
-import { updateUser, follow, getUser, getAllUsers, getUserById, getUserEnrolledCourses, searchUsers } from "../controllers/users/user.controller.js";
+import { updateUser, follow, getUser, getAllUsers, getUserById, getUserEnrolledCourses, searchUsers, getFollowersData, getFollowingData } from "../controllers/users/user.controller.js";
+import { optionalAuth } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.patch("/profile-picture", verifyToken, upload.single("picture"), asyncHandler(uploadProfilePicture));
@@ -13,7 +14,9 @@ router.get("/", getAllUsers)
 router.get("/search", searchUsers);
 router.get("/me", verifyToken, getUser);
 router.get("/me/enrolled-courses", verifyToken, asyncHandler(getUserEnrolledCourses));
-router.get("/:userId", getUserById)
+router.get("/:userId", optionalAuth, getUserById);
+router.get("/:userId/followers", optionalAuth, getFollowersData);
+router.get("/:userId/following", optionalAuth, getFollowingData);
 
 
 export default router;

@@ -16,7 +16,7 @@ import { ProfilePageContext } from "../../state/ProfilePageContext";
 import ProfileTopBottom from "./ProfileTopBottom";
 import { apiFetch } from "../../api/apiFetch";
 
-const ProfileTop = ({ userInfo }) => {
+const ProfileTop = ({ userInfo, userQualifications }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
@@ -44,27 +44,7 @@ const ProfileTop = ({ userInfo }) => {
   const { setUserById, getUserById, getUser } =
     React.useContext(GlobalContext);
 
-  const getQualifications = () => {
-    let qualifications = [];
 
-    if (userInfo?.learning?.length > 0) {
-      qualifications.push("Student");
-    }
-    if (userInfo?.courses?.length > 0) {
-      qualifications.push("Instructor");
-    }
-    if (userInfo?.tutoring?.length > 0) {
-      qualifications.push("Tutor");
-    }
-    if (userInfo?.blogs?.length > 0) {
-      qualifications.push("Blogger");
-    }
-
-    if (qualifications?.length === 0) {
-      qualifications.push("Student");
-    }
-    return qualifications.join(", ");
-  };
 
   useEffect(() => {
     if (followingDone) {
@@ -246,7 +226,7 @@ const ProfileTop = ({ userInfo }) => {
         </BreadCrumbs>
         <ProfileTopBottom
           userInfo={userInfo}
-          getQualifications={getQualifications}
+          userQualifications={userQualifications}
           changeProfilePicture={changeProfilePicture}
           saveProfileChanges={saveProfileChanges}
           setUserById={setUserById}

@@ -4,17 +4,19 @@ import { useSelector } from "react-redux";
 import { apiFetch } from "../api/apiFetch";
 import { clearAuthData, updateAccessToken } from "../api/authStore";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const ProfilePageContext = createContext();
 
 export const ProfilePageState = (props) => {
   const navigate = useNavigate();
   const [openedTab, setOpenedTab] = React.useState("profile");
-  const { token } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth);
   const [followingDone, setFollowingDone] = React.useState(false);
   const [editProfileStatus, setEditProfileStatus] = React.useState("");
   const [profileInfoChanged, setProfileInfoChanged] = React.useState(false);
   const [changedProfileInfo, setChangedProfileInfo] = React.useState({});
+  const queryClient = useQueryClient();
 
   const follow = async (userId) => {
     try {
@@ -31,6 +33,8 @@ export const ProfilePageState = (props) => {
       if (data.success) {
         // console.log(data.data);
         setFollowingDone(true);
+        queryClient.invalidateQueries({ queryKey: ['followers', userId] });
+        queryClient.invalidateQueries({ queryKey: ['following', userId] });
       }
     } catch (err) {
       //console.log(err?.message);

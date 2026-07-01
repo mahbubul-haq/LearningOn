@@ -13,7 +13,7 @@ import LoginSignUpButton from "./LoginSignUpButton.jsx";
 import { apiFetch } from "../../api/apiFetch.js";
 import axiosClient from "../../api/axiosClient.js";
 import { updateDateLogin } from "../../api/authStore.js";
-import GoogleAuthButton from "../../components/GoogleAuthButton.jsx";
+import GoogleAuthButton from "./GoogleAuthButton.jsx";
 const loginSchema = yup.object().shape({
     email: yup.string().required("Email is required"),
     password: yup.string().required("Password is required"),

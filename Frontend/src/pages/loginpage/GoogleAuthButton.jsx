@@ -2,8 +2,8 @@ import React from "react";
 import { Box, Alert } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import axiosClient from "../api/axiosClient.js";
-import { updateDateLogin } from "../api/authStore.js";
+import axiosClient from "../../api/axiosClient";
+import { updateDateLogin } from "../../api/authStore";
 
 const GoogleAuthButton = ({ redirect, isFormSubmitting, setIsFormSubmitting }) => {
     const navigate = useNavigate();

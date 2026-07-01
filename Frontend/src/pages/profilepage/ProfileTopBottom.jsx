@@ -12,8 +12,9 @@ import FlexBetween from "../../components/FlexBetween";
 import { StyledButton } from "../../components/StyledButton";
 import { cloudinaryCld } from "../../configs/cloudinary.config";
 import { ProfilePageContext } from "../../state/ProfilePageContext";
+import { useFollowers } from "./hooks/useProfileConnections";
 
-const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, saveProfileChanges }) => {
+const ProfileTopBottom = ({ userInfo, userQualifications, changeProfilePicture, saveProfileChanges }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 900px)");
   const isMobileScreens = useMediaQuery("(max-width: 600px)");
   const {
@@ -28,6 +29,9 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, s
   } = useContext(ProfilePageContext);
   const theme = useTheme();
   const user = useSelector((state) => state.auth.user);
+
+  const { data: followersData } = useFollowers(userInfo?._id, 1, 10, !!userInfo?._id);
+  const isFollowing = followersData?.isFollowingQueriedUser ?? userInfo?.isFollowing;
 
   return (
     <Box
@@ -200,7 +204,7 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, s
             {userInfo?.name}
           </Typography>
           <Typography sx={{ fontSize: "1rem", color: theme.palette.text.secondary }}>
-            {getQualifications()}
+            {userQualifications}
           </Typography>
         </Box>
 
@@ -251,11 +255,16 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, s
           </Box>
         ) : (
           <StyledButton
+            disabled={!user}
             sx={{
               "&&": {
                 px: isMobileScreens ? "2rem" : "2rem", // More touch area
                 width: isMobileScreens ? "100%" : "auto", // Optional: Full width button on mobile? User complained about squeezed. Let's keep it auto but with min-width maybe. Or just ample padding.
                 maxWidth: isMobileScreens ? "300px" : "none",
+                "&.Mui-disabled": {
+                  backgroundColor: theme.palette.action.disabledBackground,
+                  color: theme.palette.action.disabled,
+                }
               },
             }}
             onClick={() => {
@@ -269,13 +278,7 @@ const ProfileTopBottom = ({ userInfo, getQualifications, changeProfilePicture, s
           >
             {userInfo?._id == user?._id
               ? "Edit Profile"
-              : userInfo?.followers?.length > 0 &&
-                userInfo?.followers?.reduce((prev, cur) => {
-                  if (cur._id == user?._id) {
-                    return true;
-                  }
-                  return prev || false;
-                }, false)
+              : isFollowing
                 ? "Unfollow"
                 : "Follow"}
           </StyledButton>

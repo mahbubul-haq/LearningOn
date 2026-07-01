@@ -230,7 +230,7 @@ const ProfileLeft = ({ userInfo, userPublishedCourses }) => {
                                     fontWeight: "600",
                                 }}
                             >
-                                {userInfo?.followers?.length || "0"}
+                                {userInfo?.followersCount || "0"}
                             </Typography>
                         </FlexBetween>
                     </MenuItem>
@@ -265,7 +265,7 @@ const ProfileLeft = ({ userInfo, userPublishedCourses }) => {
                                     fontWeight: "600",
                                 }}
                             >
-                                {userInfo?.following?.length || "0"}
+                                {userInfo?.followingCount || "0"}
                             </Typography>
                         </FlexBetween>
                     </MenuItem>

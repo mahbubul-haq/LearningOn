@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Box from "@mui/material/Box";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
@@ -35,17 +35,18 @@ const ProfilePage = () => {
 
     const { data: userPublishedCourses, isLoading: userPublishedCoursesLoading } = useUserPublishedCourses(userId);
 
-    const getQualifications = () => {
+    const userQualifications = useMemo(() => {
+        console.log(userPublishedCourses, userId)
         let qualifications = [];
-        if (userPublishedCourses?.some((course) => course.owner.toString() === userId)) {
-            qualifications.push("Creator");
+        if (userPublishedCourses?.some((course) => course.owner?._id.toString() === userId.toString())) {
+            qualifications.push("Publisher");
         }
-        if (userPublishedCourses?.some((course) => course?.courseInstructors?.some((instructor) => instructor.toString() === userId))) {
+        if (userPublishedCourses?.some((course) => course?.courseInstructors?.some((instructor) => instructor?.toString() === userId.toString()))) {
             qualifications.push("Instructor");
         }
         if (!qualifications.length) qualifications.push("Student");
         return qualifications.join(", ");
-    };
+    }, [userPublishedCourses, userId]);
 
     useEffect(() => {
         getUserById(userId);
@@ -108,7 +109,7 @@ const ProfilePage = () => {
                         marginBottom: isNonMobileScreens ? "3.5rem" : "0", // Add spacing for desktop protrusion (overlaps otherwise)
                     }}
                 >
-                    <ProfileTop userInfo={userById} />
+                    <ProfileTop userInfo={userById} userQualifications={userQualifications} />
                 </Box>
 
                 {/* Mobile Name Block Removed - Integrated into ProfileTop */}
