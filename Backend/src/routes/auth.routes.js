@@ -1,15 +1,15 @@
 import { Router } from "express";
 import { verifyTokenLight } from "../middlewares/auth.middleware.js";
-import { loginRateLimiter } from "../middlewares/rateLimit.middleware.js";
+import { loginRateLimiter, registerRateLimiter, googleAuthRateLimiter } from "../middlewares/rateLimit.middleware.js";
 
 import { login, register, logout, refreshToken, googleLogin } from "../controllers/auth.controller.js";
 
 const router = Router();
 
 router.post("/login", loginRateLimiter, login);
-router.post("/google", googleLogin);
+router.post("/google", googleAuthRateLimiter, googleLogin);
 // == uploading image to cloudinary
-router.post("/register", register);
+router.post("/register", registerRateLimiter, register);
 router.post("/logout", verifyTokenLight, logout);
 router.post("/refresh", refreshToken);
 

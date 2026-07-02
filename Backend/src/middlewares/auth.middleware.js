@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import People from "../models/People.js";
+import { authUserRateLimiter } from "./rateLimit.middleware.js";
 
 
 const verifyToken = async (req, res, next) => {
@@ -26,7 +27,9 @@ const verifyToken = async (req, res, next) => {
         //console.log(verified);
         // console.log("verified", verified);
         req.userId = verified.id;
-        next();
+
+        // Apply per-user rate limiting after successful authentication
+        authUserRateLimiter(req, res, next);
     } catch (error) {
         // console.log("verifytoken error")
         res.status(500).json({
@@ -51,7 +54,9 @@ export const verifyTokenLight = async (req, res, next) => {
         }
         const verified = jwt.verify(authToken, process.env.JWT_SECRET);
         req.userId = verified.id;
-        next();
+
+        // Apply per-user rate limiting after successful authentication
+        authUserRateLimiter(req, res, next);
     } catch (error) {
         // console.log("verifytokenlight error")
         res.status(500).json({

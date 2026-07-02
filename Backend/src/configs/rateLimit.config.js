@@ -11,10 +11,28 @@ export const rateLimitConfig = {
             windowSeconds: numberFromEnv("GENERAL_IP_RATE_LIMIT_WINDOW_SECONDS", 60),
         },
     },
+    authUser: {
+        user: {
+            limit: numberFromEnv("AUTH_USER_RATE_LIMIT", 100),
+            windowSeconds: numberFromEnv("AUTH_USER_RATE_LIMIT_WINDOW_SECONDS", 60),
+        },
+    },
     login: {
         email: {
             limit: numberFromEnv("LOGIN_EMAIL_RATE_LIMIT", 15),
             windowSeconds: numberFromEnv("LOGIN_EMAIL_RATE_LIMIT_WINDOW_SECONDS", 15 * 60),
+        },
+    },
+    register: {
+        ip: {
+            limit: numberFromEnv("REGISTER_IP_RATE_LIMIT", 50),
+            windowSeconds: numberFromEnv("REGISTER_IP_RATE_LIMIT_WINDOW_SECONDS", 15 * 60),
+        },
+    },
+    googleAuth: {
+        ip: {
+            limit: numberFromEnv("GOOGLE_AUTH_IP_RATE_LIMIT", 100),
+            windowSeconds: numberFromEnv("GOOGLE_AUTH_IP_RATE_LIMIT_WINDOW_SECONDS", 15 * 60),
         },
     },
 };

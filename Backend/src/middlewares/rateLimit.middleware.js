@@ -115,6 +115,8 @@ const createRateLimitKey = (...parts) => {
     return [rateLimitConfig.prefix, ...parts].join(":");
 };
 
+// ─── Layer 1: General IP Rate Limiter ────────────────────────────────
+// Applied globally to /api/v1. Catches unauthenticated abuse, scrapers, bots.
 export const generalIpRateLimiter = async (req, res, next) => {
     try {
         const ip = getClientIp(req);
@@ -139,6 +141,39 @@ export const generalIpRateLimiter = async (req, res, next) => {
     }
 };
 
+// ─── Layer 2: Authenticated User Rate Limiter ────────────────────────
+// 100 req/min per user._id. Called from within verifyToken/verifyTokenLight
+// after successful authentication, so req.userId is guaranteed to exist.
+export const authUserRateLimiter = async (req, res, next) => {
+    try {
+        if (!req.userId) {
+            return next();
+        }
+
+        const result = await consumeSlidingWindow({
+            key: createRateLimitKey("auth", "user", req.userId),
+            limit: rateLimitConfig.authUser.user.limit,
+            windowSeconds: rateLimitConfig.authUser.user.windowSeconds,
+        });
+
+        if (!result.allowed) {
+            return rateLimitResponse(
+                res,
+                result,
+                "Too many requests. Please slow down and try again shortly."
+            );
+        }
+
+        setRateLimitHeaders(res, result);
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ─── Layer 3: Sensitive Endpoint Limiters ────────────────────────────
+
+// Login: 15 attempts per 15 min per email (brute-force prevention)
 export const loginRateLimiter = async (req, res, next) => {
     try {
         const email = req.body?.email;
@@ -158,6 +193,56 @@ export const loginRateLimiter = async (req, res, next) => {
                 res,
                 result,
                 "Too many login attempts for this account. Please wait before trying again."
+            );
+        }
+
+        setRateLimitHeaders(res, result);
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Registration: 5 attempts per 15 min per IP (spam account prevention)
+export const registerRateLimiter = async (req, res, next) => {
+    try {
+        const ip = getClientIp(req);
+        const result = await consumeSlidingWindow({
+            key: createRateLimitKey("register", "ip", hashValue(ip)),
+            limit: rateLimitConfig.register.ip.limit,
+            windowSeconds: rateLimitConfig.register.ip.windowSeconds,
+        });
+
+        if (!result.allowed) {
+            return rateLimitResponse(
+                res,
+                result,
+                "Too many registration attempts. Please wait before trying again."
+            );
+        }
+
+        setRateLimitHeaders(res, result);
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Google OAuth: 15 attempts per 15 min per IP (OAuth abuse prevention)
+export const googleAuthRateLimiter = async (req, res, next) => {
+    try {
+        const ip = getClientIp(req);
+        const result = await consumeSlidingWindow({
+            key: createRateLimitKey("google-auth", "ip", hashValue(ip)),
+            limit: rateLimitConfig.googleAuth.ip.limit,
+            windowSeconds: rateLimitConfig.googleAuth.ip.windowSeconds,
+        });
+
+        if (!result.allowed) {
+            return rateLimitResponse(
+                res,
+                result,
+                "Too many authentication attempts. Please wait before trying again."
             );
         }
 
